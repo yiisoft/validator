@@ -13,16 +13,16 @@ use Traversable;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Helper\PropagateOptionsHelper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\Tests\Rule\NestedTest;
@@ -102,7 +102,7 @@ use function sprintf;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Nested implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
@@ -166,7 +166,7 @@ final class Nested implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage Error message used when validation fails because the validated value
      * is an object providing wrong type of data (neither array nor an object).
@@ -179,7 +179,7 @@ final class Nested implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param bool $requirePropertyPath Whether to require a single data item to be passed in data according to declared
      * nesting level structure (all keys in the sequence must be the present). Used only when validated value is an
@@ -191,7 +191,7 @@ final class Nested implements
      *
      * - `{path}`: the path of the value being validated. Can be either a simple key of integer / string type for a
      * single nesting level or a sequence of keys concatenated using dot notation (see {@see SEPARATOR}).
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param bool $handleEachShortcut Whether to handle {@see EACH_SHORTCUT}. Enabled by default meaning shortcuts are
      * supported. Can be disabled if they are not used to prevent additional checks and improve performance.
      * @param bool $propagateOptions Whether the propagation of options is enabled (see
@@ -216,21 +216,22 @@ final class Nested implements
         | ReflectionProperty::IS_PUBLIC,
         private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
         private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array type.',
-        private string $incorrectInputMessage = 'The value must be an array or an object.',
+        private string $incorrectInputMessage = '{Property} must be an array or an object.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found.',
         private bool $handleEachShortcut = true,
         private bool $propagateOptions = false,
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
         $this->prepareRules($rules);
     }
 
     public function getName(): string
     {
-        return 'nested';
+        return self::class;
     }
 
     /**
@@ -300,7 +301,7 @@ final class Nested implements
 
     /**
      * Whether to require a single data item to be passed in data according to declared nesting level structure (all
-     * keys in the sequence must be the present). Enabled by default.
+     * keys in the sequence must be the present). Disabled by default.
      *
      * @return bool `true` if required and `false` otherwise.
      *

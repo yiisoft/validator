@@ -36,63 +36,64 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'The data must have at least "{min}" filled attributes.' => 'Данные должны содержать минимум {min, number} {min, plural, one{заполненный атрибут} few{заполненных атрибута} many{заполненных атрибутов} other{заполненных атрибута}}.',
+    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled' => 'Как ' .
+        'минимум {min, number}' .
+        '{min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка ' .
+        '{min, plural, one{должен} few{должны} many{должны} other{должны}} быть ' .
+        'заполнены: {properties}.',
     /** @see BooleanValue */
-    'Value must be either "{true}" or "{false}".' => 'Значение должно быть «{true}» или «{false}».',
+    '{Property} must be either "{true}" or "{false}".' => '{Property} должно быть «{true}» или «{false}».',
     /** @see Count */
-    'This value must be an array or implement \Countable interface.' => 'Значение должно быть массивом или объектом, реализующим интерфейс \Countable.',
-    'This value must contain at least {min, number} {min, plural, one{item} other{items}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
-    'This value must contain at most {max, number} {max, plural, one{item} other{items}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
-    'This value must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
-    /**
-     * @see Each
-     * @see UniqueIterable
-     */
-    'Value must be array or iterable.' => 'Значение должно быть массивом или иметь псевдотип iterable.',
+    '{Property} must be an array or implement \Countable interface.' => '{Property} должно быть массивом или объектом, реализующим интерфейс \Countable.',
+    '{Property} must contain at least {min, number} {min, plural, one{item} other{items}}.' => '{Property} должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
+    '{Property} must contain at most {max, number} {max, plural, one{item} other{items}}.' => '{Property} должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
+    '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
+    /** @see Each */
+    '{Property} must be array or iterable.' => '{Property} должно быть массивом или иметь псевдотип iterable.',
     'Every iterable key must have an integer or a string type.' => 'Ключ должен иметь тип integer или string.',
     /** @see Email */
-    'This value is not a valid email address.' => 'Значение не является правильным адресом электронной почты.',
+    '{Property} is not a valid email address.' => '{Property} не является правильным адресом электронной почты.',
     /** @see In */
-    'This value is not in the list of acceptable values.' => 'Это значение не в списке допустимых значений.',
+    '{Property} is not in the list of acceptable values.' => '{Property} не в списке допустимых значений.',
     /** @see Ip */
-    'Must be a valid IP address.' => 'Должно быть правильным IP-адресом.',
-    'Must not be an IPv4 address.' => 'Не должно быть IPv4-адресом.',
-    'Must not be an IPv6 address.' => 'Не должно быть IPv6-адресом.',
-    'Contains wrong subnet mask.' => 'Содержит неверную маску подсети.',
-    'Must be an IP address with specified subnet.' => 'Должно быть IP адресом с подсетью.',
-    'Must not be a subnet.' => 'Не должно быть подсетью.',
-    'Is not in the allowed range.' => 'Не входит в список разрешенных диапазонов адресов.',
+    '{Property} must be a valid IP address.' => '{Property} должен быть правильным IP-адресом.',
+    '{Property} must not be an IPv4 address.' => '{Property} не должен быть IPv4-адресом.',
+    '{Property} must not be an IPv6 address.' => '{Property} не должен быть IPv6-адресом.',
+    '{Property} contains wrong subnet mask.' => '{Property} содержит неверную маску подсети.',
+    '{Property} must be an IP address with specified subnet.' => '{Property} должен быть IP адресом с подсетью.',
+    '{Property} must not be a subnet.' => '{Property} не должно быть подсетью.',
+    '{Property} is not in the allowed range.' => '{Property} не входит в список разрешенных диапазонов адресов.',
     /**
      * @see IntegerType
      * @see Integer
      */
-    'Value must be an integer.' => 'Значение должно быть целым числом.',
+    '{Property} must be an integer.' => '{Property} должно быть целым числом.',
     /** @see Json */
-    'The value is not JSON.' => 'Значение не является строкой JSON.',
+    '{Property} is not JSON.' => '{Property} не является строкой JSON.',
     /** @see Length */
-    'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.' => 'Значение должно содержать как минимум {min, number} {min, plural, one{символ} few{символа} many{символов} other{символов}}.',
-    'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.' => 'Значение должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
-    'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => 'Значение должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
+    '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.' => '{Property} должно содержать как минимум {min, number} {min, plural, one{символ} few{символа} many{символов} other{символов}}.',
+    '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.' => '{Property} должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
+    '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
     /** @see Nested */
     'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
     'An object data set data can only have an array type.' => 'Данные в объекте должны быть массивом.',
     'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
     /** @see Number */
-    'Value must be a number.' => 'Значение должно быть числом.',
+    '{Property} must be a number.' => '{Property} должно быть числом.',
     /** @see OneOf */
-    'The data must have at least 1 filled attribute.' => 'Данные должны содержать минимум 1 заполненный атрибут.',
+    'Exactly 1 property from this list must be filled: {properties}.' => 'Ровно 1 свойство из этого списка должно быть заполнен: {properties}.',
     /** @see Regex */
-    'Value is invalid.' => 'Значение неверно.',
+    '{Property} is invalid.' => 'Значение неверно.',
     /** @see Required */
-    'Value cannot be blank.' => 'Значение не может быть пустым.',
-    'Value not passed.' => 'Значение не передано.',
+    '{Property} cannot be blank.' => '{Property} не может быть пустым.',
+    '{Property} not passed.' => '{Property} не передано.',
     /** @see Subset */
-    'Value must be iterable.' => 'Значение должно быть итерируемым.',
-    'This value is not a subset of acceptable values.' => 'Это значение не является подмножеством допустимых значений.',
+    '{Property} must be iterable.' => '{Property} должно быть итерируемым.',
+    '{Property} is not a subset of acceptable values.' => '{Property} не является подмножеством допустимых значений.',
     /** @see TrueValue */
-    'The value must be "{true}".' => 'Значение должно быть «{true}».',
+    '{Property} must be "{true}".' => '{Property} должно быть «{true}».',
     /** @see Url */
-    'This value is not a valid URL.' => 'Значение не является правильным URL.',
+    '{Property} is not a valid URL.' => '{Property} не является правильным URL.',
 
     // Used in multiple rules
 
@@ -101,7 +102,7 @@ return [
      * @see Nested
      * @see OneOf
      */
-    'The value must be an array or an object.' => 'Значение должно быть массивом или объектом.',
+    '{Property} must be an array or an object.' => '{Property} должно быть массивом или объектом.',
     /**
      * @see BooleanValue
      * @see TrueValue
@@ -117,15 +118,15 @@ return [
      * @see NotEqual
      */
     'The allowed types are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    'The attribute value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'Значение, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    'Value must be equal to "{targetValueOrAttribute}".' => 'Значение должно быть равно «{targetValueOrAttribute}».',
-    'Value must be strictly equal to "{targetValueOrAttribute}".' => 'Значение должно быть строго равно «{targetValueOrAttribute}».',
-    'Value must not be equal to "{targetValueOrAttribute}".' => 'Значение не должно быть равно «{targetValueOrAttribute}».',
-    'Value must not be strictly equal to "{targetValueOrAttribute}".' => 'Значение не должно быть строго равно «{targetValueOrAttribute}».',
-    'Value must be greater than "{targetValueOrAttribute}".' => 'Значение должно быть больше, чем «{targetValueOrAttribute}».',
-    'Value must be greater than or equal to "{targetValueOrAttribute}".' => 'Значение должно быть больше или равно «{targetValueOrAttribute}».',
-    'Value must be less than "{targetValueOrAttribute}".' => 'Значение должно быть меньше, чем «{targetValueOrAttribute}».',
-    'Value must be less than or equal to "{targetValueOrAttribute}".' => 'Значение должно быть меньше или равно «{targetValueOrAttribute}».',
+    'The property value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'Значение, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    '{Property} must be equal to "{targetValueOrProperty}".' => '{Property} должно быть равно «{targetValueOrProperty}».',
+    '{Property} must be strictly equal to "{targetValueOrProperty}".' => '{Property} должно быть строго равно «{targetValueOrProperty}».',
+    '{Property} must not be equal to "{targetValueOrProperty}".' => '{Property} не должно быть равно «{targetValueOrProperty}».',
+    '{Property} must not be strictly equal to "{targetValueOrProperty}".' => '{Property} не должно быть строго равно «{targetValueOrProperty}».',
+    '{Property} must be greater than "{targetValueOrProperty}".' => '{Property} должно быть больше, чем «{targetValueOrProperty}».',
+    '{Property} must be greater than or equal to "{targetValueOrProperty}".' => '{Property} должно быть больше или равно «{targetValueOrProperty}».',
+    '{Property} must be less than "{targetValueOrProperty}".' => '{Property} должно быть меньше, чем «{targetValueOrProperty}».',
+    '{Property} must be less than or equal to "{targetValueOrProperty}".' => '{Property} должно быть меньше или равно «{targetValueOrProperty}».',
     /**
      * @see Email
      * @see Ip
@@ -135,22 +136,22 @@ return [
      * @see StringType
      * @see Url
      */
-    'The value must be a string.' => 'Значение должно быть строкой.',
+    '{Property} must be a string.' => '{Property} должно быть строкой.',
     /**
      * @see Number
      * @see Integer
      */
     'The allowed types are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
-    'Value must be no less than {min}.' => 'Значение должно быть не меньше {min}.',
-    'Value must be no greater than {max}.' => 'Значение должно быть не больше {max}.',
+    '{Property} must be no less than {min}.' => '{Property} должно быть не меньше {min}.',
+    '{Property} must be no greater than {max}.' => '{Property} должно быть не больше {max}.',
 
     /**
      * @see \Yiisoft\Validator\Rule\Date\Date
      * @see \Yiisoft\Validator\Rule\Date\DateTime
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
-    'The value must be no early than {limit}.' => 'Значение должно быть не ранее {limit}.',
-    'The value must be no late than {limit}.' => 'Значение должно быть не позднее {limit}.',
+    '{Property} must be no early than {limit}.' => '{Property} должно быть не ранее {limit}.',
+    '{Property} must be no late than {limit}.' => '{Property} должно быть не позднее {limit}.',
 
     /**
      * @see \Yiisoft\Validator\Rule\Date\Date

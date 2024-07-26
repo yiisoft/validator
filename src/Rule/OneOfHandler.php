@@ -5,23 +5,27 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Yiisoft\Arrays\ArrayHelper;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Trait\TranslatedPropertiesHandlerTrait;
 use Yiisoft\Validator\RuleHandlerInterface;
-use Yiisoft\Validator\EmptyCondition\WhenEmpty;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_array;
 use function is_object;
 
 /**
- * Validates that one of specified attributes is filled.
+ * Validates that one of specified properties is filled.
  *
  * @see OneOf
  */
 final class OneOfHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    use TranslatedPropertiesHandlerTrait;
+
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof OneOf) {
             throw new UnexpectedRuleException(OneOf::class, $rule);
@@ -34,29 +38,31 @@ final class OneOfHandler implements RuleHandlerInterface
 
         if (!is_array($value) && !is_object($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
 
         $filledCount = 0;
-        foreach ($rule->getAttributes() as $attribute) {
-            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $attribute), $context->isAttributeMissing())) {
+        foreach ($rule->getProperties() as $property) {
+            if (!(new WhenEmpty())(ArrayHelper::getValue($value, $property), $context->isPropertyMissing())) {
                 $filledCount++;
             }
 
             if ($filledCount > 1) {
-                return $this->getGenericErrorResult($rule->getMessage(), $context);
+                return $this->getGenericErrorResult($rule, $context);
             }
         }
 
-        return $filledCount === 1 ? $result : $this->getGenericErrorResult($rule->getMessage(), $context);
+        return $filledCount === 1 ? $result : $this->getGenericErrorResult($rule, $context);
     }
 
-    private function getGenericErrorResult(string $message, ValidationContext $context): Result
+    private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
-        return (new Result())->addError($message, [
-            'attribute' => $context->getTranslatedAttribute(),
+        return (new Result())->addError($rule->getMessage(), [
+            'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
+            'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
         ]);
     }
 }

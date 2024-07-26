@@ -22,8 +22,8 @@ final class TimeHandler extends BaseDateHandler
         ?string $messageFormat = null,
         ?int $messageTimeType = IntlDateFormatter::SHORT,
         string $incorrectInputMessage = 'Invalid time value.',
-        string $tooEarlyMessage = 'The value must be no early than {limit}.',
-        string $tooLateMessage = 'The value must be no late than {limit}.',
+        string $tooEarlyMessage = '{Property} must be no early than {limit}.',
+        string $tooLateMessage = '{Property} must be no late than {limit}.',
     ) {
         parent::__construct(
             IntlDateFormatter::NONE,

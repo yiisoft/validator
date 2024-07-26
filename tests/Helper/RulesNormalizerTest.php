@@ -7,8 +7,12 @@ namespace Yiisoft\Validator\Tests\Helper;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class RulesNormalizerTest extends TestCase
@@ -19,19 +23,25 @@ final class RulesNormalizerTest extends TestCase
             'null' => [[], null],
             'object' => [
                 [
-                    'name' => ['required'],
-                    'age' => ['number'],
-                    'number' => ['number'],
+                    'name' => [Required::class],
+                    'age' => [Number::class],
+                    'number' => [Number::class],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
             ],
             'class-string' => [
                 [
-                    'name' => ['required'],
-                    'age' => ['number'],
-                    'number' => ['number'],
+                    'name' => [Required::class],
+                    'age' => [Number::class],
+                    'number' => [Number::class],
                 ],
                 ObjectWithDifferentPropertyVisibility::class,
+            ],
+            'data-object-with-attributes' => [
+                'expected' => [
+                    'name' => [Length::class],
+                ],
+                'data' => new ObjectWithAttributesOnly(),
             ],
         ];
     }
@@ -50,16 +60,16 @@ final class RulesNormalizerTest extends TestCase
      */
     public function testNormalizeWithArrayResult(
         array $expected,
-        callable|iterable|object|string|null $rules,
+        callable|iterable|object|string|null $rules = null,
         mixed $data = null
     ): void {
         $rules = RulesNormalizer::normalize($rules, $data);
 
         $result = [];
-        foreach ($rules as $attributeName => $attributeRules) {
-            $result[$attributeName] = [];
-            foreach ($attributeRules as $rule) {
-                $result[$attributeName][] = $rule->getName();
+        foreach ($rules as $propertyName => $propertyRules) {
+            $result[$propertyName] = [];
+            foreach ($propertyRules as $rule) {
+                $result[$propertyName][] = $rule->getName();
             }
         }
 
@@ -74,15 +84,15 @@ final class RulesNormalizerTest extends TestCase
                 [],
             ],
             [
-                ['callback'],
+                [Callback::class],
                 static fn () => new Result(),
             ],
             [
-                ['number'],
+                [Number::class],
                 new Number(),
             ],
             [
-                ['number', 'callback'],
+                [Number::class, Callback::class],
                 [new Number(), static fn () => new Result()],
             ],
         ];

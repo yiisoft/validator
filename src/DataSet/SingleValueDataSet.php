@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\DataSet;
 use Yiisoft\Validator\DataWrapperInterface;
 
 /**
- * A data set used for a single value of any (mixed) data type. Does not support attributes.
+ * A data set used for a single value of any (mixed) data type. Does not support PHP attributes.
  *
  * Examples of usage:
  *
@@ -37,14 +37,14 @@ final class SingleValueDataSet implements DataWrapperInterface
     }
 
     /**
-     * Returns an attribute value by its name. {@see SingleValueDataSet} does not support attributes so `null` is always
-     * returned regardless of the attribute name.
+     * Returns a property value by its name. {@see SingleValueDataSet} does not support properties so `null` is always
+     * returned regardless of the property name.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return mixed `null` value indicating that attributes are not supported.
+     * @return mixed `null` value indicating that properties are not supported.
      */
-    public function getAttributeValue(string $attribute): mixed
+    public function getPropertyValue(string $property): mixed
     {
         return null;
     }
@@ -63,13 +63,13 @@ final class SingleValueDataSet implements DataWrapperInterface
     }
 
     /**
-     * Whether this data set has the attribute with a given name.
+     * Whether this data set has the property with a given name.
      *
-     * @param string $attribute Attribute name.
+     * @param string $property Property name.
      *
-     * @return bool `false` value indicating that attributes are not supported.
+     * @return bool `false` value indicating that properties are not supported.
      */
-    public function hasAttribute(string $attribute): bool
+    public function hasProperty(string $property): bool
     {
         return false;
     }

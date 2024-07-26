@@ -31,7 +31,7 @@ the output will be:
 [  
     'name' => [  
         [  
-            'length',  
+            'Yiisoft\Validator\Rule\Length',  
             'min' => 4,  
             'max' => 10,  
             'exactly' => null,  
@@ -65,7 +65,7 @@ The resulting array, serialized as JSON, can be unserialized back and applied to
 
 Here are some specifics of the rules structure:
 
-- The indexing of rules by attribute names is maintained.
+- The indexing of rules by property names is maintained.
 - The first rule element is always a rule name with an integer index of `0`.
 - The remaining rule elements are key-value pairs, where key is an option name and value is a corresponding option value.
 - For complex rules, such as `Composite`, `Each` and `Nested`, the options of the child rules are located under

@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -28,7 +28,7 @@ use function strlen;
  * @see IpHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -92,55 +92,55 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $message Error message used when validation fails due to the wrong IP address format.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $ipv4NotAllowedMessage Error message used when validation fails due to the disabled IPv4
      * validation when {@see $allowIpv4} is set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $ipv6NotAllowedMessage Error message used when validation fails due to the disabled IPv6
      * validation when {@see $allowIpv6} is set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $wrongCidrMessage string Error message used when validation fails due to the wrong CIDR when
      * {@see $allowSubnet} is set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $noSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is used, but
      * the CIDR prefix is not set.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $hasSubnetMessage Error message used when validation fails due to {@see $allowSubnet} is false, but
      * CIDR prefix is present.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string $notInRangeMessage Error message used when validation fails due to IP address is not allowed by
      * {@see $ranges} check.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: the value being validated.
      * @param string[] $ranges The IPv4 or IPv6 ranges that are allowed or forbidden.
      *
@@ -184,16 +184,16 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         private bool $allowSubnet = false,
         private bool $requireSubnet = false,
         private bool $allowNegation = false,
-        private string $incorrectInputMessage = 'The value must be a string.',
-        private string $message = 'Must be a valid IP address.',
-        private string $ipv4NotAllowedMessage = 'Must not be an IPv4 address.',
-        private string $ipv6NotAllowedMessage = 'Must not be an IPv6 address.',
-        private string $wrongCidrMessage = 'Contains wrong subnet mask.',
-        private string $noSubnetMessage = 'Must be an IP address with specified subnet.',
-        private string $hasSubnetMessage = 'Must not be a subnet.',
-        private string $notInRangeMessage = 'Is not in the allowed range.',
+        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $message = '{Property} must be a valid IP address.',
+        private string $ipv4NotAllowedMessage = '{Property} must not be an IPv4 address.',
+        private string $ipv6NotAllowedMessage = '{Property} must not be an IPv6 address.',
+        private string $wrongCidrMessage = '{Property} contains wrong subnet mask.',
+        private string $noSubnetMessage = '{Property} must be an IP address with specified subnet.',
+        private string $hasSubnetMessage = '{Property} must not be a subnet.',
+        private string $notInRangeMessage = '{Property} is not in the allowed range.',
         private array $ranges = [],
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -217,11 +217,12 @@ final class Ip implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenIn
         }
 
         $this->ranges = $this->prepareRanges($ranges);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'ip';
+        return self::class;
     }
 
     /**

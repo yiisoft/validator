@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -24,7 +24,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -42,14 +42,14 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      *
      * @param string $notExactWidthMessage A message used when the width of validated image file doesn't exactly equal
      * to {@see $width}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{exactly}`: expected exact width of validated image file.
      *
      * @param string $notExactHeightMessage A message used when the height of validated image file doesn't exactly equal
@@ -57,7 +57,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      *  You may use the following placeholders in the message:
      *
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *  - `{exactly}`: expected exact height of validated image file.
      *
      * @param string $tooSmallWidthMessage A message used when the width of validated image file is less than
@@ -65,7 +65,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{limit}`: expected minimum width of validated image file.
      *
      * @param string $tooSmallHeightMessage A message used when the height of validated image file is less than
@@ -73,7 +73,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{limit}`: expected minimum height of validated image file.
      *
      * @param string $tooLargeWidthMessage A message used when the width of validated image file is more than
@@ -81,7 +81,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      *  You may use the following placeholders in the message:
      *
-     *  - `{attribute}`: the translated label of the attribute being validated.
+     *  - `{property}`: the translated label of the property being validated.
      *  - `{limit}`: expected maximum width of validated image file.
      *
      * @param string $tooLargeHeightMessage A message used when the height of validated image file is more than
@@ -89,7 +89,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{limit}`: expected maximum height of validated image file.
      *
      * @param string $invalidAspectRatioMessage A message used when aspect ratio of validated image file is different
@@ -98,7 +98,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{aspectRatioWidth}`: expected width part for aspect ratio. For example, for `4:3` aspect ratio, it will be
      * `4`.
      * - `{aspectRatioHeight}`: expected height part for aspect ratio. For example, for `4:3` aspect ratio, it will be
@@ -122,7 +122,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private ?int $maxWidth = null,
         private ?int $maxHeight = null,
         private ?ImageAspectRatio $aspectRatio = null,
-        private string $notImageMessage = 'The value must be an image.',
+        private string $notImageMessage = '{Property} must be an image.',
         private string $notExactWidthMessage = 'The width must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $notExactHeightMessage = 'The height must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
         private string $tooSmallWidthMessage = 'The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
@@ -130,7 +130,7 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         private string $tooLargeWidthMessage = 'The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $tooLargeHeightMessage = 'The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
         private string $invalidAspectRatioMessage = 'The aspect ratio must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -141,6 +141,8 @@ final class Image implements RuleWithOptionsInterface, SkipOnErrorInterface, Whe
         if ($this->height !== null && ($this->minHeight !== null || $this->maxHeight !== null)) {
             throw new InvalidArgumentException('Exact width and min / max height can\'t be specified together.');
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getWidth(): ?int

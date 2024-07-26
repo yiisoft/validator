@@ -6,15 +6,17 @@ namespace Yiisoft\Validator\Rule;
 
 use DateTimeInterface;
 use Stringable;
+use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function gettype;
 
 /**
- * Compares the specified value with "target" value provided directly or within an attribute.
+ * Compares the specified value with "target" value provided directly or within a property.
  *
  * @see AbstractCompare
  * @see Equal
@@ -27,7 +29,7 @@ use function gettype;
  */
 final class CompareHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof AbstractCompare) {
             throw new UnexpectedRuleException(AbstractCompare::class, $rule);
@@ -36,18 +38,19 @@ final class CompareHandler implements RuleHandlerInterface
         $result = new Result();
         if (!$this->isInputCorrect($rule->getType(), $value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
 
         /** @var mixed $targetValue */
         $targetValue = $rule->getTargetValue();
-        $targetAttribute = $rule->getTargetAttribute();
+        $targetProperty = $rule->getTargetProperty();
 
-        if ($targetValue === null && $targetAttribute !== null) {
+        if ($targetValue === null && $targetProperty !== null) {
             /** @var mixed $targetValue */
-            $targetValue = $context->getDataSet()->getAttributeValue($targetAttribute);
+            $targetValue = $context->getDataSet()->getPropertyValue($targetProperty);
             if (!$this->isInputCorrect($rule->getType(), $targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
                     'type' => get_debug_type($targetValue),
@@ -59,12 +62,17 @@ final class CompareHandler implements RuleHandlerInterface
             return new Result();
         }
 
+        $capitalizedTargetProperty = $targetProperty ? StringHelper::uppercaseFirstCharacter($targetProperty) : null;
+
         return (new Result())->addError($rule->getMessage(), [
-            'attribute' => $context->getTranslatedAttribute(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
             'targetValue' => $this->getFormattedValue($rule->getTargetValue()),
-            'targetAttribute' => $targetAttribute,
-            'targetAttributeValue' => $targetAttribute !== null ? $this->getFormattedValue($targetValue) : null,
-            'targetValueOrAttribute' => $targetAttribute ?? $this->getFormattedValue($targetValue),
+            'targetProperty' => $targetProperty,
+            'TargetProperty' => $capitalizedTargetProperty,
+            'targetPropertyValue' => $targetProperty !== null ? $this->getFormattedValue($targetValue) : null,
+            'targetValueOrProperty' => $targetProperty ?? $this->getFormattedValue($targetValue),
+            'TargetValueOrProperty' => $capitalizedTargetProperty ?? $this->getFormattedValue($targetValue),
             'value' => $this->getFormattedValue($value),
         ]);
     }

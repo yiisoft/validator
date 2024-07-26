@@ -37,26 +37,26 @@ final class Integer extends AbstractNumber
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $notNumberMessage Error message used when the value does not match {@see $pattern}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: actual value.
      * @param string $lessThanMinMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
      * @param string $greaterThanMaxMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
      * @param string $pattern The regular expression for matching numbers. It defaults to a pattern that matches integer
@@ -74,11 +74,11 @@ final class Integer extends AbstractNumber
         float|int|null $min = null,
         float|int|null $max = null,
         string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
-        string $notNumberMessage = 'Value must be an integer.',
+        string $notNumberMessage = '{Property} must be an integer.',
         string $lessThanMinMessage = self::DEFAULT_LESS_THAN_MIN_MESSAGE,
         string $greaterThanMaxMessage = self::DEFAULT_GREATER_THAN_MAX_MESSAGE,
         string $pattern = '/^\s*[+-]?\d+\s*$/',
-        mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {
@@ -94,10 +94,5 @@ final class Integer extends AbstractNumber
             skipOnError: $skipOnError,
             when: $when,
         );
-    }
-
-    public function getName(): string
-    {
-        return 'integer';
     }
 }

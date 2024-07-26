@@ -37,26 +37,26 @@ final class Number extends AbstractNumber
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $notNumberMessage Error message used when the value does not match {@see $pattern}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: actual value.
      * @param string $lessThanMinMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
      * @param string $greaterThanMaxMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
      * @param string $pattern The regular expression for matching numbers. It defaults to a pattern that matches
@@ -74,11 +74,11 @@ final class Number extends AbstractNumber
         float|int|null $min = null,
         float|int|null $max = null,
         string $incorrectInputMessage = 'The allowed types are integer, float and string.',
-        string $notNumberMessage = 'Value must be a number.',
-        string $lessThanMinMessage = 'Value must be no less than {min}.',
-        string $greaterThanMaxMessage = 'Value must be no greater than {max}.',
+        string $notNumberMessage = '{Property} must be a number.',
+        string $lessThanMinMessage = '{Property} must be no less than {min}.',
+        string $greaterThanMaxMessage = '{Property} must be no greater than {max}.',
         string $pattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-        mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {
@@ -94,10 +94,5 @@ final class Number extends AbstractNumber
             skipOnError: $skipOnError,
             when: $when,
         );
-    }
-
-    public function getName(): string
-    {
-        return 'number';
     }
 }

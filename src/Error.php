@@ -20,8 +20,8 @@ final class Error
     public const MESSAGE_TRANSLATE = 2;
 
     /**
-     * @param string $message The raw validation error message. Can be a simple text or a template with placeholders enclosed
-     * in curly braces (`{}`). In the end of the validation it will be translated using configured translator.
+     * @param string $message The raw validation error message. Can be a simple text or a template with placeholders
+     * enclosed in curly braces (`{}`). In the end of the validation it will be translated using configured translator.
      * {@see SimpleMessageFormatter} is usually enough, but for more complex translations
      * {@see IntlMessageFormatter} can be used (requires "intl" PHP extension). Examples:
      *
@@ -106,24 +106,16 @@ final class Error
      * A getter for {@see $valuePath} property. Returns a sequence of keys determining where a value caused the
      * validation error is located within a nested structure.
      *
-     * @param bool|string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
+     * @param string|null $escape Symbol that will be escaped with a backslash char (`\`) in path elements.
      * When it's null path is returned without escaping.
-     * Boolean value is deprecated and will be removed in the next major release. Boolean value processed in the following way:
-     *  - `false` as null,
-     *  - `true` as dot (`.`).
      *
      * @return array A list of keys for nested structures or an empty array otherwise.
-     *
      * @psalm-return list<int|string>
      */
-    public function getValuePath(bool|string|null $escape = false): array
+    public function getValuePath(string|null $escape = null): array
     {
-        if ($escape === false || $escape === null) {
+        if ($escape === null) {
             return $this->valuePath;
-        }
-
-        if ($escape === true) {
-            $escape = '.';
         }
 
         if (mb_strlen($escape) !== 1) {

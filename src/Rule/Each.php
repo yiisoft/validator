@@ -9,14 +9,14 @@ use Closure;
 use JetBrains\PhpStorm\ArrayShape;
 use Yiisoft\Validator\AfterInitAttributeEventInterface;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Helper\PropagateOptionsHelper;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\PropagateOptionsInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -64,7 +64,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Each implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
@@ -74,6 +74,11 @@ final class Each implements
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
+
+    /**
+     * A name of parameter string current key in the {@see Each} rule
+     */
+    public const PARAMETER_EACH_KEY = 'yii-validator-current-each-key';
 
     /**
      * @var array Normalized rules to apply for each element of the validated iterable.
@@ -93,14 +98,14 @@ final class Each implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectInputKeyMessage Error message used when validation fails because the validated iterable
      * contains invalid keys. Only integer and string keys are allowed.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the iterable key being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this `Each` rule with all defined {@see $rules} if the
      * validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
@@ -114,24 +119,25 @@ final class Each implements
      */
     public function __construct(
         callable|iterable|object|string $rules = [],
-        private string $incorrectInputMessage = 'Value must be array or iterable.',
+        private string $incorrectInputMessage = '{Property} must be array or iterable.',
         private string $incorrectInputKeyMessage = 'Every iterable key must have an integer or a string type.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
         $this->rules = RulesNormalizer::normalize($rules);
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'each';
+        return self::class;
     }
 
     public function propagateOptions(): void
     {
-        foreach ($this->rules as $key => $attributeRules) {
-            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $attributeRules);
+        foreach ($this->rules as $key => $propertyRules) {
+            $this->rules[$key] = PropagateOptionsHelper::propagate($this, $propertyRules);
         }
     }
 
@@ -204,8 +210,8 @@ final class Each implements
 
     public function afterInitAttribute(object $object): void
     {
-        foreach ($this->rules as $attributeRules) {
-            foreach ($attributeRules as $rule) {
+        foreach ($this->rules as $propertyRules) {
+            foreach ($propertyRules as $rule) {
                 if ($rule instanceof AfterInitAttributeEventInterface) {
                     $rule->afterInitAttribute($object);
                 }

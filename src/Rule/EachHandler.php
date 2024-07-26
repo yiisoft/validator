@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_int;
@@ -17,7 +18,7 @@ use function is_string;
  */
 final class EachHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Each) {
             throw new UnexpectedRuleException(Each::class, $rule);
@@ -27,7 +28,8 @@ final class EachHandler implements RuleHandlerInterface
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -35,14 +37,19 @@ final class EachHandler implements RuleHandlerInterface
         $rules = $rule->getRules();
         $result = new Result();
 
+        $originalEachKey = $context->getParameter(Each::PARAMETER_EACH_KEY);
+
         /** @var mixed $item */
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
                 return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'type' => get_debug_type($value),
                 ]);
             }
+
+            $context->setParameter(Each::PARAMETER_EACH_KEY, $index);
 
             $itemResult = $context->validate($item, $rules);
             if ($itemResult->isValid()) {
@@ -57,6 +64,8 @@ final class EachHandler implements RuleHandlerInterface
                 );
             }
         }
+
+        $context->setParameter(Each::PARAMETER_EACH_KEY, $originalEachKey);
 
         return $result;
     }

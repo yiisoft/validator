@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 
 trait RuleWithOptionsTestTrait
 {
@@ -13,7 +13,7 @@ trait RuleWithOptionsTestTrait
     /**
      * @dataProvider dataOptions
      */
-    public function testOptions(RuleWithOptionsInterface $rule, array $expectedOptions): void
+    public function testOptions(DumpedRuleInterface $rule, array $expectedOptions): void
     {
         $options = $rule->getOptions();
         $this->assertSame($expectedOptions, $options);

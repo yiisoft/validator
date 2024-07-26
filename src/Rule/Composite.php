@@ -13,7 +13,7 @@ use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Helper\RulesDumper;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\ValidatorInterface;
@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  *
  * ```php
  * $when = static function ($value, ValidationContext $context): bool {
- *     return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *     return $context->getDataSet()->getPropertyValue('country') === Country::USA;
  * };
  * $rules = [
  *     new Required(when: $when),
@@ -42,7 +42,7 @@ use Yiisoft\Validator\WhenInterface;
  *     new Required(),
  *     new Length(min: 1, max: 50, skipOnEmpty: true),
  *     when: static function ($value, ValidationContext $context): bool {
- *         return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *         return $context->getDataSet()->getPropertyValue('country') === Country::USA;
  *     },
  * ]);
  * ```
@@ -60,7 +60,7 @@ use Yiisoft\Validator\WhenInterface;
  *             new Length(min: 1, max: 50, skipOnEmpty: true),
  *         ];
  *         $this->when = static function ($value, ValidationContext $context): bool {
- *             return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+ *             return $context->getDataSet()->getPropertyValue('country') === Country::USA;
  *         };
  *     }
  * };
@@ -75,7 +75,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnEmptyInterface,
     SkipOnErrorInterface,
     WhenInterface,
@@ -91,13 +91,6 @@ class Composite implements
      * @psalm-var NormalizedRulesList
      */
     protected iterable $rules = [];
-
-    /**
-     * @var bool|callable|null Whether to skip this rule group if the validated value is empty / not passed. See
-     * {@see SkipOnEmptyInterface}.
-     * @psalm-var SkipOnEmptyValue
-     */
-    private mixed $skipOnEmpty = null;
 
     /**
      * @var bool Whether to skip this rule group if any of the previous rules gave an error. See
@@ -133,15 +126,15 @@ class Composite implements
         bool $skipOnError = false,
         Closure|null $when = null,
     ) {
-        $this->rules = RulesNormalizer::normalizeList($rules);
         $this->skipOnEmpty = $skipOnEmpty;
+        $this->rules = RulesNormalizer::normalizeList($rules);
         $this->skipOnError = $skipOnError;
         $this->when = $when;
     }
 
     public function getName(): string
     {
-        return 'composite';
+        return self::class;
     }
 
     #[ArrayShape([

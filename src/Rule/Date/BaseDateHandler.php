@@ -12,6 +12,7 @@ use LogicException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -42,7 +43,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     ) {
     }
 
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Date && !$rule instanceof DateTime && !$rule instanceof Time) {
             throw new UnexpectedRuleException([Date::class, DateTime::class, Time::class], $rule);
@@ -59,7 +60,10 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         if ($date === null) {
             $result->addError(
                 $rule->getIncorrectInputMessage() ?? $this->incorrectInputMessage,
-                ['attribute' => $context->getTranslatedAttribute()]
+                [
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
+                ]
             );
             return $result;
         }
@@ -69,7 +73,8 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             $result->addError(
                 $rule->getTooEarlyMessage() ?? $this->tooEarlyMessage,
                 [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($min, $rule, $timeZone),
                 ]
@@ -82,7 +87,8 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             $result->addError(
                 $rule->getTooLateMessage() ?? $this->tooLateMessage,
                 [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($max, $rule, $timeZone),
                 ]

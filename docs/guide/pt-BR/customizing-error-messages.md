@@ -83,10 +83,10 @@ Existem várias maneiras de usar o tradutor de atributos.
 instância do validador criada. Um exemplo para o idioma russo:
 
 ```php
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\Validator;
 
-$attributeTranslator = new ArrayAttributeTranslator([
+$attributeTranslator = new ArrayPropertyTranslator([
     'currentPassword' => 'Текущий пароль',
     'newPassword' => 'Новый пароль',
 ]);
@@ -102,14 +102,14 @@ Existe outra interface especial chamada `AttributeTranslatorProviderInterface` p
 extrair traduções dos objetos que o implementam. Um exemplo para o idioma russo:
 
 ```php
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-final class ChangePasswordForm implements AttributeTranslatorProviderInterface  
+final class ChangePasswordForm implements PropertyTranslatorProviderInterface  
 {  
     public function __construct(  
         #[Required(message: '{attribute} обязателен для ввода.')]  
@@ -124,9 +124,9 @@ final class ChangePasswordForm implements AttributeTranslatorProviderInterface
     ) {  
     }  
   
-    public function getAttributeTranslator(): ?AttributeTranslatorInterface  
+    public function getAttributeTranslator(): ?PropertyTranslatorInterface  
     {  
-        return new ArrayAttributeTranslator([  
+        return new ArrayPropertyTranslator([  
             'currentPassword' => 'Текущий пароль',  
             'newPassword' => 'Новый пароль',  
         ]);  

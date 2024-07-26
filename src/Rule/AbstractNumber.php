@@ -6,10 +6,10 @@ namespace Yiisoft\Validator\Rule;
 
 use Closure;
 use InvalidArgumentException;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -27,7 +27,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 abstract class AbstractNumber implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface
@@ -45,12 +45,12 @@ abstract class AbstractNumber implements
      * A default for {@see $lessThanMinMessage}.
      * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
-    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = 'Value must be no less than {min}.';
+    protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{Property} must be no less than {min}.';
     /**
      * A default for {@see $greaterThanMaxMessage}.
      * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
-    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = 'Value must be no greater than {max}.';
+    protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{Property} must be no greater than {max}.';
 
     /**
      * @var string The regular expression for matching numbers.
@@ -67,26 +67,26 @@ abstract class AbstractNumber implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $notNumberMessage Error message used when the value does not match {@see $pattern}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{value}`: actual value.
      * @param string $lessThanMinMessage Error message used when the value is smaller than {@link $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum value.
      * - `{value}`: actual value.
      * @param string $greaterThanMaxMessage Error message used when the value is bigger than {@link $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum value.
      * - `{value}`: actual value.
      * @param string $pattern The regular expression for matching numbers.
@@ -107,7 +107,7 @@ abstract class AbstractNumber implements
         private string $lessThanMinMessage,
         private string $greaterThanMaxMessage,
         string $pattern,
-        private mixed $skipOnEmpty,
+        bool|callable|null $skipOnEmpty,
         private bool $skipOnError,
         private Closure|null $when,
     ) {
@@ -116,6 +116,12 @@ abstract class AbstractNumber implements
         }
 
         $this->pattern = $pattern;
+        $this->skipOnEmpty = $skipOnEmpty;
+    }
+
+    public function getName(): string
+    {
+        return static::class;
     }
 
     /**

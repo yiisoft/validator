@@ -22,7 +22,7 @@ final class JsonTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Json();
-        $this->assertSame('json', $rule->getName());
+        $this->assertSame(Json::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -32,11 +32,11 @@ final class JsonTest extends RuleTestCase
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The value is not JSON.',
+                        'template' => '{Property} is not JSON.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -134,8 +134,8 @@ JSON_WRAP
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['The value must be a string.']];
-        $errors = ['' => ['The value is not JSON.']];
+        $incorrectInputErrors = ['' => ['Value must be a string.']];
+        $errors = ['' => ['Value is not JSON.']];
 
         return [
             'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],
@@ -148,13 +148,13 @@ JSON_WRAP
             ],
             'custom incorrect input message with parameters' => [
                 ['json'],
-                [new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - array.']],
+                [new Json(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - array.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => ['json']],
-                ['data' => new Json(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['data' => ['Attribute - data, type - array.']],
+                ['data' => new Json(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['data' => ['Property - data, type - array.']],
             ],
 
             ['{"name": "tester"', [new Json()], $errors],
@@ -163,13 +163,13 @@ JSON_WRAP
             'custom message' => ['bad json', [new Json(message: 'Custom message.')], ['' => ['Custom message.']]],
             'custom message with parameters' => [
                 'bad json',
-                [new Json(message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - bad json.']],
+                [new Json(message: 'Property - {property}, value - {value}.')],
+                ['' => ['Property - value, value - bad json.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => 'bad json'],
-                ['data' => new Json(message: 'Attribute - {attribute}, value - {value}.')],
-                ['data' => ['Attribute - data, value - bad json.']],
+                ['data' => new Json(message: 'Property - {Property}, value - {value}.')],
+                ['data' => ['Property - Data, value - bad json.']],
             ],
         ];
     }

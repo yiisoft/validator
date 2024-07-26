@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Rule\Type;
 
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslatorInterface;
-use Yiisoft\Validator\AttributeTranslatorProviderInterface;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslatorInterface;
+use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Type\FloatType;
 use Yiisoft\Validator\Rule\Type\FloatTypeHandler;
 use Yiisoft\Validator\RulesProviderInterface;
@@ -26,7 +26,7 @@ final class FloatTypeTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new FloatType();
-        $this->assertSame('floatType', $rule->getName());
+        $this->assertSame(FloatType::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -89,32 +89,32 @@ final class FloatTypeTest extends RuleTestCase
             'array' => [[], new FloatType(), ['' => [$message]]],
             'message, custom' => [
                 ['sum' => []],
-                ['sum' => new FloatType('Attribute - {attribute}, type - {type}')],
-                ['sum' => ['Attribute - sum, type - array']],
+                ['sum' => new FloatType('Property - {property}, type - {type}')],
+                ['sum' => ['Property - sum, type - array']],
             ],
-            'message, translated attribute' => [
-                new class () implements RulesProviderInterface, AttributeTranslatorProviderInterface {
+            'message, translated property' => [
+                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?float $sum = null,
                     ) {
                     }
 
-                    public function getAttributeLabels(): array
+                    public function getPropertyLabels(): array
                     {
                         return [
                             'sum' => 'Сумма',
                         ];
                     }
 
-                    public function getAttributeTranslator(): ?AttributeTranslatorInterface
+                    public function getPropertyTranslator(): ?PropertyTranslatorInterface
                     {
-                        return new ArrayAttributeTranslator($this->getAttributeLabels());
+                        return new ArrayPropertyTranslator($this->getPropertyLabels());
                     }
 
                     public function getRules(): array
                     {
                         return [
-                            'sum' => new FloatType(message: '"{attribute}" - невещественное число.'),
+                            'sum' => new FloatType(message: '"{property}" - невещественное число.'),
                         ];
                     }
                 },

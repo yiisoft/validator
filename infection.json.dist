@@ -20,6 +20,11 @@
                 ".*if \\(\\$enableIdn .*"
             ]
         },
+        "IfNegation": {
+            "ignoreSourceCodeByRegex": [
+                ".*if \\(function_exists\\('json_validate'\\).*"
+            ]
+        },
         "FalseValue": {
             "ignore": [
                 "Yiisoft\\Validator\\EmptyCondition\\NeverEmpty::__invoke",

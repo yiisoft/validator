@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule\Type;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
@@ -17,7 +18,7 @@ use function is_string;
  */
 final class StringTypeHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof StringType) {
             throw new UnexpectedRuleException(StringType::class, $rule);
@@ -25,7 +26,8 @@ final class StringTypeHandler implements RuleHandlerInterface
 
         if (!is_string($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }

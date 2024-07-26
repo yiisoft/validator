@@ -10,6 +10,7 @@ use ReflectionProperty;
 use stdClass;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Length;
@@ -21,6 +22,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithLabelsProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
@@ -74,7 +76,7 @@ final class ObjectDataSetTest extends TestCase
     public function testPropertyVisibility(
         ObjectDataSet $initialDataSet,
         array $expectedData,
-        array $expectedAttributeValuesMap,
+        array $expectedPropertyValuesMap,
         array $expectedRulesKeys
     ): void {
         $dataSets = [
@@ -86,8 +88,8 @@ final class ObjectDataSetTest extends TestCase
 
             $this->assertSame($expectedData, $dataSet->getData());
 
-            foreach ($expectedAttributeValuesMap as $attribute => $value) {
-                $this->assertSame($value, $dataSet->getAttributeValue($attribute));
+            foreach ($expectedPropertyValuesMap as $property => $value) {
+                $this->assertSame($value, $dataSet->getPropertyValue($property));
             }
 
             $this->assertSame($expectedRulesKeys, array_keys($dataSet->getRules()));
@@ -112,13 +114,13 @@ final class ObjectDataSetTest extends TestCase
     public function testObjectWithDataSet(ObjectDataSet $dataSet): void
     {
         $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
-        $this->assertSame(7, $dataSet->getAttributeValue('key1'));
-        $this->assertSame(42, $dataSet->getAttributeValue('key2'));
+        $this->assertSame(7, $dataSet->getPropertyValue('key1'));
+        $this->assertSame(42, $dataSet->getPropertyValue('key2'));
 
-        $this->assertNull($dataSet->getAttributeValue('name'));
-        $this->assertNull($dataSet->getAttributeValue('age'));
-        $this->assertNull($dataSet->getAttributeValue('number'));
-        $this->assertNull($dataSet->getAttributeValue('non-exist'));
+        $this->assertNull($dataSet->getPropertyValue('name'));
+        $this->assertNull($dataSet->getPropertyValue('age'));
+        $this->assertNull($dataSet->getPropertyValue('number'));
+        $this->assertNull($dataSet->getPropertyValue('non-exist'));
 
         $this->assertSame([], $dataSet->getRules());
     }
@@ -144,10 +146,10 @@ final class ObjectDataSetTest extends TestCase
 
         $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $dataSet->getData());
 
-        $this->assertSame('', $dataSet->getAttributeValue('name'));
-        $this->assertSame(17, $dataSet->getAttributeValue('age'));
-        $this->assertSame(42, $dataSet->getAttributeValue('number'));
-        $this->assertNull($dataSet->getAttributeValue('non-exist'));
+        $this->assertSame('', $dataSet->getPropertyValue('name'));
+        $this->assertSame(17, $dataSet->getPropertyValue('age'));
+        $this->assertSame(42, $dataSet->getPropertyValue('number'));
+        $this->assertNull($dataSet->getPropertyValue('non-exist'));
 
         $this->assertSame(['age'], array_keys($rules));
         $this->assertCount(2, $rules['age']);
@@ -175,13 +177,13 @@ final class ObjectDataSetTest extends TestCase
         $rules = $dataSet->getRules();
 
         $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
-        $this->assertSame(7, $dataSet->getAttributeValue('key1'));
-        $this->assertSame(42, $dataSet->getAttributeValue('key2'));
+        $this->assertSame(7, $dataSet->getPropertyValue('key1'));
+        $this->assertSame(42, $dataSet->getPropertyValue('key2'));
 
-        $this->assertNull($dataSet->getAttributeValue('name'));
-        $this->assertNull($dataSet->getAttributeValue('age'));
-        $this->assertNull($dataSet->getAttributeValue('number'));
-        $this->assertNull($dataSet->getAttributeValue('non-exist'));
+        $this->assertNull($dataSet->getPropertyValue('name'));
+        $this->assertNull($dataSet->getPropertyValue('age'));
+        $this->assertNull($dataSet->getPropertyValue('number'));
+        $this->assertNull($dataSet->getPropertyValue('non-exist'));
 
         $this->assertSame(['key1', 'key2'], array_keys($rules));
         $this->assertCount(1, $rules['key1']);
@@ -201,8 +203,8 @@ final class ObjectDataSetTest extends TestCase
         $dataSet = new ObjectDataSet($object);
 
         $actualRules = [];
-        foreach ($dataSet->getRules() as $attribute => $rules) {
-            $actualRules[$attribute] = $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
+        foreach ($dataSet->getRules() as $property => $rules) {
+            $actualRules[$property] = $rules instanceof Traversable ? iterator_to_array($rules) : (array) $rules;
         }
 
         $this->assertEquals($expectedRules, $actualRules);
@@ -367,10 +369,39 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(['b' => 2], $dataSet2->getData());
     }
 
-    public function testHasAttributeWithDataSetProvided(): void
+    public function testHasPropertyWithDataSetProvided(): void
     {
         $objectDataSet = new ObjectDataSet(new ObjectWithDataSet());
-        $this->assertTrue($objectDataSet->hasAttribute('key1'));
-        $this->assertFalse($objectDataSet->hasAttribute('non-existing-key'));
+        $this->assertTrue($objectDataSet->hasProperty('key1'));
+        $this->assertFalse($objectDataSet->hasProperty('non-existing-key'));
+    }
+
+    public function objectWithLabelsProvider(): array
+    {
+        $dataSet = new ObjectDataSet(new ObjectWithLabelsProvider());
+        $expectedResult = ['name' => 'Имя', 'age' => 'Возраст'];
+
+        return [
+            [new ObjectDataSet(new ObjectWithLabelsProvider()), $expectedResult],
+            [new ObjectDataSet(new ObjectWithLabelsProvider()), $expectedResult], // Not a duplicate. Used to test caching.
+            [$dataSet, $expectedResult],
+            [$dataSet, $expectedResult], // Not a duplicate. Used to test caching.
+            [
+                new ObjectDataSet(new class () {
+                    #[Required]
+                    #[Label('Test label')]
+                    public string $property;
+                }),
+                ['property' => 'Test label'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider objectWithLabelsProvider
+     */
+    public function testObjectWithLabelsProvider(ObjectDataSet $dataSet, array $expected): void
+    {
+        $this->assertSame($expected, $dataSet->getValidationPropertyLabels());
     }
 }

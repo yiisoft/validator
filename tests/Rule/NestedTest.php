@@ -18,9 +18,9 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
@@ -34,12 +34,12 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
-use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
+use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
-use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubRuleWithOptions;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
@@ -56,8 +56,7 @@ final class NestedTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Nested();
-
-        $this->assertSame('nested', $rule->getName());
+        $this->assertSame(Nested::class, $rule->getName());
     }
 
     public function testDefaultValues(): void
@@ -105,7 +104,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -117,7 +116,7 @@ final class NestedTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
@@ -125,15 +124,15 @@ final class NestedTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{Property} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{Property} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{Property} must be no greater than {max}.',
                                 'parameters' => ['max' => null],
                             ],
                             'skipOnEmpty' => false,
@@ -155,7 +154,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -168,7 +167,7 @@ final class NestedTest extends RuleTestCase
                     'rules' => [
                         'user.age' => [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => null,
                                 'incorrectInputMessage' => [
@@ -176,15 +175,15 @@ final class NestedTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => null],
                                 ],
                                 'skipOnEmpty' => false,
@@ -197,8 +196,8 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 new Nested([
-                    'author.name' => new StubRuleWithOptions('author-name', ['key' => 'name']),
-                    'author.age' => new StubRuleWithOptions('author-age', ['key' => 'age']),
+                    'author.name' => new StubDumpedRule('author-name', ['key' => 'name']),
+                    'author.age' => new StubDumpedRule('author-age', ['key' => 'age']),
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
@@ -210,7 +209,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -229,8 +228,8 @@ final class NestedTest extends RuleTestCase
             [
                 new Nested([
                     'author' => [
-                        'name' => new StubRuleWithOptions('author-name', ['key' => 'name']),
-                        'age' => new StubRuleWithOptions('author-age', ['key' => 'age']),
+                        'name' => new StubDumpedRule('author-name', ['key' => 'name']),
+                        'age' => new StubDumpedRule('author-age', ['key' => 'age']),
                     ],
                 ]),
                 [
@@ -243,7 +242,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -305,8 +304,8 @@ final class NestedTest extends RuleTestCase
                     ];
                 },
                 [
-                    'array.age' => ['Value must be no less than 21.'],
-                    'array.number' => ['Value must be no greater than 100.'],
+                    'array.age' => ['Age must be no less than 21.'],
+                    'array.number' => ['Number must be no greater than 100.'],
                 ],
             ],
             'class-string-rules-private-only' => [
@@ -322,7 +321,7 @@ final class NestedTest extends RuleTestCase
                     ];
                 },
                 [
-                    'array.number' => ['Value must be no greater than 100.'],
+                    'array.number' => ['Number must be no greater than 100.'],
                 ],
             ],
             'rules-provider' => [
@@ -330,7 +329,7 @@ final class NestedTest extends RuleTestCase
                     private array $array = [
                         'name' => 'hello',
                         'age' => 17,
-                        'number' => 500,
+                        Number::class => 500,
                     ];
 
                     public function getRules(): iterable
@@ -345,7 +344,7 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'array.age' => ['Value must be no less than 99.'],
+                    'array.age' => ['Age must be no less than 99.'],
                 ],
             ],
             'empty-rules' => [
@@ -371,8 +370,8 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'object.name' => ['Value cannot be blank.'],
-                    'object.age' => ['Value must be no less than 21.'],
+                    'object.name' => ['Name cannot be blank.'],
+                    'object.age' => ['Age must be no less than 21.'],
                 ],
             ],
             'rules-from-validated-value-only-public' => [
@@ -386,7 +385,7 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'object.name' => ['Value cannot be blank.'],
+                    'object.name' => ['Name cannot be blank.'],
                 ],
             ],
             'rules-from-validated-value-only-protected' => [
@@ -400,7 +399,7 @@ final class NestedTest extends RuleTestCase
                     }
                 },
                 [
-                    'object.age' => ['Value must be no less than 21.'],
+                    'object.age' => ['Age must be no less than 21.'],
                 ],
             ],
             'rules-from-validated-value-inherit-attributes' => [
@@ -415,17 +414,17 @@ final class NestedTest extends RuleTestCase
                 },
                 [
                     'object.age' => [
-                        'Value must be no less than 21.',
-                        'Value must be equal to "23".',
+                        'Age must be no less than 21.',
+                        'Age must be equal to "23".',
                     ],
-                    'object.number' => ['Value must be equal to "99".'],
+                    'object.number' => ['Number must be equal to "99".'],
                 ],
             ],
             'nested-with-each' => [
                 new Foo(),
                 [
-                    'name' => ['Value cannot be blank.'],
-                    'bars.0.name' => ['Value cannot be blank.'],
+                    'name' => ['Name cannot be blank.'],
+                    'bars.0.name' => ['Name cannot be blank.'],
                 ],
             ],
         ];
@@ -474,56 +473,56 @@ final class NestedTest extends RuleTestCase
                 ),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => true,
                         'skipOnError' => true,
                         'rules' => [
                             'posts' => [
                                 [
-                                    'each',
+                                    Each::class,
                                     'skipOnEmpty' => true,
                                     'skipOnError' => true,
                                     'rules' => [
                                         [
                                             [
-                                                'nested',
+                                                Nested::class,
                                                 'skipOnEmpty' => true,
                                                 'skipOnError' => true,
                                                 'rules' => [
                                                     'title' => [
                                                         [
-                                                            'length',
+                                                            Length::class,
                                                             'skipOnEmpty' => true,
                                                             'skipOnError' => true,
                                                         ],
                                                     ],
                                                     'authors' => [
                                                         [
-                                                            'each',
+                                                            Each::class,
                                                             'skipOnEmpty' => true,
                                                             'skipOnError' => true,
                                                             'rules' => [
                                                                 [
                                                                     [
-                                                                        'nested',
+                                                                        Nested::class,
                                                                         'skipOnEmpty' => true,
                                                                         'skipOnError' => true,
                                                                         'rules' => [
                                                                             'data.name' => [
                                                                                 [
-                                                                                    'length',
+                                                                                    Length::class,
                                                                                     'skipOnEmpty' => true,
                                                                                     'skipOnError' => true,
                                                                                 ],
                                                                             ],
                                                                             'data.age' => [
                                                                                 [
-                                                                                    'number',
+                                                                                    Number::class,
                                                                                     'skipOnEmpty' => true,
                                                                                     'skipOnError' => true,
                                                                                 ],
                                                                                 [
-                                                                                    'number',
+                                                                                    Number::class,
                                                                                     'skipOnEmpty' => true,
                                                                                     'skipOnError' => true,
                                                                                 ],
@@ -542,7 +541,7 @@ final class NestedTest extends RuleTestCase
                             ],
                             'meta' => [
                                 [
-                                    'length',
+                                    Length::class,
                                     'skipOnEmpty' => true,
                                     'skipOnError' => true,
                                 ],
@@ -555,14 +554,14 @@ final class NestedTest extends RuleTestCase
                 new Nested(propagateOptions: true),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => false,
                         'skipOnError' => false,
                         'rules' => null,
                     ],
                 ],
             ],
-            'single rule as integer attribute rules' => [
+            'single rule as integer property rules' => [
                 new Nested(
                     [new AtLeast(['a'])],
                     propagateOptions: true,
@@ -571,12 +570,12 @@ final class NestedTest extends RuleTestCase
                 ),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => true,
                         'skipOnError' => true,
                         'rules' => [
                             [
-                                'atLeast',
+                                AtLeast::class,
                                 'skipOnEmpty' => true,
                                 'skipOnError' => true,
                             ],
@@ -584,7 +583,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
             ],
-            'single rule as string attribute rules' => [
+            'single rule as string property rules' => [
                 new Nested(
                     [
                         'numbers' => new Each(new Number()),
@@ -595,19 +594,19 @@ final class NestedTest extends RuleTestCase
                 ),
                 [
                     [
-                        'nested',
+                        Nested::class,
                         'skipOnEmpty' => true,
                         'skipOnError' => true,
                         'rules' => [
                             'numbers' => [
                                 [
-                                    'each',
+                                    Each::class,
                                     'skipOnEmpty' => true,
                                     'skipOnError' => true,
                                     'rules' => [
                                         [
                                             [
-                                                'number',
+                                                Number::class,
                                                 'skipOnEmpty' => true,
                                                 'skipOnError' => true,
                                             ],
@@ -640,8 +639,8 @@ final class NestedTest extends RuleTestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(
             [
-                'caption' => ['This value must contain at least 3 characters.'],
-                'object.name' => ['This value must contain at least 5 characters.'],
+                'caption' => ['Caption must contain at least 3 characters.'],
+                'object.name' => ['Name must contain at least 5 characters.'],
             ],
             $result->getErrorMessagesIndexedByPath()
         );
@@ -687,28 +686,28 @@ final class NestedTest extends RuleTestCase
         ];
 
         $detailedErrorsData = [
-            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'x'], 'X must be no less than -10.'],
             [['charts', 0, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 0, 'points', 0, 'rgb', 0], 'Value must be no less than 0.'],
-            [['charts', 0, 'points', 0, 'rgb', 1], 'Value must be no greater than 255.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 0, 'points', 0, 'coordinates', 'y'], 'Y must be no greater than 10.'],
+            [['charts', 0, 'points', 0, 'rgb', 0], 'Rgb must be no less than 0.'],
+            [['charts', 0, 'points', 0, 'rgb', 1], 'Rgb must be no greater than 255.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'x'], 'X must be no less than -10.'],
             [['charts', 0, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 0, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
-            [['charts', 0, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
+            [['charts', 0, 'points', 1, 'coordinates', 'y'], 'Y must be no greater than 10.'],
+            [['charts', 0, 'points', 1, 'rgb', 1], 'Rgb must be no less than 0.'],
+            [['charts', 0, 'points', 1, 'rgb', 2], 'Rgb must be no greater than 255.'],
             [['charts', 1, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
             [['charts', 1, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'x'], 'X must be no less than -10.'],
             [['charts', 2, 'points', 0, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 2, 'points', 0, 'rgb', 0], 'Value must be no less than 0.'],
-            [['charts', 2, 'points', 0, 'rgb', 1], 'Value must be no greater than 255.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Value must be no less than -10.'],
+            [['charts', 2, 'points', 0, 'coordinates', 'y'], 'Y must be no greater than 10.'],
+            [['charts', 2, 'points', 0, 'rgb', 0], 'Rgb must be no less than 0.'],
+            [['charts', 2, 'points', 0, 'rgb', 1], 'Rgb must be no greater than 255.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'x'], 'X must be no less than -10.'],
             [['charts', 2, 'points', 1, 'coordinates', 'x'], 'Custom error.'],
-            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'Value must be no greater than 10.'],
-            [['charts', 2, 'points', 1, 'rgb', 1], 'Value must be no less than 0.'],
-            [['charts', 2, 'points', 1, 'rgb', 2], 'Value must be no greater than 255.'],
+            [['charts', 2, 'points', 1, 'coordinates', 'y'], 'Y must be no greater than 10.'],
+            [['charts', 2, 'points', 1, 'rgb', 1], 'Rgb must be no less than 0.'],
+            [['charts', 2, 'points', 1, 'rgb', 2], 'Rgb must be no greater than 255.'],
         ];
         $detailedErrors = [];
         foreach ($detailedErrorsData as $errorData) {
@@ -716,48 +715,48 @@ final class NestedTest extends RuleTestCase
         }
 
         $errorMessages = [
-            'Value must be no less than -10.',
+            'X must be no less than -10.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0.',
-            'Value must be no greater than 255.',
-            'Value must be no less than -10.',
+            'Y must be no greater than 10.',
+            'Rgb must be no less than 0.',
+            'Rgb must be no greater than 255.',
+            'X must be no less than -10.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0.',
-            'Value must be no greater than 255.',
+            'Y must be no greater than 10.',
+            'Rgb must be no less than 0.',
+            'Rgb must be no greater than 255.',
             'Custom error.',
             'Custom error.',
-            'Value must be no less than -10.',
+            'X must be no less than -10.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0.',
-            'Value must be no greater than 255.',
-            'Value must be no less than -10.',
+            'Y must be no greater than 10.',
+            'Rgb must be no less than 0.',
+            'Rgb must be no greater than 255.',
+            'X must be no less than -10.',
             'Custom error.',
-            'Value must be no greater than 10.',
-            'Value must be no less than 0.',
-            'Value must be no greater than 255.',
+            'Y must be no greater than 10.',
+            'Rgb must be no less than 0.',
+            'Rgb must be no greater than 255.',
         ];
         $errorMessagesIndexedByPath = [
-            'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
-            'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
-            'charts.0.points.0.rgb.0' => ['Value must be no less than 0.'],
-            'charts.0.points.0.rgb.1' => ['Value must be no greater than 255.'],
-            'charts.0.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
-            'charts.0.points.1.coordinates.y' => ['Value must be no greater than 10.'],
-            'charts.0.points.1.rgb.1' => ['Value must be no less than 0.'],
-            'charts.0.points.1.rgb.2' => ['Value must be no greater than 255.'],
+            'charts.0.points.0.coordinates.x' => ['X must be no less than -10.', 'Custom error.'],
+            'charts.0.points.0.coordinates.y' => ['Y must be no greater than 10.'],
+            'charts.0.points.0.rgb.0' => ['Rgb must be no less than 0.'],
+            'charts.0.points.0.rgb.1' => ['Rgb must be no greater than 255.'],
+            'charts.0.points.1.coordinates.x' => ['X must be no less than -10.', 'Custom error.'],
+            'charts.0.points.1.coordinates.y' => ['Y must be no greater than 10.'],
+            'charts.0.points.1.rgb.1' => ['Rgb must be no less than 0.'],
+            'charts.0.points.1.rgb.2' => ['Rgb must be no greater than 255.'],
             'charts.1.points.0.coordinates.x' => ['Custom error.'],
             'charts.1.points.1.coordinates.x' => ['Custom error.'],
-            'charts.2.points.0.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
-            'charts.2.points.0.coordinates.y' => ['Value must be no greater than 10.'],
-            'charts.2.points.0.rgb.0' => ['Value must be no less than 0.'],
-            'charts.2.points.0.rgb.1' => ['Value must be no greater than 255.'],
-            'charts.2.points.1.coordinates.x' => ['Value must be no less than -10.', 'Custom error.'],
-            'charts.2.points.1.coordinates.y' => ['Value must be no greater than 10.'],
-            'charts.2.points.1.rgb.1' => ['Value must be no less than 0.'],
-            'charts.2.points.1.rgb.2' => ['Value must be no greater than 255.'],
+            'charts.2.points.0.coordinates.x' => ['X must be no less than -10.', 'Custom error.'],
+            'charts.2.points.0.coordinates.y' => ['Y must be no greater than 10.'],
+            'charts.2.points.0.rgb.0' => ['Rgb must be no less than 0.'],
+            'charts.2.points.0.rgb.1' => ['Rgb must be no greater than 255.'],
+            'charts.2.points.1.coordinates.x' => ['X must be no less than -10.', 'Custom error.'],
+            'charts.2.points.1.coordinates.y' => ['Y must be no greater than 10.'],
+            'charts.2.points.1.rgb.1' => ['Rgb must be no less than 0.'],
+            'charts.2.points.1.rgb.2' => ['Rgb must be no greater than 255.'],
         ];
 
         return [
@@ -1016,7 +1015,7 @@ final class NestedTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataSetInterface {
-            public function getAttributeValue(string $attribute): mixed
+            public function getPropertyValue(string $property): mixed
             {
                 return false;
             }
@@ -1026,7 +1025,7 @@ final class NestedTest extends RuleTestCase
                 return null;
             }
 
-            public function hasAttribute(string $attribute): bool
+            public function hasProperty(string $property): bool
             {
                 return false;
             }
@@ -1068,11 +1067,11 @@ final class NestedTest extends RuleTestCase
             ],
             'custom no rules with no object message with parameters' => [
                 new class () {
-                    #[Nested(noRulesWithNoObjectMessage: 'Attribute - {attribute}, type - {type}.')]
+                    #[Nested(noRulesWithNoObjectMessage: 'Property - {Property}, {property}, type - {type}.')]
                     public array $value = [];
                 },
                 null,
-                ['value' => ['Attribute - value, type - array.']],
+                ['value' => ['Property - Value, value, type - array.']],
             ],
             // Incorrect data set type
             'incorrect data set type' => [
@@ -1099,7 +1098,7 @@ final class NestedTest extends RuleTestCase
             'incorrect input' => [
                 '',
                 [new Nested(['value' => new Required()])],
-                ['' => ['The value must be an array or an object.']],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 '',
@@ -1111,20 +1110,20 @@ final class NestedTest extends RuleTestCase
                 [
                     new Nested(
                         ['value' => new Required()],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - , type - string.']],
+                ['' => ['Property - value, type - string.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => ''],
                 [
                     'data' => new Nested(
                         ['value' => new Required()],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, type - string.']],
+                ['data' => ['Property - data, type - string.']],
             ],
             'error' => [
                 [
@@ -1134,7 +1133,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.age' => [new Number(min: 40)]])],
-                ['author.age' => ['Value must be no less than 40.']],
+                ['author.age' => ['Age must be no less than 40.']],
             ],
             'key not exists' => [
                 [
@@ -1144,7 +1143,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                ['author.sex' => ['This value is not in the list of acceptable values.']],
+                ['author.sex' => ['Sex is not in the list of acceptable values.']],
             ],
             [
                 ['value' => null],
@@ -1180,7 +1179,7 @@ final class NestedTest extends RuleTestCase
                         ],
                     ]),
                 ],
-                ['body.shipping.phone' => ['Value is invalid.']],
+                ['body.shipping.phone' => ['Phone is invalid.']],
             ],
             [
                 [0 => [0 => -11]],
@@ -1217,21 +1216,21 @@ final class NestedTest extends RuleTestCase
             'nested context' => [
                 [
                     'method' => 'get',
-                    'attributes' => ['abc' => null],
+                    'properties' => ['abc' => null],
                 ],
                 [
                     'method' => [new Required()],
-                    'attributes' => new Nested([
+                    'properties' => new Nested([
                         'abc' => [
                             new Required(when: static function (mixed $value, ValidationContext $context): bool {
-                                $method = $context->getGlobalDataSet()->getAttributeValue('method');
+                                $method = $context->getGlobalDataSet()->getPropertyValue('method');
                                 return $method === 'get';
                             }),
                         ],
                     ]),
                 ],
                 [
-                    'attributes.abc' => ['Value cannot be blank.'],
+                    'properties.abc' => ['Abc cannot be blank.'],
                 ],
             ],
             'deep level of nesting with plain keys' => [
@@ -1259,8 +1258,23 @@ final class NestedTest extends RuleTestCase
                     ],
                 ]),
                 [
-                    'level1.level2.level3.key' => ['Value must be no less than 9.', 'Value must be no greater than 5.'],
-                    'level1.level2.level3.name' => ['This value must contain at least 5 characters.'],
+                    'level1.level2.level3.key' => ['Key must be no less than 9.', 'Key must be no greater than 5.'],
+                    'level1.level2.level3.name' => ['Name must contain at least 5 characters.'],
+                ],
+            ],
+            'error messages with properties in nested structure' => [
+                [
+                    'user' => [
+                        'name' => '',
+                    ],
+                ],
+                new Nested([
+                    'user' => [
+                        'name' => new Required(message: '{property} is required.'),
+                    ],
+                ]),
+                [
+                    'user.name' => ['name is required.'],
                 ],
             ],
         ];
@@ -1277,7 +1291,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.age' => [new Number(min: 20)]])],
-                [['Value must be no less than 20.', ['author', 'age']]],
+                [['Age must be no less than 20.', ['author', 'age']]],
             ],
             'key not exists' => [
                 [
@@ -1287,12 +1301,12 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author.sex' => [new In(['male', 'female'])]])],
-                [['This value is not in the list of acceptable values.', ['author', 'sex']]],
+                [['Sex is not in the list of acceptable values.', ['author', 'sex']]],
             ],
             [
                 '',
                 [new Nested(['value' => new Required()])],
-                [['The value must be an array or an object.', []]],
+                [['Value must be an array or an object.', []]],
             ],
             [
                 ['value' => null],
@@ -1326,7 +1340,7 @@ final class NestedTest extends RuleTestCase
                         ],
                     ]),
                 ],
-                [['Value is invalid.', ['body', 'shipping', 'phone']]],
+                [['Phone is invalid.', ['body', 'shipping', 'phone']]],
             ],
             [
                 [0 => [0 => -11]],
@@ -1346,7 +1360,7 @@ final class NestedTest extends RuleTestCase
                     ],
                 ],
                 [new Nested(['author\.data.name\.surname' => [new Length(min: 8)]])],
-                [['This value must contain at least 8 characters.', ['author.data', 'name.surname']]],
+                [['Name.surname must contain at least 8 characters.', ['author.data', 'name.surname']]],
             ],
         ];
     }

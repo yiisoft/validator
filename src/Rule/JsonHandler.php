@@ -7,8 +7,10 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function function_exists;
 use function is_string;
 
 /**
@@ -19,7 +21,7 @@ use function is_string;
  */
 final class JsonHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Json) {
             throw new UnexpectedRuleException(Json::class, $rule);
@@ -28,7 +30,8 @@ final class JsonHandler implements RuleHandlerInterface
         $result = new Result();
         if (!is_string($value)) {
             return $result->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -36,7 +39,8 @@ final class JsonHandler implements RuleHandlerInterface
 
         if (!$this->isValidJson($value)) {
             return $result->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'value' => $value,
             ]);
         }
@@ -54,23 +58,13 @@ final class JsonHandler implements RuleHandlerInterface
      */
     private function isValidJson(string $value): bool
     {
-        // Regular expression is built based on JSON grammar specified at
-        // https://tools.ietf.org/html/rfc8259
-        $regex = <<<'REGEX'
-        /
-        (?(DEFINE)
-            (?<json>(?>\s*(?&object)\s*|\s*(?&array)\s*))
-            (?<object>(?>\{\s*(?>(?&member)(?>\s*,\s*(?&member))*)?\s*\}))
-            (?<member>(?>(?&string)\s*:\s*(?&value)))
-            (?<array>(?>\[\s*(?>(?&value)(?>\s*,\s*(?&value))*)?\s*\]))
-            (?<value>(?>)false|null|true|(?&object)|(?&array)|(?&number)|(?&string))
-            (?<number>(?>-?(?>0|[1-9]\d*)(?>\.\d+)?(?>[eE][-+]?\d+)?))
-            (?<string>(?>"(?>\\(?>["\\\/bfnrt]|u[a-fA-F0-9]{4})|[^"\\\0-\x1F\x7F]+)*"))
-        )
-        \A(?&json)\z
-        /x
-        REGEX;
+        if (function_exists('json_validate')) {
+            /** @var bool Can be removed after upgrading to PHP 8.3 */
+            return json_validate($value);
+        }
 
-        return preg_match($regex, $value) === 1;
+        json_decode($value);
+
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }

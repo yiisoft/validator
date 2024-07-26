@@ -19,7 +19,7 @@ final class EachTest extends TestCase
                 'a' => ['Value must be zero.'],
                 'c' => ['Value must be zero.'],
             ],
-            $result->getErrorMessagesIndexedByAttribute()
+            $result->getErrorMessagesIndexedByProperty()
         );
     }
 }

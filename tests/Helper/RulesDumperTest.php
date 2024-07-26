@@ -6,11 +6,12 @@ namespace Yiisoft\Validator\Tests\Helper;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Integer;
-use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 
 final class RulesDumperTest extends TestCase
 {
@@ -19,7 +20,7 @@ final class RulesDumperTest extends TestCase
         return [
             [
                 [
-                    'attributeName' => [
+                    'propertyName' => [
                         $rule = new Integer(
                             min: 10,
                             max: 100,
@@ -32,9 +33,9 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 [
-                    'attributeName' => [
+                    'propertyName' => [
                         $dump = [
-                            'integer',
+                            Integer::class,
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
@@ -42,7 +43,7 @@ final class RulesDumperTest extends TestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be an integer.',
+                                'template' => '{Property} must be an integer.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
@@ -63,6 +64,10 @@ final class RulesDumperTest extends TestCase
                         ],
                     ],
                 ],
+            ],
+            [
+                ['propertyName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
+                ['propertyName' => [[RuleWithoutOptions::class], ['name']]],
             ],
         ];
     }
@@ -90,7 +95,7 @@ final class RulesDumperTest extends TestCase
     public function testWrongKeyException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('An attribute can only have an integer or a string type. bool given.');
+        $this->expectExceptionMessage('A property can only have an integer or a string type. bool given.');
         RulesDumper::asArray(new IteratorWithBooleanKey());
     }
 
@@ -102,7 +107,7 @@ final class RulesDumperTest extends TestCase
         ];
         $expectedRules = [
             [
-                'boolean',
+                BooleanValue::class,
                 'trueValue' => '1',
                 'falseValue' => '0',
                 'strict' => false,
@@ -114,7 +119,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
                 'message' => [
-                    'template' => 'Value must be either "{true}" or "{false}".',
+                    'template' => '{Property} must be either "{true}" or "{false}".',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',
@@ -124,7 +129,7 @@ final class RulesDumperTest extends TestCase
                 'skipOnError' => false,
             ],
             [
-                'test',
+                RuleWithoutOptions::class,
             ],
         ];
 

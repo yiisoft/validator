@@ -11,7 +11,7 @@ use Yiisoft\Validator\WhenInterface;
 
 /**
  * Defines validation options to check that the specified value is equal to "target" value provided directly
- * ({@see NotEqual::$targetValue}) or within an attribute ({@see NotEqual::$targetAttribute}).
+ * ({@see NotEqual::$targetValue}) or within a property ({@see NotEqual::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see NotEqual::$type} for all possible options.
@@ -29,15 +29,15 @@ use Yiisoft\Validator\WhenInterface;
 final class NotEqual extends AbstractCompare
 {
     /**
-     * @param mixed $targetValue The value to not be equal to. When both this property and {@see $targetAttribute} are
+     * @param mixed $targetValue The value to not be equal to. When both this property and {@see $targetProperty} are
      * set, this property takes precedence.
-     * @param string|null $targetAttribute The attribute to not be equal to. When both this property and
+     * @param string|null $targetProperty The property to not be equal to. When both this property and
      * {@see $targetValue} are set, the {@see $targetValue} takes precedence.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $incorrectDataSetTypeMessage A message used when the value returned from a custom
      * data set s not scalar.
@@ -49,16 +49,16 @@ final class NotEqual extends AbstractCompare
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{targetValue}`: the value to be compared with.
-     * - `{targetAttribute}`: the name of the attribute to be compared with.
-     * - `{targetAttributeValue}`: the value extracted from the attribute to be compared with if this attribute was set.
-     * - `{targetValueOrAttribute}`: the value to be compared with or, if it's absent, the name of the attribute to be
+     * - `{targetProperty}`: the name of the property to be compared with.
+     * - `{targetPropertyValue}`: the value extracted from the property to be compared with if this property was set.
+     * - `{targetValueOrProperty}`: the value to be compared with or, if it's absent, the name of the property to be
      * compared with.
      * - `{value}`: the value being validated.
      *
      * When {@see CompareType::ORIGINAL} is used with complex types (neither scalar nor `null`), `{targetValue}`,
-     * `{targetAttributeValue}` and `{targetValueOrAttribute}` parameters might contain the actual type instead of the
+     * `{targetPropertyValue}` and `{targetValueOrProperty}` parameters might contain the actual type instead of the
      * value, e.g. "object" for predictable formatting.
      * @param string $type The type of the values being compared:
      *
@@ -88,7 +88,7 @@ final class NotEqual extends AbstractCompare
      */
     public function __construct(
         mixed $targetValue = null,
-        string|null $targetAttribute = null,
+        string|null $targetProperty = null,
         string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         string|null $message = null,
@@ -100,7 +100,7 @@ final class NotEqual extends AbstractCompare
     ) {
         parent::__construct(
             targetValue: $targetValue,
-            targetAttribute: $targetAttribute,
+            targetProperty: $targetProperty,
             incorrectInputMessage: $incorrectInputMessage,
             incorrectDataSetTypeMessage: $incorrectDataSetTypeMessage,
             message: $message,
@@ -110,10 +110,5 @@ final class NotEqual extends AbstractCompare
             skipOnError: $skipOnError,
             when: $when,
         );
-    }
-
-    public function getName(): string
-    {
-        return 'notEqual';
     }
 }

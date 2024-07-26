@@ -76,10 +76,10 @@ final class ObjectParserTest extends TestCase
         $parser = new ObjectParser(SimpleDto::class);
 
         $this->assertSame([], $parser->getData());
-        $this->assertNull($parser->getAttributeValue('a'));
-        $this->assertNull($parser->getAttributeValue('x'));
-        $this->assertFalse($parser->hasAttribute('a'));
-        $this->assertFalse($parser->hasAttribute('x'));
+        $this->assertNull($parser->getPropertyValue('a'));
+        $this->assertNull($parser->getPropertyValue('x'));
+        $this->assertFalse($parser->hasProperty('a'));
+        $this->assertFalse($parser->hasProperty('x'));
     }
 
     public function testGetRulesExpectingAttributeInheritance(): void
@@ -104,9 +104,6 @@ final class ObjectParserTest extends TestCase
         $reflectionParser = new ReflectionObject($parser1);
 
         $cacheProperty = $reflectionParser->getProperty('cache');
-        if (PHP_VERSION_ID < 80100) {
-            $cacheProperty->setAccessible(true);
-        }
 
         $cacheKey1 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache1_7_0';
         $this->assertArrayNotHasKey($cacheKey1, $cacheProperty->getValue());
@@ -116,14 +113,18 @@ final class ObjectParserTest extends TestCase
             'b' => [new Number(min: 1)],
             'c' => [new Number(max: 2)],
         ];
+        $expectedLabels1 = ['c' => 'd'];
         $rules1 = $parser1->getRules();
+        $labels1 = $parser1->getLabels();
         $this->assertEquals($expectedRules1, $rules1);
         $cache = $cacheProperty->getValue();
         $this->assertArrayHasKey($cacheKey1, $cache);
         $this->assertArrayHasKey('rules', $cache[$cacheKey1]);
         $this->assertArrayHasKey('reflectionProperties', $cache[$cacheKey1]);
         $this->assertArrayHasKey('reflectionSource', $cache[$cacheKey1]);
+        $this->assertArrayHasKey('labels', $cache[$cacheKey1]);
         $this->assertSame($rules1, $parser1->getRules());
+        $this->assertSame($labels1, $expectedLabels1);
 
         $parser2 = new ObjectParser(new ObjectForTestingCache2());
         $cacheKey2 = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingCache2_7_0';
@@ -158,9 +159,6 @@ final class ObjectParserTest extends TestCase
         $reflectionParser = new ReflectionObject($parser);
 
         $cacheProperty = $reflectionParser->getProperty('cache');
-        if (PHP_VERSION_ID < 80100) {
-            $cacheProperty->setAccessible(true);
-        }
 
         $cacheKey = 'Yiisoft\Validator\Tests\Support\Data\ObjectForTestingDisabledCache_7_0';
         $this->assertArrayNotHasKey($cacheKey, $cacheProperty->getValue());
@@ -170,10 +168,14 @@ final class ObjectParserTest extends TestCase
             'b' => [new Number(min: 1)],
             'c' => [new Number(max: 2)],
         ];
+        $expectedLabels = ['c' => 'label'];
         $rules = $parser->getRules();
+        $labels = $parser->getLabels();
         $this->assertEquals($expectedRules, $rules);
+        $this->assertSame($expectedLabels, $labels);
         $this->assertArrayNotHasKey($cacheKey, $cacheProperty->getValue());
         $this->assertEquals($expectedRules, $parser->getRules());
+        $this->assertSame($expectedLabels, $parser->getLabels());
         $this->assertNotSame($rules, $parser->getRules());
         $this->assertArrayNotHasKey($cacheKey, $cacheProperty->getValue());
     }

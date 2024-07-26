@@ -6,7 +6,7 @@ namespace Yiisoft\Validator\Helper;
 
 use InvalidArgumentException;
 use Yiisoft\Validator\RuleInterface;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 
 use function is_int;
 use function is_string;
@@ -16,7 +16,7 @@ use function is_string;
  * The array is usually passed to the client to use it in client-side validation.
  *
  * @see RuleInterface
- * @see RuleWithOptionsInterface
+ * @see DumpedRuleInterface
  */
 final class RulesDumper
 {
@@ -61,9 +61,9 @@ final class RulesDumper
      * ],
      * ```
      *
-     * @param iterable $rules Arrays of rule objects indexed by attributes.
+     * @param iterable $rules Arrays of rule objects indexed by properties.
      *
-     * @return array Array of rule names and corresponding settings indexed by attributes.
+     * @return array Array of rule names and corresponding settings indexed by properties.
      */
     public static function asArray(iterable $rules): array
     {
@@ -73,22 +73,22 @@ final class RulesDumper
     /**
      * Converts rule objects to arrays of rule names and corresponding settings.
      *
-     * @param iterable $rules Arrays of rule objects indexed by attributes.
+     * @param iterable $rules Arrays of rule objects indexed by properties.
      *
-     * @return array Array of rule names and corresponding settings indexed by attributes.
+     * @return array Array of rule names and corresponding settings indexed by properties.
      */
     private static function fetchOptions(iterable $rules): array
     {
         $result = [];
         /**
-         * @var mixed $attribute
+         * @var mixed $property
          * @var mixed $rule
          */
-        foreach ($rules as $attribute => $rule) {
-            if (!is_int($attribute) && !is_string($attribute)) {
+        foreach ($rules as $property => $rule) {
+            if (!is_int($property) && !is_string($property)) {
                 $message = sprintf(
-                    'An attribute can only have an integer or a string type. %s given.',
-                    get_debug_type($attribute),
+                    'A property can only have an integer or a string type. %s given.',
+                    get_debug_type($property),
                 );
 
                 throw new InvalidArgumentException($message);
@@ -96,10 +96,10 @@ final class RulesDumper
 
             if (is_iterable($rule)) {
                 $options = self::fetchOptions($rule);
-            } elseif ($rule instanceof RuleWithOptionsInterface) {
+            } elseif ($rule instanceof DumpedRuleInterface) {
                 $options = array_merge([$rule->getName()], $rule->getOptions());
             } elseif ($rule instanceof RuleInterface) {
-                $options = [$rule->getName()];
+                $options = [$rule::class];
             } else {
                 throw new InvalidArgumentException(sprintf(
                     'Every rule must implement "%s". Type "%s" given.',
@@ -108,7 +108,7 @@ final class RulesDumper
                 ));
             }
 
-            $result[$attribute] = $options;
+            $result[$property] = $options;
         }
 
         return $result;

@@ -46,7 +46,7 @@ final class CallbackTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Callback(callback: static fn (): Result => new Result());
-        $this->assertSame('callback', $rule->getName());
+        $this->assertSame(Callback::class, $rule->getName());
     }
 
     public function testGetMethod(): void
@@ -179,7 +179,7 @@ final class CallbackTest extends RuleTestCase
                         RuleInterface $rule,
                         ValidationContext $context
                     ): Result {
-                        if ($value !== $context->getDataSet()->getAttributeValue('age')) {
+                        if ($value !== $context->getDataSet()->getPropertyValue('age')) {
                             throw new RuntimeException('Method scope was not bound to the object.');
                         }
 

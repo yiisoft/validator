@@ -6,11 +6,11 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\Rule\Type\BooleanType;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -31,7 +31,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
+final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -60,7 +60,7 @@ final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterfa
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{type}`: the type of the value being validated.
@@ -69,7 +69,7 @@ final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterfa
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{true}`: the value set in {@see $trueValue} option.
      * - `{false}`: the value set in {@see $falseValue} option.
      * - `{value}`: the value being validated.
@@ -87,16 +87,17 @@ final class BooleanValue implements RuleWithOptionsInterface, SkipOnEmptyInterfa
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
         private string $incorrectInputMessage = 'The allowed types are integer, float, string, boolean. {type} given.',
-        private string $message = 'Value must be either "{true}" or "{false}".',
-        private mixed $skipOnEmpty = null,
+        private string $message = '{Property} must be either "{true}" or "{false}".',
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'boolean';
+        return self::class;
     }
 
     /**

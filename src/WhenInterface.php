@@ -31,11 +31,11 @@ interface WhenInterface
      * function (mixed $value, ValidationContext $context): bool;
      * ```
      *
-     * An example of applying validation depending on other attribute value:
+     * An example of applying validation depending on other property value:
      *
      * ```php
      * static function (mixed $value, ValidationContext $context): bool {
-     *     return $context->getDataSet()->getAttributeValue('country') === Country::USA;
+     *     return $context->getDataSet()->getPropertyValue('country') === Country::USA;
      * }
      * ```
      *

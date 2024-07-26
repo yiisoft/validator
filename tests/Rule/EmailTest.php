@@ -42,7 +42,7 @@ final class EmailTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Email();
-        $this->assertSame('email', $rule->getName());
+        $this->assertSame(Email::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -58,11 +58,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'This value is not a valid email address.',
+                        'template' => '{Property} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -79,11 +79,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'This value is not a valid email address.',
+                        'template' => '{Property} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -100,11 +100,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => true,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'This value is not a valid email address.',
+                        'template' => '{Property} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -121,11 +121,11 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be a string.',
+                        'template' => '{Property} must be a string.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'This value is not a valid email address.',
+                        'template' => '{Property} is not a valid email address.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -208,8 +208,8 @@ final class EmailTest extends RuleTestCase
         $ruleAllowedName = new Email(allowName: true);
         $ruleEnabledIdn = new Email(enableIdn: true);
         $ruleEnabledIdnAndAllowedName = new Email(allowName: true, enableIdn: true);
-        $errors = ['' => ['This value is not a valid email address.']];
-        $incorrectInputErrors = ['' => ['The value must be a string.']];
+        $errors = ['' => ['Value is not a valid email address.']];
+        $incorrectInputErrors = ['' => ['Value must be a string.']];
 
         return [
             'incorrect input, integer' => [1, [$rule], $incorrectInputErrors],
@@ -225,13 +225,13 @@ final class EmailTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Email(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']],
+                [new Email(incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
-                ['data' => [new Email(incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')]],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => [new Email(incorrectInputMessage: 'Property - {property}, type - {type}.')]],
+                ['data' => ['Property - data, type - int.']],
             ],
 
             ['rmcreative.ru', [$rule], $errors],
@@ -327,13 +327,13 @@ final class EmailTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 'test@nonexistingsubdomain.example.com',
-                [new Email(checkDns: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['' => ['Attribute - , value - test@nonexistingsubdomain.example.com.']],
+                [new Email(checkDns: true, message: 'Property - {Property}, value - {value}.')],
+                ['' => ['Property - Value, value - test@nonexistingsubdomain.example.com.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => 'test@nonexistingsubdomain.example.com'],
-                ['data' => new Email(checkDns: true, message: 'Attribute - {attribute}, value - {value}.')],
-                ['data' => ['Attribute - data, value - test@nonexistingsubdomain.example.com.']],
+                ['data' => new Email(checkDns: true, message: 'Property - {property}, value - {value}.')],
+                ['data' => ['Property - data, value - test@nonexistingsubdomain.example.com.']],
             ],
         ];
     }

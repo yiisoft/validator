@@ -8,10 +8,10 @@ use Attribute;
 use Closure;
 use InvalidArgumentException;
 use RuntimeException;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -30,7 +30,7 @@ use function function_exists;
  * @see UrlHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class Url implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -60,14 +60,14 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the value's type.
      * @param string $message @var string A message used when the value is not valid.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
-     * - `{value}`: the value of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
+     * - `{value}`: the value of the property being validated.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying the rule. See {@see WhenInterface}.
@@ -81,9 +81,9 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
         string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         private array $validSchemes = ['http', 'https'],
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = 'The value must be a string.',
-        private string $message = 'This value is not a valid URL.',
-        private mixed $skipOnEmpty = null,
+        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $message = '{Property} is not a valid URL.',
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -103,11 +103,13 @@ final class Url implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenI
             throw new RuntimeException('In order to use IDN validation intl extension must be installed and enabled.');
             // @codeCoverageIgnoreEnd
         }
+
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'url';
+        return self::class;
     }
 
     /**

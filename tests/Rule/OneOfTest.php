@@ -24,25 +24,25 @@ final class OneOfTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new OneOf([]);
-        $this->assertSame('oneOf', $rule->getName());
+        $this->assertSame(OneOf::class, $rule->getName());
     }
 
     public function dataOptions(): array
     {
         return [
             [
-                new OneOf(['attr1', 'attr2']),
+                new OneOf(['prop1', 'prop2']),
                 [
-                    'attributes' => [
-                        'attr1',
-                        'attr2',
+                    'properties' => [
+                        'prop1',
+                        'prop2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least 1 filled attribute.',
+                        'template' => 'Exactly 1 property from this list must be filled: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -50,18 +50,18 @@ final class OneOfTest extends RuleTestCase
                 ],
             ],
             'callable skip on empty' => [
-                new OneOf(['attr1', 'attr2'], skipOnEmpty: new NeverEmpty()),
+                new OneOf(['prop1', 'prop2'], skipOnEmpty: new NeverEmpty()),
                 [
-                    'attributes' => [
-                        'attr1',
-                        'attr2',
+                    'properties' => [
+                        'prop1',
+                        'prop2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => 'The value must be an array or an object.',
+                        'template' => '{Property} must be an array or an object.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'The data must have at least 1 filled attribute.',
+                        'template' => 'Exactly 1 property from this list must be filled: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
@@ -76,46 +76,32 @@ final class OneOfTest extends RuleTestCase
         return [
             [
                 new class () {
-                    public $attr1 = 1;
-                    public $attr2 = null;
+                    public $prop1 = 1;
+                    public $prop2 = null;
                 },
-                [new OneOf(['attr1', 'attr2'])],
+                [new OneOf(['prop1', 'prop2'])],
             ],
             [
                 new class () {
-                    public $attr1 = null;
-                    public $attr2 = 1;
+                    public $prop1 = null;
+                    public $prop2 = 1;
                 },
-                [new OneOf(['attr1', 'attr2'])],
+                [new OneOf(['prop1', 'prop2'])],
             ],
             [
                 new class () {
-                    private int $attr1 = 1;
-                    private $attr2 = null;
+                    private int $prop1 = 1;
+                    private $prop2 = null;
                 },
-                [new OneOf(['attr1', 'attr2'])],
+                [new OneOf(['prop1', 'prop2'])],
             ],
             [
-                ['attr1' => 1, 'attr2' => null],
-                [new OneOf(['attr1', 'attr2'])],
+                ['prop1' => 1, 'prop2' => null],
+                [new OneOf(['prop1', 'prop2'])],
             ],
             [
-                ['attr1' => null, 'attr2' => 1],
-                [new OneOf(['attr1', 'attr2'])],
-            ],
-            [
-                new class () {
-                    public $obj;
-
-                    public function __construct()
-                    {
-                        $this->obj = new class () {
-                            public $attr1 = 1;
-                            public $attr2 = null;
-                        };
-                    }
-                },
-                ['obj' => new OneOf(['attr1', 'attr2'])],
+                ['prop1' => null, 'prop2' => 1],
+                [new OneOf(['prop1', 'prop2'])],
             ],
             [
                 new class () {
@@ -124,22 +110,36 @@ final class OneOfTest extends RuleTestCase
                     public function __construct()
                     {
                         $this->obj = new class () {
-                            public $attr1 = null;
-                            public $attr2 = 1;
+                            public $prop1 = 1;
+                            public $prop2 = null;
                         };
                     }
                 },
-                ['obj' => new OneOf(['attr1', 'attr2'])],
+                ['obj' => new OneOf(['prop1', 'prop2'])],
             ],
             [
-                ['obj' => ['attr1' => 1, 'attr2' => null]],
-                ['obj' => new OneOf(['attr1', 'attr2'])],
+                new class () {
+                    public $obj;
+
+                    public function __construct()
+                    {
+                        $this->obj = new class () {
+                            public $prop1 = null;
+                            public $prop2 = 1;
+                        };
+                    }
+                },
+                ['obj' => new OneOf(['prop1', 'prop2'])],
             ],
             [
-                ['obj' => ['attr1' => null, 'attr2' => 1]],
-                ['obj' => new OneOf(['attr1', 'attr2'])],
+                ['obj' => ['prop1' => 1, 'prop2' => null]],
+                ['obj' => new OneOf(['prop1', 'prop2'])],
             ],
-            'class attribute' => [
+            [
+                ['obj' => ['prop1' => null, 'prop2' => 1]],
+                ['obj' => new OneOf(['prop1', 'prop2'])],
+            ],
+            'class property, translation' => [
                 new OneOfDto(1),
             ],
         ];
@@ -148,71 +148,71 @@ final class OneOfTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $object = new class () {
-            public $attr1 = null;
-            public $attr2 = null;
+            public $prop1 = null;
+            public $prop2 = null;
         };
-        $array = ['attr1' => null, 'attr2' => null];
+        $array = ['prop1' => null, 'prop2' => null];
 
         return [
             'incorrect input' => [
                 1,
-                [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The value must be an array or an object.']],
+                [new OneOf(['prop1', 'prop2'])],
+                ['' => ['Value must be an array or an object.']],
             ],
             'custom incorrect input message' => [
                 1,
-                [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Custom incorrect input message.')],
+                [new OneOf(['prop1', 'prop2'], incorrectInputMessage: 'Custom incorrect input message.')],
                 ['' => ['Custom incorrect input message.']],
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new OneOf(['attr1', 'attr2'], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']],
+                [new OneOf(['prop1', 'prop2'], incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
-                ['attribute' => 1],
+            'custom incorrect input message with parameters, property set' => [
+                ['property' => 1],
                 [
-                    'attribute' => new OneOf(
-                        ['attr1', 'attr2'],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                    'property' => new OneOf(
+                        ['prop1', 'prop2'],
+                        incorrectInputMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['attribute' => ['Attribute - attribute, type - int.']],
+                ['property' => ['Property - property, type - int.']],
             ],
             'object' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have at least 1 filled attribute.']],
+                [new OneOf(['prop1', 'prop2'])],
+                ['' => ['Exactly 1 property from this list must be filled: "prop1", "prop2".']],
             ],
             'array' => [
                 $array,
-                [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have at least 1 filled attribute.']],
+                [new OneOf(['prop1', 'prop2'])],
+                ['' => ['Exactly 1 property from this list must be filled: "prop1", "prop2".']],
             ],
-            'more than 1 attribute is filled' => [
-                ['attr1' => 1, 'attr2' => 2],
-                [new OneOf(['attr1', 'attr2'])],
-                ['' => ['The data must have at least 1 filled attribute.']],
+            'more than 1 property is filled' => [
+                ['prop1' => 1, 'prop2' => 2],
+                [new OneOf(['prop1', 'prop2'])],
+                ['' => ['Exactly 1 property from this list must be filled: "prop1", "prop2".']],
             ],
             'custom message' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'], message: 'Custom message.')],
+                [new OneOf(['prop1', 'prop2'], message: 'Custom message.')],
                 ['' => ['Custom message.']],
             ],
             'custom message with parameters' => [
                 $object,
-                [new OneOf(['attr1', 'attr2'], message: 'Attribute - {attribute}.')],
-                ['' => ['Attribute - .']],
+                [new OneOf(['prop1', 'prop2'], message: 'Properties - {Properties}.')],
+                ['' => ['Properties - "Prop1", "Prop2".']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => $object],
-                ['data' => new OneOf(['attr1', 'attr2'], message: 'Attribute - {attribute}.')],
-                ['data' => ['Attribute - data.']],
+                ['data' => new OneOf(['prop1', 'prop2'], message: 'Properties - {properties}.')],
+                ['data' => ['Properties - "prop1", "prop2".']],
             ],
-            'class attribute' => [
+            'class property' => [
                 new OneOfDto(),
                 null,
-                ['' => ['The data must have at least 1 filled attribute.']],
+                ['' => ['Exactly 1 property from this list must be filled: "A", "B", "C".']],
             ],
         ];
     }

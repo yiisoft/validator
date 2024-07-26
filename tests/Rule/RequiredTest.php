@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
+use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\RequiredHandler;
-use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -29,9 +29,9 @@ final class RequiredTest extends RuleTestCase
 
         $this->assertNull($rule->getEmptyCondition());
         $this->assertSame(RequiredHandler::class, $rule->getHandler());
-        $this->assertSame('Value cannot be blank.', $rule->getMessage());
-        $this->assertSame('required', $rule->getName());
-        $this->assertSame('Value not passed.', $rule->getNotPassedMessage());
+        $this->assertSame('{Property} cannot be blank.', $rule->getMessage());
+        $this->assertSame(Required::class, $rule->getName());
+        $this->assertSame('{Property} not passed.', $rule->getNotPassedMessage());
         $this->assertNull($rule->getWhen());
         $this->assertFalse($rule->shouldSkipOnError());
     }
@@ -61,11 +61,11 @@ final class RequiredTest extends RuleTestCase
                 new Required(),
                 [
                     'message' => [
-                        'template' => 'Value cannot be blank.',
+                        'template' => '{Property} cannot be blank.',
                         'parameters' => [],
                     ],
                     'notPassedMessage' => [
-                        'template' => 'Value not passed.',
+                        'template' => '{Property} not passed.',
                         'parameters' => [],
                     ],
                     'skipOnError' => false,
@@ -100,14 +100,14 @@ final class RequiredTest extends RuleTestCase
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],
             'empty after trimming' => [' ', [new Required()], $singleMessageCannotBeBlank],
-            'custom message with attribute' => [
+            'custom message with property' => [
                 ['name' => ''],
-                ['name' => new Required(message: '{attribute} is bad.')],
+                ['name' => new Required(message: '{property} is bad.')],
                 ['name' => ['name is bad.']],
             ],
-            'custom not passed message with attribute' => [
+            'custom not passed message with property' => [
                 [],
-                ['name' => new Required(notPassedMessage: 'Field "{attribute}" is not passed.')],
+                ['name' => new Required(notPassedMessage: 'Field "{property}" is not passed.')],
                 ['name' => ['Field "name" is not passed.']],
             ],
         ];

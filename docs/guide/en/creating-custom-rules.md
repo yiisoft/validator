@@ -31,12 +31,7 @@ final class RgbColor implements RuleInterface
     public function __construct(
         public readonly string $message = 'Invalid RGB color value.',  
     ) {  
-    }  
-  
-    public function getName(): string  
-    {  
-        return 'rgbColor';  
-    }  
+    }
   
     public function getHandler(): string  
     {  
@@ -62,11 +57,12 @@ The 2nd step is creating the handler. Let's define what is exactly a valid RGB c
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class RgbColorHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         // Every rule handler must start with this check.  
         if (!$rule instanceof RgbColor) {
@@ -118,11 +114,6 @@ final class RgbColor implements RuleInterface
     ) {  
     }
   
-    public function getName(): string  
-    {  
-        return 'rgbColor';  
-    }  
-  
     public function getHandler(): string  
     {  
         return RgbColorHandler::class;  
@@ -142,11 +133,12 @@ message templates:
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class RgbColorHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof RgbColor) {
             throw new UnexpectedRuleException(RgbColor::class, $rule);
@@ -154,7 +146,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
         if (!is_array($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -163,7 +155,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         foreach (array_keys($value) as $index => $keyValue) {
             if ($keyValue !== $index) {
                 return (new Result())->addError($rule->getIncorrectInputRepresentationMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
                 ]);
             }
 
@@ -172,7 +164,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
         if ($itemsCount !== 3) {
             return (new Result())->addError($rule->getIncorrectItemsCountMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
                 'itemsCount' => $itemsCount,
             ]);
         }
@@ -180,7 +172,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         foreach ($value as $index => $item) {
             if (!is_int($item)) {
                 return (new Result())->addError($rule->getIncorrectItemTypeMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
                     'position' => $index + 1,
                     'type' => get_debug_type($item),
                 ]);
@@ -188,7 +180,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
             if ($item < 0 || $item > 255) {
                 return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
                     'position' => $index + 1,
                     'value' => $value,
                 ]);
@@ -250,26 +242,27 @@ $result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());
 
 ##### Replacing with separate rules and `when`
 
-Below is an attempt at using validation context for validating attributes depending on each other:
+Below is an attempt at using validation context for validating properties depending on each other:
 
-- Validate company name only when the other attribute `hasCompany` name is filled.
+- Validate company name only when the other property `hasCompany` name is filled.
 - The company name must be a string with a length between 1 and 50 characters.
 
 ```php
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class CompanyNameHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof CompanyName) {
             throw new UnexpectedRuleException(CompanyName::class, $rule);
         }
 
-        if ($context->getDataSet()->getAttributeValue('hasCompany') !== true) {
+        if ($context->getDataSet()->getPropertyValue('hasCompany') !== true) {
             return new Result();
         }
 
@@ -300,7 +293,7 @@ $rules = [
         min: 1,
         max: 50,
         when: static function (mixed $value, ValidationContext $context): bool {
-            return $context->getDataSet()->getAttributeValue('hasCompany') === true;
+            return $context->getDataSet()->getPropertyValue('hasCompany') === true;
         },
     ),
 ];
@@ -330,11 +323,6 @@ final class Yaml implements RuleInterface
     ) {  
     }
   
-    public function getName(): string  
-    {  
-        return 'yaml';  
-    }  
-  
     public function getHandler(): string  
     {  
         return YamlHandler::class;  
@@ -351,11 +339,12 @@ use Exception;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class YamlHandler implements RuleHandlerInterface
 {  
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result 
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result 
     {  
         if (!$rule instanceof Yaml) {
             throw new UnexpectedRuleException(RgbColor::class, $rule);
@@ -363,7 +352,7 @@ final class YamlHandler implements RuleHandlerInterface
   
         if (!is_string($value)) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -372,13 +361,13 @@ final class YamlHandler implements RuleHandlerInterface
             $data = yaml_parse($value);
         } catch (Exception $e) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
             ]);
         }
 
         if ($data === false) {
             return (new Result())->addError($rule->getMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
             ]);
         }
 
@@ -390,7 +379,7 @@ final class YamlHandler implements RuleHandlerInterface
 > **Note:** Using [yaml_parse] additionally requires `yaml` PHP extension.
 
 > **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
-> [yaml_parse] docs for more details.
+> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details.
 
 ### Wrapping validation
 
@@ -401,11 +390,12 @@ for implementing [scenarios from Yii 2] for example.
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 final class OnHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof On) {
             throw new UnexpectedRuleException(On::class, $rule);

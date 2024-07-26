@@ -22,7 +22,7 @@ final class TrueValueTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new TrueValue();
-        $this->assertSame('isTrue', $rule->getName());
+        $this->assertSame(TrueValue::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -40,7 +40,7 @@ final class TrueValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'The value must be "{true}".',
+                        'template' => '{Property} must be "{true}".',
                         'parameters' => [
                             'true' => '1',
                         ],
@@ -61,7 +61,7 @@ final class TrueValueTest extends RuleTestCase
                         ],
                     ],
                     'message' => [
-                        'template' => 'The value must be "{true}".',
+                        'template' => '{Property} must be "{true}".',
                         'parameters' => [
                             'true' => 'true',
                         ],
@@ -114,21 +114,21 @@ final class TrueValueTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         return [
-            ['5', [new TrueValue()], ['' => ['The value must be "1".']]],
+            ['5', [new TrueValue()], ['' => ['Value must be "1".']]],
             [null, [new TrueValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
             [[], [new TrueValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
-            [true, [new TrueValue(strict: true)], ['' => ['The value must be "1".']]],
-            ['1', [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            [true, [new TrueValue(strict: true)], ['' => ['Value must be "1".']]],
+            ['1', [new TrueValue(trueValue: true, strict: true)], ['' => ['Value must be "true".']]],
             [
                 [],
                 [new TrueValue(trueValue: true, strict: true)],
                 ['' => ['The allowed types are integer, float, string, boolean. array given.']],
             ],
 
-            [false, [new TrueValue()], ['' => ['The value must be "1".']]],
-            ['0', [new TrueValue()], ['' => ['The value must be "1".']]],
-            ['0', [new TrueValue(strict: true)], ['' => ['The value must be "1".']]],
-            [false, [new TrueValue(trueValue: true, strict: true)], ['' => ['The value must be "true".']]],
+            [false, [new TrueValue()], ['' => ['Value must be "1".']]],
+            ['0', [new TrueValue()], ['' => ['Value must be "1".']]],
+            ['0', [new TrueValue(strict: true)], ['' => ['Value must be "1".']]],
+            [false, [new TrueValue(trueValue: true, strict: true)], ['' => ['Value must be "true".']]],
 
             'custom message' => [
                 5,
@@ -137,8 +137,8 @@ final class TrueValueTest extends RuleTestCase
             ],
             'custom message with parameters' => [
                 5,
-                [new TrueValue(message: 'Attribute - {attribute}, true - {true}, value - {value}.')],
-                ['' => ['Attribute - , true - 1, value - 5.']],
+                [new TrueValue(message: 'Property - {Property}, true - {true}, value - {value}.')],
+                ['' => ['Property - Value, true - 1, value - 5.']],
             ],
             'custom message with parameters, custom true value, strict' => [
                 5,
@@ -146,17 +146,17 @@ final class TrueValueTest extends RuleTestCase
                     new TrueValue(
                         trueValue: true,
                         strict: true,
-                        message: 'Attribute - {attribute}, true - {true}, value - {value}.',
+                        message: 'Property - {property}, true - {true}, value - {value}.',
                     ),
                 ],
-                ['' => ['Attribute - , true - true, value - 5.']],
+                ['' => ['Property - value, true - true, value - 5.']],
             ],
-            'custom message with parameters, attribute set' => [
+            'custom message with parameters, property set' => [
                 ['data' => 5],
                 [
-                    'data' => new TrueValue(message: 'Attribute - {attribute}, true - {true}, value - {value}.'),
+                    'data' => new TrueValue(message: 'Property - {Property}, true - {true}, value - {value}.'),
                 ],
-                ['data' => ['Attribute - data, true - 1, value - 5.']],
+                ['data' => ['Property - Data, true - 1, value - 5.']],
             ],
             'custom incorrect input message' => [
                 [],
@@ -166,9 +166,9 @@ final class TrueValueTest extends RuleTestCase
             'custom incorrect input message with parameters' => [
                 [],
                 [
-                    new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                    new TrueValue(incorrectInputMessage: 'Property - {property}, true - {true}, type - {type}.'),
                 ],
-                ['' => ['Attribute - , true - 1, type - array.']],
+                ['' => ['Property - value, true - 1, type - array.']],
             ],
             'custom incorrect input message with parameters, custom true and false values, strict' => [
                 [],
@@ -176,22 +176,22 @@ final class TrueValueTest extends RuleTestCase
                     new TrueValue(
                         trueValue: true,
                         strict: true,
-                        incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.',
+                        incorrectInputMessage: 'Property - {property}, true - {true}, type - {type}.',
                     ),
                 ],
-                ['' => ['Attribute - , true - true, type - array.']],
+                ['' => ['Property - value, true - true, type - array.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => []],
                 [
-                    'data' => new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),
+                    'data' => new TrueValue(incorrectInputMessage: 'Property - {property}, true - {true}, type - {type}.'),
                 ],
-                ['data' => ['Attribute - data, true - 1, type - array.']],
+                ['data' => ['Property - data, true - 1, type - array.']],
             ],
             'custom incorrect input message, null' => [
                 null,
-                [new TrueValue(incorrectInputMessage: 'Attribute - {attribute}, true - {true}, type - {type}.'),],
-                ['' => ['Attribute - , true - 1, type - null.']],
+                [new TrueValue(incorrectInputMessage: 'Property - {property}, true - {true}, type - {type}.'),],
+                ['' => ['Property - value, true - 1, type - null.']],
             ],
         ];
     }

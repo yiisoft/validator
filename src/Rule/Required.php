@@ -6,16 +6,16 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
  * Contains a set of options to determine if the value is not empty according to {@see Required::$emptyCondition}. When
  * rule-level condition is not set, a handler-level condition ({@see RequiredHandler::$defaultEmptyCondition}) is
- * applied (which is also customizable). In case of using attributes, the attribute must be present with passed
+ * applied (which is also customizable). In case of using attributes, the property must be present with passed
  * non-empty value.
  *
  * With default settings in order for value to pass the validation it must satisfy all the following conditions:
@@ -34,7 +34,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface
+final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface
 {
     use SkipOnErrorTrait;
     use WhenTrait;
@@ -44,10 +44,10 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * determine emptiness of the value. The signature must be like the following:
      *
      * ```php
-     * function (mixed $value, bool $isAttributeMissing): bool
+     * function (mixed $value, bool $isPropertyMissing): bool
      * ```
      *
-     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     * `$isPropertyMissing` is a flag defining whether the property is missing (not used / not passed at all).
      *
      * @psalm-var EmptyConditionType|null
      */
@@ -58,13 +58,13 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param string $notPassedMessage Error message used when validation fails because the validated value is not
      * passed.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * @param callable|null $emptyCondition An empty condition used to determine emptiness of the value.
      *
      * @psalm-param EmptyConditionType|null $emptyCondition
@@ -76,8 +76,8 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = 'Value cannot be blank.',
-        private string $notPassedMessage = 'Value not passed.',
+        private string $message = '{Property} cannot be blank.',
+        private string $notPassedMessage = '{Property} not passed.',
         callable|null $emptyCondition = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -87,7 +87,7 @@ final class Required implements RuleWithOptionsInterface, SkipOnErrorInterface, 
 
     public function getName(): string
     {
-        return 'required';
+        return self::class;
     }
 
     /**

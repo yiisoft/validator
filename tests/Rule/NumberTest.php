@@ -39,7 +39,7 @@ final class NumberTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Number();
-        $this->assertSame('number', $rule->getName());
+        $this->assertSame(Number::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -55,15 +55,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{Property} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{Property} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{Property} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -81,15 +81,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{Property} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{Property} must be no less than {min}.',
                         'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{Property} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,
@@ -107,15 +107,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{Property} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{Property} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{Property} must be no greater than {max}.',
                         'parameters' => ['max' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -133,15 +133,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be a number.',
+                        'template' => '{Property} must be a number.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{Property} must be no less than {min}.',
                         'parameters' => ['min' => 2],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{Property} must be no greater than {max}.',
                         'parameters' => ['max' => 10],
                     ],
                     'skipOnEmpty' => false,
@@ -159,15 +159,15 @@ final class NumberTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => 'Value must be an integer.',
+                        'template' => '{Property} must be an integer.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => 'Value must be no less than {min}.',
+                        'template' => '{Property} must be no less than {min}.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => 'Value must be no greater than {max}.',
+                        'template' => '{Property} must be no greater than {max}.',
                         'parameters' => ['max' => null],
                     ],
                     'skipOnEmpty' => false,

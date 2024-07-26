@@ -8,11 +8,11 @@ use Attribute;
 use Closure;
 use Countable;
 use Yiisoft\Validator\CountableLimitInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\CountableLimitTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -28,7 +28,7 @@ use Yiisoft\Validator\WhenInterface;
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Count implements
-    RuleWithOptionsInterface,
+    DumpedRuleInterface,
     SkipOnErrorInterface,
     WhenInterface,
     SkipOnEmptyInterface,
@@ -51,27 +51,27 @@ final class Count implements
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the value being validated.
      * @param string $lessThanMinMessage Error message used when the number of items is smaller than {@see $min}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{min}`: minimum number of items required.
      * - `{number}`: actual number of items.
      * @param string $greaterThanMaxMessage Error message used when the number of items is greater than {@see $max}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{max}`: maximum number of items required.
      * - `{number}`: actual number of items.
      * @param string $notExactlyMessage Error message used when the number of items does not equal {@see $exactly}.
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the translated label of the attribute being validated.
+     * - `{property}`: the translated label of the property being validated.
      * - `{exactly}`: exact number of items required.
      * - `{number}`: actual number of items.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
@@ -88,14 +88,14 @@ final class Count implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = 'This value must be an array or implement \Countable interface.',
-        string $lessThanMinMessage = 'This value must contain at least {min, number} {min, plural, one{item} ' .
+        private string $incorrectInputMessage = '{Property} must be an array or implement \Countable interface.',
+        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
-        string $greaterThanMaxMessage = 'This value must contain at most {max, number} {max, plural, one{item} ' .
+        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{item} ' .
         'other{items}}.',
-        string $notExactlyMessage = 'This value must contain exactly {exactly, number} {exactly, plural, one{item} ' .
+        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
         'other{items}}.',
-        private mixed $skipOnEmpty = null,
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
@@ -107,11 +107,12 @@ final class Count implements
             $greaterThanMaxMessage,
             $notExactlyMessage
         );
+        $this->skipOnEmpty = $skipOnEmpty;
     }
 
     public function getName(): string
     {
-        return 'count';
+        return self::class;
     }
 
     /**

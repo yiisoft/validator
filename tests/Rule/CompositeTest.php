@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
 use Yiisoft\Validator\Rule\Equal;
@@ -30,7 +31,7 @@ final class CompositeTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Composite([]);
-        $this->assertSame('composite', $rule->getName());
+        $this->assertSame(Composite::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -46,7 +47,7 @@ final class CompositeTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -54,15 +55,15 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{Property} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{Property} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{Property} must be no greater than {max}.',
                                 'parameters' => ['max' => 13],
                             ],
                             'skipOnEmpty' => false,
@@ -70,7 +71,7 @@ final class CompositeTest extends RuleTestCase
                             'pattern' => '/1/',
                         ],
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
@@ -78,15 +79,15 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{Property} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{Property} must be no less than {min}.',
                                 'parameters' => ['min' => null],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{Property} must be no greater than {max}.',
                                 'parameters' => ['max' => 14],
                             ],
                             'skipOnEmpty' => false,
@@ -106,7 +107,7 @@ final class CompositeTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'number',
+                            Number::class,
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
@@ -114,17 +115,17 @@ final class CompositeTest extends RuleTestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => 'Value must be a number.',
+                                'template' => '{Property} must be a number.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [
-                                'template' => 'Value must be no less than {min}.',
+                                'template' => '{Property} must be no less than {min}.',
                                 'parameters' => [
                                     'min' => null,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => 'Value must be no greater than {max}.',
+                                'template' => '{Property} must be no greater than {max}.',
                                 'parameters' => [
                                     'max' => 13,
                                 ],
@@ -134,7 +135,7 @@ final class CompositeTest extends RuleTestCase
                             'pattern' => '/1/',
                         ],
                         [
-                            'test',
+                            RuleWithoutOptions::class,
                         ],
                     ],
                 ],
@@ -148,7 +149,7 @@ final class CompositeTest extends RuleTestCase
                     'skipOnError' => false,
                     'rules' => [
                         [
-                            'callback',
+                            Callback::class,
                             'method' => null,
                             'skipOnEmpty' => false,
                             'skipOnError' => false,
@@ -158,7 +159,7 @@ final class CompositeTest extends RuleTestCase
             ],
             'inheritance' => [
                 new class () extends Composite {
-                    public function getRules(): iterable
+                    public function getRules(): array
                     {
                         return [
                             new Required(),
@@ -177,13 +178,13 @@ final class CompositeTest extends RuleTestCase
                     'specific-key' => 42,
                     'rules' => [
                         [
-                            'required',
+                            Required::class,
                             'message' => [
-                                'template' => 'Value cannot be blank.',
+                                'template' => '{Property} cannot be blank.',
                                 'parameters' => [],
                             ],
                             'notPassedMessage' => [
-                                'template' => 'Value not passed.',
+                                'template' => '{Property} not passed.',
                                 'parameters' => [],
                             ],
                             'skipOnError' => false,
@@ -236,7 +237,7 @@ final class CompositeTest extends RuleTestCase
                     ),
                 ],
             ],
-            'multiple attributes via subclass' => [
+            'multiple properties via subclass' => [
                 ['latitude' => -90, 'longitude' => 180],
                 [new CoordinatesRuleSet()],
             ],
@@ -311,24 +312,24 @@ final class CompositeTest extends RuleTestCase
                 ],
                 ['' => ['Custom error']],
             ],
-            'override constructor' => [
+            'override rules' => [
                 null,
                 [
                     new class () extends Composite {
-                        public function __construct()
+                        public function getRules(): array
                         {
-                            $this->rules = [new Required()];
+                            return [new Required()];
                         }
                     },
                 ],
                 ['' => ['Value cannot be blank.']],
             ],
-            'multiple attributes' => [
+            'multiple properties' => [
                 ['latitude' => -91, 'longitude' => 181],
                 [new CoordinatesRuleSet()],
                 [
-                    'latitude' => ['Value must be no less than -90.'],
-                    'longitude' => ['Value must be no greater than 180.'],
+                    'latitude' => ['Latitude must be no less than -90.'],
+                    'longitude' => ['Longitude must be no greater than 180.'],
                 ],
             ],
         ];

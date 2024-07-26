@@ -89,9 +89,9 @@ class ResultTest extends TestCase
     {
         $result = $this->createAttributeErrorResult();
 
-        $this->assertTrue($result->isAttributeValid('attribute1'));
-        $this->assertFalse($result->isAttributeValid('attribute2'));
-        $this->assertFalse($result->isAttributeValid('attribute4'));
+        $this->assertTrue($result->isPropertyValid('attribute1'));
+        $this->assertFalse($result->isPropertyValid('attribute2'));
+        $this->assertFalse($result->isPropertyValid('attribute4'));
     }
 
     public function testGetErrorMessagesIndexedByAttribute(): void
@@ -102,17 +102,17 @@ class ResultTest extends TestCase
                 '' => ['error3.1', 'error3.2'],
                 'attribute4' => ['error4.1', 'error4.2'],
             ],
-            $this->createAttributeErrorResult()->getErrorMessagesIndexedByAttribute()
+            $this->createAttributeErrorResult()->getErrorMessagesIndexedByProperty()
         );
     }
 
-    public function testGetErrorMessagesIndexedByAttributeWithIncorrectType(): void
+    public function testGetErrorMessagesIndexedByPropertyWithIncorrectType(): void
     {
         $result = (new Result())->addError('error1', [], [1]);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Top level attributes can only have string type.');
-        $result->getErrorMessagesIndexedByAttribute();
+        $this->expectExceptionMessage('Top level properties can only have string type.');
+        $result->getErrorMessagesIndexedByProperty();
     }
 
     public function testGetFirstErrorMessagesIndexedByAttribute(): void
@@ -123,24 +123,24 @@ class ResultTest extends TestCase
                 '' => 'error3.1',
                 'attribute4' => 'error4.1',
             ],
-            $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByAttribute(),
+            $this->createAttributeErrorResult()->getFirstErrorMessagesIndexedByProperty(),
         );
     }
 
-    public function testGetFirstErrorMessagesIndexedByAttributeWithIncorrectType(): void
+    public function testGetFirstErrorMessagesIndexedByPropertyWithIncorrectType(): void
     {
         $result = (new Result())->addError('error1', [], [1]);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Top level attributes can only have string type.');
-        $result->getFirstErrorMessagesIndexedByAttribute();
+        $this->expectExceptionMessage('Top level properties can only have string type.');
+        $result->getFirstErrorMessagesIndexedByProperty();
     }
 
     public function testGetAttributeErrors(): void
     {
         $result = $this->createAttributeErrorResult();
 
-        $this->assertEquals([], $result->getAttributeErrors('attribute1'));
+        $this->assertEquals([], $result->getPropertyErrors('attribute1'));
         $this->assertEquals(
             [
                 new Error('error2.1', [], ['attribute2']),
@@ -148,15 +148,15 @@ class ResultTest extends TestCase
                 new Error('error2.3', [], ['attribute2', 'nested']),
                 new Error('error2.4', [], ['attribute2', 'nested']),
             ],
-            $result->getAttributeErrors('attribute2')
+            $result->getPropertyErrors('attribute2')
         );
-        $this->assertEquals([new Error('error3.1'), new Error('error3.2')], $result->getAttributeErrors(''));
+        $this->assertEquals([new Error('error3.1'), new Error('error3.2')], $result->getPropertyErrors(''));
         $this->assertEquals(
             [
                 new Error('error4.1', [], ['attribute4', 'subattribute4.1', 'subattribute4*2']),
                 new Error('error4.2', [], ['attribute4', 'subattribute4.3', 'subattribute4*4']),
             ],
-            $result->getAttributeErrors('attribute4')
+            $result->getPropertyErrors('attribute4')
         );
     }
 
@@ -164,29 +164,29 @@ class ResultTest extends TestCase
     {
         $result = $this->createAttributeErrorResult();
 
-        $this->assertEquals([], $result->getAttributeErrorMessages('attribute1'));
+        $this->assertEquals([], $result->getPropertyErrorMessages('attribute1'));
         $this->assertEquals(
             ['error2.1', 'error2.2', 'error2.3', 'error2.4'],
-            $result->getAttributeErrorMessages('attribute2')
+            $result->getPropertyErrorMessages('attribute2')
         );
-        $this->assertEquals(['error3.1', 'error3.2'], $result->getAttributeErrorMessages(''));
-        $this->assertEquals(['error4.1', 'error4.2'], $result->getAttributeErrorMessages('attribute4'));
+        $this->assertEquals(['error3.1', 'error3.2'], $result->getPropertyErrorMessages(''));
+        $this->assertEquals(['error4.1', 'error4.2'], $result->getPropertyErrorMessages('attribute4'));
     }
 
     public function testGetAttributeErrorMessagesIndexedByPath(): void
     {
         $result = $this->createAttributeErrorResult();
 
-        $this->assertEquals([], $result->getAttributeErrorMessagesIndexedByPath('attribute1'));
+        $this->assertEquals([], $result->getPropertyErrorMessagesIndexedByPath('attribute1'));
         $this->assertEquals(
             ['' => ['error2.1', 'error2.2'], 'nested' => ['error2.3', 'error2.4']],
-            $result->getAttributeErrorMessagesIndexedByPath('attribute2')
+            $result->getPropertyErrorMessagesIndexedByPath('attribute2')
         );
-        $this->assertEquals(['' => ['error3.1', 'error3.2']], $result->getAttributeErrorMessagesIndexedByPath(''));
+        $this->assertEquals(['' => ['error3.1', 'error3.2']], $result->getPropertyErrorMessagesIndexedByPath(''));
         $this->assertEquals([
             'subattribute4\.1.subattribute4*2' => ['error4.1'],
             'subattribute4\.3.subattribute4*4' => ['error4.2'],
-        ], $result->getAttributeErrorMessagesIndexedByPath('attribute4'));
+        ], $result->getPropertyErrorMessagesIndexedByPath('attribute4'));
     }
 
     public function testGetCommonErrorMessages(): void
@@ -243,7 +243,7 @@ class ResultTest extends TestCase
             [
                 'data.meta.the\-age' => ['e1'],
             ],
-            $result->getAttributeErrorMessagesIndexedByPath('user', escape: '-'),
+            $result->getPropertyErrorMessagesIndexedByPath('user', escape: '-'),
         );
     }
 

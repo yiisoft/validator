@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Rule\Trait;
 
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 
 use function is_bool;
@@ -16,9 +16,10 @@ use function is_bool;
  * ```php
  * public function __construct(
  *     // ...
- *     private mixed $skipOnEmpty = null,
+ *     bool|callable|null $skipOnEmpty = null,
  *     // ...
  * ) {
+ *     $this->skipOnEmpty = $skipOnEmpty;
  * }
  * ```
  *
@@ -26,6 +27,13 @@ use function is_bool;
  */
 trait SkipOnEmptyTrait
 {
+    /**
+     * @var bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty / not passed.
+     * See {@see SkipOnEmptyInterface}.
+     * @psalm-var SkipOnEmptyValue $skipOnEmpty
+     */
+    private mixed $skipOnEmpty = null;
+
     /**
      * An immutable setter to change `$skipOnEmpty` property.
      *
@@ -56,7 +64,7 @@ trait SkipOnEmptyTrait
 
     /**
      * A special method used to cast `$skipOnEmpty` property for serialization to be possible. Used when building
-     * {@see RuleWithOptionsInterface::getOptions()}. The missing details need to be recreated separately on the client
+     * {@see DumpedRuleInterface::getOptions()}. The missing details need to be recreated separately on the client
      * side.
      *
      * @return bool|null A casted value:

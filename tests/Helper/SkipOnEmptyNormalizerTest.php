@@ -18,14 +18,14 @@ final class SkipOnEmptyNormalizerTest extends TestCase
             [null, NeverEmpty::class],
             [false, NeverEmpty::class],
             [true, WhenEmpty::class],
-            [static fn (mixed $value, bool $isAttributeMissing): bool => true, Closure::class],
+            [static fn (mixed $value, bool $isPropertyMissing): bool => true, Closure::class],
         ];
     }
 
     /**
      * @dataProvider normalizeData
      */
-    public function testNormalize(mixed $skipOnEmpty, string $expectedClassName): void
+    public function testNormalize(bool|callable|null $skipOnEmpty, string $expectedClassName): void
     {
         $this->assertInstanceOf($expectedClassName, SkipOnEmptyNormalizer::normalize($skipOnEmpty));
     }

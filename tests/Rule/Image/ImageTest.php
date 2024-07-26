@@ -138,7 +138,7 @@ final class ImageTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $notImageResult = ['' => ['The value must be an image.']];
+        $notImageResult = ['' => ['Value must be an image.']];
 
         return [
             'heic-with-width' => [__DIR__ . '/797x808.HEIC', new Image(width: 10), $notImageResult],
@@ -149,16 +149,16 @@ final class ImageTest extends RuleTestCase
             'heic-with-min-height' => [__DIR__ . '/797x808.HEIC', new Image(maxHeight: 10), $notImageResult],
             'heic-with-size-and-custom-message' => [
                 ['a' => __DIR__ . '/797x808.HEIC'],
-                ['a' => new Image(minWidth: 10, notImageMessage: 'The value of "{attribute}" must be an image.')],
-                ['a' => ['The value of "a" must be an image.']],
+                ['a' => new Image(minWidth: 10, notImageMessage: 'Value of "{property}" must be an image.')],
+                ['a' => ['Value of "a" must be an image.']],
             ],
             'empty-string' => ['', new Image(), $notImageResult],
             'not-file-path' => ['test', new Image(), $notImageResult],
             'not-image' => [__DIR__ . '/ImageTest.php', new Image(), $notImageResult],
             'not-image-with-custom-message' => [
                 ['a' => __DIR__ . '/ImageTest.php'],
-                ['a' => new Image(notImageMessage: 'The value of "{attribute}" must be an image.')],
-                ['a' => ['The value of "a" must be an image.']],
+                ['a' => new Image(notImageMessage: 'Value of "{property}" must be an image.')],
+                ['a' => ['Value of "a" must be an image.']],
             ],
             'not-uploaded-file' => [
                 new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_NO_FILE),
@@ -181,14 +181,14 @@ final class ImageTest extends RuleTestCase
                     'a' => new Image(
                         width: 24,
                         height: 32,
-                        notExactWidthMessage: 'Attribute - {attribute}, exactly - {exactly}.',
-                        notExactHeightMessage: 'Attribute - {attribute}, exactly - {exactly}.',
+                        notExactWidthMessage: 'Property - {property}, exactly - {exactly}.',
+                        notExactHeightMessage: 'Property - {property}, exactly - {exactly}.',
                     ),
                 ],
                 [
                     'a' => [
-                        'Attribute - a, exactly - 24.',
-                        'Attribute - a, exactly - 32.',
+                        'Property - a, exactly - 24.',
+                        'Property - a, exactly - 32.',
                     ],
                 ],
             ],
@@ -199,8 +199,8 @@ final class ImageTest extends RuleTestCase
             ],
             'too-small-width-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
-                ['a' => new Image(minWidth: 17, tooSmallWidthMessage: 'Attribute - {attribute}, limit - {limit}.')],
-                ['a' => ['Attribute - a, limit - 17.']],
+                ['a' => new Image(minWidth: 17, tooSmallWidthMessage: 'Property - {property}, limit - {limit}.')],
+                ['a' => ['Property - a, limit - 17.']],
             ],
             'too-small-height' => [
                 __DIR__ . '/16x18.jpg',
@@ -209,8 +209,8 @@ final class ImageTest extends RuleTestCase
             ],
             'too-small-height-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
-                ['a' => new Image(minHeight: 19, tooSmallHeightMessage: 'Attribute - {attribute}, limit - {limit}.')],
-                ['a' => ['Attribute - a, limit - 19.']],
+                ['a' => new Image(minHeight: 19, tooSmallHeightMessage: 'Property - {property}, limit - {limit}.')],
+                ['a' => ['Property - a, limit - 19.']],
             ],
             'too-large-width' => [
                 __DIR__ . '/16x18.jpg',
@@ -219,8 +219,8 @@ final class ImageTest extends RuleTestCase
             ],
             'too-large-width-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
-                ['a' => new Image(maxWidth: 15, tooLargeWidthMessage: 'Attribute - {attribute}, limit - {limit}.')],
-                ['a' => ['Attribute - a, limit - 15.']],
+                ['a' => new Image(maxWidth: 15, tooLargeWidthMessage: 'Property - {property}, limit - {limit}.')],
+                ['a' => ['Property - a, limit - 15.']],
             ],
             'too-large-height' => [
                 __DIR__ . '/16x18.jpg',
@@ -229,8 +229,8 @@ final class ImageTest extends RuleTestCase
             ],
             'too-large-height-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
-                ['a' => new Image(maxHeight: 17, tooLargeHeightMessage: 'Attribute - {attribute}, limit - {limit}.')],
-                ['a' => ['Attribute - a, limit - 17.']],
+                ['a' => new Image(maxHeight: 17, tooLargeHeightMessage: 'Property - {property}, limit - {limit}.')],
+                ['a' => ['Property - a, limit - 17.']],
             ],
         ];
     }
@@ -296,12 +296,12 @@ final class ImageTest extends RuleTestCase
         $rules = [
             'a' => new Image(
                 aspectRatio: new ImageAspectRatio(width: 4, height: 3),
-                invalidAspectRatioMessage: 'Attribute - {attribute}.',
+                invalidAspectRatioMessage: 'Property - {property}.',
             ),
         ];
         $result = (new Validator($ruleHandlerResolver))->validate(['a' => __DIR__ . '/16x18.jpg'], $rules);
         $this->assertSame(
-            ['a' => ['Attribute - a.']],
+            ['a' => ['Property - a.']],
             $result->getErrorMessagesIndexedByPath(),
         );
     }
@@ -363,7 +363,7 @@ final class ImageTest extends RuleTestCase
                         ],
                     ],
                     'notImageMessage' => [
-                        'template' => 'The value must be an image.',
+                        'template' => '{Property} must be an image.',
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
@@ -427,7 +427,7 @@ final class ImageTest extends RuleTestCase
                         ],
                     ],
                     'notImageMessage' => [
-                        'template' => 'The value must be an image.',
+                        'template' => '{Property} must be an image.',
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
@@ -497,7 +497,7 @@ final class ImageTest extends RuleTestCase
                         ],
                     ],
                     'notImageMessage' => [
-                        'template' => 'The value must be an image.',
+                        'template' => '{Property} must be an image.',
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [

@@ -35,7 +35,7 @@ use JetBrains\PhpStorm\ArrayShape;
  * }
  * ```
  *
- * Also, if a rule implements {@see RuleWithOptionsInterface}, you can merge limit related options instead of adding it
+ * Also, if a rule implements {@see DumpedRuleInterface}, you can merge limit related options instead of adding it
  * manually:
  *
  * ```php
@@ -114,7 +114,7 @@ trait CountableLimitTrait
 
         if ($this->min === null && $this->max === null && $this->exactly === null) {
             throw new InvalidArgumentException(
-                'At least one of these attributes must be specified: $min, $max, $exactly.'
+                'At least one of these properties must be specified: $min, $max, $exactly.'
             );
         }
 

@@ -5,12 +5,20 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 /**
- * An extended version of {@see RuleInterface} which allows exporting a rule options in addition to a rule name. It's
- * useful for passing to frontend for further identification and implementing client-side validation. If you don't need
- * that (for example for REST API), use {@see RuleInterface} instead.
+ * An extended version of {@see RuleInterface} which allows exporting a rule options and name customization. It's useful
+ * for passing to frontend for further identification and implementing client-side validation. If you don't need that
+ * (for example for REST API), use {@see RuleInterface} instead.
  */
-interface RuleWithOptionsInterface extends RuleInterface
+interface DumpedRuleInterface extends RuleInterface
 {
+    /**
+     * Returns the name of a rule used during conversion to array. It's used for identification on the frontend with
+     * further implementing of client-side validation.
+     *
+     * @return string A rule name.
+     */
+    public function getName(): string;
+
     /**
      * Gets a rule options as associative array. It's used for identification on the frontend with further implementing
      * of client-side validation. Usually it's just a mapping between rule property names and values.
@@ -46,7 +54,7 @@ interface RuleWithOptionsInterface extends RuleInterface
      * ```
      *
      * Note that the values that can't be serialized to frontend such as callable must be excluded because they will be
-     * useless on frontend. No exception will be thrown, so it's on the conscience of developer.
+     * useless on frontend. No exceptions are thrown in such cases.
      *
      * @return array A rule options.
      */

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -14,7 +15,7 @@ use Yiisoft\Validator\ValidationContext;
  */
 final class BooleanValueHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof BooleanValue) {
             throw new UnexpectedRuleException(BooleanValue::class, $rule);
@@ -47,14 +48,15 @@ final class BooleanValueHandler implements RuleHandlerInterface
      * @param BooleanValue $rule A rule instance.
      * @param ValidationContext $context Validation context.
      *
-     * @return array A mapping between attribute names and their values.
+     * @return array A mapping between property names and their values.
      *
      * @psalm-return array<string,scalar|null>
      */
     private function getCommonResultParameters(BooleanValue $rule, ValidationContext $context): array
     {
         return [
-            'attribute' => $context->getTranslatedAttribute(),
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
             'true' => $rule->getTrueValue() === true ? 'true' : $rule->getTrueValue(),
             'false' => $rule->getFalseValue() === false ? 'false' : $rule->getFalseValue(),
         ];

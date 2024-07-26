@@ -8,7 +8,7 @@ use Attribute;
 
 /**
  * Defines validation options to compare the specified value with "target" value provided directly
- * ({@see GreaterThanOrEqual::$targetValue}) or within an attribute ({@see GreaterThanOrEqual::$targetAttribute}).
+ * ({@see GreaterThanOrEqual::$targetValue}) or within a property ({@see GreaterThanOrEqual::$targetProperty}).
  *
  * The default comparison is based on number values (including float values). It's also possible to compare values as
  * strings byte by byte and compare original values as is. See {@see GreaterThanOrEqual::$type} for all possible
@@ -30,8 +30,4 @@ use Attribute;
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 final class Compare extends AbstractCompare
 {
-    public function getName(): string
-    {
-        return 'compare';
-    }
 }

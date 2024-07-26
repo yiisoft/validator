@@ -11,7 +11,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class RuleWithBuiltInHandler implements RuleInterface, RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         $result = new Result();
 
@@ -20,11 +20,6 @@ final class RuleWithBuiltInHandler implements RuleInterface, RuleHandlerInterfac
         }
 
         return $result;
-    }
-
-    public function getName(): string
-    {
-        return 'is42';
     }
 
     public function getHandler(): string|RuleHandlerInterface

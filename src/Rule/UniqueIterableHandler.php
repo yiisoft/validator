@@ -9,6 +9,7 @@ use Stringable;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function count;
@@ -19,7 +20,7 @@ use function gettype;
  */
 final class UniqueIterableHandler implements RuleHandlerInterface
 {
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof UniqueIterable) {
             throw new UnexpectedRuleException(UniqueIterable::class, $rule);
@@ -27,7 +28,8 @@ final class UniqueIterableHandler implements RuleHandlerInterface
 
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
-                'attribute' => $context->getTranslatedAttribute(),
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
         }
@@ -37,14 +39,16 @@ final class UniqueIterableHandler implements RuleHandlerInterface
         foreach ($value as $item) {
             if (!$this->isValueAllowedForItem($item)) {
                 return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'type' => get_debug_type($item),
                 ]);
             }
 
             if ($previousItem !== null && gettype($previousItem) !== gettype($item)) {
                 return (new Result())->addError($rule->getDifferentTypesMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                 ]);
             }
 
@@ -52,7 +56,8 @@ final class UniqueIterableHandler implements RuleHandlerInterface
 
             if (!empty($stack) && count($stack) !== count(array_unique($stack, flags: SORT_REGULAR))) {
                 return (new Result())->addError($rule->getMessage(), [
-                    'attribute' => $context->getTranslatedAttribute(),
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                 ]);
             }
 

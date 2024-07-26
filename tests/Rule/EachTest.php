@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
+use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Each;
@@ -12,6 +13,7 @@ use Yiisoft\Validator\Rule\EachHandler;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -19,6 +21,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Validator;
+use Yiisoft\Validator\ValidationContext;
 
 final class EachTest extends RuleTestCase
 {
@@ -31,7 +35,7 @@ final class EachTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Each();
-        $this->assertSame('each', $rule->getName());
+        $this->assertSame(Each::class, $rule->getName());
     }
 
     public function dataOptions(): array
@@ -44,7 +48,7 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be array or iterable.',
+                        'template' => '{Property} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
@@ -56,7 +60,7 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
@@ -64,15 +68,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => 13],
                                 ],
                                 'skipOnEmpty' => false,
@@ -82,7 +86,7 @@ final class EachTest extends RuleTestCase
                         ],
                         [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => 14,
                                 'incorrectInputMessage' => [
@@ -90,15 +94,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => 14],
                                 ],
                                 'skipOnEmpty' => false,
@@ -116,7 +120,7 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be array or iterable.',
+                        'template' => '{Property} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
@@ -128,7 +132,7 @@ final class EachTest extends RuleTestCase
                     'rules' => [
                         [
                             [
-                                'number',
+                                Number::class,
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
@@ -136,15 +140,15 @@ final class EachTest extends RuleTestCase
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
-                                    'template' => 'Value must be a number.',
+                                    'template' => '{Property} must be a number.',
                                     'parameters' => [],
                                 ],
                                 'lessThanMinMessage' => [
-                                    'template' => 'Value must be no less than {min}.',
+                                    'template' => '{Property} must be no less than {min}.',
                                     'parameters' => ['min' => null],
                                 ],
                                 'greaterThanMaxMessage' => [
-                                    'template' => 'Value must be no greater than {max}.',
+                                    'template' => '{Property} must be no greater than {max}.',
                                     'parameters' => ['max' => 13],
                                 ],
                                 'skipOnEmpty' => false,
@@ -154,7 +158,7 @@ final class EachTest extends RuleTestCase
                         ],
                         [
                             [
-                                'test',
+                                RuleWithoutOptions::class,
                             ],
                         ],
                     ],
@@ -219,44 +223,44 @@ final class EachTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 1,
-                [new Each([new Number(max: 13)], incorrectInputMessage: 'Attribute - {attribute}, type - {type}.')],
-                ['' => ['Attribute - , type - int.']],
+                [new Each([new Number(max: 13)], incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - int.']],
             ],
-            'custom incorrect input message with parameters, attribute set' => [
+            'custom incorrect input message with parameters, property set' => [
                 ['data' => 1],
                 [
                     'data' => new Each(
                         [new Number(max: 13)],
-                        incorrectInputMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputMessage: 'Property - {Property}, type - {type}.',
                     ),
                 ],
-                ['data' => ['Attribute - data, type - int.']],
+                ['data' => ['Property - Data, type - int.']],
             ],
 
             'incorrect input key' => [
-                ['attribute' => $getGeneratorWithIncorrectKey()],
-                ['attribute' => new Each([new Number(max: 13)])],
-                ['attribute' => ['Every iterable key must have an integer or a string type.']],
+                ['property' => $getGeneratorWithIncorrectKey()],
+                ['property' => new Each([new Number(max: 13)])],
+                ['property' => ['Every iterable key must have an integer or a string type.']],
             ],
             'custom incorrect input key message' => [
-                ['attribute' => $getGeneratorWithIncorrectKey()],
+                ['property' => $getGeneratorWithIncorrectKey()],
                 [
-                    'attribute' => new Each(
+                    'property' => new Each(
                         [new Number(max: 13)],
                         incorrectInputKeyMessage: 'Custom incorrect input key message.',
                     ),
                 ],
-                ['attribute' => ['Custom incorrect input key message.']],
+                ['property' => ['Custom incorrect input key message.']],
             ],
             'custom incorrect input key message with parameters' => [
-                ['attribute' => $getGeneratorWithIncorrectKey()],
+                ['property' => $getGeneratorWithIncorrectKey()],
                 [
-                    'attribute' => new Each(
+                    'property' => new Each(
                         [new Number(max: 13)],
-                        incorrectInputKeyMessage: 'Attribute - {attribute}, type - {type}.',
+                        incorrectInputKeyMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['attribute' => ['Attribute - attribute, type - Generator.']],
+                ['property' => ['Property - property, type - Generator.']],
             ],
 
             [
@@ -320,8 +324,20 @@ final class EachTest extends RuleTestCase
                     'age' => new Number(min: 18),
                 ]),
                 [
-                    '0.name' => ['This value must contain at least 3 characters.'],
-                    '1.age' => ['Value must be no less than 18.'],
+                    '0.name' => ['Name must contain at least 3 characters.'],
+                    '1.age' => ['Age must be no less than 18.'],
+                ],
+            ],
+            'validate with labels' => [
+                ['a' => [1, 2], 'b' => [new stdClass(), 0, 'test']],
+                [
+                    'a' => new StringValue(),
+                    'b' => new Each(new StringValue()),
+                ],
+                [
+                    'a' => ['A must be a string.'],
+                    'b.0' => ['B must be a string.'],
+                    'b.1' => ['B must be a string.'],
                 ],
             ],
         ];
@@ -341,5 +357,70 @@ final class EachTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Each::class, EachHandler::class];
+    }
+
+    public static function dataContextEachKey(): array
+    {
+        return [
+            [
+                [10, 20, 30],
+                [0, 1, 2],
+            ],
+            [
+                ['key1' => 10, 'key2' => '2 test', 'key3' => 30],
+                ['key1', 'key2', 'key3'],
+            ],
+            [
+                [3 => 10, 'key2' => '2 test', 'key3' => 30],
+                [3, 'key2', 'key3'],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataContextEachKey
+     */
+    public function testContextEachKey($data, $keys): void
+    {
+        $indexes = [];
+        $rules = [
+            new Each(
+                new Callback(
+                    function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
+                        $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                        return new Result();
+                    }
+                ),
+            ),
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+
+        $this->assertTrue($result->isValid());
+        $this->assertSame($keys, $indexes);
+    }
+
+    public function testNestedContextEachKey(): void
+    {
+        $indexes = [];
+        $callback = new Callback(
+            function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
+                $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                return new Result();
+            }
+        );
+
+        (new Validator())->validate(
+            [
+                'a' => ['x' => 1, 'y' => 2],
+                'b' => ['z' => 3],
+            ],
+            new Each([
+                new Each($callback),
+                $callback,
+            ]),
+        );
+
+        $this->assertSame(['x', 'y', 'a', 'z', 'b'], $indexes);
     }
 }

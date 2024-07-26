@@ -9,6 +9,7 @@ use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 /**
@@ -23,10 +24,10 @@ final class RequiredHandler implements RuleHandlerInterface
      * determine emptiness of the value. The signature must be like the following:
      *
      * ```php
-     * function (mixed $value, bool $isAttributeMissing): bool
+     * function (mixed $value, bool $isPropertyMissing): bool
      * ```
      *
-     * `$isAttributeMissing` is a flag defining whether the attribute is missing (not used / not passed at all).
+     * `$isPropertyMissing` is a flag defining whether the property is missing (not used / not passed at all).
      *
      * Used as a default when {@see Required::$emptyCondition} is not set. A customized handler can be added to
      * {@see SimpleRuleHandlerContainer::$instances} to be applied to all rules of this type without explicitly
@@ -47,26 +48,32 @@ final class RequiredHandler implements RuleHandlerInterface
         $this->defaultEmptyCondition = $defaultEmptyCondition ?? new WhenEmpty(trimString: true);
     }
 
-    public function validate(mixed $value, object $rule, ValidationContext $context): Result
+    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Required) {
             throw new UnexpectedRuleException(Required::class, $rule);
         }
 
         $result = new Result();
-        if ($context->isAttributeMissing()) {
-            $result->addError($rule->getNotPassedMessage(), ['attribute' => $context->getTranslatedAttribute()]);
+        if ($context->isPropertyMissing()) {
+            $result->addError($rule->getNotPassedMessage(), [
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
+            ]);
 
             return $result;
         }
 
         $emptyCondition = $rule->getEmptyCondition() ?? $this->defaultEmptyCondition;
 
-        if (!$emptyCondition($value, $context->isAttributeMissing())) {
+        if (!$emptyCondition($value, $context->isPropertyMissing())) {
             return $result;
         }
 
-        $result->addError($rule->getMessage(), ['attribute' => $context->getTranslatedAttribute()]);
+        $result->addError($rule->getMessage(), [
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
+        ]);
 
         return $result;
     }

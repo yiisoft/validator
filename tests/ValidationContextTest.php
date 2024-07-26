@@ -6,8 +6,8 @@ namespace Yiisoft\Validator\Tests;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator;
-use Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator;
+use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
+use Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
@@ -84,40 +84,63 @@ final class ValidationContextTest extends TestCase
         $dataSet2 = new ArrayDataSet($data2);
 
         $context = (new ValidationContext())
-            ->setContextDataOnce($validator, new NullAttributeTranslator(), $data1, $dataSet1)
-            ->setContextDataOnce($validator, new NullAttributeTranslator(), $data2, $dataSet2);
+            ->setContextDataOnce($validator, new NullPropertyTranslator(), $data1, $dataSet1)
+            ->setContextDataOnce($validator, new NullPropertyTranslator(), $data2, $dataSet2);
 
         $this->assertSame($data1, $context->getRawData());
         $this->assertSame($dataSet1, $context->getGlobalDataSet());
     }
 
-    public function dataTranslatedAttributeWithoutTranslator(): array
+    public function dataTranslatedPropertyWithoutTranslator(): array
     {
         return [
-            'null' => [null],
+            'null' => ['Value'],
             'string' => ['test'],
         ];
     }
 
     /**
-     * @dataProvider dataTranslatedAttributeWithoutTranslator
+     * @dataProvider dataTranslatedPropertyWithoutTranslator
      */
-    public function testTranslatedAttributeWithoutTranslator(?string $attribute): void
+    public function testTranslatedPropertyWithoutTranslator(?string $property): void
     {
         $context = new ValidationContext();
-        $context->setAttribute($attribute);
+        $context->setProperty($property);
 
-        $this->assertSame($attribute, $context->getTranslatedAttribute());
+        $this->assertSame($property, $context->getTranslatedProperty());
     }
 
-    public function testSetAttributeTranslator(): void
+    public function testSetPropertyTranslator(): void
     {
-        $translator = new ArrayAttributeTranslator(['name' => 'Имя']);
+        $translator = new ArrayPropertyTranslator(['name' => 'Имя']);
 
         $context = (new ValidationContext())
-            ->setAttributeTranslator($translator)
-            ->setAttribute('name');
+            ->setPropertyTranslator($translator)
+            ->setProperty('name');
 
-        $this->assertSame('Имя', $context->getTranslatedAttribute());
+        $this->assertSame('Имя', $context->getTranslatedProperty());
+    }
+
+    public function testSetPropertyLabel(): void
+    {
+        $context = (new ValidationContext())
+            ->setProperty('name')
+            ->setPropertyLabel('first Name');
+
+        $this->assertSame('first Name', $context->getPropertyLabel());
+        $this->assertSame('first Name', $context->getTranslatedProperty());
+        $this->assertSame('First Name', $context->getCapitalizedTranslatedProperty());
+    }
+
+    public function testSetPropertyLabelWithTranslator(): void
+    {
+        $translator = new ArrayPropertyTranslator(['First Name' => 'Имя']);
+
+        $context = (new ValidationContext())
+            ->setPropertyTranslator($translator)
+            ->setProperty('name')
+            ->setPropertyLabel('First Name');
+
+        $this->assertSame('Имя', $context->getTranslatedProperty());
     }
 }
