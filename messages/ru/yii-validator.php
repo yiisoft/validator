@@ -80,7 +80,7 @@ return [
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
     /** @see OneOf */
-    'Exactly 1 property from this list must be filled in {property}: {properties}.' =>
+    'Exactly 1 property from this list must be filled for {property}: {properties}.' =>
         'Ровно 1 свойство из этого списка должно быть заполнено в {property}: {properties}.',
     /** @see Regex */
     '{Property} is invalid.' => 'Значение неверно.',
@@ -168,14 +168,16 @@ return [
     '{Property} must be a time.' => '{Property} должно быть временем.',
 
     /** @see UniqueIterable */
-    'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    'All iterable items must have the same type.' => 'Все элементы списка должны иметь одинаковый тип.',
-    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.',
+    'The allowed types for iterable\'s item values of {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' =>
+        'Разрешённые типы для значений элементов списка {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'All iterable items of {property} must have the same type.' =>
+        'Все элементы списка {property} должны иметь одинаковый тип.',
+    'Every iterable\'s item must be unique.' => 'Каждый элемент списка {property} должен быть уникален.',
 
     /** @see BooleanType */
-    'Value must be a boolean.' => 'Значение должно быть булевым.',
+    '{Property} must be a boolean.' => 'Значение должно быть булевым.',
     /** @see FloatType */
-    'Value must be a float.' => 'Значение должно быть вещественным числом.',
+    '{Property} must be a float.' => 'Значение должно быть вещественным числом.',
     /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию',
 

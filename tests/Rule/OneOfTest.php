@@ -42,7 +42,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Exactly 1 property from this list must be filled in {property}: {properties}.',
+                        'template' => 'Exactly 1 property from this list must be filled for {property}: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -86,7 +86,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Exactly 1 property from this list must be filled in {property}: {properties}.',
+                        'template' => 'Exactly 1 property from this list must be filled for {property}: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
@@ -207,17 +207,17 @@ final class OneOfTest extends RuleTestCase
             'object' => [
                 $object,
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Exactly 1 property from this list must be filled in value: "prop1", "prop2".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "prop1", "prop2".']],
             ],
             'array' => [
                 $array,
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Exactly 1 property from this list must be filled in value: "prop1", "prop2".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "prop1", "prop2".']],
             ],
             'more than 1 property is filled' => [
                 ['prop1' => 1, 'prop2' => 2],
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Exactly 1 property from this list must be filled in value: "prop1", "prop2".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "prop1", "prop2".']],
             ],
             'custom message' => [
                 $object,
@@ -237,7 +237,7 @@ final class OneOfTest extends RuleTestCase
             'class property' => [
                 new OneOfDto(),
                 null,
-                ['' => ['Exactly 1 property from this list must be filled in value: "A", "B", "C".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "A", "B", "C".']],
             ],
         ];
     }
