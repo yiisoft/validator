@@ -120,12 +120,12 @@ final class TrueValueTest extends RuleTestCase
             [
                 null,
                 [new TrueValue()],
-                ['' => ['The allowed types for value are integer, float, string, boolean. null given.']]
+                ['' => ['The allowed types for value are integer, float, string, boolean. null given.']],
             ],
             [
                 [],
                 [new TrueValue()],
-                ['' => ['The allowed types for value are integer, float, string, boolean. array given.']]
+                ['' => ['The allowed types for value are integer, float, string, boolean. array given.']],
             ],
             [true, [new TrueValue(strict: true)], ['' => ['Value must be "1".']]],
             ['1', [new TrueValue(trueValue: true, strict: true)], ['' => ['Value must be "true".']]],
