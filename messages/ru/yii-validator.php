@@ -80,7 +80,8 @@ return [
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
     /** @see OneOf */
-    'Exactly 1 property from this list must be filled: {properties}.' => 'Ровно 1 свойство из этого списка должно быть заполнен: {properties}.',
+    'Exactly 1 property from this list must be filled in {property}: {properties}.' =>
+        'Ровно 1 свойство из этого списка должно быть заполнено в {property}: {properties}.',
     /** @see Regex */
     '{Property} is invalid.' => 'Значение неверно.',
     /** @see Required */

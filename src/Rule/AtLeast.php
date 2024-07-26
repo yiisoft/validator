@@ -48,7 +48,7 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
-     * - `{properties} - the translated labels of the properties that must be filled (within the property being
+     * - `{properties} - the translated labels of the properties some of which must be filled (within the property being
      * validated).
      * - `{min}`: the minimum number of property values that was not met.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.

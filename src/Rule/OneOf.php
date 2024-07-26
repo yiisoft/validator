@@ -44,6 +44,8 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{properties} - the translated labels of the properties one of which must be filled (within the property being
+     * validated).
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -57,7 +59,7 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
     public function __construct(
         private array $properties,
         private string $incorrectInputMessage = '{Property} must be an array or an object.',
-        private string $message = 'Exactly 1 property from this list must be filled: {properties}.',
+        private string $message = 'Exactly 1 property from this list must be filled in {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
