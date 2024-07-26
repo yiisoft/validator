@@ -69,7 +69,7 @@ final class NestedTest extends RuleTestCase
             $rule->getValidatedObjectPropertyVisibility(),
         );
         $this->assertFalse($rule->isPropertyPathRequired());
-        $this->assertSame('Property "{path}" is not found.', $rule->getNoPropertyPathMessage());
+        $this->assertSame('Property "{path}" is not found in {property}.', $rule->getNoPropertyPathMessage());
         $this->assertNull($rule->getSkipOnEmpty());
         $this->assertFalse($rule->shouldSkipOnError());
         $this->assertNull($rule->getWhen());
@@ -96,11 +96,11 @@ final class NestedTest extends RuleTestCase
                 new Nested([new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules can be used for objects only.',
+                        'template' => 'Nested rule without rules requires {property} to be an object.',
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array type.',
+                        'template' => 'An object data set data for {property} can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -108,7 +108,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found in {property}.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -149,11 +149,11 @@ final class NestedTest extends RuleTestCase
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules can be used for objects only.',
+                        'template' => 'Nested rule without rules requires {property} to be an object.',
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array type.',
+                        'template' => 'An object data set data for {property} can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -161,7 +161,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found in {property}.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -182,11 +182,11 @@ final class NestedTest extends RuleTestCase
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules can be used for objects only.',
+                        'template' => 'Nested rule without rules requires {property} to be an object.',
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data can only have an array type.',
+                        'template' => 'An object data set data for {property} can only have an array type.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -194,7 +194,7 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
-                        'template' => 'Property "{path}" is not found.',
+                        'template' => 'Property "{path}" is not found in {property}.',
                         'parameters' => [],
                     ],
                     'requirePropertyPath' => false,
@@ -987,7 +987,7 @@ final class NestedTest extends RuleTestCase
                     public array $value = [];
                 },
                 null,
-                ['value' => ['Nested rule without rules can be used for objects only.']],
+                ['value' => ['Nested rule without rules requires value to be an object.']],
             ],
             'no rules with no object, boolean' => [
                 new class () {
@@ -995,7 +995,7 @@ final class NestedTest extends RuleTestCase
                     public bool $value = false;
                 },
                 null,
-                ['value' => ['Nested rule without rules can be used for objects only.']],
+                ['value' => ['Nested rule without rules requires value to be an object.']],
             ],
             'no rules with no object, integer' => [
                 new class () {
@@ -1003,7 +1003,7 @@ final class NestedTest extends RuleTestCase
                     public int $value = 42;
                 },
                 null,
-                ['value' => ['Nested rule without rules can be used for objects only.']],
+                ['value' => ['Nested rule without rules requires value to be an object.']],
             ],
             'custom no rules with no object message' => [
                 new class () {
@@ -1025,7 +1025,7 @@ final class NestedTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()])],
-                ['' => ['An object data set data can only have an array type.']],
+                ['' => ['An object data set data for value can only have an array type.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
@@ -1083,7 +1083,7 @@ final class NestedTest extends RuleTestCase
                 [new Nested(['author.age' => [new Number(min: 40)]])],
                 ['author.age' => ['Age must be no less than 40.']],
             ],
-            'key not exists' => [
+            'key does not exist' => [
                 [
                     'author' => [
                         'name' => 'Alex',
@@ -1101,12 +1101,12 @@ final class NestedTest extends RuleTestCase
             [
                 [],
                 [new Nested(['value' => new Required()], requirePropertyPath: true)],
-                ['value' => ['Property "value" is not found.']],
+                ['value' => ['Property "value" is not found in value.']],
             ],
             [
                 [],
                 [new Nested([0 => new Required()], requirePropertyPath: true)],
-                [0 => ['Property "0" is not found.']],
+                [0 => ['Property "0" is not found in value.']],
             ],
             // https://github.com/yiisoft/validator/issues/200
             [
@@ -1265,8 +1265,8 @@ final class NestedTest extends RuleTestCase
                 [],
                 [new Nested(['value1' => new Required(), 'value2' => new Required()], requirePropertyPath: true)],
                 [
-                    ['Property "value1" is not found.', ['value1']],
-                    ['Property "value2" is not found.', ['value2']],
+                    ['Property "value1" is not found in value.', ['value1']],
+                    ['Property "value2" is not found in value.', ['value2']],
                 ],
             ],
             [

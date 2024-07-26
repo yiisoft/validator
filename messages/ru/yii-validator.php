@@ -74,9 +74,9 @@ return [
     '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.' => '{Property} должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
     /** @see Nested */
-    'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
-    'An object data set data can only have an array type.' => 'Данные в объекте должны быть массивом.',
-    'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
+    'Nested rule without rules requires {property} to be an object.' => 'При правиле Nested без указания правил {property} должно быть объектом,',
+    'An object data set data for {property} can only have an array type.' => 'Данные в объекте для {property} должны быть массивом.',
+    'Property "{path}" is not found in {property}.' => 'Свойство «{path}» не найдено в {property}.',
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
     /** @see OneOf */
