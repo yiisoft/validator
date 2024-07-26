@@ -141,7 +141,7 @@ final class BooleanValueTest extends RuleTestCase
             [
                 null,
                 [new BooleanValue()],
-                ['' => ['The allowed types for value are integer, float, string, boolean. null given.']]
+                ['' => ['The allowed types for value are integer, float, string, boolean. null given.']],
             ],
             [
                 [],
