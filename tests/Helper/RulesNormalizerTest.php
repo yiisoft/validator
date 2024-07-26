@@ -8,9 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithAttributesOnly;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class RulesNormalizerTest extends TestCase
@@ -35,6 +37,12 @@ final class RulesNormalizerTest extends TestCase
                 ],
                 ObjectWithDifferentPropertyVisibility::class,
             ],
+            'data-object-with-attributes' => [
+                'expected' => [
+                    'name' => [Length::class],
+                ],
+                'data' => new ObjectWithAttributesOnly(),
+            ],
         ];
     }
 
@@ -52,7 +60,7 @@ final class RulesNormalizerTest extends TestCase
      */
     public function testNormalizeWithArrayResult(
         array $expected,
-        callable|iterable|object|string|null $rules,
+        callable|iterable|object|string|null $rules = null,
         mixed $data = null
     ): void {
         $rules = RulesNormalizer::normalize($rules, $data);
