@@ -5,42 +5,44 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule;
 
 use Attribute;
+use BackedEnum;
 use Closure;
-use Yiisoft\Validator\DumpedRuleInterface;
+use InvalidArgumentException;
+use UnitEnum;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
+use Yiisoft\Validator\RuleWithOptionsInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 /**
- * Defines validation options to check that the value is one of the values provided in {@see $values}.
+ * Defines validation options to check that the value is one of the values (or names) contained in an enum of the
+ * specified class.
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
  * In case of the validated value being a list, the order of values is important.
  *
- * Nested arrays are supported too in both {@see values} argument and in the validated value (the order of values in
+ * Nested arrays are supported in the validated value (the order of values in
  * lists must match, the order of keys in associative arrays is not important).
  *
- * If the validated value is a set, use {@see Subset} instead.
- *
- * @see InHandler
+ * @see InEnumHandler
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class InEnum implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
     use WhenTrait;
 
     /**
-     * @param iterable $values A set of values to check against. Nested arrays are supported too (the order of values in
-     * lists must match, the order of keys in associative arrays is not important).
+     * @param string $class Class of the enum to user.
+     * @param bool $useNames Whether to use names for backend enums instead of value.
      * @param bool $strict Whether the comparison to each value in the set is strict:
      *
      * - Strict mode uses `===` operator meaning the type and the value must both match.
@@ -58,7 +60,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * You may use the following placeholders in the message:
      *
-     * - `{property}`: the name of the property.
+     * - `{attribute}`: the name of the attribute.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -70,20 +72,25 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private iterable $values,
+        private string $class,
+        private bool $useNames = false,
         private bool $strict = false,
         private bool $not = false,
-        private string $message = '{Property} is not in the list of acceptable values.',
-        bool|callable|null $skipOnEmpty = null,
+        private string $message = 'This value is not in the list of acceptable values.',
+        private mixed $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        $this->skipOnEmpty = $skipOnEmpty;
+        if (!is_string($this->class) || !is_subclass_of($this->class, UnitEnum::class)) {
+            throw new InvalidArgumentException(
+                sprintf('Class should be an enum class string, %s provided.', get_debug_type($this->class))
+            );
+        }
     }
 
     public function getName(): string
     {
-        return self::class;
+        return 'inEnum';
     }
 
     /**
@@ -93,7 +100,11 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      */
     public function getValues(): iterable
     {
-        return $this->values;
+        if (is_subclass_of($this->class, BackedEnum::class) && !$this->useNames) {
+            return array_column($this->class::cases(), 'value');
+        }
+
+        return array_column($this->class::cases(), 'name');
     }
 
     /**
@@ -130,7 +141,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
     public function getOptions(): array
     {
         return [
-            'values' => $this->values,
+            'values' => $this->getValues(),
             'strict' => $this->strict,
             'not' => $this->not,
             'message' => [
@@ -144,6 +155,6 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
 
     public function getHandler(): string
     {
-        return InHandler::class;
+        return InEnumHandler::class;
     }
 }
