@@ -195,5 +195,4 @@ return [
         'Высота {property} не может быть больше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
     'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.' =>
         'Соотношение стороно {property} должно быть {aspectRatioWidth, number}:{aspectRatioHeight, number} с отступом {aspectRatioMargin, number}%.',
-
 ];
