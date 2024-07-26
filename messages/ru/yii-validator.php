@@ -11,6 +11,7 @@ use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
+use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Ip;
@@ -175,4 +176,22 @@ return [
     'Value must be a float.' => 'Значение должно быть вещественным числом.',
     /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию',
+
+    /** @see Image */
+    '{Property} must be an image.' => '{Property} должно быть изображением.',
+    'The width of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.' =>
+        'Ширина {propery} должна быть в точности {exactly, number} {exactly, plural, one{пиксель} other{пикселей}}',
+    'The height of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.' =>
+        'Высота {propery} должна быть в точности {exactly, number} {exactly, plural, one{пиксель} other{пикселей}}',
+    'The width of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Ширина {property} не может быть меньше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The height of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Высота {property} не может быть меньше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The width of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Ширина {property} не может быть больше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The height of {property}t cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Высота {property} не может быть больше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.' =>
+        'Соотношение стороно {property} должно быть {aspectRatioWidth, number}:{aspectRatioHeight, number} с отступом {aspectRatioMargin, number}%.',
+
 ];
