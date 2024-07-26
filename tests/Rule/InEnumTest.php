@@ -8,7 +8,6 @@ use ArrayObject;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\InEnum;
 use Yiisoft\Validator\Rule\InEnumHandler;
-use Yiisoft\Validator\Rule\InHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
@@ -108,8 +107,6 @@ final class InEnumTest extends RuleTestCase
         $errors = ['' => ['This value is not in the list of acceptable values.']];
 
         return [
-
-
             'arrays, non-strict equality (partially), strict mode' => [
                 ['1', 2],
                 [new In([[1, 2], [3, 4]], strict: true)],
