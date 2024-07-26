@@ -16,5 +16,4 @@ final class Point
     #[Count(exactly: 3)]
     #[Each([new Number(min: 0, max: 255)], incorrectInputMessage: 'Custom message 5.')]
     private array $rgb;
-
 }
