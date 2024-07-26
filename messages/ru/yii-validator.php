@@ -48,7 +48,8 @@ return [
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     /** @see Each */
     '{Property} must be array or iterable.' => '{Property} должно быть массивом или иметь псевдотип iterable.',
-    'Every iterable key must have an integer or a string type.' => 'Ключ должен иметь тип integer или string.',
+    'Every iterable key of {property} must have an integer or a string type.' =>
+        'Ключ {property} должен иметь тип integer или string.',
     /** @see Email */
     '{Property} is not a valid email address.' => '{Property} не является правильным адресом электронной почты.',
     /** @see In */

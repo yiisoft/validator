@@ -52,7 +52,7 @@ final class EachTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
-                        'template' => 'Every iterable key must have an integer or a string type.',
+                        'template' => 'Every iterable key of {property} must have an integer or a string type.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -124,7 +124,7 @@ final class EachTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
-                        'template' => 'Every iterable key must have an integer or a string type.',
+                        'template' => 'Every iterable key of {property} must have an integer or a string type.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -240,7 +240,7 @@ final class EachTest extends RuleTestCase
             'incorrect input key' => [
                 ['property' => $getGeneratorWithIncorrectKey()],
                 ['property' => new Each([new Number(max: 13)])],
-                ['property' => ['Every iterable key must have an integer or a string type.']],
+                ['property' => ['Every iterable key of property must have an integer or a string type.']],
             ],
             'custom incorrect input key message' => [
                 ['property' => $getGeneratorWithIncorrectKey()],
