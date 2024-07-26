@@ -105,7 +105,8 @@ return [
      * @see BooleanValue
      * @see TrueValue
      */
-    'The allowed types are integer, float, string, boolean. {type} given.' => 'Разрешённые типы: integer, float, string, boolean. Передан {type}.',
+    'The allowed types for {property} are integer, float, string, boolean. {type} given.' =>
+        'Разрешённые типы для {property}: integer, float, string, boolean. Передан {type}.',
     /**
      * @see Compare
      * @see Equal
