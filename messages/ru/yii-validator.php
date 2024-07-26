@@ -37,11 +37,8 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled' => 'Как ' .
-        'минимум {min, number}' .
-        '{min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка ' .
-        '{min, plural, one{должен} few{должны} many{должны} other{должны}} быть ' .
-        'заполнены: {properties}.',
+    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}' =>
+        'Как минимум {min, number} {min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка {min, plural, one{должен} few{должны} many{должны} other{должны}} быть заполнены для {property}: {properties}.',
     /** @see BooleanValue */
     '{Property} must be either "{true}" or "{false}".' => '{Property} должно быть «{true}» или «{false}».',
     /** @see Count */
@@ -144,7 +141,7 @@ return [
      * @see Number
      * @see Integer
      */
-    'The allowed types are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
+    'The allowed types for {property} are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
     '{Property} must be no less than {min}.' => '{Property} должно быть не меньше {min}.',
     '{Property} must be no greater than {max}.' => '{Property} должно быть не больше {max}.',
 
