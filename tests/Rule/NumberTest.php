@@ -107,7 +107,7 @@ final class NumberTest extends RuleTestCase
                     'pattern' => 'test',
                 ],
             ],
-            'integer, default '=> [
+            'integer, default ' => [
                 new Integer(),
                 [
                     'min' => null,
@@ -168,7 +168,7 @@ final class NumberTest extends RuleTestCase
                     'skipOnError' => true,
                     'pattern' => 'test',
                 ],
-            ]
+            ],
         ];
     }
 
