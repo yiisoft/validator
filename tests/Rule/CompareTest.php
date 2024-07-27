@@ -670,10 +670,11 @@ final class CompareTest extends RuleTestCase
                 [
                     'data' => new Compare(
                         targetProperty: 'test',
-                        incorrectDataSetTypeMessage: 'Property - {Property}, Type - {type}.',
+                        incorrectDataSetTypeMessage: 'Property - {property}, capitalized property - {Property}, ' .
+                        'Type - {type}.',
                     ),
                 ],
-                ['data' => ['Property - Data, Type - stdClass.']],
+                ['data' => ['Property - data, capitalized property - Data, Type - stdClass.']],
             ],
 
             // Custom message
