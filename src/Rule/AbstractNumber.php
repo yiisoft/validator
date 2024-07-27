@@ -38,17 +38,14 @@ abstract class AbstractNumber implements
 
     /**
      * A default for {@see $incorrectInputMessage}.
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float and string.';
     /**
      * A default for {@see $lessThanMinMessage}.
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{Property} must be no less than {min}.';
     /**
      * A default for {@see $greaterThanMaxMessage}.
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{Property} must be no greater than {max}.';
 
