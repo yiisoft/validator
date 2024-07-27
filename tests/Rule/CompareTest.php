@@ -624,8 +624,8 @@ final class CompareTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 [],
-                [new Compare(false, incorrectInputMessage: 'Property - {property}, type - {type}.')],
-                ['' => ['Property - value, type - array.']],
+                [new Compare(false, incorrectInputMessage: 'Property - {property}, capitalized property - {Property}, type - {type}.')],
+                ['' => ['Property - value, capitalized property - Value, type - array.']],
             ],
             'custom incorrect input message with parameters, property set' => [
                 ['data' => []],
