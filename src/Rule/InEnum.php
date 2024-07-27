@@ -106,7 +106,13 @@ final class InEnum implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
             return array_column($this->class::cases(), 'value');
         }
 
-        return array_column($this->class::cases(), 'name');
+        /**
+         * @psalm-suppress InvalidStringClass
+         * @psalm-var array<array-key, mixed> $cases
+         */
+        $cases = $this->class::cases();
+
+        return array_column($cases, 'name');
     }
 
     /**
