@@ -13,6 +13,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\Enum\BackedEnumStatus;
 use Yiisoft\Validator\Tests\Support\Data\Enum\EnumStatus;
 
 final class InEnumTest extends RuleTestCase
@@ -40,7 +41,7 @@ final class InEnumTest extends RuleTestCase
                     'strict' => false,
                     'not' => false,
                     'message' => [
-                        'template' => 'This value is not in the list of acceptable values.',
+                        'template' => '{Property} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -54,7 +55,7 @@ final class InEnumTest extends RuleTestCase
                     'strict' => true,
                     'not' => false,
                     'message' => [
-                        'template' => 'This value is not in the list of acceptable values.',
+                        'template' => '{Property} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -68,7 +69,7 @@ final class InEnumTest extends RuleTestCase
                     'strict' => false,
                     'not' => true,
                     'message' => [
-                        'template' => 'This value is not in the list of acceptable values.',
+                        'template' => '{Property} is not in the list of acceptable values.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -81,30 +82,21 @@ final class InEnumTest extends RuleTestCase
     public function dataValidationPassed(): array
     {
         return [
-            [1, [new In(range(1, 10))]],
-            [10, [new In(range(1, 10))]],
-            ['10', [new In(range(1, 10))]],
-            ['5', [new In(range(1, 10))]],
+            ['DRAFT', [new InEnum(EnumStatus::class)]],
+            ['PUBLISHED', [new InEnum(EnumStatus::class)]],
 
-            [['a'], [new In([['a'], ['b']])]],
-            ['a', [new In(new ArrayObject(['a', 'b']))]],
+            ['DRAFT', [new InEnum(BackedEnumStatus::class, useNames: true)]],
+            ['PUBLISHED', [new InEnum(BackedEnumStatus::class, useNames: true)]],
 
-            [1, [new In(range(1, 10), strict: true)]],
-            [5, [new In(range(1, 10), strict: true)]],
-            [10, [new In(range(1, 10), strict: true)]],
 
-            [0, [new In(range(1, 10), not: true)]],
-            [11, [new In(range(1, 10), not: true)]],
-            [5.5, [new In(range(1, 10), not: true)]],
-
-            'arrays, simple case' => [[1, 2], [new In([[1, 2], [3, 4]])]],
-            'arrays, non-strict equality (partially), non-strict mode' => [['1', 2], [new In([[1, 2], [3, 4]])]],
+            ['draft', [new InEnum(BackedEnumStatus::class)]],
+            ['published', [new InEnum(BackedEnumStatus::class)]],
         ];
     }
 
     public function dataValidationFailed(): array
     {
-        $errors = ['' => ['This value is not in the list of acceptable values.']];
+        $errors = ['' => ['Value is not in the list of acceptable values.']];
 
         return [
             'arrays, non-strict equality (partially), strict mode' => [

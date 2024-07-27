@@ -12,7 +12,7 @@ use UnitEnum;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
-use Yiisoft\Validator\RuleWithOptionsInterface;
+use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
@@ -34,7 +34,7 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class InEnum implements RuleWithOptionsInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class InEnum implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -76,12 +76,14 @@ final class InEnum implements RuleWithOptionsInterface, SkipOnErrorInterface, Wh
         private bool $useNames = false,
         private bool $strict = false,
         private bool $not = false,
-        private string $message = 'This value is not in the list of acceptable values.',
-        private mixed $skipOnEmpty = null,
+        private string $message = '{Property} is not in the list of acceptable values.',
+        bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
     ) {
-        if (!is_string($this->class) || !is_subclass_of($this->class, UnitEnum::class)) {
+        $this->skipOnEmpty = $skipOnEmpty;
+
+        if (!is_subclass_of($this->class, UnitEnum::class)) {
             throw new InvalidArgumentException(
                 sprintf('Class should be an enum class string, %s provided.', get_debug_type($this->class))
             );
