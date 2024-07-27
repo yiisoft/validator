@@ -555,7 +555,7 @@ final class CompareTest extends RuleTestCase
         $incorrectDataSet = new class () implements DataWrapperInterface {
             public function getPropertyValue(string $property): mixed
             {
-                return new stdClass();
+                return $property === 'test' ? new stdClass() : false;
             }
 
             public function getData(): ?array
@@ -624,8 +624,8 @@ final class CompareTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 [],
-                [new Compare(false, incorrectInputMessage: 'Property - {property}, capitalized property - {Property}, type - {type}.')],
-                ['' => ['Property - value, capitalized property - Value, type - array.']],
+                [new Compare(false, incorrectInputMessage: 'Property - {property}, type - {type}.')],
+                ['' => ['Property - value, type - array.']],
             ],
             'custom incorrect input message with parameters, property set' => [
                 ['data' => []],
@@ -664,6 +664,16 @@ final class CompareTest extends RuleTestCase
                     ),
                 ],
                 ['' => ['Type - stdClass.']],
+            ],
+            'custom incorrect data set type message with parameters, property set' => [
+                $incorrectDataSet,
+                [
+                    'data' => new Compare(
+                        targetProperty: 'test',
+                        incorrectDataSetTypeMessage: 'Property - {Property}, Type - {type}.',
+                    ),
+                ],
+                ['data' => ['Property - Data, Type - stdClass.']],
             ],
 
             // Custom message
