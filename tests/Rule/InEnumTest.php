@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use ArrayObject;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\InEnum;
 use Yiisoft\Validator\Rule\InEnumHandler;
