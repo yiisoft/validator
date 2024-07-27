@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
-use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\InEnum;
 use Yiisoft\Validator\Rule\InEnumHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -98,14 +97,19 @@ final class InEnumTest extends RuleTestCase
         $errors = ['' => ['Value is not in the list of acceptable values.']];
 
         return [
-            'arrays, non-strict equality (partially), strict mode' => [
-                ['1', 2],
-                [new In([[1, 2], [3, 4]], strict: true)],
+            [
+                '42',
+                [new InEnum(EnumStatus::class)],
                 $errors,
             ],
-            'arrays, non-strict equality (fully), strict mode' => [
-                ['1', '2'],
-                [new In([[1, 2], [3, 4]], strict: true)],
+            [
+                'DRAFT',
+                [new InEnum(BackedEnumStatus::class)],
+                $errors,
+            ],
+            [
+                'draft',
+                [new InEnum(BackedEnumStatus::class, useNames: true)],
                 $errors,
             ],
         ];
