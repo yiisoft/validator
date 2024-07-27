@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule;
 
+use InvalidArgumentException;
 use Yiisoft\Validator\Rule\InEnum;
 use Yiisoft\Validator\Rule\InEnumHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -20,6 +21,12 @@ final class InEnumTest extends RuleTestCase
     use RuleWithOptionsTestTrait;
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
+
+    public function testInvalidEnum(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new InEnum('test');
+    }
 
     public function testGetName(): void
     {
