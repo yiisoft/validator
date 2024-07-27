@@ -46,13 +46,11 @@ abstract class AbstractCompare implements
 
     /**
      * A default for {@see $incorrectInputMessage}.
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float, string, boolean, null ' .
     'and object implementing \Stringable interface or \DateTimeInterface.';
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = 'The property value returned from a custom data set ' .
     'must have one of the following types: integer, float, string, boolean, null or an object implementing ' .
@@ -61,12 +59,10 @@ abstract class AbstractCompare implements
      * List of valid types.
      *
      * @see CompareType
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     private const VALID_TYPES = [CompareType::ORIGINAL, CompareType::STRING, CompareType::NUMBER];
     /**
      * Map of valid operators. It's used instead of a list for better performance.
-     * @psalm-suppress MissingClassConstType Add constant type after bump PHP version to 8.3.
      */
     private const VALID_OPERATORS_MAP = [
         '==' => 1,
