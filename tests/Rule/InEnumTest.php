@@ -15,6 +15,7 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\Enum\BackedEnumStatus;
 use Yiisoft\Validator\Tests\Support\Data\Enum\EnumStatus;
 use Yiisoft\Validator\Tests\Support\Data\Enum\IntBackedEnumStatus;
+use Yiisoft\Validator\ValidationContext;
 
 final class InEnumTest extends RuleTestCase
 {
@@ -132,6 +133,18 @@ final class InEnumTest extends RuleTestCase
                 $errors,
             ],
         ];
+    }
+
+    public function testValidationMessageContainsNecessaryParameters(): void
+    {
+        $rule = (new InEnum(EnumStatus::class));
+
+        $result = (new InEnumHandler())->validate('aaa', $rule, new ValidationContext());
+        foreach ($result->getErrors() as $error) {
+            $parameters = $error->getParameters();
+            $this->assertArrayHasKey('property', $parameters);
+            $this->assertArrayHasKey('Property', $parameters);
+        }
     }
 
     public function testSkipOnError(): void
