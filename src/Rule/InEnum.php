@@ -23,8 +23,6 @@ use Yiisoft\Validator\WhenInterface;
  * If the {@see In::$not} is set, the validation logic is inverted and the rule will ensure that the value
  * is NOT one of them.
  *
- * In case of the validated value being a list, the order of values is important.
- *
  * @see InEnumHandler
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
