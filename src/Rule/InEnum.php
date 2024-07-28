@@ -25,9 +25,6 @@ use Yiisoft\Validator\WhenInterface;
  *
  * In case of the validated value being a list, the order of values is important.
  *
- * Nested arrays are supported in the validated value (the order of values in
- * lists must match, the order of keys in associative arrays is not important).
- *
  * @see InEnumHandler
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
@@ -42,11 +39,11 @@ final class InEnum implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
 
     /**
      * @param string $class Class of the enum to user.
-     * @param bool $useNames Whether to use names for backend enums instead of value.
+     * @param bool $useNames Whether to use names for backed enums instead of value.
      * @param bool $strict Whether the comparison to each value in the set is strict:
      *
-     * - Strict mode uses `===` operator meaning the type and the value must both match.
-     * - Non-strict mode uses `==` operator meaning that type juggling is performed first before the comparison. You can
+     * - Strict mode meaning the type and the value must both match.
+     * - Non-strict mode meaning that type juggling is performed first before the comparison. You can
      * read more in the PHP docs:
      *
      * - {@link https://www.php.net/manual/en/language.operators.comparison.php}
@@ -60,7 +57,8 @@ final class InEnum implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
      *
      * You may use the following placeholders in the message:
      *
-     * - `{attribute}`: the name of the attribute.
+     * - `{property}`: the name of the attribute.
+     * - `{Property}`: the capitalized name of the attribute.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -98,9 +96,9 @@ final class InEnum implements DumpedRuleInterface, SkipOnErrorInterface, WhenInt
     /**
      * Get a set of values to check against.
      *
-     * @return iterable A set of values.
+     * @return array A set of values.
      */
-    public function getValues(): iterable
+    public function getValues(): array
     {
         if (is_subclass_of($this->class, BackedEnum::class) && !$this->useNames) {
             return array_column($this->class::cases(), 'value');

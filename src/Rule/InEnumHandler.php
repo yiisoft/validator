@@ -24,7 +24,7 @@ final class InEnumHandler implements RuleHandlerInterface
         }
 
         $result = new Result();
-        if ($rule->isNot() === ArrayHelper::isIn($value, $rule->getValues(), $rule->isStrict())) {
+        if ($rule->isNot() === in_array($value, $rule->getValues(), $rule->isStrict())) {
             $result->addError(
                 $rule->getMessage(),
                 [
