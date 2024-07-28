@@ -28,13 +28,14 @@ final class TrueValueTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new TrueValue(),
                 [
                     'trueValue' => '1',
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
+                            'given.',
                         'parameters' => [
                             'true' => '1',
                         ],
@@ -49,28 +50,7 @@ final class TrueValueTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new TrueValue(trueValue: true, strict: true),
-                [
-                    'trueValue' => true,
-                    'strict' => true,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
-                        'parameters' => [
-                            'true' => 'true',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be "{true}".',
-                        'parameters' => [
-                            'true' => 'true',
-                        ],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
+            'custom' => [
                 new TrueValue(
                     trueValue: 'YES',
                     strict: true,
@@ -98,6 +78,28 @@ final class TrueValueTest extends RuleTestCase
                     'skipOnError' => true,
                 ],
             ],
+            'true value is boolean' => [
+                new TrueValue(trueValue: true, strict: true),
+                [
+                    'trueValue' => true,
+                    'strict' => true,
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
+                            'given.',
+                        'parameters' => [
+                            'true' => 'true',
+                        ],
+                    ],
+                    'message' => [
+                        'template' => '{Property} must be "{true}".',
+                        'parameters' => [
+                            'true' => 'true',
+                        ],
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 
@@ -115,14 +117,22 @@ final class TrueValueTest extends RuleTestCase
     {
         return [
             ['5', [new TrueValue()], ['' => ['Value must be "1".']]],
-            [null, [new TrueValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
-            [[], [new TrueValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
+            [
+                null,
+                [new TrueValue()],
+                ['' => ['The allowed types for value are integer, float, string, boolean. null given.']],
+            ],
+            [
+                [],
+                [new TrueValue()],
+                ['' => ['The allowed types for value are integer, float, string, boolean. array given.']],
+            ],
             [true, [new TrueValue(strict: true)], ['' => ['Value must be "1".']]],
             ['1', [new TrueValue(trueValue: true, strict: true)], ['' => ['Value must be "true".']]],
             [
                 [],
                 [new TrueValue(trueValue: true, strict: true)],
-                ['' => ['The allowed types are integer, float, string, boolean. array given.']],
+                ['' => ['The allowed types for value are integer, float, string, boolean. array given.']],
             ],
 
             [false, [new TrueValue()], ['' => ['Value must be "1".']]],

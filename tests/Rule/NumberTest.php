@@ -45,13 +45,13 @@ final class NumberTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'number, default' => [
                 new Number(),
                 [
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types for {property} are integer, float and string.',
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
@@ -71,91 +71,49 @@ final class NumberTest extends RuleTestCase
                     'pattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
                 ],
             ],
-            [
-                new Number(min: 1),
-                [
-                    'min' => 1,
-                    'max' => null,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float and string.',
-                        'parameters' => [],
-                    ],
-                    'notNumberMessage' => [
-                        'template' => '{Property} must be a number.',
-                        'parameters' => [],
-                    ],
-                    'lessThanMinMessage' => [
-                        'template' => '{Property} must be no less than {min}.',
-                        'parameters' => ['min' => 1],
-                    ],
-                    'greaterThanMaxMessage' => [
-                        'template' => '{Property} must be no greater than {max}.',
-                        'parameters' => ['max' => null],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                    'pattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-                ],
-            ],
-            [
-                new Number(max: 1),
-                [
-                    'min' => null,
-                    'max' => 1,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float and string.',
-                        'parameters' => [],
-                    ],
-                    'notNumberMessage' => [
-                        'template' => '{Property} must be a number.',
-                        'parameters' => [],
-                    ],
-                    'lessThanMinMessage' => [
-                        'template' => '{Property} must be no less than {min}.',
-                        'parameters' => ['min' => null],
-                    ],
-                    'greaterThanMaxMessage' => [
-                        'template' => '{Property} must be no greater than {max}.',
-                        'parameters' => ['max' => 1],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                    'pattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
-                ],
-            ],
-            [
-                new Number(min: 2, max: 10),
+            'number, custom' => [
+                new Number(
+                    min: 2,
+                    max: 10,
+                    incorrectInputMessage: 'Custom message 1.',
+                    notNumberMessage: 'Custom message 2.',
+                    lessThanMinMessage: 'Custom message 3.',
+                    greaterThanMaxMessage: 'Custom message 4.',
+                    pattern: 'test',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
                 [
                     'min' => 2,
                     'max' => 10,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float and string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
-                        'template' => '{Property} must be a number.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [],
                     ],
                     'lessThanMinMessage' => [
-                        'template' => '{Property} must be no less than {min}.',
+                        'template' => 'Custom message 3.',
                         'parameters' => ['min' => 2],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{Property} must be no greater than {max}.',
+                        'template' => 'Custom message 4.',
                         'parameters' => ['max' => 10],
                     ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                    'pattern' => '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
+                    'pattern' => 'test',
                 ],
             ],
-            [
+            'integer, default ' => [
                 new Integer(),
                 [
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float and string.',
+                        'template' => 'The allowed types for {property} are integer, float and string.',
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
@@ -173,6 +131,42 @@ final class NumberTest extends RuleTestCase
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                     'pattern' => '/^\s*[+-]?\d+\s*$/',
+                ],
+            ],
+            'integer, custom' => [
+                new Integer(
+                    min: 2,
+                    max: 10,
+                    incorrectInputMessage: 'Custom message 1.',
+                    notNumberMessage: 'Custom message 2.',
+                    lessThanMinMessage: 'Custom message 3.',
+                    greaterThanMaxMessage: 'Custom message 4.',
+                    pattern: 'test',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'min' => 2,
+                    'max' => 10,
+                    'incorrectInputMessage' => [
+                        'template' => 'Custom message 1.',
+                        'parameters' => [],
+                    ],
+                    'notNumberMessage' => [
+                        'template' => 'Custom message 2.',
+                        'parameters' => [],
+                    ],
+                    'lessThanMinMessage' => [
+                        'template' => 'Custom message 3.',
+                        'parameters' => ['min' => 2],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Custom message 4.',
+                        'parameters' => ['max' => 10],
+                    ],
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
+                    'pattern' => 'test',
                 ],
             ],
         ];
@@ -235,7 +229,7 @@ final class NumberTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'The allowed types are integer, float and string.';
+        $incorrectInputMessage = 'The allowed types for value are integer, float and string.';
         $notNumberMessage = 'Value must be a number.';
         $notIntegerMessage = 'Value must be an integer.';
 

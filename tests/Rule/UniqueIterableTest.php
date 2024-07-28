@@ -39,20 +39,20 @@ final class UniqueIterableTest extends RuleTestCase
                 new UniqueIterable(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => 'Value must be array or iterable.',
+                        'template' => '{Property} must be array or iterable.',
                         'parameters' => [],
                     ],
                     'incorrectItemValueMessage' => [
-                        'template' => 'The allowed types for iterable\'s item values are integer, float, string, ' .
-                            'boolean and object implementing \Stringable or \DateTimeInterface.',
+                        'template' => 'The allowed types for iterable\'s item values of {property} are integer, ' .
+                            'float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
                         'parameters' => [],
                     ],
                     'differentTypesMessage' => [
-                        'template' => 'All iterable items must have the same type.',
+                        'template' => 'All iterable items of {property} must have the same type.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Every iterable\'s item must be unique.',
+                        'template' => 'Every iterable\'s item of {property} must be unique.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -63,7 +63,8 @@ final class UniqueIterableTest extends RuleTestCase
                 new UniqueIterable(
                     incorrectInputMessage: 'Custom message 1.',
                     incorrectItemValueMessage: 'Custom message 2.',
-                    message: 'Custom message 3.',
+                    differentTypesMessage: 'Custom message 3.',
+                    message: 'Custom message 4.',
                     skipOnEmpty: true,
                     skipOnError: true
                 ),
@@ -77,11 +78,11 @@ final class UniqueIterableTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'differentTypesMessage' => [
-                        'template' => 'All iterable items must have the same type.',
+                        'template' => 'Custom message 3.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Custom message 3.',
+                        'template' => 'Custom message 4.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => true,
@@ -132,10 +133,9 @@ final class UniqueIterableTest extends RuleTestCase
     public function dataValidationFailed(): array
     {
         $incorrectInputMessage = 'Value must be array or iterable.';
-        $incorrectItemValueMessage = 'The allowed types for iterable\'s item values are integer, float, string, ' .
-            'boolean and object implementing \Stringable or \DateTimeInterface.';
-        $differentTypesMessage = 'All iterable items must have the same type.';
-        $message = 'Every iterable\'s item must be unique.';
+        $incorrectItemValueMessage = 'The allowed types for iterable\'s item values of value are integer, float, ' .
+            'string, boolean and object implementing \Stringable or \DateTimeInterface.';
+        $message = 'Every iterable\'s item of value must be unique.';
 
         return [
             'incorrect input, integer' => [1, new UniqueIterable(), ['' => [$incorrectInputMessage]]],
@@ -262,7 +262,7 @@ final class UniqueIterableTest extends RuleTestCase
             'different types' => [
                 ['data' => [1, '2', 3]],
                 ['data' => new UniqueIterable()],
-                ['data' => [$differentTypesMessage]],
+                ['data' => ['All iterable items of data must have the same type.']],
             ],
             'different types, custom message' => [
                 ['data' => [1, '2', 3]],
@@ -338,7 +338,7 @@ final class UniqueIterableTest extends RuleTestCase
                     private array $data = [1, 2, 1, 3];
                 },
                 null,
-                ['data' => [$message]],
+                ['data' => ['Every iterable\'s item of data must be unique.']],
             ],
         ];
     }

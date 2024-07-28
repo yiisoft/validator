@@ -49,7 +49,7 @@ final class FloatType implements DumpedRuleInterface, SkipOnEmptyInterface, Skip
      * @psalm-param WhenType $when
      */
     public function __construct(
-        private string $message = 'Value must be a float.',
+        private string $message = '{Property} must be a float.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,

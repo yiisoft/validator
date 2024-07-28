@@ -61,6 +61,8 @@ final class OneOfHandler implements RuleHandlerInterface
     private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
     {
         return (new Result())->addError($rule->getMessage(), [
+            'property' => $context->getTranslatedProperty(),
+            'Property' => $context->getCapitalizedTranslatedProperty(),
             'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
             'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
         ]);

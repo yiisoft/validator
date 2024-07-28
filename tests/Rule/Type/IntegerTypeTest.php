@@ -36,7 +36,7 @@ final class IntegerTypeTest extends RuleTestCase
                 new IntegerType(),
                 [
                     'message' => [
-                        'template' => 'Value must be an integer.',
+                        'template' => '{Property} must be an integer.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -127,7 +127,7 @@ final class IntegerTypeTest extends RuleTestCase
                     private float $sum = 1.5;
                 },
                 null,
-                ['sum' => [$message]],
+                ['sum' => ['Sum must be an integer.']],
             ],
         ];
     }

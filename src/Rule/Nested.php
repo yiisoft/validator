@@ -173,6 +173,7 @@ final class Nested implements
      *
      * You may use the following placeholders in the message:
      *
+     * - `{property}`: the translated label of the property being validated.
      * - `{type}`: the type of the data set retrieved from the validated object.
      * @param string $incorrectInputMessage Error message used when validation fails because the validated value is
      * neither an array nor an object.
@@ -214,11 +215,11 @@ final class Nested implements
         private int $rulesSourceClassPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
-        private string $noRulesWithNoObjectMessage = 'Nested rule without rules can be used for objects only.',
-        private string $incorrectDataSetTypeMessage = 'An object data set data can only have an array type.',
+        private string $noRulesWithNoObjectMessage = 'Nested rule without rules requires {property} to be an object.',
+        private string $incorrectDataSetTypeMessage = 'An object data set data for {property} can only have an array type.',
         private string $incorrectInputMessage = '{Property} must be an array or an object.',
         private bool $requirePropertyPath = false,
-        private string $noPropertyPathMessage = 'Property "{path}" is not found.',
+        private string $noPropertyPathMessage = 'Property "{path}" is not found in {property}.',
         private bool $handleEachShortcut = true,
         private bool $propagateOptions = false,
         bool|callable|null $skipOnEmpty = null,

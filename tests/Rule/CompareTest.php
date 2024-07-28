@@ -56,14 +56,14 @@ final class CompareTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Compare(1),
                 [
                     'targetValue' => 1,
                     'targetProperty' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
-                            'implementing \Stringable interface or \DateTimeInterface.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
+                            'and object implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -71,9 +71,9 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The property value returned from a custom data set must have one of the ' .
-                            'following types: integer, float, string, boolean, null or an object implementing ' .
-                            '\Stringable interface or \DateTimeInterface.',
+                        'template' => '{Property} returned from a custom data set must have one of the following ' .
+                            'types: integer, float, string, boolean, null or an object implementing \Stringable ' .
+                            'interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -94,7 +94,7 @@ final class CompareTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
+            'custom' => [
                 new Compare(
                     new DateTime('2023-02-07 12:57:12'),
                     targetProperty: 'test',
@@ -142,8 +142,8 @@ final class CompareTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetProperty' => 'test',
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
-                            'implementing \Stringable interface or \DateTimeInterface.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
+                            'and object implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => 'test',
@@ -151,9 +151,9 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The property value returned from a custom data set must have one of the ' .
-                            'following types: integer, float, string, boolean, null or an object implementing ' .
-                            '\Stringable interface or \DateTimeInterface.',
+                        'template' => '{Property} returned from a custom data set must have one of the following ' .
+                            'types: integer, float, string, boolean, null or an object implementing \Stringable ' .
+                            'interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => 'test',
@@ -555,7 +555,7 @@ final class CompareTest extends RuleTestCase
         $incorrectDataSet = new class () implements DataWrapperInterface {
             public function getPropertyValue(string $property): mixed
             {
-                return new stdClass();
+                return $property === 'test' ? new stdClass() : false;
             }
 
             public function getData(): ?array
@@ -612,8 +612,8 @@ final class CompareTest extends RuleTestCase
                 [new Compare(false)],
                 [
                     '' => [
-                        'The allowed types are integer, float, string, boolean, null and object implementing ' .
-                        '\Stringable interface or \DateTimeInterface.',
+                        'The allowed types for value are integer, float, string, boolean, null and object ' .
+                        'implementing \Stringable interface or \DateTimeInterface.',
                     ],
                 ],
             ],
@@ -640,9 +640,8 @@ final class CompareTest extends RuleTestCase
                 [new Compare(targetProperty: 'test')],
                 [
                     '' => [
-                        'The property value returned from a custom data set must have one of the following types: ' .
-                            'integer, float, string, boolean, null or an object implementing \Stringable interface ' .
-                            'or \DateTimeInterface.',
+                        'Value returned from a custom data set must have one of the following types: integer, float, ' .
+                        'string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.',
                     ],
                 ],
             ],
@@ -665,6 +664,17 @@ final class CompareTest extends RuleTestCase
                     ),
                 ],
                 ['' => ['Type - stdClass.']],
+            ],
+            'custom incorrect data set type message with parameters, property set' => [
+                $incorrectDataSet,
+                [
+                    'data' => new Compare(
+                        targetProperty: 'test',
+                        incorrectDataSetTypeMessage: 'Property - {property}, capitalized property - {Property}, ' .
+                        'Type - {type}.',
+                    ),
+                ],
+                ['data' => ['Property - data, capitalized property - Data, Type - stdClass.']],
             ],
 
             // Custom message

@@ -73,7 +73,7 @@ final class Number extends AbstractNumber
     public function __construct(
         float|int|null $min = null,
         float|int|null $max = null,
-        string $incorrectInputMessage = 'The allowed types are integer, float and string.',
+        string $incorrectInputMessage = 'The allowed types for {property} are integer, float and string.',
         string $notNumberMessage = '{Property} must be a number.',
         string $lessThanMinMessage = '{Property} must be no less than {min}.',
         string $greaterThanMaxMessage = '{Property} must be no greater than {max}.',

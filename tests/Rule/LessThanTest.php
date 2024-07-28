@@ -27,14 +27,14 @@ final class LessThanTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new LessThan(1),
                 [
                     'targetValue' => 1,
                     'targetProperty' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean, null and object ' .
-                            'implementing \Stringable interface or \DateTimeInterface.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
+                            'and object implementing \Stringable interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -42,9 +42,9 @@ final class LessThanTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'The property value returned from a custom data set must have one of the ' .
-                            'following types: integer, float, string, boolean, null or an object implementing ' .
-                            '\Stringable interface or \DateTimeInterface.',
+                        'template' => '{Property} returned from a custom data set must have one of the following ' .
+                            'types: integer, float, string, boolean, null or an object implementing \Stringable ' .
+                            'interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -65,7 +65,7 @@ final class LessThanTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
+            'custom' => [
                 new LessThan(
                     new DateTime('2023-02-07 12:57:12'),
                     targetProperty: 'test',

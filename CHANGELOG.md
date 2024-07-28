@@ -4,6 +4,7 @@
 
 - New #734: Add enum support (@samdark)
 - New #630: Include attribute name in error messages when it's present (@dood-)
+- New #630, #718: Include attribute name in error messages when it's present (@dood-, @arogachev)
 - New #646, #653: Add `DateTime` rule (@pamparam83)
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
   and containing the current key (@dood-)

@@ -170,8 +170,8 @@ final class ImageTest extends RuleTestCase
                 new Image(width: 24, height: 32),
                 [
                     '' => [
-                        'The width must be exactly 24 pixels.',
-                        'The height must be exactly 32 pixels.',
+                        'The width of value must be exactly 24 pixels.',
+                        'The height of value must be exactly 32 pixels.',
                     ],
                 ],
             ],
@@ -195,7 +195,7 @@ final class ImageTest extends RuleTestCase
             'too-small-width' => [
                 __DIR__ . '/16x18.jpg',
                 new Image(minWidth: 17),
-                ['' => ['The width cannot be smaller than 17 pixels.']],
+                ['' => ['The width of value cannot be smaller than 17 pixels.']],
             ],
             'too-small-width-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
@@ -205,7 +205,7 @@ final class ImageTest extends RuleTestCase
             'too-small-height' => [
                 __DIR__ . '/16x18.jpg',
                 new Image(minHeight: 19),
-                ['' => ['The height cannot be smaller than 19 pixels.']],
+                ['' => ['The height of value cannot be smaller than 19 pixels.']],
             ],
             'too-small-height-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
@@ -215,7 +215,7 @@ final class ImageTest extends RuleTestCase
             'too-large-width' => [
                 __DIR__ . '/16x18.jpg',
                 new Image(maxWidth: 15),
-                ['' => ['The width cannot be larger than 15 pixels.']],
+                ['' => ['The width of value cannot be larger than 15 pixels.']],
             ],
             'too-large-width-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
@@ -225,7 +225,7 @@ final class ImageTest extends RuleTestCase
             'too-large-height' => [
                 __DIR__ . '/16x18.jpg',
                 new Image(maxHeight: 17),
-                ['' => ['The height cannot be larger than 17 pixels.']],
+                ['' => ['The height of value cannot be larger than 17 pixels.']],
             ],
             'too-large-height-with-custom-message' => [
                 ['a' => __DIR__ . '/16x18.jpg'],
@@ -241,37 +241,37 @@ final class ImageTest extends RuleTestCase
             'default aspect ratio margin , smaller height' => [
                 new ImageInfo(800, 599),
                 new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3)),
-                ['' => ['The aspect ratio must be 4:3 with margin 0%.']],
+                ['' => ['The aspect ratio of value must be 4:3 with margin 0%.']],
             ],
             'default aspect ratio margin, bigger height' => [
                 new ImageInfo(800, 601),
                 new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3)),
-                ['' => ['The aspect ratio must be 4:3 with margin 0%.']],
+                ['' => ['The aspect ratio of value must be 4:3 with margin 0%.']],
             ],
             'width, off by 1, smaller value' => [
                 new ImageInfo(593, 600),
                 new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3, margin: 1)),
-                ['' => ['The aspect ratio must be 4:3 with margin 1%.']],
+                ['' => ['The aspect ratio of value must be 4:3 with margin 1%.']],
             ],
             'width, off by 1, bigger value' => [
                 new ImageInfo(807, 600),
                 new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3, margin: 1)),
-                ['' => ['The aspect ratio must be 4:3 with margin 1%.']],
+                ['' => ['The aspect ratio of value must be 4:3 with margin 1%.']],
             ],
             'height, off by 1, smaller value' => [
                 new ImageInfo(800, 593),
                 new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3, margin: 1)),
-                ['' => ['The aspect ratio must be 4:3 with margin 1%.']],
+                ['' => ['The aspect ratio of value must be 4:3 with margin 1%.']],
             ],
             'height, off by 1, bigger value' => [
                 new ImageInfo(800, 607),
                 new Image(aspectRatio: new ImageAspectRatio(width: 4, height: 3, margin: 1)),
-                ['' => ['The aspect ratio must be 4:3 with margin 1%.']],
+                ['' => ['The aspect ratio of value must be 4:3 with margin 1%.']],
             ],
             'absolute margin calculation mutant, / 100 => / 99' => [
                 new ImageInfo(801, 600),
                 new Image(aspectRatio: new ImageAspectRatio(width: 1, height: 3, margin: 100)),
-                ['' => ['The aspect ratio must be 1:3 with margin 100%.']],
+                ['' => ['The aspect ratio of value must be 1:3 with margin 100%.']],
             ],
         ];
     }
@@ -327,37 +327,37 @@ final class ImageTest extends RuleTestCase
                     'aspectRatioHeight' => null,
                     'aspectRatioMargin' => null,
                     'notExactWidthMessage' => [
-                        'template' => 'The width must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'exactly' => null,
                         ],
                     ],
                     'notExactHeightMessage' => [
-                        'template' => 'The height must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'exactly' => null,
                         ],
                     ],
                     'tooSmallWidthMessage' => [
-                        'template' => 'The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
                     ],
                     'tooSmallHeightMessage' => [
-                        'template' => 'The height cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
                     ],
                     'tooLargeWidthMessage' => [
-                        'template' => 'The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
                     ],
                     'tooLargeHeightMessage' => [
-                        'template' => 'The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
@@ -367,7 +367,7 @@ final class ImageTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
-                        'template' => 'The aspect ratio must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
+                        'template' => 'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
                         'parameters' => [
                             'aspectRatioWidth' => null,
                             'aspectRatioHeight' => null,
@@ -391,37 +391,37 @@ final class ImageTest extends RuleTestCase
                     'aspectRatioHeight' => null,
                     'aspectRatioMargin' => null,
                     'notExactWidthMessage' => [
-                        'template' => 'The width must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'exactly' => 800,
                         ],
                     ],
                     'notExactHeightMessage' => [
-                        'template' => 'The height must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'exactly' => 600,
                         ],
                     ],
                     'tooSmallWidthMessage' => [
-                        'template' => 'The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
                     ],
                     'tooSmallHeightMessage' => [
-                        'template' => 'The height cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
                     ],
                     'tooLargeWidthMessage' => [
-                        'template' => 'The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
                     ],
                     'tooLargeHeightMessage' => [
-                        'template' => 'The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => null,
                         ],
@@ -431,7 +431,7 @@ final class ImageTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
-                        'template' => 'The aspect ratio must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
+                        'template' => 'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
                         'parameters' => [
                             'aspectRatioWidth' => null,
                             'aspectRatioHeight' => null,
@@ -461,37 +461,37 @@ final class ImageTest extends RuleTestCase
                     'aspectRatioHeight' => 3,
                     'aspectRatioMargin' => 1.0,
                     'notExactWidthMessage' => [
-                        'template' => 'The width must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'exactly' => null,
                         ],
                     ],
                     'notExactHeightMessage' => [
-                        'template' => 'The height must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'exactly' => null,
                         ],
                     ],
                     'tooSmallWidthMessage' => [
-                        'template' => 'The width cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => 700,
                         ],
                     ],
                     'tooSmallHeightMessage' => [
-                        'template' => 'The height cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => 550,
                         ],
                     ],
                     'tooLargeWidthMessage' => [
-                        'template' => 'The width cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The width of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => 900,
                         ],
                     ],
                     'tooLargeHeightMessage' => [
-                        'template' => 'The height cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
+                        'template' => 'The height of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.',
                         'parameters' => [
                             'limit' => 750,
                         ],
@@ -501,7 +501,7 @@ final class ImageTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'invalidAspectRatioMessage' => [
-                        'template' => 'The aspect ratio must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
+                        'template' => 'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
                         'parameters' => [
                             'aspectRatioWidth' => 4,
                             'aspectRatioHeight' => 3,
