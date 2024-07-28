@@ -2,7 +2,7 @@
 
 ## 2.0.0 under development
 
-- Enh #734: Add enum support (@samdark)
+- New #734: Add enum support (@samdark)
 - New #630: Include attribute name in error messages when it's present (@dood-)
 - New #646, #653: Add `DateTime` rule (@pamparam83)
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
