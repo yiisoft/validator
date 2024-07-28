@@ -45,7 +45,7 @@ final class AnyRuleTest extends RuleTestCase
                         [
                             IntegerType::class,
                             'message' => [
-                                'template' => 'Value must be an integer.',
+                                'template' => '{Property} must be an integer.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,
@@ -72,7 +72,7 @@ final class AnyRuleTest extends RuleTestCase
                         [
                             IntegerType::class,
                             'message' => [
-                                'template' => 'Value must be an integer.',
+                                'template' => '{Property} must be an integer.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,
@@ -81,7 +81,7 @@ final class AnyRuleTest extends RuleTestCase
                         [
                             FloatType::class,
                             'message' => [
-                                'template' => 'Value must be a float.',
+                                'template' => '{Property} must be a float.',
                                 'parameters' => [],
                             ],
                             'skipOnEmpty' => false,

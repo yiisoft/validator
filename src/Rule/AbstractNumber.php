@@ -39,7 +39,7 @@ abstract class AbstractNumber implements
     /**
      * A default for {@see $incorrectInputMessage}.
      */
-    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types are integer, float and string.';
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float and string.';
     /**
      * A default for {@see $lessThanMinMessage}.
      */

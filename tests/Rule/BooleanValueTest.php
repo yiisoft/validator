@@ -28,14 +28,15 @@ final class BooleanValueTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new BooleanValue(),
                 [
                     'trueValue' => '1',
                     'falseValue' => '0',
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
+                            'given.',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -52,31 +53,7 @@ final class BooleanValueTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new BooleanValue(trueValue: true, falseValue: false, strict: true),
-                [
-                    'trueValue' => true,
-                    'falseValue' => false,
-                    'strict' => true,
-                    'incorrectInputMessage' => [
-                        'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
-                        'parameters' => [
-                            'true' => 'true',
-                            'false' => 'false',
-                        ],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be either "{true}" or "{false}".',
-                        'parameters' => [
-                            'true' => 'true',
-                            'false' => 'false',
-                        ],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
+            'custom' => [
                 new BooleanValue(
                     trueValue: 'YES',
                     falseValue: 'NO',
@@ -108,6 +85,31 @@ final class BooleanValueTest extends RuleTestCase
                     'skipOnError' => true,
                 ],
             ],
+            'true and false values are boolean' => [
+                new BooleanValue(trueValue: true, falseValue: false, strict: true),
+                [
+                    'trueValue' => true,
+                    'falseValue' => false,
+                    'strict' => true,
+                    'incorrectInputMessage' => [
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
+                            'given.',
+                        'parameters' => [
+                            'true' => 'true',
+                            'false' => 'false',
+                        ],
+                    ],
+                    'message' => [
+                        'template' => '{Property} must be either "{true}" or "{false}".',
+                        'parameters' => [
+                            'true' => 'true',
+                            'false' => 'false',
+                        ],
+                    ],
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
         ];
     }
 
@@ -136,8 +138,16 @@ final class BooleanValueTest extends RuleTestCase
         return [
             ['5', [new BooleanValue()], $defaultErrors],
 
-            [null, [new BooleanValue()], ['' => ['The allowed types are integer, float, string, boolean. null given.']]],
-            [[], [new BooleanValue()], ['' => ['The allowed types are integer, float, string, boolean. array given.']]],
+            [
+                null,
+                [new BooleanValue()],
+                ['' => ['The allowed types for value are integer, float, string, boolean. null given.']],
+            ],
+            [
+                [],
+                [new BooleanValue()],
+                ['' => ['The allowed types for value are integer, float, string, boolean. array given.']],
+            ],
 
             [true, [new BooleanValue(strict: true)], $defaultErrors],
             [false, [new BooleanValue(strict: true)], $defaultErrors],
@@ -146,7 +156,7 @@ final class BooleanValueTest extends RuleTestCase
             [
                 [],
                 [new BooleanValue(trueValue: true, falseValue: false, strict: true)],
-                ['' => ['The allowed types are integer, float, string, boolean. array given.']],
+                ['' => ['The allowed types for value are integer, float, string, boolean. array given.']],
             ],
 
             'custom message' => [

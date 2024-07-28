@@ -49,7 +49,7 @@ final class TimeTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $invalidDateMessage = ['' => ['Invalid time value.']];
+        $invalidDateMessage = ['' => ['Value must be a time.']];
         return [
             'php-format-invalid' => ['12-35', new Time(format: 'php:H:i'), $invalidDateMessage],
             'intl-format-invalid' => ['12-35', new Time(format: 'HH:mm'), $invalidDateMessage],

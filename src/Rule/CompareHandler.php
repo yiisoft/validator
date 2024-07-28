@@ -53,6 +53,8 @@ final class CompareHandler implements RuleHandlerInterface
             $targetValue = $context->getDataSet()->getPropertyValue($targetProperty);
             if (!$this->isInputCorrect($rule->getType(), $targetValue)) {
                 return $result->addError($rule->getIncorrectDataSetTypeMessage(), [
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'type' => get_debug_type($targetValue),
                 ]);
             }

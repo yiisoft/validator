@@ -36,7 +36,7 @@ final class BooleanTypeTest extends RuleTestCase
                 new BooleanType(),
                 [
                     'message' => [
-                        'template' => 'Value must be a boolean.',
+                        'template' => '{Property} must be a boolean.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -126,7 +126,7 @@ final class BooleanTypeTest extends RuleTestCase
                     private int $active = 1;
                 },
                 null,
-                ['active' => [$message]],
+                ['active' => ['Active must be a boolean.']],
             ],
         ];
     }

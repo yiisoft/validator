@@ -63,7 +63,7 @@ final class DateTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $invalidDateMessage = ['' => ['Invalid date value.']];
+        $invalidDateMessage = ['' => ['Value must be a date.']];
         return [
             'php-format-invalid' => ['2021.01.01', new Date(format: 'php:Y-m-d'), $invalidDateMessage],
             'intl-format-invalid' => ['2021.01.01', new Date(format: 'yyyy-MM-dd'), $invalidDateMessage],

@@ -48,6 +48,8 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{properties} - the translated labels of the properties some of which must be filled (within the property being
+     * validated).
      * - `{min}`: the minimum number of property values that was not met.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
@@ -64,7 +66,7 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
         private int $min = 1,
         private string $incorrectInputMessage = '{Property} must be an array or an object.',
         private string $message = 'At least {min, number} {min, plural, one{property} other{properties}} from this ' .
-        'list must be filled: {properties}.',
+        'list must be filled for {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
