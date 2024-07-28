@@ -14,6 +14,7 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\Enum\BackedEnumStatus;
 use Yiisoft\Validator\Tests\Support\Data\Enum\EnumStatus;
+use Yiisoft\Validator\Tests\Support\Data\Enum\IntBackedEnumStatus;
 
 final class InEnumTest extends RuleTestCase
 {
@@ -39,7 +40,7 @@ final class InEnumTest extends RuleTestCase
         $values = array_column(EnumStatus::class::cases(), 'name');
 
         return [
-            [
+            'non-strict' => [
                 new InEnum(EnumStatus::class),
                 [
                     'values' => $values,
@@ -53,7 +54,7 @@ final class InEnumTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
+            'strict' => [
                 new InEnum(EnumStatus::class, strict: true),
                 [
                     'values' => $values,
@@ -67,7 +68,7 @@ final class InEnumTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
+            'not' => [
                 new InEnum(EnumStatus::class, not: true),
                 [
                     'values' => $values,
@@ -96,6 +97,11 @@ final class InEnumTest extends RuleTestCase
 
             ['draft', [new InEnum(BackedEnumStatus::class)]],
             ['published', [new InEnum(BackedEnumStatus::class)]],
+
+            [1, [new InEnum(IntBackedEnumStatus::class)]],
+            [2, [new InEnum(IntBackedEnumStatus::class)]],
+            ['1', [new InEnum(IntBackedEnumStatus::class)]],
+            ['2', [new InEnum(IntBackedEnumStatus::class)]],
         ];
     }
 
@@ -117,6 +123,12 @@ final class InEnumTest extends RuleTestCase
             [
                 'draft',
                 [new InEnum(BackedEnumStatus::class, useNames: true)],
+                $errors,
+            ],
+
+            [
+                '1',
+                [new InEnum(IntBackedEnumStatus::class, strict: true)],
                 $errors,
             ],
         ];
