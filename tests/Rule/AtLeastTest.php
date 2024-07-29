@@ -54,7 +54,7 @@ final class AtLeastTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new AtLeast(['prop1', 'prop2']),
                 [
                     'properties' => [
@@ -68,15 +68,22 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'message' => [
                         'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from ' .
-                            'this list must be filled: {properties}.',
+                            'this list must be filled for {property}: {properties}.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new AtLeast(['prop1', 'prop2'], min: 2),
+            'custom' => [
+                new AtLeast(
+                    ['prop1', 'prop2'],
+                    min: 2,
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
                 [
                     'properties' => [
                         'prop1',
@@ -84,16 +91,15 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 2,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from ' .
-                            'this list must be filled: {properties}.',
+                        'template' => 'Custom message 2.',
                         'parameters' => ['min' => 2],
                     ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
             'callable skip on empty' => [
@@ -110,7 +116,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'message' => [
                         'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from ' .
-                            'this list must be filled: {properties}.',
+                            'this list must be filled for {property}: {properties}.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => null,
@@ -243,22 +249,22 @@ final class AtLeastTest extends RuleTestCase
             'object' => [
                 $class,
                 [new AtLeast(['prop2'])],
-                ['' => ['At least 1 property from this list must be filled: "prop2".']],
+                ['' => ['At least 1 property from this list must be filled for value: "prop2".']],
             ],
             'object, custom min' => [
                 $class,
                 [new AtLeast(['prop1', 'prop2'], min: 2)],
-                ['' => ['At least 2 properties from this list must be filled: "prop1", "prop2".']],
+                ['' => ['At least 2 properties from this list must be filled for value: "prop1", "prop2".']],
             ],
             'array' => [
                 $array,
                 [new AtLeast(['prop2'])],
-                ['' => ['At least 1 property from this list must be filled: "prop2".']],
+                ['' => ['At least 1 property from this list must be filled for value: "prop2".']],
             ],
             'array, custom min' => [
                 $array,
                 [new AtLeast(['prop1', 'prop2'], min: 2)],
-                ['' => ['At least 2 properties from this list must be filled: "prop1", "prop2".']],
+                ['' => ['At least 2 properties from this list must be filled for value: "prop1", "prop2".']],
             ],
             'custom message' => [
                 $class,
@@ -275,10 +281,10 @@ final class AtLeastTest extends RuleTestCase
                 ['data' => new AtLeast(['prop1', 'prop2'], min: 2, message: 'Properties - {properties}, min - {min}.')],
                 ['data' => ['Properties - "prop1", "prop2", min - 2.']],
             ],
-            'class property, translation' => [
+            'class property, translated properties' => [
                 new AtLeastDto(),
                 null,
-                ['' => ['At least 1 property from this list must be filled: "A", "B", "C".']],
+                ['' => ['At least 1 property from this list must be filled for value: "A", "B", "C".']],
             ],
         ];
     }

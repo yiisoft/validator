@@ -18,7 +18,7 @@ final class RulesDumperTest extends TestCase
     public function asArrayDataProvider(): array
     {
         return [
-            [
+            'basic' => [
                 [
                     'propertyName' => [
                         $rule = new Integer(
@@ -39,7 +39,7 @@ final class RulesDumperTest extends TestCase
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -65,7 +65,7 @@ final class RulesDumperTest extends TestCase
                     ],
                 ],
             ],
-            [
+            'rules without options' => [
                 ['propertyName' => [new RuleWithoutOptions(), new StubDumpedRule('name', [])]],
                 ['propertyName' => [[RuleWithoutOptions::class], ['name']]],
             ],
@@ -112,7 +112,7 @@ final class RulesDumperTest extends TestCase
                 'falseValue' => '0',
                 'strict' => false,
                 'incorrectInputMessage' => [
-                    'template' => 'The allowed types are integer, float, string, boolean. {type} given.',
+                    'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} given.',
                     'parameters' => [
                         'true' => '1',
                         'false' => '0',

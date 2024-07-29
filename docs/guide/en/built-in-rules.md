@@ -44,6 +44,7 @@ Here is a list of all available built-in rules, divided by category.
 ### Set rules
 
 - [In](../../../src/Rule/In.php)
+- [InEnum](../../../src/Rule/InEnum.php)
 - [Subset](../../../src/Rule/Subset.php)
 - [UniqueIterable](../../../src/Rule/UniqueIterable.php)
 

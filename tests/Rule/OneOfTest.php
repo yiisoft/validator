@@ -30,7 +30,7 @@ final class OneOfTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new OneOf(['prop1', 'prop2']),
                 [
                     'properties' => [
@@ -42,11 +42,36 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Exactly 1 property from this list must be filled: {properties}.',
+                        'template' => 'Exactly 1 property from this list must be filled for {property}: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                ],
+            ],
+            'custom' => [
+                new OneOf(
+                    ['prop1', 'prop2'],
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'properties' => [
+                        'prop1',
+                        'prop2',
+                    ],
+                    'incorrectInputMessage' => [
+                        'template' => 'Custom message 1.',
+                        'parameters' => [],
+                    ],
+                    'message' => [
+                        'template' => 'Custom message 2.',
+                        'parameters' => [],
+                    ],
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
             'callable skip on empty' => [
@@ -61,7 +86,7 @@ final class OneOfTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'Exactly 1 property from this list must be filled: {properties}.',
+                        'template' => 'Exactly 1 property from this list must be filled for {property}: {properties}.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => null,
@@ -182,17 +207,17 @@ final class OneOfTest extends RuleTestCase
             'object' => [
                 $object,
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Exactly 1 property from this list must be filled: "prop1", "prop2".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "prop1", "prop2".']],
             ],
             'array' => [
                 $array,
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Exactly 1 property from this list must be filled: "prop1", "prop2".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "prop1", "prop2".']],
             ],
             'more than 1 property is filled' => [
                 ['prop1' => 1, 'prop2' => 2],
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Exactly 1 property from this list must be filled: "prop1", "prop2".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "prop1", "prop2".']],
             ],
             'custom message' => [
                 $object,
@@ -212,7 +237,7 @@ final class OneOfTest extends RuleTestCase
             'class property' => [
                 new OneOfDto(),
                 null,
-                ['' => ['Exactly 1 property from this list must be filled: "A", "B", "C".']],
+                ['' => ['Exactly 1 property from this list must be filled for value: "A", "B", "C".']],
             ],
         ];
     }

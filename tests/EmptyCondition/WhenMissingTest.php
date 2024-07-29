@@ -15,17 +15,17 @@ final class WhenMissingTest extends TestCase
     public function dataBase(): array
     {
         return [
-            [
-                ['The allowed types are integer, float and string.'],
+            'null' => [
+                ['The allowed types for value are integer, float and string.'],
                 null,
                 new Number(skipOnEmpty: new WhenMissing()),
             ],
-            [
+            'empty array' => [
                 [],
                 [],
                 ['property' => new Number(skipOnEmpty: new WhenMissing())],
             ],
-            [
+            'empty string' => [
                 ['Value must be a number.'],
                 '',
                 new Number(skipOnEmpty: new WhenMissing()),

@@ -2,7 +2,8 @@
 
 ## 2.0.0 under development
 
-- New #630: Include attribute name in error messages when it's present (@dood-)
+- New #734: Add `InEnum` rule (@samdark)
+- New #630, #718: Include attribute name in error messages when it's present (@dood-, @arogachev)
 - New #646, #653: Add `DateTime` rule (@pamparam83)
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
   and containing the current key (@dood-)
@@ -29,6 +30,8 @@
   (@arogachev)
 - Enh #726: Refactor `Result::add()`: took `array_merge()` out of the `foreach` (@lav45)
 - Chg #583: Change "attribute" to "property" in class/trait/method/variable/placeholder names (@vjik)
+- Enh #733: Make parameter `$rules` in `RulesNormalizer::normalize()` optional (@vjik)
+- Bug #733: Rules provided by data object PHP attributes were not used in  `RulesNormalizer::normalize()` (@vjik)
 
 ## 1.4.1 June 11, 2024
 

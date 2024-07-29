@@ -53,6 +53,8 @@ final class AtLeastHandler implements RuleHandlerInterface
 
         if ($filledCount < $rule->getMin()) {
             $result->addError($rule->getMessage(), [
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
                 'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
                 'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
                 'min' => $rule->getMin(),

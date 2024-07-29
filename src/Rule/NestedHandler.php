@@ -52,6 +52,8 @@ final class NestedHandler implements RuleHandlerInterface
             $data = (new ObjectDataSet($value, $rule->getValidatedObjectPropertyVisibility()))->getData();
             if ($data === null) {
                 return (new Result())->addError($rule->getIncorrectDataSetTypeMessage(), [
+                    'property' => $context->getTranslatedProperty(),
+                    'Property' => $context->getCapitalizedTranslatedProperty(),
                     'type' => get_debug_type($data),
                 ]);
             }

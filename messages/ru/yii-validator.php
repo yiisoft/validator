@@ -11,6 +11,7 @@ use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
+use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Ip;
@@ -36,11 +37,8 @@ return [
     // Used in single rule
 
     /** @see AtLeast */
-    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled' => 'Как ' .
-        'минимум {min, number}' .
-        '{min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка ' .
-        '{min, plural, one{должен} few{должны} many{должны} other{должны}} быть ' .
-        'заполнены: {properties}.',
+    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}' =>
+        'Как минимум {min, number} {min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка {min, plural, one{должен} few{должны} many{должны} other{должны}} быть заполнены для {property}: {properties}.',
     /** @see BooleanValue */
     '{Property} must be either "{true}" or "{false}".' => '{Property} должно быть «{true}» или «{false}».',
     /** @see Count */
@@ -50,7 +48,8 @@ return [
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     /** @see Each */
     '{Property} must be array or iterable.' => '{Property} должно быть массивом или иметь псевдотип iterable.',
-    'Every iterable key must have an integer or a string type.' => 'Ключ должен иметь тип integer или string.',
+    'Every iterable key of {property} must have an integer or a string type.' =>
+        'Ключ {property} должен иметь тип integer или string.',
     /** @see Email */
     '{Property} is not a valid email address.' => '{Property} не является правильным адресом электронной почты.',
     /** @see In */
@@ -75,13 +74,14 @@ return [
     '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.' => '{Property} должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
     /** @see Nested */
-    'Nested rule without rules can be used for objects only.' => 'Правило Nested без указания правил может использоваться только для объектов.',
-    'An object data set data can only have an array type.' => 'Данные в объекте должны быть массивом.',
-    'Property "{path}" is not found.' => 'Свойство «{path}» не найдено.',
+    'Nested rule without rules requires {property} to be an object.' => 'При правиле Nested без указания правил {property} должно быть объектом,',
+    'An object data set data for {property} can only have an array type.' => 'Данные в объекте для {property} должны быть массивом.',
+    'Property "{path}" is not found in {property}.' => 'Свойство «{path}» не найдено в {property}.',
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
     /** @see OneOf */
-    'Exactly 1 property from this list must be filled: {properties}.' => 'Ровно 1 свойство из этого списка должно быть заполнен: {properties}.',
+    'Exactly 1 property from this list must be filled for {property}: {properties}.' =>
+        'Ровно 1 свойство из этого списка должно быть заполнено в {property}: {properties}.',
     /** @see Regex */
     '{Property} is invalid.' => 'Значение неверно.',
     /** @see Required */
@@ -107,7 +107,8 @@ return [
      * @see BooleanValue
      * @see TrueValue
      */
-    'The allowed types are integer, float, string, boolean. {type} given.' => 'Разрешённые типы: integer, float, string, boolean. Передан {type}.',
+    'The allowed types for {property} are integer, float, string, boolean. {type} given.' =>
+        'Разрешённые типы для {property}: integer, float, string, boolean. Передан {type}.',
     /**
      * @see Compare
      * @see Equal
@@ -117,8 +118,10 @@ return [
      * @see LessThanOrEqual
      * @see NotEqual
      */
-    'The allowed types are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    'The property value returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' => 'Значение, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'The allowed types for {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' =>
+        'Разрешённые типы для {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    '{Property} returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' =>
+        '{Property}, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
     '{Property} must be equal to "{targetValueOrProperty}".' => '{Property} должно быть равно «{targetValueOrProperty}».',
     '{Property} must be strictly equal to "{targetValueOrProperty}".' => '{Property} должно быть строго равно «{targetValueOrProperty}».',
     '{Property} must not be equal to "{targetValueOrProperty}".' => '{Property} не должно быть равно «{targetValueOrProperty}».',
@@ -141,7 +144,7 @@ return [
      * @see Number
      * @see Integer
      */
-    'The allowed types are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
+    'The allowed types for {property} are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
     '{Property} must be no less than {min}.' => '{Property} должно быть не меньше {min}.',
     '{Property} must be no greater than {max}.' => '{Property} должно быть не больше {max}.',
 
@@ -157,22 +160,41 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Date
      * @see \Yiisoft\Validator\Rule\Date\DateTime
      */
-    'Invalid date value.' => 'Некорректное значение даты.',
+    '{Property} must be a date' => '{Property} должно быть датой.',
 
     /**
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
-    'Invalid time value.' => 'Некорректное значение времени.',
+    '{Property} must be a time.' => '{Property} должно быть временем.',
 
     /** @see UniqueIterable */
-    'The allowed types for iterable\'s item values are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' => 'Разрешённые типы для значений элементов списка: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    'All iterable items must have the same type.' => 'Все элементы списка должны иметь одинаковый тип.',
-    'Every iterable\'s item must be unique.' => 'Каждый элемент списка должен быть уникален.',
+    'The allowed types for iterable\'s item values of {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' =>
+        'Разрешённые типы для значений элементов списка {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'All iterable items of {property} must have the same type.' =>
+        'Все элементы списка {property} должны иметь одинаковый тип.',
+    'Every iterable\'s item must be unique.' => 'Каждый элемент списка {property} должен быть уникален.',
 
     /** @see BooleanType */
-    'Value must be a boolean.' => 'Значение должно быть булевым.',
+    '{Property} must be a boolean.' => 'Значение должно быть булевым.',
     /** @see FloatType */
-    'Value must be a float.' => 'Значение должно быть вещественным числом.',
+    '{Property} must be a float.' => 'Значение должно быть вещественным числом.',
     /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию',
+
+    /** @see Image */
+    '{Property} must be an image.' => '{Property} должно быть изображением.',
+    'The width of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.' =>
+        'Ширина {propery} должна быть в точности {exactly, number} {exactly, plural, one{пиксель} other{пикселей}}',
+    'The height of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.' =>
+        'Высота {propery} должна быть в точности {exactly, number} {exactly, plural, one{пиксель} other{пикселей}}',
+    'The width of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Ширина {property} не может быть меньше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The height of {property} cannot be smaller than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Высота {property} не может быть меньше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The width of {property} cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Ширина {property} не может быть больше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The height of {property}t cannot be larger than {limit, number} {limit, plural, one{pixel} other{pixels}}.' =>
+        'Высота {property} не может быть больше {limit, number} {limit, plural, one{пикселя} other{пикселей}}.',
+    'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.' =>
+        'Соотношение стороно {property} должно быть {aspectRatioWidth, number}:{aspectRatioHeight, number} с отступом {aspectRatioMargin, number}%.',
 ];
