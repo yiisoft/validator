@@ -153,7 +153,7 @@ final class LengthTest extends RuleTestCase
             'incorrect input, boolean (true)' => [
                 true,
                 [new Length(min: 25)],
-                ['' => ['Value must be a string. bool given.']]
+                ['' => ['Value must be a string. bool given.']],
             ],
             'incorrect input, boolean (false)' => [
                 false,
