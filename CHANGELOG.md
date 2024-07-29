@@ -2,6 +2,9 @@
 
 ## 2.0.0 under development
 
+- Enh #492: Add type to error messages related with incorrect input (@arogachev)
+- Enh #735: Make `Json::$message` a bit more clear (@arogachev)
+- Bug #736: Fix wrong value for `type` parameter for `Each::$incorrectInputKeyMessage` (@arogachev)
 - New #734: Add `InEnum` rule (@samdark)
 - New #630, #718: Include attribute name in error messages when it's present (@dood-, @arogachev)
 - New #646, #653: Add `DateTime` rule (@pamparam83)
