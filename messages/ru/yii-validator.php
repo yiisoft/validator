@@ -77,7 +77,7 @@ return [
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
     /** @see Nested */
     'Nested rule without rules requires {property} to be an object. {type} given.' =>
-        'При правиле Nested без указания правил {property} должно быть объектом, {type} given.',
+        'При правиле Nested без указания правил {property} должно быть объектом. Передан {type}.',
     'An object data set data for {property} can only have an array type. {type} given.' =>
         'Данные в объекте для {property} должны быть массивом. Передан {type}.',
     'Property "{path}" is not found in {property}.' => 'Свойство «{path}» не найдено в {property}.',
