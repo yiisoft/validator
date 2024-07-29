@@ -302,7 +302,7 @@ final class IpTest extends RuleTestCase
             'incorrect input, array' => [
                 ['what an array', '??'],
                 [new Ip()],
-                ['' => ['Value must be a string. array given.']]
+                ['' => ['Value must be a string. array given.']],
             ],
             'incorrect input, integer' => [123456, [new Ip()], ['' => ['Value must be a string. int given.']]],
             'incorrect input, boolean (true)' => [true, [new Ip()], ['' => ['Value must be a string. bool given.']]],
