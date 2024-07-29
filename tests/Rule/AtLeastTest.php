@@ -63,7 +63,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 1,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -111,7 +111,7 @@ final class AtLeastTest extends RuleTestCase
                     ],
                     'min' => 1,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -224,7 +224,7 @@ final class AtLeastTest extends RuleTestCase
             'incorrect input' => [
                 1,
                 [new AtLeast(['prop2'])],
-                ['' => ['Value must be an array or an object.']],
+                ['' => ['Value must be an array or an object. int given.']],
             ],
             'custom incorrect input message' => [
                 1,

@@ -71,62 +71,7 @@ final class IpTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
-                new Ip(),
-                [
-                    'networks' => [
-                        '*' => ['any'],
-                        'any' => ['0.0.0.0/0', '::/0'],
-                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-                        'localhost' => ['127.0.0.0/8', '::1'],
-                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
-                    ],
-                    'allowIpv4' => true,
-                    'allowIpv6' => true,
-                    'allowSubnet' => false,
-                    'requireSubnet' => false,
-                    'allowNegation' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be a valid IP address.',
-                        'parameters' => [],
-                    ],
-                    'ipv4NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv4 address.',
-                        'parameters' => [],
-                    ],
-                    'ipv6NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv6 address.',
-                        'parameters' => [],
-                    ],
-                    'wrongCidrMessage' => [
-                        'template' => '{Property} contains wrong subnet mask.',
-                        'parameters' => [],
-                    ],
-                    'noSubnetMessage' => [
-                        'template' => '{Property} must be an IP address with specified subnet.',
-                        'parameters' => [],
-                    ],
-                    'hasSubnetMessage' => [
-                        'template' => '{Property} must not be a subnet.',
-                        'parameters' => [],
-                    ],
-                    'notInRangeMessage' => [
-                        'template' => '{Property} is not in the allowed range.',
-                        'parameters' => [],
-                    ],
-                    'ranges' => [],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
+            'disallow IPv4' => [
                 new Ip(allowIpv4: false),
                 [
                     'networks' => [
@@ -145,7 +90,7 @@ final class IpTest extends RuleTestCase
                     'requireSubnet' => false,
                     'allowNegation' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -181,8 +126,24 @@ final class IpTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new Ip(allowIpv6: false),
+            'disallow IPv6, custom' => [
+                new Ip(
+                    allowIpv6: false,
+                    allowSubnet: true,
+                    requireSubnet: true,
+                    allowNegation: true,
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    ipv4NotAllowedMessage: 'Custom message 3.',
+                    ipv6NotAllowedMessage: 'Custom message 4.',
+                    wrongCidrMessage: 'Custom message 5.',
+                    noSubnetMessage: 'Custom message 6.',
+                    hasSubnetMessage: 'Custom message 7.',
+                    notInRangeMessage: 'Custom message 8.',
+                    ranges: ['private'],
+                    skipOnEmpty: true,
+                    skipOnError: true
+                ),
                 [
                     'networks' => [
                         '*' => ['any'],
@@ -196,264 +157,49 @@ final class IpTest extends RuleTestCase
                     ],
                     'allowIpv4' => true,
                     'allowIpv6' => false,
-                    'allowSubnet' => false,
-                    'requireSubnet' => false,
-                    'allowNegation' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be a valid IP address.',
-                        'parameters' => [],
-                    ],
-                    'ipv4NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv4 address.',
-                        'parameters' => [],
-                    ],
-                    'ipv6NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv6 address.',
-                        'parameters' => [],
-                    ],
-                    'wrongCidrMessage' => [
-                        'template' => '{Property} contains wrong subnet mask.',
-                        'parameters' => [],
-                    ],
-                    'noSubnetMessage' => [
-                        'template' => '{Property} must be an IP address with specified subnet.',
-                        'parameters' => [],
-                    ],
-                    'hasSubnetMessage' => [
-                        'template' => '{Property} must not be a subnet.',
-                        'parameters' => [],
-                    ],
-                    'notInRangeMessage' => [
-                        'template' => '{Property} is not in the allowed range.',
-                        'parameters' => [],
-                    ],
-                    'ranges' => [],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Ip(allowSubnet: true),
-                [
-                    'networks' => [
-                        '*' => ['any'],
-                        'any' => ['0.0.0.0/0', '::/0'],
-                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-                        'localhost' => ['127.0.0.0/8', '::1'],
-                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
-                    ],
-                    'allowIpv4' => true,
-                    'allowIpv6' => true,
-                    'allowSubnet' => true,
-                    'requireSubnet' => false,
-                    'allowNegation' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be a valid IP address.',
-                        'parameters' => [],
-                    ],
-                    'ipv4NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv4 address.',
-                        'parameters' => [],
-                    ],
-                    'ipv6NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv6 address.',
-                        'parameters' => [],
-                    ],
-                    'wrongCidrMessage' => [
-                        'template' => '{Property} contains wrong subnet mask.',
-                        'parameters' => [],
-                    ],
-                    'noSubnetMessage' => [
-                        'template' => '{Property} must be an IP address with specified subnet.',
-                        'parameters' => [],
-                    ],
-                    'hasSubnetMessage' => [
-                        'template' => '{Property} must not be a subnet.',
-                        'parameters' => [],
-                    ],
-                    'notInRangeMessage' => [
-                        'template' => '{Property} is not in the allowed range.',
-                        'parameters' => [],
-                    ],
-                    'ranges' => [],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Ip(requireSubnet: true),
-                [
-                    'networks' => [
-                        '*' => ['any'],
-                        'any' => ['0.0.0.0/0', '::/0'],
-                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-                        'localhost' => ['127.0.0.0/8', '::1'],
-                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
-                    ],
-                    'allowIpv4' => true,
-                    'allowIpv6' => true,
                     'allowSubnet' => true,
                     'requireSubnet' => true,
-                    'allowNegation' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be a valid IP address.',
-                        'parameters' => [],
-                    ],
-                    'ipv4NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv4 address.',
-                        'parameters' => [],
-                    ],
-                    'ipv6NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv6 address.',
-                        'parameters' => [],
-                    ],
-                    'wrongCidrMessage' => [
-                        'template' => '{Property} contains wrong subnet mask.',
-                        'parameters' => [],
-                    ],
-                    'noSubnetMessage' => [
-                        'template' => '{Property} must be an IP address with specified subnet.',
-                        'parameters' => [],
-                    ],
-                    'hasSubnetMessage' => [
-                        'template' => '{Property} must not be a subnet.',
-                        'parameters' => [],
-                    ],
-                    'notInRangeMessage' => [
-                        'template' => '{Property} is not in the allowed range.',
-                        'parameters' => [],
-                    ],
-                    'ranges' => [],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Ip(allowNegation: true),
-                [
-                    'networks' => [
-                        '*' => ['any'],
-                        'any' => ['0.0.0.0/0', '::/0'],
-                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-                        'localhost' => ['127.0.0.0/8', '::1'],
-                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
-                    ],
-                    'allowIpv4' => true,
-                    'allowIpv6' => true,
-                    'allowSubnet' => false,
-                    'requireSubnet' => false,
                     'allowNegation' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Property} must be a valid IP address.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [],
                     ],
                     'ipv4NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv4 address.',
+                        'template' => 'Custom message 3.',
                         'parameters' => [],
                     ],
                     'ipv6NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv6 address.',
+                        'template' => 'Custom message 4.',
                         'parameters' => [],
                     ],
                     'wrongCidrMessage' => [
-                        'template' => '{Property} contains wrong subnet mask.',
+                        'template' => 'Custom message 5.',
                         'parameters' => [],
                     ],
                     'noSubnetMessage' => [
-                        'template' => '{Property} must be an IP address with specified subnet.',
+                        'template' => 'Custom message 6.',
                         'parameters' => [],
                     ],
                     'hasSubnetMessage' => [
-                        'template' => '{Property} must not be a subnet.',
+                        'template' => 'Custom message 7.',
                         'parameters' => [],
                     ],
                     'notInRangeMessage' => [
-                        'template' => '{Property} is not in the allowed range.',
+                        'template' => 'Custom message 8.',
                         'parameters' => [],
                     ],
-                    'ranges' => [],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Ip(ranges: ['private']),
-                [
-                    'networks' => [
-                        '*' => ['any'],
-                        'any' => ['0.0.0.0/0', '::/0'],
-                        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-                        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-                        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-                        'localhost' => ['127.0.0.0/8', '::1'],
-                        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-                        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
+                    'ranges' => [
+                        '10.0.0.0/8',
+                        '172.16.0.0/12',
+                        '192.168.0.0/16',
+                        'fd00::/8',
                     ],
-                    'allowIpv4' => true,
-                    'allowIpv6' => true,
-                    'allowSubnet' => false,
-                    'requireSubnet' => false,
-                    'allowNegation' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} must be a valid IP address.',
-                        'parameters' => [],
-                    ],
-                    'ipv4NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv4 address.',
-                        'parameters' => [],
-                    ],
-                    'ipv6NotAllowedMessage' => [
-                        'template' => '{Property} must not be an IPv6 address.',
-                        'parameters' => [],
-                    ],
-                    'wrongCidrMessage' => [
-                        'template' => '{Property} contains wrong subnet mask.',
-                        'parameters' => [],
-                    ],
-                    'noSubnetMessage' => [
-                        'template' => '{Property} must be an IP address with specified subnet.',
-                        'parameters' => [],
-                    ],
-                    'hasSubnetMessage' => [
-                        'template' => '{Property} must not be a subnet.',
-                        'parameters' => [],
-                    ],
-                    'notInRangeMessage' => [
-                        'template' => '{Property} is not in the allowed range.',
-                        'parameters' => [],
-                    ],
-                    'ranges' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -544,7 +290,6 @@ final class IpTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'Value must be a string.';
         $message = 'Value must be a valid IP address.';
         $hasSubnetMessage = 'Value must not be a subnet.';
         $notInRangeMessage = 'Value is not in the allowed range.';
@@ -554,11 +299,16 @@ final class IpTest extends RuleTestCase
         $ipv6NotAllowedMessage = 'Value must not be an IPv6 address.';
 
         return [
-            'incorrect input, array' => [['what an array', '??'], [new Ip()], ['' => [$incorrectInputMessage]]],
-            'incorrect input, integer' => [123456, [new Ip()], ['' => [$incorrectInputMessage]]],
-            'incorrect input, boolean (true)' => [true, [new Ip()], ['' => [$incorrectInputMessage]]],
-            'incorrect input, boolean (false)' => [false, [new Ip()], ['' => [$incorrectInputMessage]]],
-            'incorrect input, null' => [null, [new Ip()], ['' => [$incorrectInputMessage]]],
+            'incorrect input, array' => [
+                ['what an array', '??'],
+                [new Ip()],
+                ['' => ['Value must be a string. array given.']]
+            ],
+            'incorrect input, integer' => [123456, [new Ip()], ['' => ['Value must be a string. int given.']]],
+            'incorrect input, boolean (true)' => [true, [new Ip()], ['' => ['Value must be a string. bool given.']]],
+            'incorrect input, boolean (false)' => [false, [new Ip()], ['' => ['Value must be a string. bool given.']],
+            ],
+            'incorrect input, null' => [null, [new Ip()], ['' => ['Value must be a string. null given.']]],
             'custom incorrect input message' => [
                 1,
                 [new Ip(incorrectInputMessage: 'Custom incorrect input message.')],

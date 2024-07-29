@@ -45,7 +45,7 @@ final class EachHandler implements RuleHandlerInterface
                 return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
                     'property' => $context->getTranslatedProperty(),
                     'Property' => $context->getCapitalizedTranslatedProperty(),
-                    'type' => get_debug_type($value),
+                    'type' => get_debug_type($index),
                 ]);
             }
 

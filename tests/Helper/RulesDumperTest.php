@@ -43,7 +43,7 @@ final class RulesDumperTest extends TestCase
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
-                                'template' => '{Property} must be an integer.',
+                                'template' => '{Property} must be an integer. {type} given.',
                                 'parameters' => [],
                             ],
                             'lessThanMinMessage' => [

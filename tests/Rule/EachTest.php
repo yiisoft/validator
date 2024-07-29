@@ -48,11 +48,12 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be array or iterable.',
+                        'template' => '{Property} must be array or iterable. {type} given.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
-                        'template' => 'Every iterable key of {property} must have an integer or a string type.',
+                        'template' => 'Every iterable key of {property} must have an integer or a string type. ' .
+                            '{type} given.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -64,7 +65,8 @@ final class EachTest extends RuleTestCase
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
-                                    'template' => 'The allowed types for {property} are integer, float and string.',
+                                    'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                        '{type} given.',
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
@@ -90,7 +92,8 @@ final class EachTest extends RuleTestCase
                                 'min' => null,
                                 'max' => 14,
                                 'incorrectInputMessage' => [
-                                    'template' => 'The allowed types for {property} are integer, float and string.',
+                                    'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                        '{type} given.',
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
@@ -120,11 +123,12 @@ final class EachTest extends RuleTestCase
                 ]),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be array or iterable.',
+                        'template' => '{Property} must be array or iterable. {type} given.',
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
-                        'template' => 'Every iterable key of {property} must have an integer or a string type.',
+                        'template' => 'Every iterable key of {property} must have an integer or a string type. ' .
+                            '{type} given.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -136,7 +140,8 @@ final class EachTest extends RuleTestCase
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
-                                    'template' => 'The allowed types for {property} are integer, float and string.',
+                                    'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                        '{type} given.',
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
@@ -210,7 +215,11 @@ final class EachTest extends RuleTestCase
         };
 
         return [
-            'incorrect input' => [1, [new Each([new Number(max: 13)])], ['' => ['Value must be array or iterable.']]],
+            'incorrect input' => [
+                1,
+                [new Each([new Number(max: 13)])],
+                ['' => ['Value must be array or iterable. int given.']],
+            ],
             'custom incorrect input message' => [
                 1,
                 [new Each([new Number(max: 13)], incorrectInputMessage: 'Custom incorrect input message.')],
@@ -240,7 +249,7 @@ final class EachTest extends RuleTestCase
             'incorrect input key' => [
                 ['property' => $getGeneratorWithIncorrectKey()],
                 ['property' => new Each([new Number(max: 13)])],
-                ['property' => ['Every iterable key of property must have an integer or a string type.']],
+                ['property' => ['Every iterable key of property must have an integer or a string type. bool given.']],
             ],
             'custom incorrect input key message' => [
                 ['property' => $getGeneratorWithIncorrectKey()],
@@ -260,7 +269,7 @@ final class EachTest extends RuleTestCase
                         incorrectInputKeyMessage: 'Property - {property}, type - {type}.',
                     ),
                 ],
-                ['property' => ['Property - property, type - Generator.']],
+                ['property' => ['Property - property, type - bool.']],
             ],
 
             [

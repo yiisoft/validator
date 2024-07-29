@@ -69,7 +69,7 @@ final class Regex implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         #[Language('RegExp')]
         string $pattern,
         private bool $not = false,
-        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $incorrectInputMessage = '{Property} must be a string. {type} given.',
         private string $message = '{Property} is invalid.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,

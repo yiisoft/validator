@@ -81,7 +81,7 @@ final class Url implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterf
         string $pattern = '/^{schemes}:\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
         private array $validSchemes = ['http', 'https'],
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $incorrectInputMessage = '{Property} must be a string. {type} given.',
         private string $message = '{Property} is not a valid URL.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,

@@ -28,7 +28,7 @@ final class JsonTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Json(),
                 [
                     'incorrectInputMessage' => [
@@ -36,11 +36,31 @@ final class JsonTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Property} is not JSON.',
+                        'template' => '{Property} is not a valid JSON.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                ],
+            ],
+            'custom' => [
+                new Json(
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'incorrectInputMessage' => [
+                        'template' => 'Custom message 1.',
+                        'parameters' => [],
+                    ],
+                    'message' => [
+                        'template' => 'Custom message 2.',
+                        'parameters' => [],
+                    ],
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -135,7 +155,7 @@ JSON_WRAP
     public function dataValidationFailed(): array
     {
         $incorrectInputErrors = ['' => ['Value must be a string.']];
-        $errors = ['' => ['Value is not JSON.']];
+        $errors = ['' => ['Value is not a valid JSON.']];
 
         return [
             'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],

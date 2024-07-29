@@ -37,7 +37,7 @@ final class StringTypeTest extends RuleTestCase
                 new StringType(),
                 [
                     'message' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -94,12 +94,10 @@ EOD,
 
     public function dataValidationFailed(): array
     {
-        $message = 'Value must be a string.';
-
         return [
-            'boolean' => [false, new StringType(), ['' => [$message]]],
-            'float' => [1.5, new StringType(), ['' => [$message]]],
-            'ingeter' => [1, new StringType(), ['' => [$message]]],
+            'boolean' => [false, new StringType(), ['' => ['Value must be a string. bool given.']]],
+            'float' => [1.5, new StringType(), ['' => ['Value must be a string. float given.']]],
+            'ingeter' => [1, new StringType(), ['' => ['Value must be a string. int given.']]],
             'stringable' => [
                 new class () implements Stringable {
                     public function __toString(): string
@@ -108,9 +106,9 @@ EOD,
                     }
                 },
                 new StringType(),
-                ['' => [$message]],
+                ['' => ['Value must be a string. Stringable@anonymous given.']],
             ],
-            'array' => [[], new StringType(), ['' => [$message]]],
+            'array' => [[], new StringType(), ['' => ['Value must be a string. array given.']]],
             'message, custom' => [
                 ['name' => []],
                 ['name' => new StringType('Property - {property}, type - {type}')],
@@ -151,7 +149,7 @@ EOD,
                     private array $name = ['test'];
                 },
                 null,
-                ['name' => ['Name must be a string.']],
+                ['name' => ['Name must be a string. array given.']],
             ],
         ];
     }

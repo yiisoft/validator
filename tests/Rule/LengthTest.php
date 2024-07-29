@@ -32,83 +32,65 @@ final class LengthTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
-                new Length(min: 3),
+            'min and max' => [
+                new Length(min: 1, max: 5),
                 [
-                    'min' => 3,
+                    'min' => 1,
+                    'max' => 5,
+                    'exactly' => null,
+                    'lessThanMinMessage' => [
+                        'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'parameters' => ['min' => 1],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
+                        'parameters' => ['max' => 5],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'parameters' => ['exactly' => null],
+                    ],
+                    'incorrectInputMessage' => [
+                        'template' => '{Property} must be a string. {type} given.',
+                        'parameters' => [],
+                    ],
+                    'encoding' => 'UTF-8',
+                    'skipOnEmpty' => false,
+                    'skipOnError' => false,
+                ],
+            ],
+            'exactly, custom' => [
+                new Length(
+                    exactly: 3,
+                    incorrectInputMessage: 'Custom message.',
+                    lessThanMinMessage: 'Custom message.',
+                    greaterThanMaxMessage: 'Custom message.',
+                    notExactlyMessage: 'Custom message.',
+                    encoding: 'windows-1251',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'min' => null,
                     'max' => null,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'parameters' => ['min' => 3],
+                        'template' => 'Custom message 2.',
+                        'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => null],
+                        'template' => 'Custom message 3.',
+                        'parameters' => ['max' => 5],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
+                        'template' => 'Custom message 4.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Length(max: 3),
-                [
-                    'min' => null,
-                    'max' => 3,
-                    'exactly' => null,
-                    'lessThanMinMessage' => [
-                        'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'parameters' => ['min' => null],
-                    ],
-                    'greaterThanMaxMessage' => [
-                        'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => 3],
-                    ],
-                    'notExactlyMessage' => [
-                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
-                        'parameters' => ['exactly' => null],
-                    ],
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'encoding' => 'UTF-8',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Length(min: 3, max: 4, encoding: 'windows-1251'),
-                [
-                    'min' => 3,
-                    'max' => 4,
-                    'exactly' => null,
-                    'lessThanMinMessage' => [
-                        'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'parameters' => ['min' => 3],
-                    ],
-                    'greaterThanMaxMessage' => [
-                        'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => 4],
-                    ],
-                    'notExactlyMessage' => [
-                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
-                        'parameters' => ['exactly' => null],
-                    ],
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'encoding' => 'windows-1251',
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],

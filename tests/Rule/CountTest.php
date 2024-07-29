@@ -35,21 +35,21 @@ final class CountTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
-                new Count(min: 3),
+            'min and max' => [
+                new Count(min: 1, max: 5),
                 [
-                    'min' => 3,
-                    'max' => null,
+                    'min' => 1,
+                    'max' => 5,
                     'exactly' => null,
                     'lessThanMinMessage' => [
                         'template' => '{Property} must contain at least {min, number} {min, plural, one{item} ' .
                             'other{items}}.',
-                        'parameters' => ['min' => 3],
+                        'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
                         'template' => '{Property} must contain at most {max, number} {max, plural, one{item} ' .
                             'other{items}}.',
-                        'parameters' => ['max' => null],
+                        'parameters' => ['max' => 5],
                     ],
                     'notExactlyMessage' => [
                         'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
@@ -57,11 +57,45 @@ final class CountTest extends RuleTestCase
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or implement \Countable interface.',
+                        'template' => '{Property} must be an array or implement \Countable interface. {type} given.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                ],
+            ],
+            'exactly, custom' => [
+                new Count(
+                    exactly: 3,
+                    incorrectInputMessage: 'Custom message 1.',
+                    lessThanMinMessage: 'Custom message 2.',
+                    greaterThanMaxMessage: 'Custom message 3.',
+                    notExactlyMessage: 'Custom message 4.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'min' => null,
+                    'max' => null,
+                    'exactly' => 3,
+                    'lessThanMinMessage' => [
+                        'template' => 'Custom message 2.',
+                        'parameters' => ['min' => null],
+                    ],
+                    'greaterThanMaxMessage' => [
+                        'template' => 'Custom message 3.',
+                        'parameters' => ['max' => null],
+                    ],
+                    'notExactlyMessage' => [
+                        'template' => 'Custom message 4.',
+                        'parameters' => ['exactly' => 3],
+                    ],
+                    'incorrectInputMessage' => [
+                        'template' => 'Custom message 1.',
+                        'parameters' => [],
+                    ],
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -128,7 +162,7 @@ final class CountTest extends RuleTestCase
             'incorrect input' => [
                 1,
                 [new Count(min: 3)],
-                ['' => ['Value must be an array or implement \Countable interface.']],
+                ['' => ['Value must be an array or implement \Countable interface. int given.']],
             ],
             'custom incorrect input message' => [
                 1,

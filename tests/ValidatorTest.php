@@ -196,7 +196,7 @@ class ValidatorTest extends TestCase
             'array-and-object' => [
                 [
                     'name' => ['Name not passed.'],
-                    'bars' => ['Bars must be array or iterable.'],
+                    'bars' => ['Bars must be array or iterable. null given.'],
                 ],
                 [],
                 new Foo(),

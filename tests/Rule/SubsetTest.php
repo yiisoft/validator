@@ -30,13 +30,13 @@ final class SubsetTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Subset([]),
                 [
                     'values' => [],
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be iterable.',
+                        'template' => '{Property} must be iterable. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -45,6 +45,30 @@ final class SubsetTest extends RuleTestCase
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                ],
+            ],
+            'custom' => [
+                new Subset(
+                    [],
+                    strict: true,
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'values' => [],
+                    'strict' => true,
+                    'incorrectInputMessage' => [
+                        'template' => 'Custom message 1.',
+                        'parameters' => [],
+                    ],
+                    'message' => [
+                        'template' => 'Custom message 2.',
+                        'parameters' => [],
+                    ],
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -119,7 +143,7 @@ final class SubsetTest extends RuleTestCase
             'non-iterable' => [
                 1,
                 [new Subset([1, 2, 3])],
-                ['' => ['Value must be iterable.']],
+                ['' => ['Value must be iterable. int given.']],
             ],
             'custom incorrect input message' => [
                 1,

@@ -37,13 +37,13 @@ final class RegexTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Regex('//'),
                 [
                     'pattern' => '//',
                     'not' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -54,21 +54,28 @@ final class RegexTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new Regex('//', not: true),
+            'custom' => [
+                new Regex(
+                    '//',
+                    not: true,
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
                 [
                     'pattern' => '//',
                     'not' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Property} is invalid.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [],
                     ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -85,16 +92,15 @@ final class RegexTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'Value must be a string.';
         $message = 'Value is invalid.';
 
         return [
-            [['a', 'b'], [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
-            [['a', 'b'], [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
-            [null, [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
-            [null, [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
-            [new stdClass(), [new Regex('/a/')], ['' => [$incorrectInputMessage]]],
-            [new stdClass(), [new Regex('/a/', not: true)], ['' => [$incorrectInputMessage]]],
+            [['a', 'b'], [new Regex('/a/')], ['' => ['Value must be a string. array given.']]],
+            [['a', 'b'], [new Regex('/a/', not: true)], ['' => ['Value must be a string. array given.']]],
+            [null, [new Regex('/a/')], ['' => ['Value must be a string. null given.']]],
+            [null, [new Regex('/a/', not: true)], ['' => ['Value must be a string. null given.']]],
+            [new stdClass(), [new Regex('/a/')], ['' => ['Value must be a string. stdClass given.']]],
+            [new stdClass(), [new Regex('/a/', not: true)], ['' => ['Value must be a string. stdClass given.']]],
             'not' => ['a', [new Regex('/a/', not: true)], ['' => [$message]]],
             'custom incorrect input message' => [
                 null,
