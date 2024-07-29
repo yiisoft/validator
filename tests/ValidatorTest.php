@@ -390,7 +390,7 @@ class ValidatorTest extends TestCase
                         Error::MESSAGE_NONE,
                     ),
                     new Error(
-                        'The allowed types for merchantId are integer, float and string.',
+                        'The allowed types for merchantId are integer, float and string. null given.',
                         ['property' => 'merchantId', 'Property' => 'MerchantId', 'type' => 'null'],
                         ['merchantId'],
                         Error::MESSAGE_NONE,
@@ -554,7 +554,7 @@ class ValidatorTest extends TestCase
             'age' => [new Integer(min: 18)],
         ];
         $stringLessThanMinMessage = 'Name must contain at least 8 characters.';
-        $incorrectNumberMessage = 'The allowed types for age are integer, float and string.';
+        $incorrectNumberMessage = 'The allowed types for age are integer, float and string. null given.';
         $intMessage = 'Age must be an integer.';
         $intLessThanMinMessage = 'Age must be no less than 18.';
 

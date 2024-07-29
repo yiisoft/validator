@@ -62,10 +62,10 @@ final class LengthTest extends RuleTestCase
             'exactly, custom' => [
                 new Length(
                     exactly: 3,
-                    incorrectInputMessage: 'Custom message.',
-                    lessThanMinMessage: 'Custom message.',
-                    greaterThanMaxMessage: 'Custom message.',
-                    notExactlyMessage: 'Custom message.',
+                    incorrectInputMessage: 'Custom message 1.',
+                    lessThanMinMessage: 'Custom message 2.',
+                    greaterThanMaxMessage: 'Custom message 3.',
+                    notExactlyMessage: 'Custom message 4.',
                     encoding: 'windows-1251',
                     skipOnEmpty: true,
                     skipOnError: true,
@@ -73,26 +73,26 @@ final class LengthTest extends RuleTestCase
                 [
                     'min' => null,
                     'max' => null,
-                    'exactly' => null,
+                    'exactly' => 3,
                     'lessThanMinMessage' => [
                         'template' => 'Custom message 2.',
-                        'parameters' => ['min' => 1],
+                        'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
                         'template' => 'Custom message 3.',
-                        'parameters' => ['max' => 5],
+                        'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
                         'template' => 'Custom message 4.',
-                        'parameters' => ['exactly' => null],
+                        'parameters' => ['exactly' => 3],
                     ],
                     'incorrectInputMessage' => [
                         'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
-                    'encoding' => 'UTF-8',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'encoding' => 'windows-1251',
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -140,15 +140,26 @@ final class LengthTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'Value must be a string.';
         $greaterThanMaxMessage = 'Value must contain at most 25 characters.';
         $notExactlyMessage = 'Value must contain exactly 25 characters.';
         $lessThanMinMessage = 'Value must contain at least 25 characters.';
 
         return [
-            'incorrect input, array' => [['not a string'], [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
-            'incorrect input, boolean (true)' => [true, [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
-            'incorrect input, boolean (false)' => [false, [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
+            'incorrect input, array' => [
+                ['not a string'],
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. array given.']],
+            ],
+            'incorrect input, boolean (true)' => [
+                true,
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. bool given.']]
+            ],
+            'incorrect input, boolean (false)' => [
+                false,
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. bool given.']],
+            ],
             'custom incorrect input message' => [
                 false,
                 [new Length(min: 25, incorrectInputMessage: 'Custom incorrect input message.')],
@@ -165,7 +176,11 @@ final class LengthTest extends RuleTestCase
                 ['data' => ['Property - data, type - bool.']],
             ],
 
-            [new SingleValueDataSet(new stdClass()), [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
+            [
+                new SingleValueDataSet(new stdClass()),
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. stdClass given.']],
+            ],
 
             [str_repeat('x', 1250), [new Length(max: 25)], ['' => [$greaterThanMaxMessage]]],
             [str_repeat('x', 125), [new Length(exactly: 25)], ['' => [$notExactlyMessage]]],

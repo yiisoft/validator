@@ -121,7 +121,8 @@ final class NestedTest extends RuleTestCase
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                    '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [

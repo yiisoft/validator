@@ -144,7 +144,7 @@ final class UrlTest extends RuleTestCase
             'incorrect input, object' => [
                 new stdClass(),
                 [new Url()],
-                ['' => ['Value is not a valid URL. stdClass given.']],
+                ['' => ['Value must be a string. stdClass given.']],
             ],
             'custom incorrect input message' => [
                 1,

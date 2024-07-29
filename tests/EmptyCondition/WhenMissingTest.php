@@ -16,7 +16,7 @@ final class WhenMissingTest extends TestCase
     {
         return [
             'null' => [
-                ['The allowed types for value are integer, float and string.'],
+                ['The allowed types for value are integer, float and string. null given.'],
                 null,
                 new Number(skipOnEmpty: new WhenMissing()),
             ],

@@ -74,7 +74,7 @@ final class Integer extends AbstractNumber
         float|int|null $min = null,
         float|int|null $max = null,
         string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
-        string $notNumberMessage = '{Property} must be an integer. {type} given.',
+        string $notNumberMessage = '{Property} must be an integer.',
         string $lessThanMinMessage = self::DEFAULT_LESS_THAN_MIN_MESSAGE,
         string $greaterThanMaxMessage = self::DEFAULT_GREATER_THAN_MAX_MESSAGE,
         string $pattern = '/^\s*[+-]?\d+\s*$/',
