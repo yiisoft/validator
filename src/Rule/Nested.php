@@ -215,9 +215,11 @@ final class Nested implements
         private int $rulesSourceClassPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
-        private string $noRulesWithNoObjectMessage = 'Nested rule without rules requires {property} to be an object.',
-        private string $incorrectDataSetTypeMessage = 'An object data set data for {property} can only have an array type.',
-        private string $incorrectInputMessage = '{Property} must be an array or an object.',
+        private string $noRulesWithNoObjectMessage = 'Nested rule without rules requires {property} to be an object. ' .
+        '{type} given.',
+        private string $incorrectDataSetTypeMessage = 'An object data set data for {property} can only have an array ' .
+        'type. {type} given.',
+        private string $incorrectInputMessage = '{Property} must be an array or an object. {type} given.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found in {property}.',
         private bool $handleEachShortcut = true,

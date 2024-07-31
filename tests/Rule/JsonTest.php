@@ -28,19 +28,39 @@ final class JsonTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Json(),
                 [
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Property} is not JSON.',
+                        'template' => '{Property} is not a valid JSON.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                ],
+            ],
+            'custom' => [
+                new Json(
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'incorrectInputMessage' => [
+                        'template' => 'Custom message 1.',
+                        'parameters' => [],
+                    ],
+                    'message' => [
+                        'template' => 'Custom message 2.',
+                        'parameters' => [],
+                    ],
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -134,13 +154,12 @@ JSON_WRAP
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['Value must be a string.']];
-        $errors = ['' => ['Value is not JSON.']];
+        $errors = ['' => ['Value is not a valid JSON.']];
 
         return [
-            'incorrect input, array' => [['json'], [new Json()], $incorrectInputErrors],
-            'incorrect input, integer' => [10, [new Json()], $incorrectInputErrors],
-            'incorrect input, null' => [null, [new Json()], $incorrectInputErrors],
+            'incorrect input, array' => [['json'], [new Json()], ['' => ['Value must be a string. array given.']]],
+            'incorrect input, integer' => [10, [new Json()], ['' => ['Value must be a string. int given.']]],
+            'incorrect input, null' => [null, [new Json()], ['' => ['Value must be a string. null given.']]],
             'custom incorrect input message' => [
                 ['json'],
                 [new Json(incorrectInputMessage: 'Custom incorrect input message.')],

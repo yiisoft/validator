@@ -48,7 +48,7 @@ abstract class AbstractCompare implements
      * A default for {@see $incorrectInputMessage}.
      */
     protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float, string, ' .
-    'boolean, null and object implementing \Stringable interface or \DateTimeInterface.';
+    'boolean, null and object implementing \Stringable interface or \DateTimeInterface. {type} given.';
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
      */

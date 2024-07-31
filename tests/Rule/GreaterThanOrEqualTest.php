@@ -34,7 +34,7 @@ final class GreaterThanOrEqualTest extends RuleTestCase
                     'targetProperty' => null,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
-                            'and object implementing \Stringable interface or \DateTimeInterface.',
+                            'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,

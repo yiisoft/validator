@@ -48,7 +48,7 @@ final class EmailTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Email(),
                 [
                     'pattern' => '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
@@ -58,7 +58,7 @@ final class EmailTest extends RuleTestCase
                     'checkDns' => false,
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -69,67 +69,36 @@ final class EmailTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new Email(allowName: true),
+            'custom' => [
+                new Email(
+                    pattern: '/test1/',
+                    fullPattern: '/test2/',
+                    idnEmailPattern: '/test3/',
+                    allowName: true,
+                    checkDns: true,
+                    enableIdn: true,
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
                 [
-                    'pattern' => '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
-                    'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
-                    'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
-                    'allowName' => true,
-                    'checkDns' => false,
-                    'enableIdn' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} is not a valid email address.',
-                        'parameters' => [],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Email(allowName: true, checkDns: true),
-                [
-                    'pattern' => '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
-                    'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
-                    'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
+                    'pattern' => '/test1/',
+                    'fullPattern' => '/test2/',
+                    'idnEmailPattern' => '/test3/',
                     'allowName' => true,
                     'checkDns' => true,
-                    'enableIdn' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} is not a valid email address.',
-                        'parameters' => [],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Email(allowName: true, enableIdn: true),
-                [
-                    'pattern' => '/^[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/',
-                    'fullPattern' => '/^[^@]*<[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&\'*+\\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?>$/',
-                    'idnEmailPattern' => '/^([a-zA-Z0-9._%+-]+)@((\[\d{1,3}\.\d{1,3}\.\d{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|\d{1,3})(\]?)$/',
-                    'allowName' => true,
-                    'checkDns' => false,
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Property} is not a valid email address.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [],
                     ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -209,14 +178,13 @@ final class EmailTest extends RuleTestCase
         $ruleEnabledIdn = new Email(enableIdn: true);
         $ruleEnabledIdnAndAllowedName = new Email(allowName: true, enableIdn: true);
         $errors = ['' => ['Value is not a valid email address.']];
-        $incorrectInputErrors = ['' => ['Value must be a string.']];
 
         return [
-            'incorrect input, integer' => [1, [$rule], $incorrectInputErrors],
+            'incorrect input, integer' => [1, [$rule], ['' => ['Value must be a string. int given.']]],
             'incorrect input, array containing string element' => [
                 ['developer@yiiframework.com'],
                 [$ruleAllowedName],
-                $incorrectInputErrors,
+                ['' => ['Value must be a string. array given.']],
             ],
             'custom incorrect input message' => [
                 1,

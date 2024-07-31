@@ -51,7 +51,8 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                    '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -75,7 +76,8 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                    '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -111,7 +113,8 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                    '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [

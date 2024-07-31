@@ -94,7 +94,7 @@ final class Email implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private bool $allowName = false,
         private bool $checkDns = false,
         private bool $enableIdn = false,
-        private string $incorrectInputMessage = '{Property} must be a string.',
+        private string $incorrectInputMessage = '{Property} must be a string. {type} given.',
         private string $message = '{Property} is not a valid email address.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
