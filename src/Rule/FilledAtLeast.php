@@ -17,6 +17,7 @@ use Yiisoft\Validator\WhenInterface;
 
 use function count;
 
+
 /**
  * Defines validation options to check that a minimum number of specified properties are filled.
  *
