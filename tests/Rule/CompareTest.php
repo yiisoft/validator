@@ -63,7 +63,7 @@ final class CompareTest extends RuleTestCase
                     'targetProperty' => null,
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
-                            'and object implementing \Stringable interface or \DateTimeInterface.',
+                            'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -143,7 +143,7 @@ final class CompareTest extends RuleTestCase
                     'targetProperty' => 'test',
                     'incorrectInputMessage' => [
                         'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
-                            'and object implementing \Stringable interface or \DateTimeInterface.',
+                            'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => 'test',
@@ -613,7 +613,7 @@ final class CompareTest extends RuleTestCase
                 [
                     '' => [
                         'The allowed types for value are integer, float, string, boolean, null and object ' .
-                        'implementing \Stringable interface or \DateTimeInterface.',
+                        'implementing \Stringable interface or \DateTimeInterface. array given.',
                     ],
                 ],
             ],

@@ -39,7 +39,8 @@ final class RulesDumperTest extends TestCase
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                    '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [

@@ -45,14 +45,14 @@ final class UrlTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'default' => [
                 new Url(),
                 [
                     'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
                     'validSchemes' => ['http', 'https'],
                     'enableIdn' => false,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -63,58 +63,30 @@ final class UrlTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new Url(enableIdn: true),
-                [
-                    'pattern' => '/^((?i)http|https):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
-                    'validSchemes' => ['http', 'https'],
-                    'enableIdn' => true,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} is not a valid URL.',
-                        'parameters' => [],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Url(validSchemes: ['http']),
-                [
-                    'pattern' => '/^((?i)http):\/\/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+)(?::\d{1,5})?([?\/#].*$|$)/',
-                    'validSchemes' => ['http'],
-                    'enableIdn' => false,
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'message' => [
-                        'template' => '{Property} is not a valid URL.',
-                        'parameters' => [],
-                    ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Url(pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/', enableIdn: true),
+            'custom' => [
+                new Url(
+                    pattern: '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
+                    validSchemes: ['http'],
+                    enableIdn: true,
+                    incorrectInputMessage: 'Custom message 1.',
+                    message: 'Custom message 2.',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
                 [
                     'pattern' => '/(([a-zA-Z0-9][a-zA-Z0-9_-]*)(\.[a-zA-Z0-9][a-zA-Z0-9_-]*)+).*$/',
-                    'validSchemes' => ['http', 'https'],
+                    'validSchemes' => ['http'],
                     'enableIdn' => true,
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => '{Property} is not a valid URL.',
+                        'template' => 'Custom message 2.',
                         'parameters' => [],
                     ],
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -159,14 +131,21 @@ final class UrlTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputErrors = ['' => ['Value must be a string.']];
         $errors = ['' => ['Value is not a valid URL.']];
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';
 
         return [
-            'incorrect input, integer' => [1, [new Url()], $incorrectInputErrors],
-            'incorrect input, string in array' => [['yiiframework.com'], [new Url()], $incorrectInputErrors],
-            'incorrect input, object' => [new stdClass(), [new Url()], $incorrectInputErrors],
+            'incorrect input, integer' => [1, [new Url()], ['' => ['Value must be a string. int given.']]],
+            'incorrect input, string in array' => [
+                ['yiiframework.com'],
+                [new Url()],
+                ['' => ['Value must be a string. array given.']],
+            ],
+            'incorrect input, object' => [
+                new stdClass(),
+                [new Url()],
+                ['' => ['Value must be a string. stdClass given.']],
+            ],
             'custom incorrect input message' => [
                 1,
                 [new Url(incorrectInputMessage: 'Custom incorrect input message.')],

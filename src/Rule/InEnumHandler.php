@@ -9,6 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function in_array;
+
 /**
  * Validates that the value is one of the values of a specified enum.
  *

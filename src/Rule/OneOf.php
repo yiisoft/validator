@@ -58,7 +58,7 @@ final class OneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
      */
     public function __construct(
         private array $properties,
-        private string $incorrectInputMessage = '{Property} must be an array or an object.',
+        private string $incorrectInputMessage = '{Property} must be an array or an object. {type} given.',
         private string $message = 'Exactly 1 property from this list must be filled for {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,

@@ -32,7 +32,7 @@ final class StopOnErrorTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
+            'basic' => [
                 new StopOnError([new Length(min: 10)]),
                 [
                     'skipOnEmpty' => false,
@@ -65,7 +65,54 @@ final class StopOnErrorTest extends RuleTestCase
                                 ],
                             ],
                             'incorrectInputMessage' => [
-                                'template' => '{Property} must be a string.',
+                                'template' => '{Property} must be a string. {type} given.',
+                                'parameters' => [],
+                            ],
+                            'encoding' => 'UTF-8',
+                            'skipOnEmpty' => false,
+                            'skipOnError' => false,
+                        ],
+                    ],
+                ],
+            ],
+            'custom' => [
+                new StopOnError(
+                    [new Length(min: 10)],
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
+                [
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
+                    'rules' => [
+                        [
+                            Length::class,
+                            'min' => 10,
+                            'max' => null,
+                            'exactly' => null,
+                            'lessThanMinMessage' => [
+                                'template' => '{Property} must contain at least {min, number} {min, plural, ' .
+                                    'one{character} other{characters}}.',
+                                'parameters' => [
+                                    'min' => 10,
+                                ],
+                            ],
+                            'greaterThanMaxMessage' => [
+                                'template' => '{Property} must contain at most {max, number} {max, plural, ' .
+                                    'one{character} other{characters}}.',
+                                'parameters' => [
+                                    'max' => null,
+                                ],
+                            ],
+                            'notExactlyMessage' => [
+                                'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
+                                    'one{character} other{characters}}.',
+                                'parameters' => [
+                                    'exactly' => null,
+                                ],
+                            ],
+                            'incorrectInputMessage' => [
+                                'template' => '{Property} must be a string. {type} given.',
                                 'parameters' => [],
                             ],
                             'encoding' => 'UTF-8',

@@ -51,7 +51,7 @@ final class NumberTest extends RuleTestCase
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float and string.',
+                        'template' => 'The allowed types for {property} are integer, float and string. {type} given.',
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
@@ -113,7 +113,7 @@ final class NumberTest extends RuleTestCase
                     'min' => null,
                     'max' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float and string.',
+                        'template' => 'The allowed types for {property} are integer, float and string. {type} given.',
                         'parameters' => [],
                     ],
                     'notNumberMessage' => [
@@ -229,16 +229,27 @@ final class NumberTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'The allowed types for value are integer, float and string.';
         $notNumberMessage = 'Value must be a number.';
         $notIntegerMessage = 'Value must be an integer.';
 
         return [
-            [false, [new Number()], ['' => [$incorrectInputMessage]]],
-            [true, [new Number()], ['' => [$incorrectInputMessage]]],
-            [[1, 2, 3], [new Number()], ['' => [$incorrectInputMessage]]],
-            [new stdClass(), [new Number()], ['' => [$incorrectInputMessage]]],
-            [fopen('php://stdin', 'rb'), [new Number()], ['' => [$incorrectInputMessage]]],
+            [false, [new Number()], ['' => ['The allowed types for value are integer, float and string. bool given.']]],
+            [true, [new Number()], ['' => ['The allowed types for value are integer, float and string. bool given.']]],
+            [
+                [1, 2, 3],
+                [new Number()],
+                ['' => ['The allowed types for value are integer, float and string. array given.']],
+            ],
+            [
+                new stdClass(),
+                [new Number()],
+                ['' => ['The allowed types for value are integer, float and string. stdClass given.']],
+            ],
+            [
+                fopen('php://stdin', 'rb'),
+                [new Number()],
+                ['' => ['The allowed types for value are integer, float and string. resource (stream) given.']],
+            ],
 
             ['12:45', [new Number()], ['' => [$notNumberMessage]]],
             ['e12', [new Number()], ['' => [$notNumberMessage]]],

@@ -88,7 +88,8 @@ final class Count implements
         int|null $exactly = null,
         int|null $min = null,
         int|null $max = null,
-        private string $incorrectInputMessage = '{Property} must be an array or implement \Countable interface.',
+        private string $incorrectInputMessage = '{Property} must be an array or implement \Countable interface. ' .
+        '{type} given.',
         string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{item} ' .
         'other{items}}.',
         string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{item} ' .

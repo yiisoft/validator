@@ -42,14 +42,16 @@ return [
     /** @see BooleanValue */
     '{Property} must be either "{true}" or "{false}".' => '{Property} должно быть «{true}» или «{false}».',
     /** @see Count */
-    '{Property} must be an array or implement \Countable interface.' => '{Property} должно быть массивом или объектом, реализующим интерфейс \Countable.',
+    '{Property} must be an array or implement \Countable interface. {type} given.' =>
+        '{Property} должно быть массивом или объектом, реализующим интерфейс \Countable. Передан {type}.',
     '{Property} must contain at least {min, number} {min, plural, one{item} other{items}}.' => '{Property} должно содержать как минимум {min, number} {min, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     '{Property} must contain at most {max, number} {max, plural, one{item} other{items}}.' => '{Property} должно содержать не более {max, number} {max, plural, one{элемента} few{элементов} many{элементов} other{элементов}}.',
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} other{items}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{элемент} few{элемента} many{элементов} other{элементов}}.',
     /** @see Each */
-    '{Property} must be array or iterable.' => '{Property} должно быть массивом или иметь псевдотип iterable.',
-    'Every iterable key of {property} must have an integer or a string type.' =>
-        'Ключ {property} должен иметь тип integer или string.',
+    '{Property} must be array or iterable. {type} given.' =>
+        '{Property} должно быть массивом или иметь псевдотип iterable. Передан {type}',
+    'Every iterable key of {property} must have an integer or a string type. {type} given.' =>
+        'Ключ {property} должен иметь тип integer или string. Передан {type}.',
     /** @see Email */
     '{Property} is not a valid email address.' => '{Property} не является правильным адресом электронной почты.',
     /** @see In */
@@ -68,14 +70,16 @@ return [
      */
     '{Property} must be an integer.' => '{Property} должно быть целым числом.',
     /** @see Json */
-    '{Property} is not JSON.' => '{Property} не является строкой JSON.',
+    '{Property} is not a valid JSON.' => '{Property} не является валидной строкой JSON.',
     /** @see Length */
     '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.' => '{Property} должно содержать как минимум {min, number} {min, plural, one{символ} few{символа} many{символов} other{символов}}.',
     '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.' => '{Property} должно содержать не более {max, number} {max, plural, one{символа} few{символов} many{символов} other{символов}}.',
     '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.' => '{Property} должно содержать ровно {exactly, number} {exactly, plural, one{символ} few{символа} many{символов} other{символов}}.',
     /** @see Nested */
-    'Nested rule without rules requires {property} to be an object.' => 'При правиле Nested без указания правил {property} должно быть объектом,',
-    'An object data set data for {property} can only have an array type.' => 'Данные в объекте для {property} должны быть массивом.',
+    'Nested rule without rules requires {property} to be an object. {type} given.' =>
+        'При правиле Nested без указания правил {property} должно быть объектом. Передан {type}.',
+    'An object data set data for {property} can only have an array type. {type} given.' =>
+        'Данные в объекте для {property} должны быть массивом. Передан {type}.',
     'Property "{path}" is not found in {property}.' => 'Свойство «{path}» не найдено в {property}.',
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
@@ -88,7 +92,7 @@ return [
     '{Property} cannot be blank.' => '{Property} не может быть пустым.',
     '{Property} not passed.' => '{Property} не передано.',
     /** @see Subset */
-    '{Property} must be iterable.' => '{Property} должно быть итерируемым.',
+    '{Property} must be iterable. {type} given.' => '{Property} должно быть итерируемым. Передан {type}.',
     '{Property} is not a subset of acceptable values.' => '{Property} не является подмножеством допустимых значений.',
     /** @see TrueValue */
     '{Property} must be "{true}".' => '{Property} должно быть «{true}».',
@@ -102,7 +106,8 @@ return [
      * @see Nested
      * @see OneOf
      */
-    '{Property} must be an array or an object.' => '{Property} должно быть массивом или объектом.',
+    '{Property} must be an array or an object. {type} given.' => '{Property} должно быть массивом или объектом. ' .
+        'Передан {type}.',
     /**
      * @see BooleanValue
      * @see TrueValue
@@ -118,10 +123,10 @@ return [
      * @see LessThanOrEqual
      * @see NotEqual
      */
-    'The allowed types for {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' =>
-        'Разрешённые типы для {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
-    '{Property} returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.' =>
-        '{Property}, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'The allowed types for {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface. {type} given.' =>
+        'Разрешённые типы для {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface. Передан {type}.',
+    '{Property} returned from a custom data set must have one of the following types: integer, float, string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface. {type} given.' =>
+        '{Property}, получаемое из пользовательского набора данных, должно иметь один из следующих типов: integer, float, string, bool, null или объект, реализующий интерфейс \Stringable или \DateTimeInterface. Передан {type}.',
     '{Property} must be equal to "{targetValueOrProperty}".' => '{Property} должно быть равно «{targetValueOrProperty}».',
     '{Property} must be strictly equal to "{targetValueOrProperty}".' => '{Property} должно быть строго равно «{targetValueOrProperty}».',
     '{Property} must not be equal to "{targetValueOrProperty}".' => '{Property} не должно быть равно «{targetValueOrProperty}».',
@@ -139,12 +144,12 @@ return [
      * @see StringType
      * @see Url
      */
-    '{Property} must be a string.' => '{Property} должно быть строкой.',
+    '{Property} must be a string. {type} given.' => '{Property} должно быть строкой. Передан {type}.',
     /**
      * @see Number
      * @see Integer
      */
-    'The allowed types for {property} are integer, float and string.' => 'Разрешённые типы: integer, float и string.',
+    'The allowed types for {property} are integer, float and string. {type} given.' => 'Разрешённые типы: integer, float и string. Передан {type}.',
     '{Property} must be no less than {min}.' => '{Property} должно быть не меньше {min}.',
     '{Property} must be no greater than {max}.' => '{Property} должно быть не больше {max}.',
 
@@ -160,7 +165,7 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\Date
      * @see \Yiisoft\Validator\Rule\Date\DateTime
      */
-    '{Property} must be a date' => '{Property} должно быть датой.',
+    '{Property} must be a date.' => '{Property} должно быть датой.',
 
     /**
      * @see \Yiisoft\Validator\Rule\Date\Time
@@ -168,8 +173,8 @@ return [
     '{Property} must be a time.' => '{Property} должно быть временем.',
 
     /** @see UniqueIterable */
-    'The allowed types for iterable\'s item values of {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface.' =>
-        'Разрешённые типы для значений элементов списка {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface.',
+    'The allowed types for iterable\'s item values of {property} are integer, float, string, boolean, null and object implementing \Stringable or \DateTimeInterface. {type} given.' =>
+        'Разрешённые типы для значений элементов списка {property}: integer, float, string, boolean, null и объект, реализующий интерфейс \Stringable или \DateTimeInterface. Передан {type}.',
     'All iterable items of {property} must have the same type.' =>
         'Все элементы списка {property} должны иметь одинаковый тип.',
     'Every iterable\'s item must be unique.' => 'Каждый элемент списка {property} должен быть уникален.',

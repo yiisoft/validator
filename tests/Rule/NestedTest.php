@@ -96,15 +96,16 @@ final class NestedTest extends RuleTestCase
                 new Nested([new Number(pattern: '/1/')]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules requires {property} to be an object.',
+                        'template' => 'Nested rule without rules requires {property} to be an object. {type} given.',
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data for {property} can only have an array type.',
+                        'template' => 'An object data set data for {property} can only have an array type. {type} ' .
+                            'given.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -120,7 +121,8 @@ final class NestedTest extends RuleTestCase
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string.',
+                                'template' => 'The allowed types for {property} are integer, float and string. ' .
+                                    '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -149,15 +151,16 @@ final class NestedTest extends RuleTestCase
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules requires {property} to be an object.',
+                        'template' => 'Nested rule without rules requires {property} to be an object. {type} given.',
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data for {property} can only have an array type.',
+                        'template' => 'An object data set data for {property} can only have an array type. {type} ' .
+                            'given.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -182,15 +185,16 @@ final class NestedTest extends RuleTestCase
                 ]),
                 [
                     'noRulesWithNoObjectMessage' => [
-                        'template' => 'Nested rule without rules requires {property} to be an object.',
+                        'template' => 'Nested rule without rules requires {property} to be an object. {type} given.',
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data for {property} can only have an array type.',
+                        'template' => 'An object data set data for {property} can only have an array type. {type} ' .
+                            'given.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'noPropertyPathMessage' => [
@@ -987,7 +991,7 @@ final class NestedTest extends RuleTestCase
                     public array $value = [];
                 },
                 null,
-                ['value' => ['Nested rule without rules requires value to be an object.']],
+                ['value' => ['Nested rule without rules requires value to be an object. array given.']],
             ],
             'no rules with no object, boolean' => [
                 new class () {
@@ -995,7 +999,7 @@ final class NestedTest extends RuleTestCase
                     public bool $value = false;
                 },
                 null,
-                ['value' => ['Nested rule without rules requires value to be an object.']],
+                ['value' => ['Nested rule without rules requires value to be an object. bool given.']],
             ],
             'no rules with no object, integer' => [
                 new class () {
@@ -1003,7 +1007,7 @@ final class NestedTest extends RuleTestCase
                     public int $value = 42;
                 },
                 null,
-                ['value' => ['Nested rule without rules requires value to be an object.']],
+                ['value' => ['Nested rule without rules requires value to be an object. int given.']],
             ],
             'custom no rules with no object message' => [
                 new class () {
@@ -1025,7 +1029,7 @@ final class NestedTest extends RuleTestCase
             'incorrect data set type' => [
                 $incorrectDataSet,
                 [new Nested(['value' => new Required()])],
-                ['' => ['An object data set data for value can only have an array type.']],
+                ['' => ['An object data set data for value can only have an array type. null given.']],
             ],
             'custom incorrect data set type message' => [
                 $incorrectDataSet,
@@ -1046,7 +1050,7 @@ final class NestedTest extends RuleTestCase
             'incorrect input' => [
                 '',
                 [new Nested(['value' => new Required()])],
-                ['' => ['Value must be an array or an object.']],
+                ['' => ['Value must be an array or an object. string given.']],
             ],
             'custom incorrect input message' => [
                 '',
@@ -1241,7 +1245,7 @@ final class NestedTest extends RuleTestCase
                 [new Nested(['author.age' => [new Number(min: 20)]])],
                 [['Age must be no less than 20.', ['author', 'age']]],
             ],
-            'key not exists' => [
+            'key does not exist' => [
                 [
                     'author' => [
                         'name' => 'Dmitry',
@@ -1254,7 +1258,7 @@ final class NestedTest extends RuleTestCase
             [
                 '',
                 [new Nested(['value' => new Required()])],
-                [['Value must be an array or an object.', []]],
+                [['Value must be an array or an object. string given.', []]],
             ],
             [
                 ['value' => null],

@@ -38,7 +38,7 @@ final class OneOfTest extends RuleTestCase
                         'prop2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -82,7 +82,7 @@ final class OneOfTest extends RuleTestCase
                         'prop2',
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be an array or an object.',
+                        'template' => '{Property} must be an array or an object. {type} given.',
                         'parameters' => [],
                     ],
                     'message' => [
@@ -182,7 +182,7 @@ final class OneOfTest extends RuleTestCase
             'incorrect input' => [
                 1,
                 [new OneOf(['prop1', 'prop2'])],
-                ['' => ['Value must be an array or an object.']],
+                ['' => ['Value must be an array or an object. int given.']],
             ],
             'custom incorrect input message' => [
                 1,

@@ -32,26 +32,26 @@ final class LengthTest extends RuleTestCase
     public function dataOptions(): array
     {
         return [
-            [
-                new Length(min: 3),
+            'min and max' => [
+                new Length(min: 1, max: 5),
                 [
-                    'min' => 3,
-                    'max' => null,
+                    'min' => 1,
+                    'max' => 5,
                     'exactly' => null,
                     'lessThanMinMessage' => [
                         'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'parameters' => ['min' => 3],
+                        'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
                         'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => null],
+                        'parameters' => ['max' => 5],
                     ],
                     'notExactlyMessage' => [
                         'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => '{Property} must be a string. {type} given.',
                         'parameters' => [],
                     ],
                     'encoding' => 'UTF-8',
@@ -59,58 +59,40 @@ final class LengthTest extends RuleTestCase
                     'skipOnError' => false,
                 ],
             ],
-            [
-                new Length(max: 3),
+            'exactly, custom' => [
+                new Length(
+                    exactly: 3,
+                    incorrectInputMessage: 'Custom message 1.',
+                    lessThanMinMessage: 'Custom message 2.',
+                    greaterThanMaxMessage: 'Custom message 3.',
+                    notExactlyMessage: 'Custom message 4.',
+                    encoding: 'windows-1251',
+                    skipOnEmpty: true,
+                    skipOnError: true,
+                ),
                 [
                     'min' => null,
-                    'max' => 3,
-                    'exactly' => null,
+                    'max' => null,
+                    'exactly' => 3,
                     'lessThanMinMessage' => [
-                        'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
+                        'template' => 'Custom message 2.',
                         'parameters' => ['min' => null],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => 3],
+                        'template' => 'Custom message 3.',
+                        'parameters' => ['max' => null],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
-                        'parameters' => ['exactly' => null],
+                        'template' => 'Custom message 4.',
+                        'parameters' => ['exactly' => 3],
                     ],
                     'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
-                        'parameters' => [],
-                    ],
-                    'encoding' => 'UTF-8',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
-                ],
-            ],
-            [
-                new Length(min: 3, max: 4, encoding: 'windows-1251'),
-                [
-                    'min' => 3,
-                    'max' => 4,
-                    'exactly' => null,
-                    'lessThanMinMessage' => [
-                        'template' => '{Property} must contain at least {min, number} {min, plural, one{character} other{characters}}.',
-                        'parameters' => ['min' => 3],
-                    ],
-                    'greaterThanMaxMessage' => [
-                        'template' => '{Property} must contain at most {max, number} {max, plural, one{character} other{characters}}.',
-                        'parameters' => ['max' => 4],
-                    ],
-                    'notExactlyMessage' => [
-                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',
-                        'parameters' => ['exactly' => null],
-                    ],
-                    'incorrectInputMessage' => [
-                        'template' => '{Property} must be a string.',
+                        'template' => 'Custom message 1.',
                         'parameters' => [],
                     ],
                     'encoding' => 'windows-1251',
-                    'skipOnEmpty' => false,
-                    'skipOnError' => false,
+                    'skipOnEmpty' => true,
+                    'skipOnError' => true,
                 ],
             ],
         ];
@@ -158,15 +140,26 @@ final class LengthTest extends RuleTestCase
 
     public function dataValidationFailed(): array
     {
-        $incorrectInputMessage = 'Value must be a string.';
         $greaterThanMaxMessage = 'Value must contain at most 25 characters.';
         $notExactlyMessage = 'Value must contain exactly 25 characters.';
         $lessThanMinMessage = 'Value must contain at least 25 characters.';
 
         return [
-            'incorrect input, array' => [['not a string'], [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
-            'incorrect input, boolean (true)' => [true, [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
-            'incorrect input, boolean (false)' => [false, [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
+            'incorrect input, array' => [
+                ['not a string'],
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. array given.']],
+            ],
+            'incorrect input, boolean (true)' => [
+                true,
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. bool given.']],
+            ],
+            'incorrect input, boolean (false)' => [
+                false,
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. bool given.']],
+            ],
             'custom incorrect input message' => [
                 false,
                 [new Length(min: 25, incorrectInputMessage: 'Custom incorrect input message.')],
@@ -183,7 +176,11 @@ final class LengthTest extends RuleTestCase
                 ['data' => ['Property - data, type - bool.']],
             ],
 
-            [new SingleValueDataSet(new stdClass()), [new Length(min: 25)], ['' => [$incorrectInputMessage]]],
+            [
+                new SingleValueDataSet(new stdClass()),
+                [new Length(min: 25)],
+                ['' => ['Value must be a string. stdClass given.']],
+            ],
 
             [str_repeat('x', 1250), [new Length(max: 25)], ['' => [$greaterThanMaxMessage]]],
             [str_repeat('x', 125), [new Length(exactly: 25)], ['' => [$notExactlyMessage]]],
