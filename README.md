@@ -52,14 +52,14 @@ composer require yiisoft/validator
 Validator allows to check data in any format. For example, when data is an object:
 
 ```php
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-#[AtLeast(['email', 'phone'])]
+#[FilledAtLeast(['email', 'phone'])]
 final class Person
 {
     public function __construct(

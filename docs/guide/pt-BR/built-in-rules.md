@@ -49,9 +49,9 @@ Aqui está uma lista de todas as regras integradas disponíveis, divididas por c
 
 ### Regras de contagem
 
-- [AtLeast](../../../src/Rule/AtLeast.php)
 - [Count](../../../src/Rule/Count.php)
-- [OneOf](../../../src/Rule/OneOf.php)
+- [FilledAtLeast](../../../src/Rule/FilledAtLeast.php)
+- [FilledOnlyOneOf](../../../src/Rule/FilledOnlyOneOf.php)
 
 ### Regras de arquivo
 

@@ -28,7 +28,7 @@ $result = (new Validator())->validate($value, $rules);
 Валидировать массив можно как целиком, так и по отдельным элементам. Например:
 
 ```php
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
@@ -46,7 +46,7 @@ $rules = [
     // Правила, не относящиеся к конкретному свойству.
  
     // Хотя бы одно из свойств ("email" или "phone"), должен быть передан и иметь непустое значение.
-    new AtLeast(['email', 'phone']),
+    new FilledAtLeast(['email', 'phone']),
 
     // Правила, относящиеся к конкретному свойству.
 
@@ -71,14 +71,14 @@ $result = (new Validator())->validate($data, $rules);
 Для объектов есть дополнительная возможность настроить валидацию по атрибутами, что позволяет не передавать правила отдельно явным образом (достаточно передавать только сам объект). Например:
 
 ```php
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-#[AtLeast(['email', 'phone'])]
+#[FilledAtLeast(['email', 'phone'])]
 final class Person
 {
     public function __construct(

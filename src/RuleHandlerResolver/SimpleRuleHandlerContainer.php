@@ -30,7 +30,7 @@ use function array_key_exists;
  * It's also possible to replace a handler for built-in rule with a custom one:
  *
  * ```php
- * $container = new SimpleRuleHandlerContainer([AtLeast::class => new MyAtLeastHandler()]);
+ * $container = new SimpleRuleHandlerContainer([FilledAtLeast::class => new MyFilledAtLeastHandler()]);
  * $validator = new Validator(ruleHandlerResolver: $container);
  * ```
  */

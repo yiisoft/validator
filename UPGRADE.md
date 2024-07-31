@@ -13,7 +13,9 @@ for both A and B.
     - `Yiisoft\Validator\AttributeTranslator\ArrayAttributeTranslator` to `Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator`,
     - `Yiisoft\Validator\AttributeTranslator\NullAttributeTranslator` to `Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator`,
     - `Yiisoft\Validator\AttributeTranslator\TranslatorAttributeTranslator` to `Yiisoft\Validator\PropertyTranslator\TranslatorPropertyTranslator`,
-    - `Yiisoft\Validator\AttributeTranslatorInterface` to `Yiisoft\Validator\PropertyTranslatorInterface`.
+    - `Yiisoft\Validator\AttributeTranslatorInterface` to `Yiisoft\Validator\PropertyTranslatorInterface`,
+    - `Yiisoft\Validator\Rule\AtLeast` to `Yiisoft\Validator\Rule\FilledAtLeast`,
+    - `Yiisoft\Validator\Rule\OneOf` to `Yiisoft\Validator\Rule\FilledOnlyOneOf`.
 
 * Changed interface `Yiisoft\Validator\AttributeTranslatorProviderInterface`:
     - renamed to `Yiisoft\Validator\PropertyTranslatorProviderInterface`,

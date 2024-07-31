@@ -28,7 +28,7 @@ $result = (new Validator())->validate($value, $rules);
 It's possible to validate an array both as a whole and by individual items. For example:
 
 ```php
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
@@ -46,7 +46,7 @@ $rules = [
     // The rules that are not related to a specific property
 
     // At least one of the properties ("email" and "phone") must be passed and have non-empty value.  
-    new AtLeast(['email', 'phone']),
+    new FilledAtLeast(['email', 'phone']),
 
     // The rules related to a specific property.
 
@@ -72,14 +72,14 @@ For objects there is an additional option to configure validation with PHP attri
 separately in explicit way (passing just the object itself is enough). For example:
 
 ```php
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Validator;
 
-#[AtLeast(['email', 'phone'])]
+#[FilledAtLeast(['email', 'phone'])]
 final class Person
 {
     public function __construct(

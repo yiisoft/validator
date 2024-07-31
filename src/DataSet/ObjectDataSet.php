@@ -208,7 +208,7 @@ final class ObjectDataSet implements
      *
      * ```php
      * [
-     *     [new AtLeast(['name', 'author'])], // Rules not bound to a specific property.
+     *     [new FilledAtLeast(['name', 'author'])], // Rules not bound to a specific property.
      *     'files' => [new Count(max: 3)], // Property specific rules.
      * ],
      * ```
