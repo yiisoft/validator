@@ -7,10 +7,10 @@ namespace Yiisoft\Validator\Tests\Support\Data;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\PropertyTranslatorInterface;
 use Yiisoft\Validator\PropertyTranslatorProviderInterface;
-use Yiisoft\Validator\Rule\OneOf;
+use Yiisoft\Validator\Rule\FilledOnlyOneOf;
 
-#[OneOf(['a', 'b', 'c'])]
-final class OneOfDto implements PropertyTranslatorProviderInterface
+#[FilledOnlyOneOf(['a', 'b', 'c'])]
+final class FilledOnlyOneOfDto implements PropertyTranslatorProviderInterface
 {
     public function __construct(
         public ?int $a = null,

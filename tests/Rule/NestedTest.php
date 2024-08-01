@@ -13,7 +13,7 @@ use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
@@ -515,7 +515,7 @@ final class NestedTest extends RuleTestCase
             ],
             'single rule as integer property rules' => [
                 new Nested(
-                    [new AtLeast(['a'])],
+                    [new FilledAtLeast(['a'])],
                     propagateOptions: true,
                     skipOnEmpty: true,
                     skipOnError: true,
@@ -527,7 +527,7 @@ final class NestedTest extends RuleTestCase
                         'skipOnError' => true,
                         'rules' => [
                             [
-                                AtLeast::class,
+                                FilledAtLeast::class,
                                 'skipOnEmpty' => true,
                                 'skipOnError' => true,
                             ],

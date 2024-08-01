@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\Count;
@@ -21,7 +21,7 @@ use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\OneOf;
+use Yiisoft\Validator\Rule\FilledOnlyOneOf;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
@@ -31,7 +31,7 @@ use Yiisoft\Validator\Rule\Url;
 return [
     // Usado em regra única
 
-    /** @see AtLeast */
+    /** @see FilledAtLeast */
     'The data must have at least "{min}" filled properties.' => 'Os dados devem conter no mínimo {min, number} {min, plural, one{atributo preenchido} few{atributo preenchido} many{atributos preenchidos} other{atributo preenchido}}.',
     /** @see BooleanValue */
     'Value must be either "{true}" or "{false}".' => 'O valor deve ser "{true}" ou "{false}".',
@@ -69,7 +69,7 @@ return [
     'Property "{path}" is not found.' => 'Propriedade "{path}" não encontrada.',
     /** @see Number */
     'Value must be a number.' => 'O valor deve ser um número.',
-    /** @see OneOf */
+    /** @see FilledOnlyOneOf */
     'The data must have at least 1 filled property.' => 'Os dados devem conter pelo menos 1 atributo preenchido.',
     /** @see Regex */
     'Value is invalid.' => 'O valor está incorreto.',
@@ -87,9 +87,9 @@ return [
     // Usado em múltiplas regras
 
     /**
-     * @see AtLeast
+     * @see FilledAtLeast
      * @see Nested
-     * @see OneOf
+     * @see FilledOnlyOneOf
      */
     'The value must be an array or an object.' => 'O valor deve ser um array ou um objeto.',
     /**

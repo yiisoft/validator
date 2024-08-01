@@ -19,7 +19,7 @@ use Yiisoft\Validator\Exception\RuleHandlerInterfaceNotImplementedException;
 use Yiisoft\Validator\Exception\RuleHandlerNotFoundException;
 use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\In;
@@ -1484,8 +1484,8 @@ class ValidatorTest extends TestCase
         $result = (new Validator())->validate(
             ['x' => ['a' => 1, 'b' => 2]],
             [
-                new AtLeast(['x']),
-                'x' => new AtLeast(['a', 'b']),
+                new FilledAtLeast(['x']),
+                'x' => new FilledAtLeast(['a', 'b']),
             ],
         );
         $this->assertTrue($result->isValid());

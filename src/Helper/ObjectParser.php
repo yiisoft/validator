@@ -199,7 +199,7 @@ final class ObjectParser
      *
      * ```php
      * [
-     *     [new AtLeast(['name', 'author'])], // Parsed from class attribute.
+     *     [new FilledAtLeast(['name', 'author'])], // Parsed from class attribute.
      *     'files' => [new Count(max: 3)], // Parsed from property attribute.
      * ],
      * ```

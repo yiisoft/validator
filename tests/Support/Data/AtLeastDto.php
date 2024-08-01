@@ -7,9 +7,9 @@ namespace Yiisoft\Validator\Tests\Support\Data;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\PropertyTranslatorInterface;
 use Yiisoft\Validator\PropertyTranslatorProviderInterface;
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 
-#[AtLeast(['a', 'b', 'c'])]
+#[FilledAtLeast(['a', 'b', 'c'])]
 final class AtLeastDto implements PropertyTranslatorProviderInterface
 {
     public function __construct(
