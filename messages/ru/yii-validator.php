@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Yiisoft\Validator\Rule\AtLeast;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\Count;
@@ -22,7 +22,7 @@ use Yiisoft\Validator\Rule\LessThanOrEqual;
 use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\NotEqual;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\Rule\OneOf;
+use Yiisoft\Validator\Rule\FilledOnlyOneOf;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\Subset;
@@ -36,7 +36,7 @@ use Yiisoft\Validator\Rule\Url;
 return [
     // Used in single rule
 
-    /** @see AtLeast */
+    /** @see FilledAtLeast */
     'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}' =>
         'Как минимум {min, number} {min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка {min, plural, one{должен} few{должны} many{должны} other{должны}} быть заполнены для {property}: {properties}.',
     /** @see BooleanValue */
@@ -83,7 +83,7 @@ return [
     'Property "{path}" is not found in {property}.' => 'Свойство «{path}» не найдено в {property}.',
     /** @see Number */
     '{Property} must be a number.' => '{Property} должно быть числом.',
-    /** @see OneOf */
+    /** @see FilledOnlyOneOf */
     'Exactly 1 property from this list must be filled for {property}: {properties}.' =>
         'Ровно 1 свойство из этого списка должно быть заполнено в {property}: {properties}.',
     /** @see Regex */
@@ -102,9 +102,9 @@ return [
     // Used in multiple rules
 
     /**
-     * @see AtLeast
+     * @see FilledAtLeast
      * @see Nested
-     * @see OneOf
+     * @see FilledOnlyOneOf
      */
     '{Property} must be an array or an object. {type} given.' => '{Property} должно быть массивом или объектом. ' .
         'Передан {type}.',

@@ -17,18 +17,18 @@ use function is_array;
 use function is_object;
 
 /**
- * Validates that one of specified properties is filled.
+ * Validates that a minimum number of specified properties are filled.
  *
- * @see OneOf
+ * @see FilledAtLeast
  */
-final class OneOfHandler implements RuleHandlerInterface
+final class FilledAtLeastHandler implements RuleHandlerInterface
 {
     use TranslatedPropertiesHandlerTrait;
 
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
-        if (!$rule instanceof OneOf) {
-            throw new UnexpectedRuleException(OneOf::class, $rule);
+        if (!$rule instanceof FilledAtLeast) {
+            throw new UnexpectedRuleException(FilledAtLeast::class, $rule);
         }
 
         /** @var mixed $value */
@@ -49,22 +49,18 @@ final class OneOfHandler implements RuleHandlerInterface
             if (!(new WhenEmpty())(ArrayHelper::getValue($value, $property), $context->isPropertyMissing())) {
                 $filledCount++;
             }
-
-            if ($filledCount > 1) {
-                return $this->getGenericErrorResult($rule, $context);
-            }
         }
 
-        return $filledCount === 1 ? $result : $this->getGenericErrorResult($rule, $context);
-    }
+        if ($filledCount < $rule->getMin()) {
+            $result->addError($rule->getMessage(), [
+                'property' => $context->getTranslatedProperty(),
+                'Property' => $context->getCapitalizedTranslatedProperty(),
+                'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
+                'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
+                'min' => $rule->getMin(),
+            ]);
+        }
 
-    private function getGenericErrorResult(OneOf $rule, ValidationContext $context): Result
-    {
-        return (new Result())->addError($rule->getMessage(), [
-            'property' => $context->getTranslatedProperty(),
-            'Property' => $context->getCapitalizedTranslatedProperty(),
-            'properties' => $this->getFormattedPropertiesString($rule->getProperties(), $context),
-            'Properties' => $this->getCapitalizedPropertiesString($rule->getProperties(), $context),
-        ]);
+        return $result;
     }
 }

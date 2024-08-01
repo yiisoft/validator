@@ -50,9 +50,9 @@ Here is a list of all available built-in rules, divided by category.
 
 ### Count rules
 
-- [AtLeast](../../../src/Rule/AtLeast.php)
 - [Count](../../../src/Rule/Count.php)
-- [OneOf](../../../src/Rule/OneOf.php)
+- [FilledAtLeast](../../../src/Rule/FilledAtLeast.php)
+- [FilledOnlyOneOf](../../../src/Rule/FilledOnlyOneOf.php)
 
 ### File rules
 

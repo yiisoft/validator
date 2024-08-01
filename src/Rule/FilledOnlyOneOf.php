@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Rule;
 
 use Attribute;
 use Closure;
-use InvalidArgumentException;
 use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -15,20 +14,18 @@ use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
-use function count;
-
 /**
- * Defines validation options to check that a minimum number of specified properties are filled.
+ * Defines validation options to check that only one of specified properties is filled.
  *
  * Both arrays and objects with public properties are supported as validated values.
  *
- * @see AtLeastHandler
+ * @see FilledOnlyOneOfHandler
  *
  * @psalm-import-type SkipOnEmptyValue from SkipOnEmptyInterface
  * @psalm-import-type WhenType from WhenInterface
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
+final class FilledOnlyOneOf implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterface, SkipOnEmptyInterface
 {
     use SkipOnEmptyTrait;
     use SkipOnErrorTrait;
@@ -36,7 +33,6 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
 
     /**
      * @param string[] $properties The list of required properties that will be checked.
-     * @param int $min The minimum required quantity of filled properties to pass the validation. Defaults to 1.
      * @param string $incorrectInputMessage A message used when the input is incorrect.
      *
      * You may use the following placeholders in the message:
@@ -48,9 +44,8 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
-     * - `{properties} - the translated labels of the properties some of which must be filled (within the property being
+     * - `{properties} - the translated labels of the properties one of which must be filled (within the property being
      * validated).
-     * - `{min}`: the minimum number of property values that was not met.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the value validated is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -63,18 +58,12 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
      */
     public function __construct(
         private array $properties,
-        private int $min = 1,
         private string $incorrectInputMessage = '{Property} must be an array or an object. {type} given.',
-        private string $message = 'At least {min, number} {min, plural, one{property} other{properties}} from this ' .
-        'list must be filled for {property}: {properties}.',
+        private string $message = 'Exactly 1 property from this list must be filled for {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
     ) {
-        if ($min > count($this->properties)) {
-            throw new InvalidArgumentException('$min must be no greater than amount of $properties.');
-        }
-
         $this->skipOnEmpty = $skipOnEmpty;
     }
 
@@ -93,18 +82,6 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
     public function getProperties(): array
     {
         return $this->properties;
-    }
-
-    /**
-     * Get the minimum required quantity of filled properties to pass the validation.
-     *
-     * @return int Minimum require quantity.
-     *
-     * @see $min
-     */
-    public function getMin(): int
-    {
-        return $this->min;
     }
 
     /**
@@ -135,14 +112,13 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
     {
         return [
             'properties' => $this->properties,
-            'min' => $this->min,
             'incorrectInputMessage' => [
                 'template' => $this->incorrectInputMessage,
                 'parameters' => [],
             ],
             'message' => [
                 'template' => $this->message,
-                'parameters' => ['min' => $this->min],
+                'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
@@ -151,6 +127,6 @@ final class AtLeast implements DumpedRuleInterface, SkipOnErrorInterface, WhenIn
 
     public function getHandler(): string
     {
-        return AtLeastHandler::class;
+        return FilledOnlyOneOfHandler::class;
     }
 }

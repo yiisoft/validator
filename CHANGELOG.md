@@ -2,6 +2,7 @@
 
 ## 2.0.0 under development
 
+- Chg #694: Rename `AtLeast` rule to `FilledAtLeast` and `OneOf` rule to `FilledOnlyOneOf` (@arogachev) 
 - Enh #492: Add type to error messages related with incorrect input (@arogachev)
 - Enh #735: Make `Json::$message` a bit more clear (@arogachev)
 - Bug #736: Fix wrong value for `type` parameter for `Each::$incorrectInputKeyMessage` (@arogachev)
