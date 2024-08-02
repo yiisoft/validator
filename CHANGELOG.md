@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.0.1 under development
+
+- no changes in this release.
+
 ## 2.0.0 August 02, 2024
 
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
