@@ -8,7 +8,6 @@
 - Bug #736: Fix wrong value for `type` parameter for `Each::$incorrectInputKeyMessage` (@arogachev)
 - New #734: Add `InEnum` rule (@samdark)
 - New #630, #718: Include attribute name in error messages when it's present (@dood-, @arogachev)
-- New #646, #653: Add `DateTime` rule (@pamparam83)
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
   and containing the current key (@dood-)
 - Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
@@ -24,12 +23,14 @@
 - Chg #634: Rename `RuleWithOptionsInterface` to `DumpedRuleInterface` (@arogachev)
 - Chg #634: Use FQCN as a name for built-in rules during export with `RulesDumper` (@arogachev)
 - Chg #634: Use FQCN as a name for rules not implementing `DumpedRuleInterface` during export with `RulesDumper`
+  (@arogachev) 
 - Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
 - Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3
   (@arogachev)
 - Chg #679: Change type of `$rule` argument in `RuleHandlerInterface::validate()` from `object` to `RuleInterface`
   (@arogachev)
 - Chg #660: Change type of `$skipOnEmpty` argument in rules' constructors from `mixed` to `bool|callable|null`
+  (@arogachev)
 - Chg #613: Change type of `$escape` argument in `Error::getValuePath()` from `bool|string|null` to `string|null`
   (@arogachev)
 - Enh #726: Refactor `Result::add()`: took `array_merge()` out of the `foreach` (@lav45)
