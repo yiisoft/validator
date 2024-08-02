@@ -1,42 +1,42 @@
 # Yii Validator Change Log
 
-## 2.0.0 under development
+## 2.0.0 August 02, 2024
 
-- Chg #694: Rename `AtLeast` rule to `FilledAtLeast` and `OneOf` rule to `FilledOnlyOneOf` (@arogachev) 
-- Enh #492: Add type to error messages related with incorrect input (@arogachev)
-- Enh #735: Make `Json::$message` a bit more clear (@arogachev)
-- Bug #736: Fix wrong value for `type` parameter for `Each::$incorrectInputKeyMessage` (@arogachev)
-- New #734: Add `InEnum` rule (@samdark)
-- New #630, #718: Include attribute name in error messages when it's present (@dood-, @arogachev)
 - New #615: Add the `Each::PARAMETER_EACH_KEY` validation context parameter that available during `Each` rule handling
   and containing the current key (@dood-)
-- Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
+- New #630, #718: Include attribute name in error messages when it's present (@dood-, @arogachev)
 - New #633: Add PHP attribute that sets property label for usage in error messages (@dood-)
+- New #734: Add `InEnum` rule (@samdark)
+- Chg #583: Change "attribute" to "property" in class/trait/method/variable/placeholder names (@vjik)
+- Chg #613: Change type of `$escape` argument in `Error::getValuePath()` from `bool|string|null` to `string|null`
+  (@arogachev)
 - Chg #623: List translated attributes in error message for `OneOf` and `AtLeast` rules (@arogachev)
 - Chg #624: Fix meaning of error message in `OneOf` rule (@arogachev)
 - Chg #625: Improve meaning and use pluralization in error message for `OneOf` and `AtLeast` rules (@arogachev)
 - Chg #626: Disallow `$min` greater than amount of `$attributes` in `AtLeast` configuration (@arogachev)
-- Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik)
-- Enh #636: Improve psalm annotations in `Result` class (@vjik)
-- Enh #637: Add German translation (@took)
 - Chg #634: Move `getName()` method from `RuleInterface` to `RuleWithOptionsInterface` (@arogachev)
 - Chg #634: Rename `RuleWithOptionsInterface` to `DumpedRuleInterface` (@arogachev)
 - Chg #634: Use FQCN as a name for built-in rules during export with `RulesDumper` (@arogachev)
 - Chg #634: Use FQCN as a name for rules not implementing `DumpedRuleInterface` during export with `RulesDumper`
-  (@arogachev) 
-- Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
-- Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3
-  (@arogachev)
-- Chg #679: Change type of `$rule` argument in `RuleHandlerInterface::validate()` from `object` to `RuleInterface`
   (@arogachev)
 - Chg #660: Change type of `$skipOnEmpty` argument in rules' constructors from `mixed` to `bool|callable|null`
   (@arogachev)
-- Chg #613: Change type of `$escape` argument in `Error::getValuePath()` from `bool|string|null` to `string|null`
+- Chg #679: Change type of `$rule` argument in `RuleHandlerInterface::validate()` from `object` to `RuleInterface`
   (@arogachev)
+- Chg #694: Rename `AtLeast` rule to `FilledAtLeast` and `OneOf` rule to `FilledOnlyOneOf` (@arogachev)
+- Enh #492: Add type to error messages related with incorrect input (@arogachev)
+- Enh #622: Use `json_validate()` built-in PHP function in `JsonHandler` if code is run with PHP 8.3 (@arogachev)
+- Enh #636: Improve psalm annotations in `Result` class (@vjik)
+- Enh #637: Add German translation (@took)
+- Enh #639: Simplify validation of JSON in `JsonHandler` using built-in PHP functions for PHP versions below 8.3
+  (@arogachev)
+- Enh #648: Raise the minimum version of PHP to 8.1 (@pamparam83)
 - Enh #726: Refactor `Result::add()`: took `array_merge()` out of the `foreach` (@lav45)
-- Chg #583: Change "attribute" to "property" in class/trait/method/variable/placeholder names (@vjik)
 - Enh #733: Make parameter `$rules` in `RulesNormalizer::normalize()` optional (@vjik)
+- Enh #735: Make `Json::$message` a bit more clear (@arogachev)
+- Bug #632: Fix property name usage in error messages of rules in `Nested` rule (@vjik)
 - Bug #733: Rules provided by data object PHP attributes were not used in  `RulesNormalizer::normalize()` (@vjik)
+- Bug #736: Fix wrong value for `type` parameter for `Each::$incorrectInputKeyMessage` (@arogachev)
 
 ## 1.4.1 June 11, 2024
 
