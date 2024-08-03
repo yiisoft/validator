@@ -172,7 +172,7 @@ final class IpHandler implements RuleHandlerInterface
             }
         }
 
-        if (!$rule->isAllowed($ipCidr)) {
+        if (!$rule->getIpRanges()->isAllowed($ipCidr)) {
             return self::getGenericErrorResult($rule->getNotInRangeMessage(), $context, $value);
         }
 

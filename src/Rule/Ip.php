@@ -7,7 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Attribute;
 use Closure;
 use InvalidArgumentException;
-use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\NetworkUtilities\IpRanges;
 use Yiisoft\Validator\DumpedRuleInterface;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
@@ -15,9 +15,6 @@ use Yiisoft\Validator\Rule\Trait\WhenTrait;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
-
-use function array_key_exists;
-use function strlen;
 
 /**
  * Checks if the value is a valid IPv4/IPv6 address or subnet.
@@ -34,30 +31,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
     use SkipOnErrorTrait;
     use WhenTrait;
 
-    /**
-     * Negation character.
-     *
-     * Used to negate {@see $ranges} or {@see $network} or to negate value validated when {@see $allowNegation}
-     * is used.
-     */
-    private const NEGATION_CHARACTER = '!';
-    /**
-     * @psalm-var array<string, list<string>>
-     *
-     * @var array Default network aliases that can be used in {@see $ranges}.
-     *
-     * @see $networks
-     */
-    private array $defaultNetworks = [
-        '*' => ['any'],
-        'any' => ['0.0.0.0/0', '::/0'],
-        'private' => ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', 'fd00::/8'],
-        'multicast' => ['224.0.0.0/4', 'ff00::/8'],
-        'linklocal' => ['169.254.0.0/16', 'fe80::/10'],
-        'localhost' => ['127.0.0.0/8', '::1'],
-        'documentation' => ['192.0.2.0/24', '198.51.100.0/24', '203.0.113.0/24', '2001:db8::/32'],
-        'system' => ['multicast', 'linklocal', 'localhost', 'documentation'],
-    ];
+    private IpRanges $ranges;
 
     /**
      * @param array $networks Custom network aliases, that can be used in {@see $ranges}:
@@ -178,7 +152,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      * @throws InvalidArgumentException If configuration is wrong.
      */
     public function __construct(
-        private array $networks = [],
+        array $networks = [],
         private bool $allowIpv4 = true,
         private bool $allowIpv6 = true,
         private bool $allowSubnet = false,
@@ -192,7 +166,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private string $noSubnetMessage = '{Property} must be an IP address with specified subnet.',
         private string $hasSubnetMessage = '{Property} must not be a subnet.',
         private string $notInRangeMessage = '{Property} is not in the allowed range.',
-        private array $ranges = [],
+        array $ranges = [],
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
@@ -201,14 +175,6 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
             throw new InvalidArgumentException('Both IPv4 and IPv6 checks can not be disabled at the same time.');
         }
 
-        foreach ($networks as $key => $_values) {
-            if (array_key_exists($key, $this->defaultNetworks)) {
-                throw new InvalidArgumentException("Network alias \"{$key}\" already set as default.");
-            }
-        }
-
-        $this->networks = array_merge($this->defaultNetworks, $this->networks);
-
         if ($requireSubnet) {
             // Might be a bug of XDebug, because this line is covered by tests (see "IpTest").
             // @codeCoverageIgnoreStart
@@ -216,7 +182,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
             // @codeCoverageIgnoreEnd
         }
 
-        $this->ranges = $this->prepareRanges($ranges);
+        $this->ranges = new IpRanges($ranges, $networks);
         $this->skipOnEmpty = $skipOnEmpty;
     }
 
@@ -230,11 +196,11 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * @return array Network aliases.
      *
-     * @see $networks
+     * @deprecated since 2.0.1, use {@see IpRanges::getNetworks()} instead.
      */
     public function getNetworks(): array
     {
-        return $this->networks;
+        return $this->ranges->getNetworks();
     }
 
     /**
@@ -404,80 +370,32 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * @return string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
      *
-     * @see $ranges
+     * @deprecated since 2.0.1, use {@see IpRanges::getRanges()} instead.
      */
     public function getRanges(): array
+    {
+        return $this->ranges->getRanges();
+    }
+
+    public function getIpRanges(): IpRanges
     {
         return $this->ranges;
     }
 
     /**
-     * Parses IP address/range for the negation with {@see NEGATION_CHARACTER}.
-     *
-     * @return array The result array consists of 2 elements:
-     * - `boolean`: whether the string is negated
-     * - `string`: the string without negation (when the negation were present)
-     *
-     * @psalm-return array{0: bool, 1: string}
-     */
-    private function parseNegatedRange(string $string): array
-    {
-        $isNegated = str_starts_with($string, self::NEGATION_CHARACTER);
-        return [$isNegated, $isNegated ? substr($string, strlen(self::NEGATION_CHARACTER)) : $string];
-    }
-
-    /**
-     * Prepares array to fill in {@see $ranges}:
-     *
-     *  - Recursively substitutes aliases, described in {@see $networks} with their values.
-     *  - Removes duplicates.
-     *
-     * @param string[] $ranges
-     *
-     * @return string[]
-     */
-    private function prepareRanges(array $ranges): array
-    {
-        $result = [];
-        foreach ($ranges as $string) {
-            [$isRangeNegated, $range] = $this->parseNegatedRange($string);
-            if (isset($this->networks[$range])) {
-                $replacements = $this->prepareRanges($this->networks[$range]);
-                foreach ($replacements as &$replacement) {
-                    [$isReplacementNegated, $replacement] = $this->parseNegatedRange($replacement);
-                    $result[] = ($isRangeNegated && !$isReplacementNegated ? self::NEGATION_CHARACTER : '') . $replacement;
-                }
-            } else {
-                $result[] = $string;
-            }
-        }
-
-        return array_unique($result);
-    }
-
-    /**
      * Whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
+     *
+     * @deprecated since 2.0.1, use {@see IpRanges::isAllowed()} instead.
      */
     public function isAllowed(string $ip): bool
     {
-        if (empty($this->ranges)) {
-            return true;
-        }
-
-        foreach ($this->ranges as $string) {
-            [$isNegated, $range] = $this->parseNegatedRange($string);
-            if (IpHelper::inRange($ip, $range)) {
-                return !$isNegated;
-            }
-        }
-
-        return false;
+        return $this->ranges->isAllowed($ip);
     }
 
     public function getOptions(): array
     {
         return [
-            'networks' => $this->networks,
+            'networks' => $this->ranges->getNetworks(),
             'allowIpv4' => $this->allowIpv4,
             'allowIpv6' => $this->allowIpv6,
             'allowSubnet' => $this->allowSubnet,
@@ -515,7 +433,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
                 'template' => $this->notInRangeMessage,
                 'parameters' => [],
             ],
-            'ranges' => $this->ranges,
+            'ranges' => $this->ranges->getRanges(),
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
         ];
