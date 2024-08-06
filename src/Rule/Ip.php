@@ -196,7 +196,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * @return array Network aliases.
      *
-     * @deprecated since 2.0.1, use {@see IpRanges::getNetworks()} instead.
+     * @deprecated Use {@see IpRanges::getNetworks()} instead.
      */
     public function getNetworks(): array
     {
@@ -370,7 +370,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
      *
      * @return string[] The IPv4 or IPv6 ranges that are allowed or forbidden.
      *
-     * @deprecated since 2.0.1, use {@see IpRanges::getRanges()} instead.
+     * @deprecated Use {@see IpRanges::getRanges()} instead.
      */
     public function getRanges(): array
     {
@@ -385,7 +385,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
     /**
      * Whether the IP address with specified CIDR is allowed according to the {@see $ranges} list.
      *
-     * @deprecated since 2.0.1, use {@see IpRanges::isAllowed()} instead.
+     * @deprecated Use {@see IpRanges::isAllowed()} instead.
      */
     public function isAllowed(string $ip): bool
     {
