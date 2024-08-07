@@ -1,8 +1,9 @@
 # Yii Validator Change Log
 
-## 2.0.1 under development
+## 2.1.0 under development
 
-- no changes in this release.
+- Enh #740: Use `Yiisoft\NetworkUtilities\IpRanges` in `Ip` rule: add `getIpRanges()` method and deprecate
+  `getRanges()`, `getNetworks()`, `isAllowed()` methods (@vjik) 
 
 ## 2.0.0 August 02, 2024
 
