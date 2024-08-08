@@ -51,8 +51,8 @@ for both A and B.
     - `{targetValueOrAttribute}` to `{targetValueOrProperty}`,
     - `{attributes}` to `{properties}`.
 
-* The signature for `Yiisoft\Validator\RuleHandlerIntarface::validate()` changed. If you have classes that implement 
-  `RuleHandlerIntarface`, change the type of `$rule` parameter in method `validate()` from `object` to `RuleInterface`. 
+* The signature for `Yiisoft\Validator\RuleHandlerInterface::validate()` changed. If you have classes that implement 
+  `RuleHandlerInterface`, change the type of `$rule` parameter in method `validate()` from `object` to `RuleInterface`. 
   For example:
 
   ```php
