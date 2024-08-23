@@ -175,10 +175,9 @@ Neste caso, as regras serão analisadas automaticamente, sem necessidade de faze
 ```php
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
-use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Validator;
 
-final class PersonRulesProvider implements RulesProviderInterface
+final class PersonRulesProvider
 {
     #[Length(min: 2)]
     public string $name;
