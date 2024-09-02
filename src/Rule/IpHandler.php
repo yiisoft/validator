@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Rule;
 
 use InvalidArgumentException;
 use Yiisoft\NetworkUtilities\IpHelper;
+use Yiisoft\NetworkUtilities\IpRanges;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -21,14 +22,6 @@ use function is_string;
  */
 final class IpHandler implements RuleHandlerInterface
 {
-    /**
-     * Negation character.
-     *
-     * Used to negate {@see $ranges} or {@see $network} or to negate value validated when {@see $allowNegation}
-     * is used.
-     */
-    private const NEGATION_CHARACTER = '!';
-
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof Ip) {
@@ -82,7 +75,7 @@ final class IpHandler implements RuleHandlerInterface
     private static function getIpParsePattern(): string
     {
         return '/^(?<not>' .
-            self::NEGATION_CHARACTER .
+            IpRanges::NEGATION_CHARACTER .
             ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
