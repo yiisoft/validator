@@ -4,7 +4,7 @@
 
 - Enh #740: Use `Yiisoft\NetworkUtilities\IpRanges` in `Ip` rule: add `getIpRanges()` method and deprecate
   `getRanges()`, `getNetworks()`, `isAllowed()` methods (@vjik)
-- Chg #746: Use `NEGATION_CHARACTER` constant from `network-utilities` package in `IpHandler` instead of declaring its own 
+- Enh #746: Use `NEGATION_CHARACTER` constant from `network-utilities` package in `IpHandler` instead of declaring its own 
   constant (@arogachev)
 
 ## 2.0.0 August 02, 2024
