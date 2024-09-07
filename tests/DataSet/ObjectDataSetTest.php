@@ -415,8 +415,11 @@ final class ObjectDataSetTest extends TestCase
                     #[Required]
                     #[Label('Test label')]
                     public string $property;
+
+                    #[Label('Test label 2')]
+                    public string $property2;
                 }),
-                ['property' => 'Test label'],
+                ['property' => 'Test label', 'property2' => 'Test label 2'],
             ],
         ];
     }
