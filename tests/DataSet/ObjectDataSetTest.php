@@ -13,6 +13,7 @@ use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -136,7 +137,6 @@ final class ObjectDataSetTest extends TestCase
             [new ObjectDataSet(new ObjectWithRulesProvider())], // Not a duplicate. Used to test caching.
             [$dataSet],
             [$dataSet], // Not a duplicate. Used to test caching.
-            [new ObjectDataSet(new ObjectWithIterablePropertyRules())],
         ];
     }
 
@@ -159,6 +159,26 @@ final class ObjectDataSetTest extends TestCase
         $this->assertInstanceOf(Number::class, $rules['age'][0]);
         $this->assertInstanceOf(Required::class, $rules['age'][1]);
         $this->assertInstanceOf(Equal::class, $rules['age'][2]);
+    }
+
+    public function testObjectWithIterablePropertyRules(): void
+    {
+        $dataSet = (new ObjectDataSet(new ObjectWithIterablePropertyRules()));
+        $rules = $dataSet->getRules();
+
+        $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $dataSet->getData());
+
+        $this->assertSame('', $dataSet->getPropertyValue('name'));
+        $this->assertSame(17, $dataSet->getPropertyValue('age'));
+        $this->assertSame(42, $dataSet->getPropertyValue('number'));
+        $this->assertNull($dataSet->getPropertyValue('non-exist'));
+
+        $this->assertSame(['age', 'name', 'number'], array_keys($rules));
+        $this->assertCount(4, $rules['age']);
+        $this->assertInstanceOf(GreaterThan::class, $rules['age'][0]);
+        $this->assertInstanceOf(Number::class, $rules['age'][1]);
+        $this->assertInstanceOf(Required::class, $rules['age'][2]);
+        $this->assertInstanceOf(Equal::class, $rules['age'][3]);
     }
 
     public function objectWithDataSetAndRulesProviderDataProvider(): array
