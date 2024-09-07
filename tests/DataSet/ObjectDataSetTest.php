@@ -14,6 +14,7 @@ use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
@@ -22,6 +23,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithIterablePropertyRules;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithLabelsProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
@@ -134,6 +136,7 @@ final class ObjectDataSetTest extends TestCase
             [new ObjectDataSet(new ObjectWithRulesProvider())], // Not a duplicate. Used to test caching.
             [$dataSet],
             [$dataSet], // Not a duplicate. Used to test caching.
+            [new ObjectDataSet(new ObjectWithIterablePropertyRules())],
         ];
     }
 
@@ -151,10 +154,11 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(42, $dataSet->getPropertyValue('number'));
         $this->assertNull($dataSet->getPropertyValue('non-exist'));
 
-        $this->assertSame(['age'], array_keys($rules));
-        $this->assertCount(2, $rules['age']);
-        $this->assertInstanceOf(Required::class, $rules['age'][0]);
-        $this->assertInstanceOf(Equal::class, $rules['age'][1]);
+        $this->assertSame(['age', 'name', 'number'], array_keys($rules));
+        $this->assertCount(3, $rules['age']);
+        $this->assertInstanceOf(Number::class, $rules['age'][0]);
+        $this->assertInstanceOf(Required::class, $rules['age'][1]);
+        $this->assertInstanceOf(Equal::class, $rules['age'][2]);
     }
 
     public function objectWithDataSetAndRulesProviderDataProvider(): array

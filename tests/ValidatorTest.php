@@ -127,7 +127,8 @@ class ValidatorTest extends TestCase
             ],
             'rules-provider-object-and-no-rules' => [
                 [
-                    'age' => ['Age must be equal to "25".'],
+                    'age' => ['Age must be no less than 21.', 'Age must be equal to "25".'],
+                    'name' => ['Name cannot be blank.'],
                 ],
                 new ObjectWithRulesProvider(),
                 null,
