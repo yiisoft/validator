@@ -1,12 +1,12 @@
 # Yii Validator Change Log
 
-## 2.1.0 under development
+## 2.1.0 September 12, 2024
 
+- Chg #747: Merge rules from PHP attributes with rules provided via `getRules()` method (@vjik)
 - Enh #740: Use `Yiisoft\NetworkUtilities\IpRanges` in `Ip` rule: add `getIpRanges()` method and deprecate
   `getRanges()`, `getNetworks()`, `isAllowed()` methods (@vjik)
 - Enh #746: Use `NEGATION_CHARACTER` constant from `network-utilities` package in `IpHandler` instead of declaring its own 
   constant (@arogachev)
-- Chg #747: Merge rules from PHP attributes with rules provided via `getRules()` method (@vjik)
 
 ## 2.0.0 August 02, 2024
 
