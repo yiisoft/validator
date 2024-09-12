@@ -13,7 +13,9 @@ use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithCallbackMethod\ObjectWithCallbackMethod;
@@ -22,6 +24,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSet;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDataSetAndRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDynamicDataSet;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithIterablePropertyRules;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithLabelsProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
@@ -151,10 +154,31 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame(42, $dataSet->getPropertyValue('number'));
         $this->assertNull($dataSet->getPropertyValue('non-exist'));
 
-        $this->assertSame(['age'], array_keys($rules));
-        $this->assertCount(2, $rules['age']);
-        $this->assertInstanceOf(Required::class, $rules['age'][0]);
-        $this->assertInstanceOf(Equal::class, $rules['age'][1]);
+        $this->assertSame(['age', 'name', 'number'], array_keys($rules));
+        $this->assertCount(3, $rules['age']);
+        $this->assertInstanceOf(Number::class, $rules['age'][0]);
+        $this->assertInstanceOf(Required::class, $rules['age'][1]);
+        $this->assertInstanceOf(Equal::class, $rules['age'][2]);
+    }
+
+    public function testObjectWithIterablePropertyRules(): void
+    {
+        $dataSet = (new ObjectDataSet(new ObjectWithIterablePropertyRules()));
+        $rules = $dataSet->getRules();
+
+        $this->assertSame(['name' => '', 'age' => 17, 'number' => 42], $dataSet->getData());
+
+        $this->assertSame('', $dataSet->getPropertyValue('name'));
+        $this->assertSame(17, $dataSet->getPropertyValue('age'));
+        $this->assertSame(42, $dataSet->getPropertyValue('number'));
+        $this->assertNull($dataSet->getPropertyValue('non-exist'));
+
+        $this->assertSame(['age', 'name', 'number'], array_keys($rules));
+        $this->assertCount(4, $rules['age']);
+        $this->assertInstanceOf(GreaterThan::class, $rules['age'][0]);
+        $this->assertInstanceOf(Number::class, $rules['age'][1]);
+        $this->assertInstanceOf(Required::class, $rules['age'][2]);
+        $this->assertInstanceOf(Equal::class, $rules['age'][3]);
     }
 
     public function objectWithDataSetAndRulesProviderDataProvider(): array
@@ -391,8 +415,11 @@ final class ObjectDataSetTest extends TestCase
                     #[Required]
                     #[Label('Test label')]
                     public string $property;
+
+                    #[Label('Test label 2')]
+                    public string $property2;
                 }),
-                ['property' => 'Test label'],
+                ['property' => 'Test label', 'property2' => 'Test label 2'],
             ],
         ];
     }

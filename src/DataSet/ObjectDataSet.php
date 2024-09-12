@@ -5,15 +5,21 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\DataSet;
 
 use ReflectionProperty;
+use Traversable;
 use Yiisoft\Validator\PropertyTranslatorInterface;
 use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\DataWrapperInterface;
 use Yiisoft\Validator\Helper\ObjectParser;
 use Yiisoft\Validator\LabelsProviderInterface;
+use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\ValidatorInterface;
+
+use function array_unshift;
+use function is_int;
+use function is_iterable;
 
 /**
  * A data set for object data. The object passed to this data set can provide rules and data by implementing
@@ -181,7 +187,7 @@ final class ObjectDataSet implements
         /**
          * @var object An object containing rules and data.
          */
-        private object $object,
+        private readonly object $object,
         int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
         ReflectionProperty::IS_PUBLIC,
@@ -197,10 +203,11 @@ final class ObjectDataSet implements
     }
 
     /**
-     * Returns {@see $object} rules specified via {@see RulesProviderInterface::getRules()} implementation or parsed
+     * Returns {@see $object} rules specified via {@see RulesProviderInterface::getRules()} implementation or/and parsed
      * from attributes attached to class properties and class itself. For the latter case repetitive calls utilize cache
-     * if it's enabled in {@see $useCache}. Rules provided via separate method have a higher priority over attributes,
-     * so, when used together, the latter ones will be ignored without exception.
+     * if it's enabled in {@see $useCache}. Rules provided via separate method have a lower priority over
+     * PHP attributes, so, when used together, all rules will be merged, but rules from PHP attributes will be applied
+     * first.
      *
      * @return iterable The resulting rules is an array with the following structure:
      *
@@ -218,17 +225,41 @@ final class ObjectDataSet implements
         if ($this->rulesProvided) {
             /** @var RulesProviderInterface $object */
             $object = $this->object;
-
-            return $object->getRules();
+            $rules = $object->getRules();
+        } else {
+            $rules = [];
         }
 
-        // Providing data set assumes object has its own rules getting logic. So further parsing of rules is skipped
-        // intentionally.
+        // Providing data set assumes object has its own rules getting logic.
+        // So further parsing of rules is skipped intentionally.
         if ($this->dataSetProvided) {
-            return [];
+            return $rules;
         }
 
-        return $this->parser->getRules();
+        // Merge rules from `RulesProviderInterface` implementation and parsed from PHP attributes.
+        $rules = $rules instanceof Traversable ? iterator_to_array($rules) : $rules;
+        foreach ($this->parser->getRules() as $key => $value) {
+            if (is_int($key)) {
+                array_unshift($rules, $value);
+                continue;
+            }
+
+            /**
+             * @psalm-var list<RuleInterface> $value If `$key` is string, then `$value` is array of rules
+             * @see ObjectParser::getRules()
+             */
+
+            if (!isset($rules[$key])) {
+                $rules[$key] = $value;
+                continue;
+            }
+
+            $rules[$key] = is_iterable($rules[$key])
+                ? [...$value, ...$rules[$key]]
+                : [...$value, $rules[$key]];
+        }
+
+        return $rules;
     }
 
     /**
