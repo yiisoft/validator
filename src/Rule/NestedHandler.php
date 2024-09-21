@@ -8,6 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\PostValidationHookInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
@@ -110,6 +111,10 @@ final class NestedHandler implements RuleHandlerInterface
                     $valuePathList
                 );
             }
+        }
+
+        if ($value instanceof PostValidationHookInterface) {
+            $value->processValidationResult($compoundResult);
         }
 
         return $compoundResult;
