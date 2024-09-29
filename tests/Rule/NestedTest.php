@@ -38,6 +38,7 @@ use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttribut
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
@@ -858,6 +859,25 @@ final class NestedTest extends RuleTestCase
         $this->assertSame($expectedDetailedErrors, $errorsData);
         $this->assertSame($expectedErrorMessages, $result->getErrorMessages());
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
+    }
+
+
+    public function testNestedPostValidationHook(): void
+    {
+        $object = new class () {
+
+            #[Nested(ObjectWithPostValidationHook::class)]
+            public ObjectWithPostValidationHook $postHook;
+
+            public function __construct()
+            {
+                $this->postHook = new ObjectWithPostValidationHook();
+            }
+        };
+
+        $validator = new Validator();
+        $validator->validate($object);
+        $this->assertTrue($object->postHook->hookCalled);
     }
 
     public function dataValidationPassed(): array
