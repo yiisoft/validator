@@ -863,11 +863,9 @@ final class NestedTest extends RuleTestCase
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-
     public function testNestedPostValidationHook(): void
     {
         $object = new class () implements PostValidationHookInterface {
-
             #[Required]
             #[StringValue]
             #[Length(min: 6)]
@@ -887,42 +885,40 @@ final class NestedTest extends RuleTestCase
             {
                 $this->validationResult = $result;
             }
-        };;
-        $object->nested->firstString = 'short';
-        $object->nested->firstArray = [
-            'short',
-            'short',
-            'long string',
-        ];
-        $object->nested->secondNested->secondInt = 15;
-        $object->nested->secondNested->secondString = 'short';
+        };
 
-
-        $validator = new Validator();
-        $validator->validate($object);
+        (new Validator())->validate($object);
 
         $this->assertInstanceOf(Result::class, $object->validationResult);
         $this->assertInstanceOf(Result::class, $object->nested->validationResult);
         $this->assertInstanceOf(Result::class, $object->nested->secondNested->validationResult);
-        $this->assertArrayHasKey('name', $object->validationResult->getErrorMessagesIndexedByPath());
-        $this->assertArrayHasKey('firstString', $object->nested->validationResult->getErrorMessagesIndexedByPath());
-        $this->assertArrayHasKey('firstArray.0', $object->nested->validationResult->getErrorMessagesIndexedByPath());
-        $this->assertArrayHasKey('firstArray.1', $object->nested->validationResult->getErrorMessagesIndexedByPath());
-        $this->assertArrayHasKey(
-            'secondNested.secondString',
-            $object->nested->validationResult->getErrorMessagesIndexedByPath(),
+        $this->assertSame(
+            [
+                'name',
+                'nested.firstString',
+                'nested.firstArray.0',
+                'nested.firstArray.1',
+                'nested.secondNested.secondInt',
+                'nested.secondNested.secondString',
+            ],
+            array_keys($object->validationResult->getFirstErrorMessagesIndexedByPath())
         );
-        $this->assertArrayHasKey(
-            'secondNested.secondInt',
-            $object->nested->validationResult->getErrorMessagesIndexedByPath(),
+        $this->assertSame(
+            [
+                'firstString',
+                'firstArray.0',
+                'firstArray.1',
+                'secondNested.secondInt',
+                'secondNested.secondString',
+            ],
+            array_keys($object->nested->validationResult->getFirstErrorMessagesIndexedByPath())
         );
-        $this->assertArrayHasKey(
-            'secondString',
-            $object->nested->secondNested->validationResult->getErrorMessagesIndexedByPath(),
-        );
-        $this->assertArrayHasKey(
-            'secondInt',
-            $object->nested->secondNested->validationResult->getErrorMessagesIndexedByPath(),
+        $this->assertSame(
+            [
+                'secondInt',
+                'secondString',
+            ],
+            array_keys($object->nested->secondNested->validationResult->getFirstErrorMessagesIndexedByPath())
         );
     }
 

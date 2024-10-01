@@ -17,7 +17,7 @@ class NestedObjectWithPostValidationHook implements PostValidationHookInterface
     #[Required]
     #[StringValue]
     #[Length(min: 6)]
-    public string $firstString;
+    public string $firstString = 'short';
 
     #[Each(
         [
@@ -25,7 +25,11 @@ class NestedObjectWithPostValidationHook implements PostValidationHookInterface
             new Length(min: 6),
         ]
     )]
-    public array $firstArray;
+    public array $firstArray = [
+        'short',
+        'short',
+        'long string',
+    ];
 
     #[Nested(SecondNestedObjectWithPostValidationHook::class)]
     public SecondNestedObjectWithPostValidationHook $secondNested;

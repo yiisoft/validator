@@ -15,13 +15,15 @@ class SecondNestedObjectWithPostValidationHook implements PostValidationHookInte
 {
     #[Required]
     #[Integer(min: 5, max: 10)]
-    public int $secondInt;
+    public int $secondInt = 15;
     #[StringValue]
     #[Length(min: 10)]
-    public string $secondString;
+    public string $secondString = 'short';
     public ?Result $validationResult = null;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     public function processValidationResult(Result $result): void
     {
