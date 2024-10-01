@@ -12,12 +12,13 @@ use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Helper\RulesDumper;
+use Yiisoft\Validator\PostValidationHookInterface;
 use Yiisoft\Validator\Result;
-use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
@@ -26,6 +27,7 @@ use Yiisoft\Validator\Rule\NestedHandler;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\Rule\StringValue;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -36,9 +38,9 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Data\NestedHookProvider\NestedObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
-use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
@@ -864,20 +866,64 @@ final class NestedTest extends RuleTestCase
 
     public function testNestedPostValidationHook(): void
     {
-        $object = new class () {
+        $object = new class () implements PostValidationHookInterface {
 
-            #[Nested(ObjectWithPostValidationHook::class)]
-            public ObjectWithPostValidationHook $postHook;
+            #[Required]
+            #[StringValue]
+            #[Length(min: 6)]
+            public string $name = '';
+
+            #[Nested(NestedObjectWithPostValidationHook::class)]
+            public NestedObjectWithPostValidationHook $nested;
+
+            public ?Result $validationResult = null;
 
             public function __construct()
             {
-                $this->postHook = new ObjectWithPostValidationHook();
+                $this->nested = new NestedObjectWithPostValidationHook();
             }
-        };
+
+            public function processValidationResult(Result $result): void
+            {
+                $this->validationResult = $result;
+            }
+        };;
+        $object->nested->firstString = 'short';
+        $object->nested->firstArray = [
+            'short',
+            'short',
+            'long string',
+        ];
+        $object->nested->secondNested->secondInt = 15;
+        $object->nested->secondNested->secondString = 'short';
+
 
         $validator = new Validator();
         $validator->validate($object);
-        $this->assertTrue($object->postHook->hookCalled);
+
+        $this->assertInstanceOf(Result::class, $object->validationResult);
+        $this->assertInstanceOf(Result::class, $object->nested->validationResult);
+        $this->assertInstanceOf(Result::class, $object->nested->secondNested->validationResult);
+        $this->assertArrayHasKey('name', $object->validationResult->getErrorMessagesIndexedByPath());
+        $this->assertArrayHasKey('firstString', $object->nested->validationResult->getErrorMessagesIndexedByPath());
+        $this->assertArrayHasKey('firstArray.0', $object->nested->validationResult->getErrorMessagesIndexedByPath());
+        $this->assertArrayHasKey('firstArray.1', $object->nested->validationResult->getErrorMessagesIndexedByPath());
+        $this->assertArrayHasKey(
+            'secondNested.secondString',
+            $object->nested->validationResult->getErrorMessagesIndexedByPath(),
+        );
+        $this->assertArrayHasKey(
+            'secondNested.secondInt',
+            $object->nested->validationResult->getErrorMessagesIndexedByPath(),
+        );
+        $this->assertArrayHasKey(
+            'secondString',
+            $object->nested->secondNested->validationResult->getErrorMessagesIndexedByPath(),
+        );
+        $this->assertArrayHasKey(
+            'secondInt',
+            $object->nested->secondNested->validationResult->getErrorMessagesIndexedByPath(),
+        );
     }
 
     public function dataValidationPassed(): array

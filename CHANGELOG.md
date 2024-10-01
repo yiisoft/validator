@@ -2,7 +2,7 @@
 
 ## 2.1.1 under development
 
-- no changes in this release.
+- New #748: Add write of validation results to nested objects that implement the PostValidationHookInterface (@DAGpro)
 
 ## 2.1.0 September 12, 2024
 
