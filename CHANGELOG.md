@@ -2,7 +2,8 @@
 
 ## 2.1.1 under development
 
-- no changes in this release.
+- Bug #748: Fix hook processing for nested objects that implement `PostValidationHookInterface` when `Nested` rule with
+  specified rules is used (@DAGpro)
 
 ## 2.1.0 September 12, 2024
 
