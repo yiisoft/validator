@@ -11,7 +11,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 class UuidHandler implements RuleHandlerInterface {
-    private const PATTERN = '\A[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\z';
+    private const PATTERN = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i';
     private const NIL = '00000000-0000-0000-0000-000000000000';
 
     /**
