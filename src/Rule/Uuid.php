@@ -21,17 +21,26 @@ class Uuid implements DumpedRuleInterface, SkipOnEmptyInterface, SkipOnErrorInte
     use WhenTrait;
 
     /**
+     * @param bool $replaceChars
      * @param string $message
      * @param string $notPassedMessage
      * @param bool $skipOnError
      * @param Closure|null $when
      */
     public function __construct(
+        private bool $replaceChars = false,
         private string       $message = 'The value of {property} does not conform to the UUID format.',
         private string       $notPassedMessage = '{Property} not passed.',
         private bool         $skipOnError = false,
         private Closure|null $when = null,
     ) {
+    }
+
+    /**
+     * @return bool
+     */
+    public function getReplaceChars(): bool {
+        return $this->replaceChars;
     }
 
     /**

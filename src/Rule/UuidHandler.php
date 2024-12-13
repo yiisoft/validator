@@ -27,7 +27,7 @@ class UuidHandler implements RuleHandlerInterface {
 
         $result = new Result();
 
-        if ($this->validateUuid($value)) {
+        if ($this->validateUuid($value, $rule->getReplaceChars())) {
             return $result;
         }
 
@@ -39,10 +39,13 @@ class UuidHandler implements RuleHandlerInterface {
 
     /**
      * @param string $uuid
+     * @param bool $replaceChars
      * @return bool
      */
-    protected function validateUuid(string $uuid): bool {
-        $uuid = str_replace(['urn:', 'uuid:', 'URN:', 'UUID:', '{', '}'], '', $uuid);
+    protected function validateUuid(string $uuid, bool $replaceChars): bool {
+        if ($replaceChars) {
+            $uuid = str_replace(['urn:', 'uuid:', 'URN:', 'UUID:', '{', '}'], '', $uuid);
+        }
 
         return $uuid === self::NIL || preg_match('/' . self::PATTERN . '/Dms', $uuid);
     }
