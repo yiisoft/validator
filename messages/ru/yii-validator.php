@@ -37,8 +37,8 @@ return [
     // Used in single rule
 
     /** @see FilledAtLeast */
-    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}' =>
-        'Как минимум {min, number} {min, plural, one{свойство} few{свойства} many{свойства} other{свойства}} из этого списка {min, plural, one{должен} few{должны} many{должны} other{должны}} быть заполнены для {property}: {properties}.',
+    'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}.' =>
+        'Как минимум {min, number} {min, plural, one{свойство} other{свойства}} из этого списка {min, plural, one{должно быть заполнено} other{должны быть заполнены}} для "{property}": {properties}.',
     /** @see BooleanValue */
     '{Property} must be either "{true}" or "{false}".' => '{Property} должно быть «{true}» или «{false}».',
     /** @see Count */

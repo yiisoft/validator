@@ -65,8 +65,7 @@ final class FilledAtLeast implements DumpedRuleInterface, SkipOnErrorInterface, 
         private array $properties,
         private int $min = 1,
         private string $incorrectInputMessage = '{Property} must be an array or an object. {type} given.',
-        private string $message = 'At least {min, number} {min, plural, one{property} other{properties}} from this ' .
-        'list must be filled for {property}: {properties}.',
+        private string $message = 'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null
