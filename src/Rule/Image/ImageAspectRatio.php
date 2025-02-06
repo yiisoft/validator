@@ -22,9 +22,9 @@ final class ImageAspectRatio
      * expected to be `4:3` will meet this requirement.
      */
     public function __construct(
-        private int $width,
-        private int $height,
-        private float $margin = 0,
+        private readonly int $width,
+        private readonly int $height,
+        private readonly float $margin = 0,
     ) {
     }
 

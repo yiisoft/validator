@@ -97,7 +97,7 @@ final class AttributesRulesProvider implements RulesProviderInterface
     /**
      * @var ObjectParser An object parser instance used to parse rules from attributes.
      */
-    private ObjectParser $parser;
+    private readonly ObjectParser $parser;
 
     /**
      * @param class-string|object $source A source for parsing rules. Can be either a class name string or an instance.

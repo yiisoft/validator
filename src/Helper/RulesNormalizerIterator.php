@@ -42,7 +42,7 @@ final class RulesNormalizerIterator implements IteratorAggregate
      * @psalm-param SkipOnEmptyCallable|null $defaultSkipOnEmptyCondition
      */
     public function __construct(
-        private iterable $rules,
+        private readonly iterable $rules,
         ?callable $defaultSkipOnEmptyCondition = null,
     ) {
         $this->defaultSkipOnEmptyCondition = $defaultSkipOnEmptyCondition;

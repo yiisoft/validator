@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Rule\Image;
 final class ImageInfo
 {
     public function __construct(
-        private int $width,
-        private int $height,
+        private readonly int $width,
+        private readonly int $height,
     ) {
     }
 

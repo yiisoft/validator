@@ -10,5 +10,5 @@ use Yiisoft\Validator\Rule\Nested;
 final class Chart
 {
     #[Each([new Nested(Point::class)])]
-    private array $points;
+    private readonly array $points;
 }

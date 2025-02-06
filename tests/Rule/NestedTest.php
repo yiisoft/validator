@@ -305,7 +305,7 @@ final class NestedTest extends RuleTestCase
             'empty-rules' => [
                 new class () {
                     #[Nested([])]
-                    private ObjectWithDifferentPropertyVisibility $object;
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
                     {
@@ -317,7 +317,7 @@ final class NestedTest extends RuleTestCase
             'rules-from-validated-value' => [
                 new class () {
                     #[Nested]
-                    private ObjectWithDifferentPropertyVisibility $object;
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
                     {
@@ -332,7 +332,7 @@ final class NestedTest extends RuleTestCase
             'rules-from-validated-value-only-public' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
-                    private ObjectWithDifferentPropertyVisibility $object;
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
                     {
@@ -346,7 +346,7 @@ final class NestedTest extends RuleTestCase
             'rules-from-validated-value-only-protected' => [
                 new class () {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
-                    private ObjectWithDifferentPropertyVisibility $object;
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
                     {
@@ -360,7 +360,7 @@ final class NestedTest extends RuleTestCase
             'rules-from-validated-value-inherit-attributes' => [
                 new class () {
                     #[Nested]
-                    private InheritAttributesObject $object;
+                    private readonly InheritAttributesObject $object;
 
                     public function __construct()
                     {

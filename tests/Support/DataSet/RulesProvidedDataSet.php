@@ -11,7 +11,7 @@ use function array_key_exists;
 
 final class RulesProvidedDataSet implements RulesProviderInterface, DataSetInterface
 {
-    public function __construct(private array $data, private array $rules)
+    public function __construct(private array $data, private readonly array $rules)
     {
     }
 

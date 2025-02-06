@@ -10,7 +10,7 @@ use Attribute;
 final class Label
 {
     public function __construct(
-        private string $label,
+        private readonly string $label,
     ) {
     }
 

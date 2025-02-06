@@ -9,7 +9,7 @@ final class CompositeImageInfoProvider implements ImageInfoProviderInterface
     /**
      * @var ImageInfoProviderInterface[]
      */
-    private array $providers;
+    private readonly array $providers;
 
     public function __construct(
         ImageInfoProviderInterface ...$providers

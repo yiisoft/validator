@@ -42,7 +42,7 @@
         "maglnet/composer-require-checker": "^4.3",
         "phpbench/phpbench": "^1.2",
         "phpunit/phpunit": "^9.5",
-        "rector/rector": "^2.0",
+        "rector/rector": "^2.0.8",
         "roave/infection-static-analysis-plugin": "^1.25",
         "spatie/phpunit-watcher": "^1.23",
         "vimeo/psalm": "^5.24",
@@ -83,7 +83,7 @@
         "allow-plugins": {
             "infection/extension-installer": true,
             "composer/package-versions-deprecated": true,
-            "yiisoft/config": true
+            "yiisoft/config": false
         }
     },
     "scripts": {
