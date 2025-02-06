@@ -36,7 +36,7 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
         /**
          * @var ContainerInterface An instance of dependency injection container.
          */
-        private ContainerInterface $container,
+        private readonly ContainerInterface $container,
     ) {
     }
 

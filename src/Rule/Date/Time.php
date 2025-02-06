@@ -120,13 +120,13 @@ final class Time extends BaseDate
      */
     public function __construct(
         ?string $format = null,
-        private ?int $timeType = null,
+        private readonly ?int $timeType = null,
         ?string $timeZone = null,
         ?string $locale = null,
         int|string|DateTimeInterface|null $min = null,
         int|string|DateTimeInterface|null $max = null,
         ?string $messageFormat = null,
-        private ?int $messageTimeType = null,
+        private readonly ?int $messageTimeType = null,
         ?string $incorrectInputMessage = null,
         ?string $tooEarlyMessage = null,
         ?string $tooLateMessage = null,

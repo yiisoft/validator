@@ -33,7 +33,7 @@ final class WhenEmpty
          * @var bool Whether to trim string (both from the start and from the end) before checking. Defaults to `false`
          * meaning no trimming is done.
          */
-        private bool $trimString = false,
+        private readonly bool $trimString = false,
     ) {
     }
 

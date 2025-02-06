@@ -10,7 +10,7 @@ use function array_key_exists;
 
 final class ObjectWithDynamicDataSet implements DataSetInterface
 {
-    public function __construct(private string $name)
+    public function __construct(private readonly string $name)
     {
     }
 

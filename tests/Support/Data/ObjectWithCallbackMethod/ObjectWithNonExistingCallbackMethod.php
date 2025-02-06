@@ -9,5 +9,5 @@ use Yiisoft\Validator\Rule\Callback;
 final class ObjectWithNonExistingCallbackMethod
 {
     #[Callback(method: 'validateName')]
-    private string $name;
+    private readonly string $name;
 }

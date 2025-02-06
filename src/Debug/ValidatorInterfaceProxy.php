@@ -12,8 +12,8 @@ use Yiisoft\Validator\ValidatorInterface;
 final class ValidatorInterfaceProxy implements ValidatorInterface
 {
     public function __construct(
-        private ValidatorInterface $validator,
-        private ValidatorCollector $collector,
+        private readonly ValidatorInterface $validator,
+        private readonly ValidatorCollector $collector,
     ) {
     }
 

@@ -10,7 +10,7 @@ use Yiisoft\Validator\Rule\Image\ImageInfoProviderInterface;
 final class StubImageInfoProvider implements ImageInfoProviderInterface
 {
     public function __construct(
-        private ?ImageInfo $info = null,
+        private readonly ?ImageInfo $info = null,
     ) {
     }
 

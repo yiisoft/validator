@@ -21,10 +21,10 @@ final class MessageProcessor
      * @param string $messageFormatterLocale Locale to use when error message requires format only.
      */
     public function __construct(
-        private TranslatorInterface $translator,
-        private string $translationCategory,
-        private MessageFormatterInterface $messageFormatter,
-        private string $messageFormatterLocale,
+        private readonly TranslatorInterface $translator,
+        private readonly string $translationCategory,
+        private readonly MessageFormatterInterface $messageFormatter,
+        private readonly string $messageFormatterLocale,
     ) {
     }
 

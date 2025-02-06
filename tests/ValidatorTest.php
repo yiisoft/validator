@@ -1263,7 +1263,7 @@ class ValidatorTest extends TestCase
     public function testComposition(): void
     {
         $validator = new class () implements ValidatorInterface {
-            private Validator $validator;
+            private readonly Validator $validator;
 
             public function __construct()
             {

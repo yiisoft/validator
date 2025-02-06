@@ -7,8 +7,8 @@ namespace Yiisoft\Validator\Tests\Support\Data;
 final class CompareObject
 {
     public function __construct(
-        private mixed $a,
-        private mixed $b,
+        private readonly mixed $a,
+        private readonly mixed $b,
     ) {
     }
 }

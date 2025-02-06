@@ -30,16 +30,16 @@ abstract class BaseDateHandler implements RuleHandlerInterface
      * @psalm-param non-empty-string|null $timeZone
      */
     public function __construct(
-        private int $dateType,
-        private int $timeType,
-        private ?string $timeZone,
-        private ?string $locale,
-        private ?string $messageFormat,
-        private ?int $messageDateType,
-        private ?int $messageTimeType,
-        private string $incorrectInputMessage,
-        private string $tooEarlyMessage,
-        private string $tooLateMessage,
+        private readonly int $dateType,
+        private readonly int $timeType,
+        private readonly ?string $timeZone,
+        private readonly ?string $locale,
+        private readonly ?string $messageFormat,
+        private readonly ?int $messageDateType,
+        private readonly ?int $messageTimeType,
+        private readonly string $incorrectInputMessage,
+        private readonly string $tooEarlyMessage,
+        private readonly string $tooLateMessage,
     ) {
     }
 

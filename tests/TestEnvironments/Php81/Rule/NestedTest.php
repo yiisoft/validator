@@ -21,7 +21,7 @@ final class NestedTest extends TestCase
             'object' => [
                 new class () {
                     #[Nested(['number' => new Number(max: 7)])]
-                    private ObjectWithDifferentPropertyVisibility $object;
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
                     {
@@ -38,7 +38,7 @@ final class NestedTest extends TestCase
                         ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
                         validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE,
                     )]
-                    private ObjectWithDifferentPropertyVisibility $object;
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
 
                     public function __construct()
                     {

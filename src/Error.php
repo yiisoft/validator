@@ -73,10 +73,10 @@ final class Error
      * @psalm-param self::MESSAGE_* $messageProcessing
      */
     public function __construct(
-        private string $message,
-        private array $parameters = [],
-        private array $valuePath = [],
-        private int $messageProcessing = self::MESSAGE_TRANSLATE,
+        private readonly string $message,
+        private readonly array $parameters = [],
+        private readonly array $valuePath = [],
+        private readonly int $messageProcessing = self::MESSAGE_TRANSLATE,
     ) {
     }
 
