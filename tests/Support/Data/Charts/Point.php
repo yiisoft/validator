@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\TestEnvironments\Support\Data\Charts;
+namespace Yiisoft\Validator\Tests\Support\Data\Charts;
 
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;

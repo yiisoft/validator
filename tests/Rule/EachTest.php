@@ -22,6 +22,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Tests\Support\Data\EachDto;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidationContext;
 
@@ -430,5 +431,18 @@ final class EachTest extends RuleTestCase
         );
 
         $this->assertSame(['x', 'y', 'a', 'z', 'b'], $indexes);
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(new EachDto(1, 0, 3));
+
+        $this->assertSame(
+            [
+                'a' => ['Value must be zero.'],
+                'c' => ['Value must be zero.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty()
+        );
     }
 }

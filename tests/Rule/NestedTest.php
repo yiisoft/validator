@@ -45,6 +45,8 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
+use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -381,6 +383,37 @@ final class NestedTest extends RuleTestCase
                 [
                     'name' => ['Name cannot be blank.'],
                     'bars.0.name' => ['Name cannot be blank.'],
+                ],
+            ],
+            'object' => [
+                new class () {
+                    #[Nested(['number' => new Number(max: 7)])]
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.number' => ['Number must be no greater than 7.'],
+                ],
+            ],
+            'object-private-only' => [
+                new class () {
+                    #[Nested(
+                        ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
+                        validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE,
+                    )]
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.number' => ['Number must be no greater than 7.'],
                 ],
             ],
         ];
@@ -1423,6 +1456,32 @@ final class NestedTest extends RuleTestCase
             'RulesProviderInterface, a class string or an iterable.'
         );
         new Nested(new Required());
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(new NestedClassAttribute());
+
+        $this->assertSame(
+            [
+                'a' => ['A must be no less than 7.'],
+                'b' => ['B must be no greater than 1.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty(),
+        );
+    }
+
+    public function testWithCallbackAttribute(): void
+    {
+        $result = (new Validator())->validate(new NestedWithCallbackAttribute());
+
+        $this->assertSame(
+            [
+                'a' => ['Invalid A.'],
+                'b' => ['Invalid B.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty(),
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array

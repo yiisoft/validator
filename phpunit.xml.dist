@@ -22,10 +22,6 @@
             <directory>./tests</directory>
             <exclude>./tests/TestEnvironments</exclude>
         </testsuite>
-
-        <testsuite name="Yii Validator PHP 8.1 tests">
-            <directory phpVersion="8.1" phpVersionOperator=">=">./tests/TestEnvironments/Php81</directory>
-        </testsuite>
     </testsuites>
 
     <source>

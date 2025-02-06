@@ -13,9 +13,12 @@ use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -31,6 +34,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
+use Yiisoft\Validator\Tests\Support\Data\Charts\Chart;
 use Yiisoft\Validator\Validator;
 
 final class ObjectDataSetTest extends TestCase
@@ -290,12 +294,87 @@ final class ObjectDataSetTest extends TestCase
             ],
             [
                 new class () {
+                    #[Each([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Each([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    #[Nested([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Each([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Nested([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Each([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class () {
                     #[Length(max: 255, skipOnEmpty: true)]
                     #[Length(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
+                        new Length(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: false),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    #[Nested([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Nested([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: false)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Nested([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Nested([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
                         new Length(max: 255, skipOnEmpty: true),
                         new Length(max: 255, skipOnEmpty: false),
                     ],
@@ -418,5 +497,36 @@ final class ObjectDataSetTest extends TestCase
     public function testObjectWithLabelsProvider(ObjectDataSet $dataSet, array $expected): void
     {
         $this->assertSame($expected, $dataSet->getValidationPropertyLabels());
+    }
+
+    public function testMoreComplexEmbeddedRule(): void
+    {
+        $dataSet = new ObjectDataSet(new Chart());
+        $expectedRules = [
+            'points' => [
+                new Each([
+                    new Nested([
+                        'coordinates' => new Each([
+                            new Nested(
+                                [
+                                    'x' => [new Number(min: -10, max: 10)],
+                                    'y' => [new Number(min: -10, max: 10)],
+                                ],
+                                requirePropertyPath: true,
+                                noPropertyPathMessage: 'Custom message 4.',
+                            ),
+                        ]),
+                        'rgb' => [
+                            new Count(3),
+                            new Each(
+                                [new Number(min: 0, max: 255)],
+                                incorrectInputMessage: 'Custom message 5.',
+                            ),
+                        ],
+                    ]),
+                ]),
+            ],
+        ];
+        $this->assertEquals($expectedRules, $dataSet->getRules());
     }
 }

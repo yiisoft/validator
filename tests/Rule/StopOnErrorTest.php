@@ -15,6 +15,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\StopOnErrorDto;
+use Yiisoft\Validator\Validator;
 
 final class StopOnErrorTest extends RuleTestCase
 {
@@ -289,6 +291,18 @@ final class StopOnErrorTest extends RuleTestCase
         $this->testWhenInternal(
             new StopOnError([new Length(min: 10)]),
             new StopOnError([new Length(min: 10)], when: $when),
+        );
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(new StopOnErrorDto());
+
+        $this->assertSame(
+            [
+                '' => ['error A'],
+            ],
+            $result->getErrorMessagesIndexedByProperty()
         );
     }
 

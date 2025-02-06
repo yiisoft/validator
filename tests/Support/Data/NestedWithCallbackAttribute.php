@@ -2,21 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\TestEnvironments\Support\Data;
+namespace Yiisoft\Validator\Tests\Support\Data;
 
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
-use Yiisoft\Validator\Rule\Composite;
+use Yiisoft\Validator\Rule\Nested;
 
-#[Composite([
-    new Callback(method: 'validateA'),
+#[Nested([
+    'a' => new Callback(method: 'validateA'),
 ])]
-final class CompositeWithCallbackAttribute
+final class NestedWithCallbackAttribute
 {
-    #[Composite([
-        new Callback(method: 'validateB'),
+    private int $a = 7;
+
+    #[Nested([
+        'x' => new Callback(method: 'validateB'),
     ])]
-    private int $b = 7;
+    private array $b = [
+        'x' => 5,
+    ];
 
     private function validateA(): Result
     {
