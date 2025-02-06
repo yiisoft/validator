@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -38,7 +39,7 @@ final class EachTest extends RuleTestCase
         $this->assertSame(Each::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'basic' => [
@@ -177,7 +178,7 @@ final class EachTest extends RuleTestCase
         $this->testGetOptionsWithNotRuleInternal(Each::class);
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'base' => [
@@ -208,7 +209,7 @@ final class EachTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $getGeneratorWithIncorrectKey = static function (): Generator {
             yield false => 0;
@@ -386,9 +387,7 @@ final class EachTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataContextEachKey
-     */
+    #[DataProvider('dataContextEachKey')]
     public function testContextEachKey($data, $keys): void
     {
         $indexes = [];

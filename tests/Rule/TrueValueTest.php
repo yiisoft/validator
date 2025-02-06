@@ -25,7 +25,7 @@ final class TrueValueTest extends RuleTestCase
         $this->assertSame(TrueValue::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -103,7 +103,7 @@ final class TrueValueTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [true, [new TrueValue()]],
@@ -113,7 +113,7 @@ final class TrueValueTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             ['5', [new TrueValue()], ['' => ['Value must be "1".']]],

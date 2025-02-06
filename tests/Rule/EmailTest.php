@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\EmailHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -20,7 +21,7 @@ final class EmailTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
-    public function dataInvalidConfiguration(): array
+    public static function dataInvalidConfiguration(): array
     {
         return [
             [['pattern' => ''], 'Pattern can\'t be empty.'],
@@ -29,9 +30,7 @@ final class EmailTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataInvalidConfiguration
-     */
+    #[DataProvider('dataInvalidConfiguration')]
     public function testinvalidConfiguration(array $arguments, string $expectedExceptionMessage): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -45,7 +44,7 @@ final class EmailTest extends RuleTestCase
         $this->assertSame(Email::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -104,7 +103,7 @@ final class EmailTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);
@@ -171,7 +170,7 @@ final class EmailTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $rule = new Email();
         $ruleAllowedName = new Email(allowName: true);

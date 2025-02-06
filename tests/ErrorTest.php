@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 
 final class ErrorTest extends TestCase
 {
-    public function dataGetValuePath(): array
+    public static function dataGetValuePath(): array
     {
         return [
             'null' => [
@@ -36,9 +37,7 @@ final class ErrorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataGetValuePath
-     */
+    #[DataProvider('dataGetValuePath')]
     public function testGetValuePath(array $expectedValuePath, array $valuePath, bool|string|null $escape): void
     {
         $error = new Error('', valuePath: $valuePath);

@@ -34,7 +34,7 @@ final class CompositeTest extends RuleTestCase
         $this->assertSame(Composite::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'basic' => [
@@ -203,7 +203,7 @@ final class CompositeTest extends RuleTestCase
         $this->testGetOptionsWithNotRuleInternal(Composite::class);
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -247,7 +247,7 @@ final class CompositeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             'callable' => [

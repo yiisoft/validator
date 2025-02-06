@@ -24,7 +24,7 @@ final class EqualTest extends RuleTestCase
         $this->assertSame(Equal::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -107,7 +107,7 @@ final class EqualTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [100, [new Equal(100)]],
@@ -115,7 +115,7 @@ final class EqualTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             [101, [new Equal(100)], ['' => ['Value must be equal to "100".']]],

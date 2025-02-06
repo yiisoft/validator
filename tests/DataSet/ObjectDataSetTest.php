@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
@@ -34,7 +35,7 @@ use Yiisoft\Validator\Validator;
 
 final class ObjectDataSetTest extends TestCase
 {
-    public function propertyVisibilityDataProvider(): array
+    public static function propertyVisibilityDataProvider(): array
     {
         return [
             [
@@ -73,9 +74,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider propertyVisibilityDataProvider
-     */
+    #[DataProvider('propertyVisibilityDataProvider')]
     public function testPropertyVisibility(
         ObjectDataSet $initialDataSet,
         array $expectedData,
@@ -99,7 +98,7 @@ final class ObjectDataSetTest extends TestCase
         }
     }
 
-    public function objectWithDataSetDataProvider(): array
+    public static function objectWithDataSetDataProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithDataSet());
 
@@ -111,9 +110,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithDataSetDataProvider
-     */
+    #[DataProvider('objectWithDataSetDataProvider')]
     public function testObjectWithDataSet(ObjectDataSet $dataSet): void
     {
         $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
@@ -128,7 +125,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame([], $dataSet->getRules());
     }
 
-    public function objectWithRulesProvider(): array
+    public static function objectWithRulesProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithRulesProvider());
 
@@ -140,9 +137,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithRulesProvider
-     */
+    #[DataProvider('objectWithRulesProvider')]
     public function testObjectWithRulesProvider(ObjectDataSet $dataSet): void
     {
         $rules = $dataSet->getRules();
@@ -181,7 +176,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertInstanceOf(Equal::class, $rules['age'][3]);
     }
 
-    public function objectWithDataSetAndRulesProviderDataProvider(): array
+    public static function objectWithDataSetAndRulesProviderDataProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithDataSetAndRulesProvider());
 
@@ -193,9 +188,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithDataSetAndRulesProviderDataProvider
-     */
+    #[DataProvider('objectWithDataSetAndRulesProviderDataProvider')]
     public function testObjectWithDataSetAndRulesProvider(ObjectDataSet $dataSet): void
     {
         $rules = $dataSet->getRules();
@@ -218,10 +211,9 @@ final class ObjectDataSetTest extends TestCase
     }
 
     /**
-     * @dataProvider dataCollectRules
-     *
      * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $expectedRules
      */
+    #[DataProvider('dataCollectRules')]
     public function testCollectRules(object $object, array $expectedRules): void
     {
         $dataSet = new ObjectDataSet($object);
@@ -234,7 +226,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertEquals($expectedRules, $actualRules);
     }
 
-    public function dataCollectRules(): array
+    public static function dataCollectRules(): array
     {
         return [
             [
@@ -357,7 +349,7 @@ final class ObjectDataSetTest extends TestCase
         $dataSet->getRules();
     }
 
-    public function objectWithDynamicDataSetProvider(): array
+    public static function objectWithDynamicDataSetProvider(): array
     {
         return [
             [
@@ -371,9 +363,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithDynamicDataSetProvider
-     */
+    #[DataProvider('objectWithDynamicDataSetProvider')]
     public function testObjectWithDynamicDataSet(ObjectDataSet $dataSet, array $expectedData): void
     {
         $this->assertSame($expectedData, $dataSet->getData());
@@ -400,7 +390,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertFalse($objectDataSet->hasProperty('non-existing-key'));
     }
 
-    public function objectWithLabelsProvider(): array
+    public static function objectWithLabelsProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithLabelsProvider());
         $expectedResult = ['name' => 'Имя', 'age' => 'Возраст'];
@@ -424,9 +414,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithLabelsProvider
-     */
+    #[DataProvider('objectWithLabelsProvider')]
     public function testObjectWithLabelsProvider(ObjectDataSet $dataSet, array $expected): void
     {
         $this->assertSame($expected, $dataSet->getValidationPropertyLabels());

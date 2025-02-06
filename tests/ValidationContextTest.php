@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
@@ -91,7 +92,7 @@ final class ValidationContextTest extends TestCase
         $this->assertSame($dataSet1, $context->getGlobalDataSet());
     }
 
-    public function dataTranslatedPropertyWithoutTranslator(): array
+    public static function dataTranslatedPropertyWithoutTranslator(): array
     {
         return [
             'null' => ['Value'],
@@ -99,9 +100,7 @@ final class ValidationContextTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataTranslatedPropertyWithoutTranslator
-     */
+    #[DataProvider('dataTranslatedPropertyWithoutTranslator')]
     public function testTranslatedPropertyWithoutTranslator(?string $property): void
     {
         $context = new ValidationContext();

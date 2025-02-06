@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Tests\Rule\Image;
 
 use GuzzleHttp\Psr7\UploadedFile;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\Image\ImageAspectRatio;
 use Yiisoft\Validator\Rule\Image\ImageHandler;
@@ -25,7 +27,7 @@ final class ImageTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
-    public function dataConfigurationError(): array
+    public static function dataConfigurationError(): array
     {
         return [
             'width and min width' => [
@@ -47,9 +49,7 @@ final class ImageTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataConfigurationError
-     */
+    #[DataProvider('dataConfigurationError')]
     public function testConfigurationError(array $arguments, string $expectedExceptionMessage): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -63,7 +63,7 @@ final class ImageTest extends RuleTestCase
         $this->assertSame('image', $rule->getName());
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'png' => [__DIR__ . '/16x18.png', new Image()],
@@ -82,7 +82,7 @@ final class ImageTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassedAspectRatio(): array
+    public static function dataValidationPassedAspectRatio(): array
     {
         return [
             'default margin' => [
@@ -124,9 +124,7 @@ final class ImageTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationPassedAspectRatio
-     */
+    #[DataProvider('dataValidationPassedAspectRatio')]
     public function testValidationPassedAspectRatio(ImageInfo $imageInfo, Image $rules): void
     {
         $ruleHandlerResolver = new SimpleRuleHandlerContainer([
@@ -136,7 +134,7 @@ final class ImageTest extends RuleTestCase
         $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $notImageResult = ['' => ['Value must be an image.']];
 
@@ -153,7 +151,6 @@ final class ImageTest extends RuleTestCase
                 ['a' => ['Value of "a" must be an image.']],
             ],
             'empty-string' => ['', new Image(), $notImageResult],
-            'not-file-path' => ['test', new Image(), $notImageResult],
             'not-image' => [__DIR__ . '/ImageTest.php', new Image(), $notImageResult],
             'not-image-with-custom-message' => [
                 ['a' => __DIR__ . '/ImageTest.php'],
@@ -235,7 +232,7 @@ final class ImageTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailedAspectRatio(): array
+    public static function dataValidationFailedAspectRatio(): array
     {
         return [
             'default aspect ratio margin , smaller height' => [
@@ -276,9 +273,7 @@ final class ImageTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailedAspectRatio
-     */
+    #[DataProvider('dataValidationFailedAspectRatio')]
     public function testValidationFailedAspectRatio(ImageInfo $imageInfo, Image $rules, array $errors): void
     {
         $ruleHandlerResolver = new SimpleRuleHandlerContainer([
@@ -311,7 +306,7 @@ final class ImageTest extends RuleTestCase
         return [Image::class, ImageHandler::class];
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -528,5 +523,27 @@ final class ImageTest extends RuleTestCase
                 when: static fn(mixed $value): bool => $value !== null
             )
         );
+    }
+
+    #[WithoutErrorHandler]
+    public function testStringValueIsNotFilePath(): void
+    {
+        $validator = new Validator();
+
+        $errorMessage = null;
+        set_error_handler(
+            static function (int $code, string $message) use (&$errorMessage): bool {
+                $errorMessage = $message;
+                return true;
+            }
+        );
+
+        $result = $validator->validate('test', new Image());
+
+        restore_error_handler();
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(['Value must be an image.'], $result->getErrorMessages());
+        $this->assertSame('mime_content_type(test): Failed to open stream: No such file or directory', $errorMessage);
     }
 }

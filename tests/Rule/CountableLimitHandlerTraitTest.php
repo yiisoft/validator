@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\CountableLimitInterface;
 use Yiisoft\Validator\Result;
@@ -16,7 +17,7 @@ use Yiisoft\Validator\ValidationContext;
 
 final class CountableLimitHandlerTraitTest extends TestCase
 {
-    public function validateLimitsWithWrongRuleData(): array
+    public static function validateLimitsWithWrongRuleData(): array
     {
         return [
             [
@@ -58,9 +59,7 @@ final class CountableLimitHandlerTraitTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider validateLimitsWithWrongRuleData
-     */
+    #[DataProvider('validateLimitsWithWrongRuleData')]
     public function testValidateLimitsWithWrongRule(CountableLimitInterface|RuleInterface $rule): void
     {
         $handler = new class () implements RuleHandlerInterface {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
@@ -282,9 +283,7 @@ class ResultTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataAdd
-     */
+    #[DataProvider('dataAdd')]
     public function testAdd(Result $baseResult, array $addedResults, Result $expectedResult): void
     {
         $this->assertEquals($expectedResult, $baseResult->add(...$addedResults));

@@ -24,7 +24,7 @@ final class GreaterThanTest extends RuleTestCase
         $this->assertSame(GreaterThan::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -106,7 +106,7 @@ final class GreaterThanTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [100, [new GreaterThan(99)]],
@@ -114,7 +114,7 @@ final class GreaterThanTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value must be greater than "100".';
 

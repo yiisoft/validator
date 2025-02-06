@@ -11,7 +11,7 @@ use Yiisoft\Validator\RuleHandlerResolverInterface;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidatorInterface;
 
-final class ConfigTest extends BaseConfigTest
+final class ConfigTest extends BaseConfigTestCase
 {
     public function testBase(): void
     {

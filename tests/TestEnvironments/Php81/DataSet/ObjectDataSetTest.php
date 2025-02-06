@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\TestEnvironments\Php81\DataSet;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -21,10 +22,9 @@ use Yiisoft\Validator\Tests\TestEnvironments\Support\Data\Charts\Chart;
 final class ObjectDataSetTest extends TestCase
 {
     /**
-     * @dataProvider dataProvider
-     *
      * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $expectedRules
      */
+    #[DataProvider('dataProvider')]
     public function testCollectRules(object $object, array $expectedRules): void
     {
         $dataSet = new ObjectDataSet($object);
@@ -34,7 +34,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertEquals($expectedRules, $rulesArray);
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\EmptyCondition;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\EmptyCondition\WhenMissing;
 use Yiisoft\Validator\Rule\Number;
@@ -12,7 +13,7 @@ use Yiisoft\Validator\Validator;
 
 final class WhenMissingTest extends TestCase
 {
-    public function dataBase(): array
+    public static function dataBase(): array
     {
         return [
             'null' => [
@@ -33,9 +34,7 @@ final class WhenMissingTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataBase
-     */
+    #[DataProvider('dataBase')]
     public function testBase(array $expectedMessages, mixed $data, array|RuleInterface|null $rules = null): void
     {
         $result = (new Validator())->validate($data, $rules);

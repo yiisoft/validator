@@ -42,7 +42,7 @@ final class NumberTest extends RuleTestCase
         $this->assertSame(Number::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'number, default' => [
@@ -172,7 +172,7 @@ final class NumberTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [20, [new Number()]],
@@ -227,7 +227,7 @@ final class NumberTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $notNumberMessage = 'Value must be a number.';
         $notIntegerMessage = 'Value must be an integer.';

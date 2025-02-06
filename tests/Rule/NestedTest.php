@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use ArrayObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -92,7 +93,7 @@ final class NestedTest extends RuleTestCase
         $this->assertSame(NestedHandler::class, $rule->getHandler());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'rules without properties' => [
@@ -246,7 +247,7 @@ final class NestedTest extends RuleTestCase
         new Nested(['*' => [new Number(min: -10, max: 10)]]);
     }
 
-    public function dataHandler(): array
+    public static function dataHandler(): array
     {
         return [
             'class-string-rules' => [
@@ -385,16 +386,14 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataHandler
-     */
+    #[DataProvider('dataHandler')]
     public function testHandler(object $data, array $expectedErrorMessagesIndexedByPath): void
     {
         $result = (new Validator())->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-    public function dataPropagateOptions(): array
+    public static function dataPropagateOptions(): array
     {
         return [
             'nested and each combinations' => [
@@ -576,9 +575,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataPropagateOptions
-     */
+    #[DataProvider('dataPropagateOptions')]
     public function testPropagateOptions(Nested $rule, array $expectedOptions): void
     {
         $options = RulesDumper::asArray([$rule]);
@@ -601,7 +598,7 @@ final class NestedTest extends RuleTestCase
         );
     }
 
-    public function dataWithOtherNestedAndEach(): array
+    public static function dataWithOtherNestedAndEach(): array
     {
         $data = [
             'charts' => [
@@ -838,9 +835,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataWithOtherNestedAndEach
-     */
+    #[DataProvider('dataWithOtherNestedAndEach')]
     public function testWithOtherNestedAndEach(
         mixed $data,
         array $rules,
@@ -922,7 +917,7 @@ final class NestedTest extends RuleTestCase
         );
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -1026,7 +1021,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataSetInterface {
             public function getPropertyValue(string $property): mixed
@@ -1294,7 +1289,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailedWithDetailedErrors(): array
+    public static function dataValidationFailedWithDetailedErrors(): array
     {
         return [
             'error' => [
@@ -1379,9 +1374,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailedWithDetailedErrors
-     */
+    #[DataProvider('dataValidationFailedWithDetailedErrors')]
     public function testValidationFailedWithDetailedErrors(mixed $data, array $rules, array $errors): void
     {
         $result = (new Validator())->validate($data, $rules);

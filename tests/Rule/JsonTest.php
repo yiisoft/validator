@@ -25,7 +25,7 @@ final class JsonTest extends RuleTestCase
         $this->assertSame(Json::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -66,7 +66,7 @@ final class JsonTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             // JSON test from https://www.json.org/JSON_checker/test/pass1.json
@@ -152,7 +152,7 @@ JSON_WRAP
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $errors = ['' => ['Value is not a valid JSON.']];
 

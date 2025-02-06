@@ -11,7 +11,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 
 final class AnyRuleTest extends RuleTestCase
 {
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'using as attribute' => [
@@ -24,7 +24,7 @@ final class AnyRuleTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'At least one of the inner rules must pass the validation.';
 

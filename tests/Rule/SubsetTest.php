@@ -27,7 +27,7 @@ final class SubsetTest extends RuleTestCase
         $this->assertSame(Subset::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -74,7 +74,7 @@ final class SubsetTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [[], [new Subset(range(1, 10))]],
@@ -135,7 +135,7 @@ final class SubsetTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $errors = ['' => ['Value is not a subset of acceptable values.']];
 

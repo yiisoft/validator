@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\TestEnvironments\Php81\Rule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Yiisoft\Validator\Rule\Nested;
@@ -15,7 +16,7 @@ use Yiisoft\Validator\Validator;
 
 final class NestedTest extends TestCase
 {
-    public function dataHandler(): array
+    public static function dataHandler(): array
     {
         return [
             'object' => [
@@ -52,9 +53,7 @@ final class NestedTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataHandler
-     */
+    #[DataProvider('dataHandler')]
     public function testHandler(
         object $data,
         array $expectedErrorMessagesIndexedByPath,

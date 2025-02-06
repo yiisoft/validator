@@ -30,7 +30,7 @@ final class StringTypeTest extends RuleTestCase
         $this->assertSame(StringType::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -58,7 +58,7 @@ final class StringTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'empty' => ['', new StringType()],
@@ -92,7 +92,7 @@ EOD,
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             'boolean' => [false, new StringType(), ['' => ['Value must be a string. bool given.']]],
