@@ -24,5 +24,5 @@ return RectorConfig::configure()
         NewInInitializerRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class => [
             __DIR__ . '/src/Rule/Composite.php',
-        ]
+        ],
     ]);
