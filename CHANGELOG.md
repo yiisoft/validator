@@ -5,6 +5,7 @@
 - Bug #748: Fix hook processing for nested objects that implement `PostValidationHookInterface` when `Nested` rule with
   specified rules is used (@DAGpro)
 - Bug #756: Fix russian translation of error message for `FilledAtLeast` rule (@vjik)
+- Chg #758: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
 
 ## 2.1.0 September 12, 2024
 
