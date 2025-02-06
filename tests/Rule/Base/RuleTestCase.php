@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
-use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
