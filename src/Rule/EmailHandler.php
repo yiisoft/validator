@@ -42,7 +42,15 @@ final class EmailHandler implements RuleHandlerInterface
         )) {
             $valid = false;
         } else {
-            /** @var array{name:string,local:string,open:string,domain:string,close:string} $matches */
+            /**
+             * @psalm-var array{
+             *     name: string,
+             *     local: string,
+             *     open: string,
+             *     domain: string,
+             *     close: string,
+             * } $matches
+             */
             if ($rule->isIdnEnabled()) {
                 $matches['local'] = idn_to_ascii($matches['local']);
                 $matches['domain'] = idn_to_ascii($matches['domain']);
