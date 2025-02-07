@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -21,6 +22,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Tests\Support\Data\EachDto;
 use Yiisoft\Validator\Validator;
 use Yiisoft\Validator\ValidationContext;
 
@@ -38,7 +40,7 @@ final class EachTest extends RuleTestCase
         $this->assertSame(Each::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'basic' => [
@@ -177,7 +179,7 @@ final class EachTest extends RuleTestCase
         $this->testGetOptionsWithNotRuleInternal(Each::class);
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'base' => [
@@ -208,7 +210,7 @@ final class EachTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $getGeneratorWithIncorrectKey = static function (): Generator {
             yield false => 0;
@@ -386,9 +388,7 @@ final class EachTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataContextEachKey
-     */
+    #[DataProvider('dataContextEachKey')]
     public function testContextEachKey($data, $keys): void
     {
         $indexes = [];
@@ -431,5 +431,18 @@ final class EachTest extends RuleTestCase
         );
 
         $this->assertSame(['x', 'y', 'a', 'z', 'b'], $indexes);
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(new EachDto(1, 0, 3));
+
+        $this->assertSame(
+            [
+                'a' => ['Value must be zero.'],
+                'c' => ['Value must be zero.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty()
+        );
     }
 }

@@ -15,6 +15,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\StopOnErrorDto;
+use Yiisoft\Validator\Validator;
 
 final class StopOnErrorTest extends RuleTestCase
 {
@@ -29,7 +31,7 @@ final class StopOnErrorTest extends RuleTestCase
         $this->assertSame(StopOnError::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'basic' => [
@@ -130,7 +132,7 @@ final class StopOnErrorTest extends RuleTestCase
         $this->testGetOptionsWithNotRuleInternal(StopOnError::class);
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'at least one succeed property' => [
@@ -145,7 +147,7 @@ final class StopOnErrorTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             'basic' => [
@@ -289,6 +291,18 @@ final class StopOnErrorTest extends RuleTestCase
         $this->testWhenInternal(
             new StopOnError([new Length(min: 10)]),
             new StopOnError([new Length(min: 10)], when: $when),
+        );
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(new StopOnErrorDto());
+
+        $this->assertSame(
+            [
+                '' => ['error A'],
+            ],
+            $result->getErrorMessagesIndexedByProperty()
         );
     }
 

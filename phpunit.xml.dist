@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit colors="true"
-         verbose="true"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         cacheDirectory=".phpunit.cache"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         executionOrder="random"
          failOnRisky="true"
          failOnWarning="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          stopOnFailure="false"
-         executionOrder="random"
-         resolveDependencies="true">
+         colors="true"
+         displayDetailsOnPhpunitDeprecations="true"
+>
     <php>
         <ini name="error_reporting" value="-1"/>
     </php>
 
     <testsuites>
         <testsuite name="Yii Validator common tests">
-            <directory suffix=".php">./tests</directory>
+            <directory>./tests</directory>
             <exclude>./tests/TestEnvironments</exclude>
         </testsuite>
-
-        <testsuite name="Yii Validator PHP 8.1 tests">
-            <directory phpVersion="8.1" phpVersionOperator=">=">./tests/TestEnvironments/Php81</directory>
-        </testsuite>
     </testsuites>
-    <coverage>
+
+    <source>
         <include>
             <directory>./src</directory>
             <directory>./config</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

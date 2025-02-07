@@ -22,11 +22,7 @@ Thumbs.db
 # composer itself is not needed
 composer.phar
 
-# phpunit itself is not needed
-phpunit.phar
-# local phpunit config
+# PHPUnit
+/phpunit.phar
 /phpunit.xml
-# phpunit cache
-.phpunit.result.cache
-
-/config/.merge-plan.php
+/.phpunit.cache

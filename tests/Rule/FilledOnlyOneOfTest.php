@@ -27,7 +27,7 @@ final class FilledOnlyOneOfTest extends RuleTestCase
         $this->assertSame(FilledOnlyOneOf::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -96,7 +96,7 @@ final class FilledOnlyOneOfTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -170,7 +170,7 @@ final class FilledOnlyOneOfTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $object = new class () {
             public $prop1 = null;

@@ -6,9 +6,9 @@ namespace Yiisoft\Validator\Tests\TestEnvironments\WithoutIntl;
 
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\MessageFormatterInterface;
-use Yiisoft\Validator\Tests\BaseConfigTest;
+use Yiisoft\Validator\Tests\BaseConfigTestCase;
 
-final class ConfigTest extends BaseConfigTest
+final class ConfigTest extends BaseConfigTestCase
 {
     public function testSimpleMessageFormatter(): void
     {

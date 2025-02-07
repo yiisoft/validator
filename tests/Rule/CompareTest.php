@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use DateTime;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 use stdClass;
 use Stringable;
@@ -53,7 +54,7 @@ final class CompareTest extends RuleTestCase
         $this->assertSame(Compare::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -177,7 +178,7 @@ final class CompareTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         $targetStringableFloat = new class () implements Stringable {
             public function __toString(): string
@@ -374,7 +375,7 @@ final class CompareTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassedWithDifferentTypes(): array
+    public static function dataValidationPassedWithDifferentTypes(): array
     {
         $customDataSet = new class () implements DataSetInterface {
             public function getPropertyValue(string $property): mixed
@@ -535,13 +536,11 @@ final class CompareTest extends RuleTestCase
             ],
         ];
 
-        return $this->extendDataWithDifferentTypes($initialData);
+        return self::extendDataWithDifferentTypes($initialData);
     }
 
-    /**
-     * @dataProvider dataValidationPassed
-     * @dataProvider dataValidationPassedWithDifferentTypes
-     */
+    #[DataProvider('dataValidationPassed')]
+    #[DataProvider('dataValidationPassedWithDifferentTypes')]
     public function testValidationPassed(
         mixed $data,
         array|RuleInterface|null $rules = null,
@@ -550,7 +549,7 @@ final class CompareTest extends RuleTestCase
         parent::testValidationPassed($data, $rules, $ruleHandlers);
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataWrapperInterface {
             public function getPropertyValue(string $property): mixed
@@ -875,7 +874,7 @@ final class CompareTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailedWithDifferentTypes(): array
+    public static function dataValidationFailedWithDifferentTypes(): array
     {
         $messageEqual = 'Value must be equal to "100".';
         $messageStrictlyEqual = 'Value must be strictly equal to "100".';
@@ -994,13 +993,11 @@ final class CompareTest extends RuleTestCase
             ],
         ];
 
-        return $this->extendDataWithDifferentTypes($initialData);
+        return self::extendDataWithDifferentTypes($initialData);
     }
 
-    /**
-     * @dataProvider dataValidationFailed
-     * @dataProvider dataValidationFailedWithDifferentTypes
-     */
+    #[DataProvider('dataValidationFailed')]
+    #[DataProvider('dataValidationFailedWithDifferentTypes')]
     public function testValidationFailed(
         mixed $data,
         array|RuleInterface|null $rules,
@@ -1010,7 +1007,7 @@ final class CompareTest extends RuleTestCase
         parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath, $ruleHandlers);
     }
 
-    private function extendDataWithDifferentTypes(array $initialData): array
+    private static function extendDataWithDifferentTypes(array $initialData): array
     {
         $dynamicData = [];
         $mainType = CompareType::NUMBER;

@@ -34,7 +34,7 @@ final class RegexTest extends RuleTestCase
         $this->assertSame(Regex::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -81,7 +81,7 @@ final class RegexTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             ['a', [new Regex('/a/')]],
@@ -90,7 +90,7 @@ final class RegexTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value is invalid.';
 

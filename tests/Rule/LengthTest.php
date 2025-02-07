@@ -29,7 +29,7 @@ final class LengthTest extends RuleTestCase
         $this->assertSame(Length::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'min and max' => [
@@ -98,7 +98,7 @@ final class LengthTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [str_repeat('x', 25), [new Length(exactly: 25)]],
@@ -138,7 +138,7 @@ final class LengthTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $greaterThanMaxMessage = 'Value must contain at most 25 characters.';
         $notExactlyMessage = 'Value must contain exactly 25 characters.';

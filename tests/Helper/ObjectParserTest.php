@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Helper;
 
 use Error;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 use Yiisoft\Validator\Helper\ObjectParser;
@@ -26,7 +27,7 @@ final class ObjectParserTest extends TestCase
         new ObjectParser('non-exist-class');
     }
 
-    public function dataSkipStaticProperties(): array
+    public static function dataSkipStaticProperties(): array
     {
         return [
             [
@@ -49,9 +50,7 @@ final class ObjectParserTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataSkipStaticProperties
-     */
+    #[DataProvider('dataSkipStaticProperties')]
     public function testSkipStaticProperties(array $expectedData, object $object, bool $skipStaticProperties): void
     {
         $parser = new ObjectParser($object, skipStaticProperties: $skipStaticProperties);

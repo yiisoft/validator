@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\DataSet;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
 use Yiisoft\Validator\Result;
@@ -17,7 +18,7 @@ use Yiisoft\Validator\Validator;
 
 final class DataSetUsageTest extends TestCase
 {
-    public function dataArrayDataSetUsage(): array
+    public static function dataArrayDataSetUsage(): array
     {
         return [
             [
@@ -27,9 +28,7 @@ final class DataSetUsageTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataArrayDataSetUsage
-     */
+    #[DataProvider('dataArrayDataSetUsage')]
     public function testArrayDataSetUsage(array $dataSet, array $rules): void
     {
         $dataObject = new ArrayDataSet($dataSet);
@@ -38,7 +37,7 @@ final class DataSetUsageTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function dataRulesProvidedDataSetUsage(): array
+    public static function dataRulesProvidedDataSetUsage(): array
     {
         return [
             [
@@ -48,9 +47,7 @@ final class DataSetUsageTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataRulesProvidedDataSetUsage
-     */
+    #[DataProvider('dataRulesProvidedDataSetUsage')]
     public function testRulesProvidedDataSetUsage(array $dataSet, array $rules): void
     {
         $dataObject = new RulesProvidedDataSet($dataSet, $rules);

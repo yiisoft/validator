@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Validator\Rule\Ip;
 use Yiisoft\Validator\Rule\IpHandler;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -26,7 +27,7 @@ final class IpTest extends RuleTestCase
         $this->assertSame(Ip::class, $rule->getName());
     }
 
-    public function getNetworksData(): array
+    public static function getNetworksData(): array
     {
         return [
             'default' => [
@@ -59,16 +60,14 @@ final class IpTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider getNetworksData
-     */
+    #[DataProvider('getNetworksData')]
     public function testGetNetworks(array $networksArgument, array $expectedNetworks): void
     {
         $rule = new Ip(networks: $networksArgument);
         $this->assertSame($expectedNetworks, $rule->getNetworks());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'disallow IPv4' => [
@@ -205,7 +204,7 @@ final class IpTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             ['192.168.10.11', [new Ip()]],
@@ -288,7 +287,7 @@ final class IpTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value must be a valid IP address.';
         $hasSubnetMessage = 'Value must not be a subnet.';
@@ -569,7 +568,7 @@ final class IpTest extends RuleTestCase
         new Ip(networks: ['*' => ['wrong']], ranges: ['*']);
     }
 
-    public function dataRangesForSubstitution(): array
+    public static function dataRangesForSubstitution(): array
     {
         return [
             'ipv4' => [['10.0.0.1'], ['10.0.0.1']],
@@ -607,9 +606,8 @@ final class IpTest extends RuleTestCase
     /**
      * @param string[] $ranges
      * @param string[] $expectedRanges
-     *
-     * @dataProvider dataRangesForSubstitution
      */
+    #[DataProvider('dataRangesForSubstitution')]
     public function testRangesForSubstitution(array $ranges, array $expectedRanges): void
     {
         $rule = new Ip(ranges: $ranges);

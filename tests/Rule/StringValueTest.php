@@ -30,7 +30,7 @@ final class StringValueTest extends RuleTestCase
         $this->assertSame(StringValue::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             [
@@ -58,7 +58,7 @@ final class StringValueTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         $rule = new StringValue();
 
@@ -81,7 +81,7 @@ final class StringValueTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $rule = new StringValue();
         $message = 'Value must be a string.';

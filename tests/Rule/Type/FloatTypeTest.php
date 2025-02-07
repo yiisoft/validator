@@ -29,7 +29,7 @@ final class FloatTypeTest extends RuleTestCase
         $this->assertSame(FloatType::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -57,7 +57,7 @@ final class FloatTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'float, negative' => [-1.5, new FloatType()],
@@ -76,7 +76,7 @@ final class FloatTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value must be a float.';
 

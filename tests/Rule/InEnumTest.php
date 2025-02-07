@@ -36,7 +36,7 @@ final class InEnumTest extends RuleTestCase
         $this->assertSame('inEnum', $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         $values = array_column(EnumStatus::class::cases(), 'name');
 
@@ -86,7 +86,7 @@ final class InEnumTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             ['DRAFT', [new InEnum(EnumStatus::class)]],
@@ -106,7 +106,7 @@ final class InEnumTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $errors = ['' => ['Value is not in the list of acceptable values.']];
 

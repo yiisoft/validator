@@ -19,6 +19,8 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\CoordinatesRuleSet;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
+use Yiisoft\Validator\Tests\Support\Data\CompositeWithCallbackAttribute;
+use Yiisoft\Validator\Validator;
 
 final class CompositeTest extends RuleTestCase
 {
@@ -34,7 +36,7 @@ final class CompositeTest extends RuleTestCase
         $this->assertSame(Composite::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'basic' => [
@@ -203,7 +205,7 @@ final class CompositeTest extends RuleTestCase
         $this->testGetOptionsWithNotRuleInternal(Composite::class);
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -247,7 +249,7 @@ final class CompositeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             'callable' => [
@@ -347,6 +349,19 @@ final class CompositeTest extends RuleTestCase
     {
         $when = static fn (mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Composite([]), new Composite([], when: $when));
+    }
+
+    public function testWithCallbackAttribute(): void
+    {
+        $result = (new Validator())->validate(new CompositeWithCallbackAttribute());
+
+        $this->assertSame(
+            [
+                '' => ['Invalid A.'],
+                'b' => ['Invalid B.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty()
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array

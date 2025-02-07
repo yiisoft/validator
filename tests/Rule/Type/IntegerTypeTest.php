@@ -29,7 +29,7 @@ final class IntegerTypeTest extends RuleTestCase
         $this->assertSame(IntegerType::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -57,7 +57,7 @@ final class IntegerTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'integer, negative' => [-1, new IntegerType()],
@@ -77,7 +77,7 @@ final class IntegerTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value must be an integer.';
 

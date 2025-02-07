@@ -10,7 +10,7 @@ use Yiisoft\Di\ContainerConfig;
 
 use function dirname;
 
-abstract class BaseConfigTest extends TestCase
+abstract class BaseConfigTestCase extends TestCase
 {
     final protected function createContainer(array|null $params = null): Container
     {

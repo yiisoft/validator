@@ -51,7 +51,7 @@ final class FilledAtLeastTest extends RuleTestCase
         $this->assertNull($context->getPropertyLabel());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -126,7 +126,7 @@ final class FilledAtLeastTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -212,7 +212,7 @@ final class FilledAtLeastTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $class = new class () {
             public $prop1 = 1;

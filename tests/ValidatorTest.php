@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 use Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator;
@@ -80,7 +81,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function dataDataAndRulesCombinations(): array
+    public static function dataDataAndRulesCombinations(): array
     {
         return [
             'pure-object-and-array-of-rules' => [
@@ -210,9 +211,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataDataAndRulesCombinations
-     */
+    #[DataProvider('dataDataAndRulesCombinations')]
     public function testDataAndRulesCombinations(
         array $expectedErrorMessages,
         mixed $data,
@@ -223,7 +222,7 @@ class ValidatorTest extends TestCase
         $this->assertSame($expectedErrorMessages, $result->getErrorMessagesIndexedByProperty());
     }
 
-    public function dataWithEmptyArrayOfRules(): array
+    public static function dataWithEmptyArrayOfRules(): array
     {
         return [
             'pure-object-and-no-rules' => [new ObjectWithDifferentPropertyVisibility()],
@@ -235,9 +234,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataWithEmptyArrayOfRules
-     */
+    #[DataProvider('dataWithEmptyArrayOfRules')]
     public function testWithEmptyArrayOfRules(mixed $data): void
     {
         $validator = new Validator();
@@ -270,7 +267,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse($result->isPropertyValid('int'));
     }
 
-    public function diverseTypesDataProvider(): array
+    public static function diverseTypesDataProvider(): array
     {
         $class = new stdClass();
         $class->property = true;
@@ -285,9 +282,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider diverseTypesDataProvider
-     */
+    #[DataProvider('diverseTypesDataProvider')]
     public function testDiverseTypes($dataSet): void
     {
         $validator = new Validator();
@@ -355,7 +350,7 @@ class ValidatorTest extends TestCase
         ]);
     }
 
-    public function requiredDataProvider(): array
+    public static function requiredDataProvider(): array
     {
         $strictRules = [
             'orderBy' => [new Required()],
@@ -537,9 +532,8 @@ class ValidatorTest extends TestCase
     /**
      * @link https://github.com/yiisoft/validator/issues/173
      * @link https://github.com/yiisoft/validator/issues/289
-     *
-     * @dataProvider requiredDataProvider
      */
+    #[DataProvider('requiredDataProvider')]
     public function testRequired(array|null $rules, DataSetInterface $dataSet, array $expectedErrors): void
     {
         $validator = new Validator();
@@ -547,7 +541,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals($expectedErrors, $result->getErrors());
     }
 
-    public function skipOnEmptyDataProvider(): array
+    public static function skipOnEmptyDataProvider(): array
     {
         $validator = new Validator();
         $rules = [
@@ -1152,16 +1146,15 @@ class ValidatorTest extends TestCase
     /**
      * @param StubDumpedRule[] $rules
      * @param Error[] $expectedErrors
-     *
-     * @dataProvider skipOnEmptyDataProvider
      */
+    #[DataProvider('skipOnEmptyDataProvider')]
     public function testSkipOnEmpty(Validator $validator, ArrayDataSet $data, array $rules, array $expectedErrors): void
     {
         $result = $validator->validate($data, $rules);
         $this->assertEquals($expectedErrors, $result->getErrors());
     }
 
-    public function initSkipOnEmptyDataProvider(): array
+    public static function initSkipOnEmptyDataProvider(): array
     {
         return [
             'null' => [
@@ -1207,9 +1200,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider initSkipOnEmptyDataProvider
-     */
+    #[DataProvider('initSkipOnEmptyDataProvider')]
     public function testInitSkipOnEmpty(
         bool|callable|null $skipOnEmpty,
         mixed $data,
@@ -1384,7 +1375,7 @@ class ValidatorTest extends TestCase
         $this->assertSame(['number' => ['3-few']], $result->getErrorMessagesIndexedByPath());
     }
 
-    public function dataSimpleForm(): array
+    public static function dataSimpleForm(): array
     {
         return [
             [
@@ -1412,9 +1403,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataSimpleForm
-     */
+    #[DataProvider('dataSimpleForm')]
     public function testSimpleForm(array $expectedMessages, ?ValidationContext $validationContext): void
     {
         $form = new SimpleForm();
@@ -1427,7 +1416,7 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function dataOriginalValueUsage(): array
+    public static function dataOriginalValueUsage(): array
     {
         $data = [
             'null' => [null, null],
@@ -1447,9 +1436,7 @@ class ValidatorTest extends TestCase
         return $data;
     }
 
-    /**
-     * @dataProvider dataOriginalValueUsage
-     */
+    #[DataProvider('dataOriginalValueUsage')]
     public function testOriginalValueUsage(mixed $expectedValue, mixed $value): void
     {
         $valueHandled = false;
@@ -1492,7 +1479,7 @@ class ValidatorTest extends TestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function dataErrorMessagesWithLabels(): array
+    public static function dataErrorMessagesWithLabels(): array
     {
         return [
             [
@@ -1529,9 +1516,7 @@ class ValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataErrorMessagesWithLabels
-     */
+    #[DataProvider('dataErrorMessagesWithLabels')]
     public function testErrorMessagesWithLabels(
         mixed $data,
         array $expectedErrorMessages,

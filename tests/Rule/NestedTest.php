@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use ArrayObject;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
@@ -44,6 +45,8 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
+use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -92,7 +95,7 @@ final class NestedTest extends RuleTestCase
         $this->assertSame(NestedHandler::class, $rule->getHandler());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'rules without properties' => [
@@ -246,7 +249,7 @@ final class NestedTest extends RuleTestCase
         new Nested(['*' => [new Number(min: -10, max: 10)]]);
     }
 
-    public function dataHandler(): array
+    public static function dataHandler(): array
     {
         return [
             'class-string-rules' => [
@@ -382,19 +385,48 @@ final class NestedTest extends RuleTestCase
                     'bars.0.name' => ['Name cannot be blank.'],
                 ],
             ],
+            'object' => [
+                new class () {
+                    #[Nested(['number' => new Number(max: 7)])]
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.number' => ['Number must be no greater than 7.'],
+                ],
+            ],
+            'object-private-only' => [
+                new class () {
+                    #[Nested(
+                        ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
+                        validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE,
+                    )]
+                    private readonly ObjectWithDifferentPropertyVisibility $object;
+
+                    public function __construct()
+                    {
+                        $this->object = new ObjectWithDifferentPropertyVisibility();
+                    }
+                },
+                [
+                    'object.number' => ['Number must be no greater than 7.'],
+                ],
+            ],
         ];
     }
 
-    /**
-     * @dataProvider dataHandler
-     */
+    #[DataProvider('dataHandler')]
     public function testHandler(object $data, array $expectedErrorMessagesIndexedByPath): void
     {
         $result = (new Validator())->validate($data);
         $this->assertSame($expectedErrorMessagesIndexedByPath, $result->getErrorMessagesIndexedByPath());
     }
 
-    public function dataPropagateOptions(): array
+    public static function dataPropagateOptions(): array
     {
         return [
             'nested and each combinations' => [
@@ -576,9 +608,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataPropagateOptions
-     */
+    #[DataProvider('dataPropagateOptions')]
     public function testPropagateOptions(Nested $rule, array $expectedOptions): void
     {
         $options = RulesDumper::asArray([$rule]);
@@ -601,7 +631,7 @@ final class NestedTest extends RuleTestCase
         );
     }
 
-    public function dataWithOtherNestedAndEach(): array
+    public static function dataWithOtherNestedAndEach(): array
     {
         $data = [
             'charts' => [
@@ -838,9 +868,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataWithOtherNestedAndEach
-     */
+    #[DataProvider('dataWithOtherNestedAndEach')]
     public function testWithOtherNestedAndEach(
         mixed $data,
         array $rules,
@@ -922,7 +950,7 @@ final class NestedTest extends RuleTestCase
         );
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -1026,7 +1054,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $incorrectDataSet = new class () implements DataSetInterface {
             public function getPropertyValue(string $property): mixed
@@ -1294,7 +1322,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailedWithDetailedErrors(): array
+    public static function dataValidationFailedWithDetailedErrors(): array
     {
         return [
             'error' => [
@@ -1379,9 +1407,7 @@ final class NestedTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataValidationFailedWithDetailedErrors
-     */
+    #[DataProvider('dataValidationFailedWithDetailedErrors')]
     public function testValidationFailedWithDetailedErrors(mixed $data, array $rules, array $errors): void
     {
         $result = (new Validator())->validate($data, $rules);
@@ -1430,6 +1456,32 @@ final class NestedTest extends RuleTestCase
             'RulesProviderInterface, a class string or an iterable.'
         );
         new Nested(new Required());
+    }
+
+    public function testClassAttribute(): void
+    {
+        $result = (new Validator())->validate(new NestedClassAttribute());
+
+        $this->assertSame(
+            [
+                'a' => ['A must be no less than 7.'],
+                'b' => ['B must be no greater than 1.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty(),
+        );
+    }
+
+    public function testWithCallbackAttribute(): void
+    {
+        $result = (new Validator())->validate(new NestedWithCallbackAttribute());
+
+        $this->assertSame(
+            [
+                'a' => ['Invalid A.'],
+                'b' => ['Invalid B.'],
+            ],
+            $result->getErrorMessagesIndexedByProperty(),
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array

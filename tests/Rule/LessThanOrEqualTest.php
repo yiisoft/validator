@@ -24,7 +24,7 @@ final class LessThanOrEqualTest extends RuleTestCase
         $this->assertSame(LessThanOrEqual::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -106,7 +106,7 @@ final class LessThanOrEqualTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [100, [new LessThanOrEqual(101)]],
@@ -115,7 +115,7 @@ final class LessThanOrEqualTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value must be less than or equal to "100".';
 

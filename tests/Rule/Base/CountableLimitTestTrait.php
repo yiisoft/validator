@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 trait CountableLimitTestTrait
 {
@@ -13,7 +14,7 @@ trait CountableLimitTestTrait
      */
     abstract protected function getRuleClass(): string;
 
-    public function dataInitWithMinAndMaxAndExactly(): array
+    public static function dataInitWithMinAndMaxAndExactly(): array
     {
         return [
             [['min' => 3, 'exactly' => 3]],
@@ -23,9 +24,7 @@ trait CountableLimitTestTrait
         ];
     }
 
-    /**
-     * @dataProvider dataInitWithMinAndMaxAndExactly
-     */
+    #[DataProvider('dataInitWithMinAndMaxAndExactly')]
     public function testInitWithMinAndMaxAndExactly(array $arguments): void
     {
         $ruleClass = $this->getRuleClass();
@@ -35,7 +34,7 @@ trait CountableLimitTestTrait
         new $ruleClass(...$arguments);
     }
 
-    public function dataUseExactlyInstead(): array
+    public static function dataUseExactlyInstead(): array
     {
         return [
             [['min' => 3, 'max' => 3]],
@@ -43,9 +42,7 @@ trait CountableLimitTestTrait
         ];
     }
 
-    /**
-     * @dataProvider dataUseExactlyInstead
-     */
+    #[DataProvider('dataUseExactlyInstead')]
     public function testUseExactlyInstead(array $arguments): void
     {
         $ruleClass = $this->getRuleClass();
@@ -64,7 +61,7 @@ trait CountableLimitTestTrait
         new $ruleClass();
     }
 
-    public function dataInitWithNonPositiveValues(): array
+    public static function dataInitWithNonPositiveValues(): array
     {
         return [
             [['min' => -1, 'max' => 2]],
@@ -78,9 +75,7 @@ trait CountableLimitTestTrait
         ];
     }
 
-    /**
-     * @dataProvider dataInitWithNonPositiveValues
-     */
+    #[DataProvider('dataInitWithNonPositiveValues')]
     public function testInitWithNonPositiveValues(array $arguments): void
     {
         $ruleClass = $this->getRuleClass();

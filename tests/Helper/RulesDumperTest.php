@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Helper;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -15,7 +16,7 @@ use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 
 final class RulesDumperTest extends TestCase
 {
-    public function asArrayDataProvider(): array
+    public static function asArrayDataProvider(): array
     {
         return [
             'basic' => [
@@ -73,9 +74,7 @@ final class RulesDumperTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider asArrayDataProvider
-     */
+    #[DataProvider('asArrayDataProvider')]
     public function testAsArray($rules, array $expected): void
     {
         $result = RulesDumper::asArray($rules);

@@ -26,7 +26,7 @@ final class InTest extends RuleTestCase
         $this->assertSame(In::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             [
@@ -74,7 +74,7 @@ final class InTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [1, [new In(range(1, 10))]],
@@ -126,7 +126,7 @@ final class InTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $errors = ['' => ['Value is not in the list of acceptable values.']];
 

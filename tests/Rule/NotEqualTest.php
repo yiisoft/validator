@@ -24,7 +24,7 @@ final class NotEqualTest extends RuleTestCase
         $this->assertSame(NotEqual::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -107,7 +107,7 @@ final class NotEqualTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [101, [new NotEqual(100)]],
@@ -115,7 +115,7 @@ final class NotEqualTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             [100, [new NotEqual(100)], ['' => ['Value must not be equal to "100".']]],

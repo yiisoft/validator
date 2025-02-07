@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Helper\RulesNormalizer;
 use Yiisoft\Validator\Result;
@@ -17,7 +18,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class RulesNormalizerTest extends TestCase
 {
-    public function dataNormalize(): array
+    public static function dataNormalize(): array
     {
         return [
             'null' => [[], null],
@@ -47,8 +48,6 @@ final class RulesNormalizerTest extends TestCase
     }
 
     /**
-     * @dataProvider dataNormalize
-     *
      * More cases are covered in {@see ValidatorTest}.
      *
      * @see ValidatorTest::testDataAndRulesCombinations()
@@ -58,6 +57,7 @@ final class RulesNormalizerTest extends TestCase
      * @see ValidatorTest::testNullAsDataSet()
      * @see ValidatorTest::testValidateWithSingleRule()
      */
+    #[DataProvider('dataNormalize')]
     public function testNormalizeWithArrayResult(
         array $expected,
         callable|iterable|object|string|null $rules = null,
@@ -76,7 +76,7 @@ final class RulesNormalizerTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    public function dataNormalizeList(): array
+    public static function dataNormalizeList(): array
     {
         return [
             [
@@ -98,9 +98,7 @@ final class RulesNormalizerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataNormalizeList
-     */
+    #[DataProvider('dataNormalizeList')]
     public function testNormalizeList(array $expected, iterable|callable|RuleInterface $rules): void
     {
         $rules = RulesNormalizer::normalizeList($rules);
