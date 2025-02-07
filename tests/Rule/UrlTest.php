@@ -42,7 +42,7 @@ final class UrlTest extends RuleTestCase
         $this->assertSame(['http', 'https', 'ftp', 'ftps'], $rule->getValidSchemes());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -92,7 +92,7 @@ final class UrlTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             ['http://google.de', [new Url()]],
@@ -129,7 +129,7 @@ final class UrlTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $errors = ['' => ['Value is not a valid URL.']];
         $longUrl = 'http://' . str_repeat('u', 1990) . '.de';

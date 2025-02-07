@@ -32,7 +32,7 @@ final class SingleValueDataSet implements DataWrapperInterface
         /**
          * @var mixed Single value of any (mixed) data type.
          */
-        private mixed $value,
+        private readonly mixed $value,
     ) {
     }
 

@@ -11,7 +11,7 @@ use Yiisoft\Validator\Rule\Count;
 final class CountDto implements Countable
 {
     public function __construct(
-        private int $count = 0,
+        private readonly int $count = 0,
     ) {
     }
 

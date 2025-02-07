@@ -16,7 +16,7 @@ final class TranslatorPropertyTranslator implements PropertyTranslatorInterface
      * @param TranslatorInterface $translator Translator to use.
      */
     public function __construct(
-        private TranslatorInterface $translator,
+        private readonly TranslatorInterface $translator,
     ) {
     }
 

@@ -68,7 +68,7 @@ final class CallbackTest extends RuleTestCase
         $this->assertSame($callback, $rule->getCallback());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             [
@@ -103,7 +103,7 @@ final class CallbackTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [
@@ -122,7 +122,7 @@ final class CallbackTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         return [
             [

@@ -164,16 +164,16 @@ final class ObjectDataSet implements
     /**
      * @var bool Whether an {@see $object} provided a data set by implementing {@see DataSetInterface}.
      */
-    private bool $dataSetProvided;
+    private readonly bool $dataSetProvided;
     /**
      * @var bool Whether an {@see $object} provided rules by implementing {@see RulesProviderInterface}.
      */
-    private bool $rulesProvided;
+    private readonly bool $rulesProvided;
     /**
      * @var ObjectParser An object parser instance used to parse rules and data from attributes if these were not
      * provided by implementing {@see RulesProviderInterface} and {@see DataSetInterface} accordingly.
      */
-    private ObjectParser $parser;
+    private readonly ObjectParser $parser;
 
     /**
      * @param int $propertyVisibility Visibility levels the properties with rules / data must have. For example: public

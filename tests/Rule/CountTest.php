@@ -32,7 +32,7 @@ final class CountTest extends RuleTestCase
         $this->assertSame(Count::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'min and max' => [
@@ -101,7 +101,7 @@ final class CountTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [[0, 0, 0], [new Count(min: 3)]],
@@ -153,7 +153,7 @@ final class CountTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $lessThanMinmessage = 'Value must contain at least 3 items.';
         $greaterThanMaxMessage = 'Value must contain at most 3 items.';

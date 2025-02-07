@@ -155,7 +155,7 @@ final class ObjectParser
          *
          * @psalm-var class-string|object
          */
-        private string|object $source,
+        private readonly string|object $source,
         /**
          * @var int Visibility levels the parsed properties must have. For example: public and protected only, this
          * means that the rest (private ones) will be skipped. Defaults to all visibility levels (public, protected and
@@ -163,13 +163,13 @@ final class ObjectParser
          *
          * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
-        private int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
+        private readonly int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
         ReflectionProperty::IS_PROTECTED |
         ReflectionProperty::IS_PUBLIC,
         /**
          * @var bool Whether the properties with "static" modifier must be skipped.
          */
-        private bool $skipStaticProperties = false,
+        private readonly bool $skipStaticProperties = false,
         /**
          * @var bool Whether some results of parsing (Reflection of a class / an object with properties and rules) must
          * be cached.

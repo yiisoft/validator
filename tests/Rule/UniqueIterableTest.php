@@ -32,7 +32,7 @@ final class UniqueIterableTest extends RuleTestCase
         $this->assertSame(UniqueIterable::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -92,7 +92,7 @@ final class UniqueIterableTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'strings' => [['a', 'b'], new UniqueIterable()],
@@ -130,7 +130,7 @@ final class UniqueIterableTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $incorrectInputMessage = 'Value must be array or iterable.';
         $incorrectItemValueMessage = 'The allowed types for iterable\'s item values of value are integer, float, ' .

@@ -29,7 +29,7 @@ final class BooleanTypeTest extends RuleTestCase
         $this->assertSame(BooleanType::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -57,7 +57,7 @@ final class BooleanTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'boolean, false' => [false, new BooleanType()],
@@ -72,7 +72,7 @@ final class BooleanTypeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'Value must be a boolean.';
 

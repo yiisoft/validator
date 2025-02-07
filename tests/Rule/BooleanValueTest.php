@@ -25,7 +25,7 @@ final class BooleanValueTest extends RuleTestCase
         $this->assertSame(BooleanValue::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -113,7 +113,7 @@ final class BooleanValueTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             [true, [new BooleanValue()]],
@@ -130,7 +130,7 @@ final class BooleanValueTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $defaultErrors = ['' => ['Value must be either "1" or "0".']];
         $booleanErrors = ['' => ['Value must be either "true" or "false".']];

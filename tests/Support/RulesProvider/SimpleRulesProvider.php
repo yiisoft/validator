@@ -9,7 +9,7 @@ use Yiisoft\Validator\RulesProviderInterface;
 final class SimpleRulesProvider implements RulesProviderInterface
 {
     public function __construct(
-        private iterable $rules,
+        private readonly iterable $rules,
     ) {
     }
 

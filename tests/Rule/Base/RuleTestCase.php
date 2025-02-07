@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests\Rule\Base;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
@@ -12,11 +13,9 @@ use Yiisoft\Validator\Validator;
 
 abstract class RuleTestCase extends TestCase
 {
-    abstract public function dataValidationPassed(): array;
+    abstract public static function dataValidationPassed(): array;
 
-    /**
-     * @dataProvider dataValidationPassed
-     */
+    #[DataProvider('dataValidationPassed')]
     public function testValidationPassed(
         mixed $data,
         array|RuleInterface|null $rules = null,
@@ -30,11 +29,9 @@ abstract class RuleTestCase extends TestCase
         $this->assertSame([], $result->getErrorMessagesIndexedByPath());
     }
 
-    abstract public function dataValidationFailed(): array;
+    abstract public static function dataValidationFailed(): array;
 
-    /**
-     * @dataProvider dataValidationFailed
-     */
+    #[DataProvider('dataValidationFailed')]
     public function testValidationFailed(
         mixed $data,
         array|RuleInterface|null $rules,

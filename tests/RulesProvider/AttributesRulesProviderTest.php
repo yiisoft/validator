@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\RulesProvider;
 
 use JetBrains\PhpStorm\Deprecated;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use Traversable;
@@ -18,7 +19,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 
 final class AttributesRulesProviderTest extends TestCase
 {
-    public function dataBase(): array
+    public static function dataBase(): array
     {
         return [
             'class-name' => [
@@ -59,9 +60,7 @@ final class AttributesRulesProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataBase
-     */
+    #[DataProvider('dataBase')]
     public function testBase(array $expectedRuleClassNames, string|object $source): void
     {
         $rulesProvider = new AttributesRulesProvider($source);
@@ -70,7 +69,7 @@ final class AttributesRulesProviderTest extends TestCase
         $this->assertSame($expectedRuleClassNames, $ruleClassNames);
     }
 
-    public function dataPropertyVisibility(): array
+    public static function dataPropertyVisibility(): array
     {
         return [
             'class-name-and-private-protected-public' => [
@@ -136,9 +135,7 @@ final class AttributesRulesProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataPropertyVisibility
-     */
+    #[DataProvider('dataPropertyVisibility')]
     public function testPropertyVisibility(
         array $expectedRuleClassNames,
         string|object $source,
@@ -151,7 +148,7 @@ final class AttributesRulesProviderTest extends TestCase
         $this->assertSame($expectedRuleClassNames, $ruleClassNames);
     }
 
-    public function dataStaticProperties(): array
+    public static function dataStaticProperties(): array
     {
         return [
             [
@@ -187,9 +184,7 @@ final class AttributesRulesProviderTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataStaticProperties
-     */
+    #[DataProvider('dataStaticProperties')]
     public function testStaticProperties(
         array $expectedRuleClassNames,
         object $source,

@@ -31,7 +31,7 @@ final class DateTest extends RuleTestCase
         $this->assertSame('date', $rule->getName());
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'php-format' => ['2021-01-01', new Date(format: 'php:Y-m-d')],
@@ -61,7 +61,7 @@ final class DateTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $invalidDateMessage = ['' => ['Value must be a date.']];
         return [

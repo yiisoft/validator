@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Translator\CategorySource;
 use Yiisoft\Translator\Message\Php\MessageSource;
@@ -44,16 +45,14 @@ final class MessagesTest extends TestCase
         );
     }
 
-    public function dataNonEmpty(): array
+    public static function dataNonEmpty(): array
     {
         return [
             ['ru'],
         ];
     }
 
-    /**
-     * @dataProvider dataNonEmpty
-     */
+    #[DataProvider('dataNonEmpty')]
     public function testNonEmpty(string $locale): void
     {
         $file = $this->getMessagesPath() . '/' . $locale . '/' . Validator::DEFAULT_TRANSLATION_CATEGORY . '.php';

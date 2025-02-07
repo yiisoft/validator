@@ -11,7 +11,7 @@ use Yiisoft\Validator\ValidationContext;
 final class ObjectWithCallbackMethod
 {
     #[Callback(method: 'validateName')]
-    private string $name;
+    private readonly string $name;
 
     public static function validateName(mixed $value, object $rule, ValidationContext $context): Result
     {

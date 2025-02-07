@@ -20,7 +20,7 @@ use function is_string;
  */
 final class ImageHandler implements RuleHandlerInterface
 {
-    private ImageInfoProviderInterface $imageInfoProvider;
+    private readonly ImageInfoProviderInterface $imageInfoProvider;
 
     public function __construct(
         ?ImageInfoProviderInterface $imageInfoProvider = null,

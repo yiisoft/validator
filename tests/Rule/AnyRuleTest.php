@@ -29,7 +29,7 @@ final class AnyRuleTest extends RuleTestCase
         $this->assertSame(AnyRule::class, $rule->getName());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             'default' => [
@@ -93,20 +93,35 @@ final class AnyRuleTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'right away' => [1, new AnyRule([new IntegerType(), new FloatType()])],
             'later' => [1.5, new AnyRule([new IntegerType(), new FloatType()])],
+            'using as attribute' => [
+                new class () {
+                    #[AnyRule([new IntegerType(), new FloatType()])]
+                    private int|float $sum = 1.5;
+                },
+                null,
+            ],
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $message = 'At least one of the inner rules must pass the validation.';
 
         return [
             'none' => ['1', new AnyRule([new IntegerType(), new FloatType()]), ['' => [$message]]],
+            'using as attribute' => [
+                new class () {
+                    #[AnyRule([new IntegerType(), new FloatType()])]
+                    private string $sum = '1.5';
+                },
+                null,
+                ['sum' => [$message]],
+            ],
         ];
     }
 

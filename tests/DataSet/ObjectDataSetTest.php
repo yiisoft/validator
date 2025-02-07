@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\DataSet;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use ReflectionProperty;
 use stdClass;
@@ -12,9 +13,12 @@ use Traversable;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Label;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\RuleInterface;
@@ -30,11 +34,12 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
 use Yiisoft\Validator\Tests\Support\Data\Post;
 use Yiisoft\Validator\Tests\Support\Data\TitleTrait;
 use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
+use Yiisoft\Validator\Tests\Support\Data\Charts\Chart;
 use Yiisoft\Validator\Validator;
 
 final class ObjectDataSetTest extends TestCase
 {
-    public function propertyVisibilityDataProvider(): array
+    public static function propertyVisibilityDataProvider(): array
     {
         return [
             [
@@ -73,9 +78,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider propertyVisibilityDataProvider
-     */
+    #[DataProvider('propertyVisibilityDataProvider')]
     public function testPropertyVisibility(
         ObjectDataSet $initialDataSet,
         array $expectedData,
@@ -99,7 +102,7 @@ final class ObjectDataSetTest extends TestCase
         }
     }
 
-    public function objectWithDataSetDataProvider(): array
+    public static function objectWithDataSetDataProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithDataSet());
 
@@ -111,9 +114,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithDataSetDataProvider
-     */
+    #[DataProvider('objectWithDataSetDataProvider')]
     public function testObjectWithDataSet(ObjectDataSet $dataSet): void
     {
         $this->assertSame(['key1' => 7, 'key2' => 42], $dataSet->getData());
@@ -128,7 +129,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertSame([], $dataSet->getRules());
     }
 
-    public function objectWithRulesProvider(): array
+    public static function objectWithRulesProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithRulesProvider());
 
@@ -140,9 +141,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithRulesProvider
-     */
+    #[DataProvider('objectWithRulesProvider')]
     public function testObjectWithRulesProvider(ObjectDataSet $dataSet): void
     {
         $rules = $dataSet->getRules();
@@ -181,7 +180,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertInstanceOf(Equal::class, $rules['age'][3]);
     }
 
-    public function objectWithDataSetAndRulesProviderDataProvider(): array
+    public static function objectWithDataSetAndRulesProviderDataProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithDataSetAndRulesProvider());
 
@@ -193,9 +192,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithDataSetAndRulesProviderDataProvider
-     */
+    #[DataProvider('objectWithDataSetAndRulesProviderDataProvider')]
     public function testObjectWithDataSetAndRulesProvider(ObjectDataSet $dataSet): void
     {
         $rules = $dataSet->getRules();
@@ -218,10 +215,9 @@ final class ObjectDataSetTest extends TestCase
     }
 
     /**
-     * @dataProvider dataCollectRules
-     *
      * @param RuleInterface[]|RuleInterface[][]|RuleInterface[][][] $expectedRules
      */
+    #[DataProvider('dataCollectRules')]
     public function testCollectRules(object $object, array $expectedRules): void
     {
         $dataSet = new ObjectDataSet($object);
@@ -234,7 +230,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertEquals($expectedRules, $actualRules);
     }
 
-    public function dataCollectRules(): array
+    public static function dataCollectRules(): array
     {
         return [
             [
@@ -298,12 +294,87 @@ final class ObjectDataSetTest extends TestCase
             ],
             [
                 new class () {
+                    #[Each([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Each([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    #[Nested([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Each([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Nested([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Each([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ],
+                ],
+            ],
+            [
+                new class () {
                     #[Length(max: 255, skipOnEmpty: true)]
                     #[Length(max: 255, skipOnEmpty: false)]
                     private $property1;
                 },
                 [
                     'property1' => [
+                        new Length(max: 255, skipOnEmpty: true),
+                        new Length(max: 255, skipOnEmpty: false),
+                    ],
+                ],
+            ],
+            [
+                new class () {
+                    #[Nested([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Nested([
+                        new Required(),
+                        new Length(max: 255, skipOnEmpty: true),
+                    ])]
+                    #[Length(max: 255, skipOnEmpty: true)]
+                    #[Length(max: 255, skipOnEmpty: false)]
+                    private $property1;
+                },
+                [
+                    'property1' => [
+                        new Nested([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
+                        new Nested([
+                            new Required(),
+                            new Length(max: 255, skipOnEmpty: true),
+                        ]),
                         new Length(max: 255, skipOnEmpty: true),
                         new Length(max: 255, skipOnEmpty: false),
                     ],
@@ -357,7 +428,7 @@ final class ObjectDataSetTest extends TestCase
         $dataSet->getRules();
     }
 
-    public function objectWithDynamicDataSetProvider(): array
+    public static function objectWithDynamicDataSetProvider(): array
     {
         return [
             [
@@ -371,9 +442,7 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithDynamicDataSetProvider
-     */
+    #[DataProvider('objectWithDynamicDataSetProvider')]
     public function testObjectWithDynamicDataSet(ObjectDataSet $dataSet, array $expectedData): void
     {
         $this->assertSame($expectedData, $dataSet->getData());
@@ -400,7 +469,7 @@ final class ObjectDataSetTest extends TestCase
         $this->assertFalse($objectDataSet->hasProperty('non-existing-key'));
     }
 
-    public function objectWithLabelsProvider(): array
+    public static function objectWithLabelsProvider(): array
     {
         $dataSet = new ObjectDataSet(new ObjectWithLabelsProvider());
         $expectedResult = ['name' => 'Имя', 'age' => 'Возраст'];
@@ -424,11 +493,40 @@ final class ObjectDataSetTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider objectWithLabelsProvider
-     */
+    #[DataProvider('objectWithLabelsProvider')]
     public function testObjectWithLabelsProvider(ObjectDataSet $dataSet, array $expected): void
     {
         $this->assertSame($expected, $dataSet->getValidationPropertyLabels());
+    }
+
+    public function testMoreComplexEmbeddedRule(): void
+    {
+        $dataSet = new ObjectDataSet(new Chart());
+        $expectedRules = [
+            'points' => [
+                new Each([
+                    new Nested([
+                        'coordinates' => new Each([
+                            new Nested(
+                                [
+                                    'x' => [new Number(min: -10, max: 10)],
+                                    'y' => [new Number(min: -10, max: 10)],
+                                ],
+                                requirePropertyPath: true,
+                                noPropertyPathMessage: 'Custom message 4.',
+                            ),
+                        ]),
+                        'rgb' => [
+                            new Count(3),
+                            new Each(
+                                [new Number(min: 0, max: 255)],
+                                incorrectInputMessage: 'Custom message 5.',
+                            ),
+                        ],
+                    ]),
+                ]),
+            ],
+        ];
+        $this->assertEquals($expectedRules, $dataSet->getRules());
     }
 }

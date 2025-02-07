@@ -25,7 +25,7 @@ final class TimeTest extends RuleTestCase
         $this->assertSame('date', $rule->getName());
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             'php-format' => ['12:34', new Time(format: 'php:H:i')],
@@ -47,7 +47,7 @@ final class TimeTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $invalidDateMessage = ['' => ['Value must be a time.']];
         return [

@@ -41,7 +41,7 @@
         "jetbrains/phpstorm-attributes": "^1.2",
         "maglnet/composer-require-checker": "^4.7.1",
         "phpbench/phpbench": "^1.4",
-        "phpunit/phpunit": "^9.6.22",
+        "phpunit/phpunit": "^10.5.45",
         "rector/rector": "^2.0.8",
         "roave/infection-static-analysis-plugin": "^1.35",
         "spatie/phpunit-watcher": "^1.24",
@@ -84,7 +84,7 @@
         "allow-plugins": {
             "infection/extension-installer": true,
             "composer/package-versions-deprecated": true,
-            "yiisoft/config": true
+            "yiisoft/config": false
         }
     },
     "scripts": {

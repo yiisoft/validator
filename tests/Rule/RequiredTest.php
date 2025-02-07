@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Closure;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yiisoft\Validator\EmptyCondition\NeverEmpty;
 use Yiisoft\Validator\EmptyCondition\WhenNull;
 use Yiisoft\Validator\Rule\Required;
@@ -36,7 +37,7 @@ final class RequiredTest extends RuleTestCase
         $this->assertFalse($rule->shouldSkipOnError());
     }
 
-    public function dataGetEmptyCondition(): array
+    public static function dataGetEmptyCondition(): array
     {
         return [
             'skip on null' => [new WhenNull(), WhenNull::class],
@@ -44,9 +45,7 @@ final class RequiredTest extends RuleTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataGetEmptyCondition
-     */
+    #[DataProvider('dataGetEmptyCondition')]
     public function testGetEmptyCondition(?callable $callback, string $expectedCallbackClassName): void
     {
         $rule = new Required(emptyCondition: $callback);
@@ -54,7 +53,7 @@ final class RequiredTest extends RuleTestCase
         $this->assertInstanceOf($expectedCallbackClassName, $rule->getEmptyCondition());
     }
 
-    public function dataOptions(): array
+    public static function dataOptions(): array
     {
         return [
             [
@@ -74,7 +73,7 @@ final class RequiredTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationPassed(): array
+    public static function dataValidationPassed(): array
     {
         return [
             ['not empty', [new Required()]],
@@ -86,7 +85,7 @@ final class RequiredTest extends RuleTestCase
         ];
     }
 
-    public function dataValidationFailed(): array
+    public static function dataValidationFailed(): array
     {
         $singleMessageCannotBeBlank = ['' => ['Value cannot be blank.']];
 

@@ -9,7 +9,7 @@ use Yiisoft\Validator\RuleInterface;
 final class RuleWithCustomHandler implements RuleInterface
 {
     public function __construct(
-        private string $handlerClassName,
+        private readonly string $handlerClassName,
     ) {
     }
 

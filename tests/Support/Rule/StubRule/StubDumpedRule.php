@@ -8,7 +8,7 @@ use Yiisoft\Validator\DumpedRuleInterface;
 
 final class StubDumpedRule implements DumpedRuleInterface
 {
-    public function __construct(private string $name, private array $options)
+    public function __construct(private readonly string $name, private readonly array $options)
     {
     }
 
