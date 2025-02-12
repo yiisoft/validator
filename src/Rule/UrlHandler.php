@@ -91,6 +91,9 @@ final class UrlHandler implements RuleHandlerInterface
             return $this->idnToAscii($value);
         }
 
+        /**
+         * @var string We use correct regular expression, so `preg_replace_callback()` never returns `null`.
+         */
         return preg_replace_callback(
             '/:\/\/([^\/]+)/',
             fn ($matches) => '://' . $this->idnToAscii($matches[1]),
