@@ -68,6 +68,10 @@ final class UrlHandler implements RuleHandlerInterface
      */
     private function idnToAscii(string $idn): string
     {
+        if (empty($idn)) {
+            return '';
+        }
+
         $result = idn_to_ascii($idn);
 
         return $result === false ? '' : $result;

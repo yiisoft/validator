@@ -8,6 +8,7 @@
 - Chg #758: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
 - Chg #758: Bump `yiisoft/strings` version to `^2.6` (@vjik)
 - Enh #758: Minor refactoring with PHP 8.1 features usage (@vjik)
+- Bug #758: Fix `URL` handler for PHP 8.4 when value is empty string (@vjik)
 
 ## 2.1.0 September 12, 2024
 
