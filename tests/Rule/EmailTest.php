@@ -167,6 +167,10 @@ final class EmailTest extends RuleTestCase
             ['ipetrov@gmail.com', [new Email(allowName: true, checkDns: true)]],
             ['Ivan Petrov <ipetrov@gmail.com>', [new Email(allowName: true, checkDns: true)]],
             ['name@ñandu.cl', [new Email(checkDns: true, enableIdn: true)]],
+            'success-edge-case-1' => [
+                'custom-email-test',
+                new Email(enableIdn: true, idnEmailPattern: '/.*/'),
+            ],
         ];
     }
 
@@ -302,11 +306,11 @@ final class EmailTest extends RuleTestCase
                 ['data' => new Email(checkDns: true, message: 'Property - {property}, value - {value}.')],
                 ['data' => ['Property - data, value - test@nonexistingsubdomain.example.com.']],
             ],
-            'edge-case-1' => [
+            'fail-edge-case-1' => [
                 'test@-example.com',
                 new Email(enableIdn: true, checkDns: true, pattern: '/.*/'),
                 ['' => ['Value is not a valid email address.']],
-            ]
+            ],
         ];
     }
 
