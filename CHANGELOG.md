@@ -6,6 +6,7 @@
   specified rules is used (@DAGpro)
 - Bug #756: Fix russian translation of error message for `FilledAtLeast` rule (@vjik)
 - Enh #758: Minor refactoring with PHP 8.1 features usage (@vjik)
+- Bug #760: Fix bug in `Email` rule in edge case when enabled IDN, check DNS and used custom pattern (@vjik)
 
 ## 2.1.0 September 12, 2024
 

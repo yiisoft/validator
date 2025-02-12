@@ -302,6 +302,11 @@ final class EmailTest extends RuleTestCase
                 ['data' => new Email(checkDns: true, message: 'Property - {property}, value - {value}.')],
                 ['data' => ['Property - data, value - test@nonexistingsubdomain.example.com.']],
             ],
+            'edge-case-1' => [
+                'test@-example.com',
+                new Email(enableIdn: true, checkDns: true, pattern: '/.*/'),
+                ['' => ['Value is not a valid email address.']],
+            ]
         ];
     }
 
