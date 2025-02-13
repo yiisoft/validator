@@ -5,10 +5,10 @@
 - Bug #748: Fix hook processing for nested objects that implement `PostValidationHookInterface` when `Nested` rule with
   specified rules is used (@DAGpro)
 - Bug #756: Fix russian translation of error message for `FilledAtLeast` rule (@vjik)
-- Chg #758: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
-- Chg #758: Bump `yiisoft/strings` version to `^2.6` (@vjik)
+- Chg #761: Change PHP constraint in `composer.json` to `~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0` (@vjik)
+- Chg #761: Bump `yiisoft/strings` version to `^2.6` (@vjik)
 - Enh #758: Minor refactoring with PHP 8.1 features usage (@vjik)
-- Bug #758: Fix `URL` handler for PHP 8.4 when value is empty string (@vjik)
+- Bug #761: Fix `URL` handler for PHP 8.4 when value is empty string (@vjik)
 - Bug #760: Fix bug in `Email` rule in edge case when enabled IDN, check DNS and used custom pattern (@vjik)
 
 ## 2.1.0 September 12, 2024
