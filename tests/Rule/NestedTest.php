@@ -1051,6 +1051,10 @@ final class NestedTest extends RuleTestCase
                 ['user' => ['age' => 19]],
                 [new Nested(new ArrayObject(['user.age' => new Number(min: 18)]))],
             ],
+            'empty-key' => [
+                ['' => 17],
+                new Nested(['' => new Integer(min: 15)]),
+            ],
         ];
     }
 
@@ -1317,6 +1321,13 @@ final class NestedTest extends RuleTestCase
                 ]),
                 [
                     'user.name' => ['name is required.'],
+                ],
+            ],
+            'empty-key' => [
+                ['' => 17],
+                new Nested(['' => new Integer(min: 19)]),
+                [
+                    '' => [' must be no less than 19.'],
                 ],
             ],
         ];
