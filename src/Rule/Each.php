@@ -113,6 +113,7 @@ final class Each implements
      * rules gave an error. See {@see SkipOnErrorInterface}.
      * @param Closure|null $when A callable to define a condition for applying this `Each` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
+     * @param bool $stopOnError Whether to stop applying rules when an error occurred. Defaults to `false`.
      *
      * @psalm-param SkipOnEmptyValue $skipOnEmpty
      * @psalm-param WhenType $when
@@ -125,6 +126,7 @@ final class Each implements
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private Closure|null $when = null,
+        public readonly bool $stopOnError = false,
     ) {
         $this->rules = RulesNormalizer::normalize($rules);
         $this->skipOnEmpty = $skipOnEmpty;
@@ -185,6 +187,7 @@ final class Each implements
         'incorrectInputKeyMessage' => 'array',
         'skipOnEmpty' => 'bool',
         'skipOnError' => 'bool',
+        'stopOnError' => 'bool',
         'rules' => 'array',
     ])]
     public function getOptions(): array
@@ -200,6 +203,7 @@ final class Each implements
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),
             'skipOnError' => $this->skipOnError,
+            'stopOnError' => $this->stopOnError,
             'rules' => RulesDumper::asArray($this->rules),
         ];
     }

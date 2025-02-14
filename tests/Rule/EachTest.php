@@ -9,8 +9,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\EachHandler;
+use Yiisoft\Validator\Rule\Integer;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
@@ -60,6 +62,7 @@ final class EachTest extends RuleTestCase
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'stopOnError' => false,
                     'rules' => [
                         [
                             [
@@ -135,6 +138,7 @@ final class EachTest extends RuleTestCase
                     ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
+                    'stopOnError' => false,
                     'rules' => [
                         [
                             [
@@ -195,14 +199,10 @@ final class EachTest extends RuleTestCase
                 [
                     'items' => [
                         new Each([
-                            new Callback(callback: function (array $item) {
-                                return new Result();
-                            }),
+                            new Callback(callback: static fn() => new Result()),
                         ]),
                         new Each([
-                            new Callback(callback: function (array $item) {
-                                return new Result();
-                            }),
+                            new Callback(callback: static fn() => new Result()),
                         ]),
                     ],
                 ],
@@ -349,6 +349,45 @@ final class EachTest extends RuleTestCase
                     'a' => ['A must be a string.'],
                     'b.0' => ['B must be a string.'],
                     'b.1' => ['B must be a string.'],
+                ],
+            ],
+            'stop on error' => [
+                [10, 20, 30],
+                new Each(new Integer(max: 15), stopOnError: true),
+                [
+                    1 => ['Value must be no greater than 15.'],
+                ],
+            ],
+            'stop on error, array of rules' => [
+                [10, 20, 30],
+                new Each([new Integer(max: 15), new Integer(max: 14)], stopOnError: true),
+                [
+                    1 => [
+                        'Value must be no greater than 15.',
+                        'Value must be no greater than 14.',
+                    ],
+                ],
+            ],
+            'stop on error, other rule' => [
+                [10, 20, 30],
+                [
+                    new Each(new Integer(max: 15), stopOnError: true),
+                    new Count(max: 2),
+                ],
+                [
+                    1 => ['Value must be no greater than 15.'],
+                    '' => ['Value must contain at most 2 items.'],
+                ],
+            ],
+            'stop on error, nested' => [
+                [[10, 20, 30], [11, 12, 13], [20, 30, 40]],
+                new Each(
+                    new Each(new Integer(max: 15)),
+                    stopOnError: true
+                ),
+                [
+                    '0.1' => ['Value must be no greater than 15.'],
+                    '0.2' => ['Value must be no greater than 15.'],
                 ],
             ],
         ];

@@ -24,7 +24,6 @@ final class EachHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Each::class, $rule);
         }
 
-        /** @var mixed $value */
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
         if (!is_iterable($value)) {
             return (new Result())->addError($rule->getIncorrectInputMessage(), [
@@ -39,7 +38,6 @@ final class EachHandler implements RuleHandlerInterface
 
         $originalEachKey = $context->getParameter(Each::PARAMETER_EACH_KEY);
 
-        /** @var mixed $item */
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
                 return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
@@ -62,6 +60,10 @@ final class EachHandler implements RuleHandlerInterface
                     $error->getParameters(),
                     $error->getValuePath() === [] ? [$index] : [$index, ...$error->getValuePath()],
                 );
+            }
+
+            if ($rule->stopOnError) {
+                return $result;
             }
         }
 

@@ -2,6 +2,7 @@
 
 ## 2.1.1 under development
 
+- New #762: Add `stopOnError` parameter to `Each` rule (@vjik)
 - Bug #748: Fix hook processing for nested objects that implement `PostValidationHookInterface` when `Nested` rule with
   specified rules is used (@DAGpro)
 - Bug #756: Fix russian translation of error message for `FilledAtLeast` rule (@vjik)
