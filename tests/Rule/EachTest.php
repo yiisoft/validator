@@ -358,6 +358,16 @@ final class EachTest extends RuleTestCase
                     1 => ['Value must be no greater than 15.'],
                 ],
             ],
+            'stop on error, array of rules' => [
+                [10, 20, 30],
+                new Each([new Integer(max: 15), new Integer(max: 14)], stopOnError: true),
+                [
+                    1 => [
+                        'Value must be no greater than 15.',
+                        'Value must be no greater than 14.',
+                    ],
+                ],
+            ],
             'stop on error, other rule' => [
                 [10, 20, 30],
                 [
