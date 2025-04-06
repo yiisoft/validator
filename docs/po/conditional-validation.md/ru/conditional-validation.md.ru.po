@@ -6,16 +6,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-06 06:46+0000\n"
-"PO-Revision-Date: 2025-04-06 06:46+0000\n"
+"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"PO-Revision-Date: 2025-04-06 07:24+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. type: Title #
 #: guide/en/conditional-validation.md
@@ -25,10 +24,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"Rules contain several options for skipping themselves under certain "
-"conditions. Not every rule supports all of these options, but the vast "
-"majority do."
+msgid "Rules contain several options for skipping themselves under certain conditions. Not every rule supports all of these options, but the vast majority do."
 msgstr ""
 
 #. type: Title ##
@@ -39,17 +35,12 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"By default, if an error occurs while validating a property, all further "
-"rules in the set are processed. To change this behavior, use `skipOnError: "
-"true` for rules that need to be skipped:"
+msgid "By default, if an error occurs while validating a property, all further rules in the set are processed. To change this behavior, use `skipOnError: true` for rules that need to be skipped:"
 msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"In the following example, checking the length of a username is skipped if "
-"the username is not filled."
+msgid "In the following example, checking the length of a username is skipped if the username is not filled."
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -84,16 +75,12 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"Note that this setting must be set for each rule that needs to be skipped on "
-"error."
+msgid "Note that this setting must be set for each rule that needs to be skipped on error."
 msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"The same effect can be achieved with `StopOnError` and `Composite` rules, "
-"which can be more convenient for a larger number of rules."
+msgid "The same effect can be achieved with `StopOnError` and `Composite` rules, which can be more convenient for a larger number of rules."
 msgstr ""
 
 #. type: Plain text
@@ -161,10 +148,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"By default, missing/empty values of properties are validated. If the value "
-"is missing, it is assumed to be `null`.  If you want the property to be "
-"optional, use `skipOnEmpty: true`."
+msgid "By default, missing/empty values of properties are validated. If the value is missing, it is assumed to be `null`.  If you want the property to be optional, use `skipOnEmpty: true`."
 msgstr ""
 
 #. type: Plain text
@@ -190,13 +174,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"If the property is required, it is more appropriate to use `skipOnError: "
-"true` along with the preceding `Required` rule instead of `skipOnEmpty: "
-"true`. This is because the detection of empty values within the `Required` "
-"rule and skipping in further rules can be set separately. This is described "
-"in more detail below, see [Configuring empty condition in other rules] "
-"section."
+msgid "If the property is required, it is more appropriate to use `skipOnError: true` along with the preceding `Required` rule instead of `skipOnEmpty: true`. This is because the detection of empty values within the `Required` rule and skipping in further rules can be set separately. This is described in more detail below, see [Configuring empty condition in other rules] section."
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -230,21 +208,12 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"The value passed to `skipOnEmpty` is called \"empty condition\". Due to "
-"normalization the following shortcut values are supported:"
+msgid "The value passed to `skipOnEmpty` is called \"empty condition\". Due to normalization the following shortcut values are supported:"
 msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"- When `false` or `null`, `Yiisoft\\Validator\\EmptyCondition\\NeverEmpty` "
-"is used automatically as a callback - every value is considered non-empty "
-"and validated without skipping (default).  - When `true`, "
-"`Yiisoft\\Validator\\EmptyCondition\\WhenEmpty` is used automatically as a "
-"callback - only passed (corresponding property must be present) and non-"
-"empty values (not `null`, `[]`, or `''`) are validated.  - If a custom "
-"callback is set, it is used to determine emptiness."
+msgid "- When `false` or `null`, `Yiisoft\\Validator\\EmptyCondition\\NeverEmpty` is used automatically as a callback - every value is considered non-empty and validated without skipping (default).  - When `true`, `Yiisoft\\Validator\\EmptyCondition\\WhenEmpty` is used automatically as a callback - only passed (corresponding property must be present) and non-empty values (not `null`, `[]`, or `''`) are validated.  - If a custom callback is set, it is used to determine emptiness."
 msgstr ""
 
 #. type: Plain text
@@ -254,30 +223,22 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"There are some more conditions that have no shortcuts and need to be set "
-"explicitly because they are less used:"
+msgid "There are some more conditions that have no shortcuts and need to be set explicitly because they are less used:"
 msgstr ""
 
 #. type: Bullet: '- '
 #: guide/en/conditional-validation.md
-msgid ""
-"`Yiisoft\\Validator\\EmptyCondition\\WhenMissing` - a value is treated as "
-"empty only when it is missing (not passed at all)."
+msgid "`Yiisoft\\Validator\\EmptyCondition\\WhenMissing` - a value is treated as empty only when it is missing (not passed at all)."
 msgstr ""
 
 #. type: Bullet: '- '
 #: guide/en/conditional-validation.md
-msgid ""
-"`Yiisoft\\Validator\\EmptyCondition\\WhenNull` - limits empty values to "
-"`null` only."
+msgid "`Yiisoft\\Validator\\EmptyCondition\\WhenNull` - limits empty values to `null` only."
 msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"An example with using `WhenNull` as parameter (note that an instance is "
-"passed, not a class name):"
+msgid "An example with using `WhenNull` as parameter (note that an instance is passed, not a class name):"
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -298,10 +259,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"For even more customization you can use your own class that implements the "
-"`__invoke()` magic method. Here is an example where a value is empty only if "
-"it is missing (when using properties) or equals exactly to zero."
+msgid "For even more customization you can use your own class that implements the `__invoke()` magic method. Here is an example where a value is empty only if it is missing (when using properties) or equals exactly to zero."
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -353,9 +311,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"For multiple rules, this can also be more conveniently set at the validator "
-"level:"
+msgid "For multiple rules, this can also be more conveniently set at the validator level:"
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -383,11 +339,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"Some rules, such as `Required` can't be skipped for empty values - that "
-"would defeat the purpose of the rule.  However, empty condition can be "
-"configured here for detecting when a value is empty. Note - this does not "
-"skip the rule.  It only determines what the empty condition is:"
+msgid "Some rules, such as `Required` can't be skipped for empty values - that would defeat the purpose of the rule.  However, empty condition can be configured here for detecting when a value is empty. Note - this does not skip the rule.  It only determines what the empty condition is:"
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -405,9 +357,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"It is also possible to set it globally for all rules of this type at the "
-"handler level via `RequiredHandler::$defaultEmptyCondition`."
+msgid "It is also possible to set it globally for all rules of this type at the handler level via `RequiredHandler::$defaultEmptyCondition`."
 msgstr ""
 
 #. type: Title ##
@@ -418,10 +368,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"`when` provides the option to apply the rule depending on a condition of the "
-"provided callable. A callable's result determines if the rule will be "
-"skipped. The signature of the function is the following:"
+msgid "`when` provides the option to apply the rule depending on a condition of the provided callable. A callable's result determines if the rule will be skipped. The signature of the function is the following:"
 msgstr ""
 
 #. type: Fenced code block (php)
@@ -447,9 +394,7 @@ msgstr ""
 
 #. type: Bullet: '- '
 #: guide/en/conditional-validation.md
-msgid ""
-"`true` as a returned value means that the rule must be applied and a `false` "
-"means it must be skipped."
+msgid "`true` as a returned value means that the rule must be applied and a `false` means it must be skipped."
 msgstr ""
 
 #. type: Plain text
@@ -486,10 +431,7 @@ msgstr ""
 
 #. type: Plain text
 #: guide/en/conditional-validation.md
-msgid ""
-"As an alternative to functions, callable classes can be used instead. This "
-"approach has the advantage of code reusability.  See the [Skip on empty] "
-"section for an example."
+msgid "As an alternative to functions, callable classes can be used instead. This approach has the advantage of code reusability.  See the [Skip on empty] section for an example."
 msgstr ""
 
 #. type: Link reference
