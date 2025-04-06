@@ -1,0 +1,118 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-04-06 06:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Title #
+#: guide/en/README.md
+#, no-wrap
+msgid "Yii Validator"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/README.md
+#, no-wrap
+msgid "Validation"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Using validator](using-validator.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Result](result.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Conditional validation](conditional-validation.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Customizing error messages](customizing-error-messages.md)"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/README.md guide/en/using-validator.md
+#, no-wrap
+msgid "Rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Built-in rules](built-in-rules.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[Callback](built-in-rules-callback.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[Composite](built-in-rules-composite.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[Each](built-in-rules-each.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[Nested](built-in-rules-nested.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[Required](built-in-rules-required.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[StopOnError](built-in-rules-stop-on-error.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid ""
+"[Configuring rules via PHP attributes](configuring-rules-via-php-attributes."
+"md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Creating custom rules](creating-custom-rules.md)"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/README.md
+#, no-wrap
+msgid "Miscellaneous"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Client-side validation](client-side-validation.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md
+msgid "[Extensions](extensions.md)"
+msgstr ""

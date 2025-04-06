@@ -1,0 +1,287 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-04-06 06:46+0000\n"
+"PO-Revision-Date: 2025-04-06 06:46+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Title #
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "Customizing error messages"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"To use a non-default error message, pass a custom message/template when "
+"creating a validation rule. Generally the `message` option is responsible "
+"for storing error message:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "new Required(message: '{Property} is required.');\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"Some rules have multiple error messages and are overridden via different "
+"corresponding options.  It is easy to differentiate them from the rest of "
+"the parameters by `Message` suffix:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"\n"
+"new Length(  \n"
+"    min: 4,  \n"
+"    max: 10,\n"
+"    lessThanMinMessage: '{Property} is too short.',  \n"
+"    greaterThanMaxMessage: '{Property} is too long.',  \n"
+");\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"A full list of supported placeholders with descriptions is available in "
+"PHPDoc for each message."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "Translating error messages"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"The translation of error messages is implemented with the help of [Yii "
+"Translator] package, using messages in English language as a source. The "
+"translations are stored in a regular PHP file in associative array form, "
+"where keys are original messages and values are translations."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"To use the translations, it's required to install an additional package for "
+"support of reading them from PHP files:"
+msgstr ""
+
+#. type: Fenced code block (shell)
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "composer require yiisoft/translator-message-php\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"When using a validator within the Yii ecosystem (an application uses [Yii "
+"Config] and the validator is obtained as a dependency via [Yii DI] "
+"container), the translations are plugged in automatically. Otherwise, a "
+"translator object must be created and configured manually. For example, like "
+"this:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Translator\\CategorySource;\n"
+"use Yiisoft\\Translator\\Message\\Php\\MessageSource;\n"
+"use Yiisoft\\Translator\\SimpleMessageFormatter;\n"
+"use Yiisoft\\Translator\\Translator;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$translationsPath = '/app/vendor/yiisoft/validator/messages';\n"
+"$categorySource = new CategorySource(\n"
+"    Validator::DEFAULT_TRANSLATION_CATEGORY,\n"
+"    new MessageSource($translationsPath),\n"
+"    new SimpleMessageFormatter(),\n"
+");\n"
+"$translator = new Translator(locale: 'ru');\n"
+"$translator->addCategorySources($categorySource);\n"
+"\n"
+"$validator = new Validator(translator: $translator);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"You can check the available translations by viewing subfolders of the "
+"`messages` folder. If a required language is missing, feel free to submit a "
+"[PR]."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "Translating property names"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"Almost all error templates have support for a `{property}` placeholder which "
+"is substituted with an actual property name that was set during rules "
+"configuration. By default, a property name is formatted as is. It can be "
+"acceptable for English language (for example, `currentPassword is required."
+"`), but when using translations for error messages, it's better to provide "
+"an additional property translation."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"There is a separate interface called `PropertyTranslatorInterface` to solve "
+"exactly this task. It ships with 3 implementations out of the box:"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"- `ArrayPropertyTranslator` - uses an associative array, where keys are "
+"initial property names and values are their corresponding translated "
+"versions.  - `TranslatorPropertyTranslator` - uses [Yii Translator].  - "
+"`NullPropertyTranslator` - dummy translator, returns property name as is "
+"without translation."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid "There are several ways to use property translator."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "Passing translator to validator instance"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"It's quite self-explanatory, just create a property translator, define all "
+"translations, and pass it to the newly created validator instance. An "
+"example for Russian language:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\PropertyTranslator\\ArrayPropertyTranslator;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$propertyTranslator = new ArrayPropertyTranslator([\n"
+"    'currentPassword' => 'Текущий пароль',\n"
+"    'newPassword' => 'Новый пароль',\n"
+"]);\n"
+"$validator = new Validator(defaultPropertyTranslator: $propertyTranslator);\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "Passing within a data object for validation"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"Another option is providing translations in the validated data object "
+"itself. This approach can be used to create a form classes for example."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid ""
+"There is another special interface called "
+"`PropertyTranslatorProviderInterface` for this case allowing the validator "
+"to extract translations from the objects implementing it. An example for "
+"Russian language:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\PropertyTranslator\\ArrayPropertyTranslator;\n"
+"use Yiisoft\\Validator\\PropertyTranslatorInterface;\n"
+"use Yiisoft\\Validator\\PropertyTranslatorProviderInterface;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"final class ChangePasswordForm implements PropertyTranslatorProviderInterface  \n"
+"{  \n"
+"    public function __construct(  \n"
+"        #[Required(message: '{Property} обязателен.')]  \n"
+"        public string $currentPassword = '',  \n"
+"  \n"
+"        #[Length(  \n"
+"            min: 8,\n"
+"            skipOnEmpty: false,  \n"
+"            lessThanMinMessage: '{Property} должен быть сложный, не менее 8 символов.'  \n"
+"        )]  \n"
+"        public string $newPassword = '',  \n"
+"    ) {  \n"
+"    }  \n"
+"  \n"
+"    public function getPropertyTranslator(): ?PropertyTranslatorInterface  \n"
+"    {  \n"
+"        return new ArrayPropertyTranslator([  \n"
+"            'currentPassword' => 'Текущий пароль',  \n"
+"            'newPassword' => 'Новый пароль',  \n"
+"        ]);  \n"
+"    }  \n"
+"}\n"
+"\n"
+"$form = new ChangePasswordForm();    \n"
+"$result = (new Validator())->validate($form);\n"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "[PR]: https://github.com/yiisoft/validator/pulls"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "[Yii Translator]: https://github.com/yiisoft/translator"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "[Yii Config]: https://github.com/yiisoft/config"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md
+#, no-wrap
+msgid "[Yii DI]: https://github.com/yiisoft/di"
+msgstr ""

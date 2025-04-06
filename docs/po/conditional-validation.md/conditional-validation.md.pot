@@ -1,0 +1,504 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-04-06 06:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Title #
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "Conditional validation"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"Rules contain several options for skipping themselves under certain "
+"conditions. Not every rule supports all of these options, but the vast "
+"majority do."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "`skipOnError` - skip a rule in the set if the previous one failed"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"By default, if an error occurs while validating a property, all further "
+"rules in the set are processed. To change this behavior, use `skipOnError: "
+"true` for rules that need to be skipped:"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"In the following example, checking the length of a username is skipped if "
+"the username is not filled."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Regex;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'name' => [\n"
+"        // Validated.\n"
+"        new Required(),\n"
+"        // Skipped because \"name\" is required but not filled.\n"
+"        new Length(min: 4, max: 20, skipOnError: true),\n"
+"        // Validated because \"skipOnError\" is \"false\" by default. Set to \"true\" to skip it as well.\n"
+"        new Regex('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$'),\n"
+"    ],\n"
+"    'age' => [\n"
+"        // Validated because \"age\" is a different property with its own set of rules.\n"
+"        new Required(),\n"
+"        // Validated because \"skipOnError\" is \"false\" by default. Set to \"true\" to skip it as well.\n"
+"        new Number(min: 21),\n"
+"    ],\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"Note that this setting must be set for each rule that needs to be skipped on "
+"error."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"The same effect can be achieved with `StopOnError` and `Composite` rules, "
+"which can be more convenient for a larger number of rules."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "Using `StopOnError`:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Regex;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Rule\\StopOnError;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'name' => new StopOnError([\n"
+"        new Required(),\n"
+"        new Length(min: 4, max: 20),\n"
+"        new Regex('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$'),\n"
+"    ]),\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "Using `Composite`:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Regex;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'name' => [\n"
+"        new Required(),\n"
+"        new Composite(\n"
+"            [\n"
+"                new Length(min: 4, max: 20),\n"
+"                new Regex('^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$'),\n"
+"            ],\n"
+"            skipOnError: true,\n"
+"        )\n"
+"    ],\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "`skipOnEmpty` - skipping a rule if the validated value is \"empty\""
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"By default, missing/empty values of properties are validated. If the value "
+"is missing, it is assumed to be `null`.  If you want the property to be "
+"optional, use `skipOnEmpty: true`."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "An example with an optional language property:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\In;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'language' => [\n"
+"        new In(['ru', 'en'], skipOnEmpty: true),\n"
+"    ],\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"If the property is required, it is more appropriate to use `skipOnError: "
+"true` along with the preceding `Required` rule instead of `skipOnEmpty: "
+"true`. This is because the detection of empty values within the `Required` "
+"rule and skipping in further rules can be set separately. This is described "
+"in more detail below, see [Configuring empty condition in other rules] "
+"section."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\In;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'language' => [\n"
+"        new Required(),\n"
+"        new In(['ru', 'en'], skipOnError: true),\n"
+"    ],\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "Empty condition basics"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "What is considered empty can vary depending on the scope of usage."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"The value passed to `skipOnEmpty` is called \"empty condition\". Due to "
+"normalization the following shortcut values are supported:"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"- When `false` or `null`, `Yiisoft\\Validator\\EmptyCondition\\NeverEmpty` "
+"is used automatically as a callback - every value is considered non-empty "
+"and validated without skipping (default).  - When `true`, "
+"`Yiisoft\\Validator\\EmptyCondition\\WhenEmpty` is used automatically as a "
+"callback - only passed (corresponding property must be present) and non-"
+"empty values (not `null`, `[]`, or `''`) are validated.  - If a custom "
+"callback is set, it is used to determine emptiness."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "`false` is usually more suitable for HTML forms and `true` for APIs."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"There are some more conditions that have no shortcuts and need to be set "
+"explicitly because they are less used:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/conditional-validation.md
+msgid ""
+"`Yiisoft\\Validator\\EmptyCondition\\WhenMissing` - a value is treated as "
+"empty only when it is missing (not passed at all)."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/conditional-validation.md
+msgid ""
+"`Yiisoft\\Validator\\EmptyCondition\\WhenNull` - limits empty values to "
+"`null` only."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"An example with using `WhenNull` as parameter (note that an instance is "
+"passed, not a class name):"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"use Yiisoft\\Validator\\EmptyCondition\\WhenNull;\n"
+"\n"
+"new Integer(max: 100, skipOnEmpty: new WhenNull());\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "Custom empty condition"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"For even more customization you can use your own class that implements the "
+"`__invoke()` magic method. Here is an example where a value is empty only if "
+"it is missing (when using properties) or equals exactly to zero."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class WhenZero\n"
+"{\n"
+"    public function __invoke(mixed $value, bool $isPropertyMissing): bool\n"
+"    {\n"
+"        return $isPropertyMissing || $value === 0;\n"
+"    }\n"
+"}\n"
+"\n"
+"new Integer(max: 100, skipOnEmpty: new WhenZero());\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "or just a callable:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Integer(\n"
+"    max: 100,\n"
+"    skipOnEmpty: static function (mixed $value, bool $isPropertyMissing): bool {\n"
+"        return $isPropertyMissing || $value === 0;\n"
+"    }\n"
+");\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "Using the class has the benefit of the code reusability."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "Using the same non-default empty condition for all the rules"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"For multiple rules, this can also be more conveniently set at the validator "
+"level:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\RuleHandlerResolver\\SimpleRuleHandlerContainer;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$validator = new Validator(skipOnEmpty: true); // Using the shortcut.\n"
+"$validator = new Validator(\n"
+"    new SimpleRuleHandlerContainer(),\n"
+"    // Using the custom callback.\n"
+"    skipOnEmpty: static function (mixed $value, bool $isPropertyMissing): bool {\n"
+"        return $value === 0;\n"
+"    }\n"
+");\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "Configuring empty condition in other rules"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"Some rules, such as `Required` can't be skipped for empty values - that "
+"would defeat the purpose of the rule.  However, empty condition can be "
+"configured here for detecting when a value is empty. Note - this does not "
+"skip the rule.  It only determines what the empty condition is:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$rule = new Required(\n"
+"    emptyCondition: static function (mixed $value, bool $isPropertyMissing): bool {\n"
+"        return $isPropertyMissing || $value === '';\n"
+"    },\n"
+");\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"It is also possible to set it globally for all rules of this type at the "
+"handler level via `RequiredHandler::$defaultEmptyCondition`."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "`when`"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"`when` provides the option to apply the rule depending on a condition of the "
+"provided callable. A callable's result determines if the rule will be "
+"skipped. The signature of the function is the following:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "function (mixed $value, ValidationContext $context): bool;\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid "where:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/conditional-validation.md
+msgid "`$value` is a validated value;"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/conditional-validation.md
+msgid "`$context` is a validation context;"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/conditional-validation.md
+msgid ""
+"`true` as a returned value means that the rule must be applied and a `false` "
+"means it must be skipped."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"In this example the state is only required when the country is `Brazil`. `$context->getDataSet()->getPropertyValue()`\n"
+"method allows you to get any other property's value within the `ValidationContext`.\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'country' => [\n"
+"        new Required(),\n"
+"        new Length(min: 2),\n"
+"    ],\n"
+"    'state' => new Required(\n"
+"        when: static function (mixed $value, ValidationContext $context): bool {\n"
+"            return $context->getDataSet()->getPropertyValue('country') === 'Brazil';\n"
+"        },\n"
+"    )\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/conditional-validation.md
+msgid ""
+"As an alternative to functions, callable classes can be used instead. This "
+"approach has the advantage of code reusability.  See the [Skip on empty] "
+"section for an example."
+msgstr ""
+
+#. type: Link reference
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "[Configuring empty condition in other rules]: #configuring-empty-condition-in-other-rules"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/conditional-validation.md
+#, no-wrap
+msgid "[Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty"
+msgstr ""

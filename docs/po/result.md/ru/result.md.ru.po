@@ -1,0 +1,561 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-04-06 06:46+0000\n"
+"PO-Revision-Date: 2025-04-06 06:46+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Title #
+#: guide/en/result.md
+#, no-wrap
+msgid "Result"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"The validation result is an object containing of errors occurred during "
+"validation."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/result.md
+#, no-wrap
+msgid "Is validation successful?"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"To just check the status of validation (whether a data is valid as a whole), "
+"use the following `Result` API call:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result */\n"
+"$result->isValid();\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "It can be narrowed down to a specific property:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result $result */\n"
+"$result->isPropertyValid('name');\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/result.md
+#, no-wrap
+msgid "Errors"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"Most of the time telling only the status of validation is not enough. There "
+"are multiple methods to get detailed errors list with their data from the "
+"result. The difference between them is in the grouping, filtering, and "
+"representation of every error. Choose one to fit your needs depending on the "
+"situation."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/result.md
+#, no-wrap
+msgid "Flat list of error messages"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"One of the simplest cases is getting a flat list of all error messages. Use "
+"the following `Result` API call:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result */\n"
+"$result->getErrorMessages();\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "An example of output with `age` and `email` properties:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'Value must be no less than 21.',\n"
+"    'This value is not a valid email address.',\n"
+"    'A custom error message.',\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"It's easy to display and iterate, however, with a bigger amount of "
+"properties and depending on a message, it can be problematic to understand "
+"which property an error belongs to."
+msgstr ""
+
+#. type: Title ####
+#: guide/en/result.md
+#, no-wrap
+msgid "Error messages not bound to a specific property"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"Sometimes error messages are not related to a specific property. It can "
+"happen during the validation of multiple properties depending on each other "
+"for example. Use the following `Result` API call:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid "$result->getCommonErrorMessages();\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "The output for example above:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'A custom error message.',\n"
+"];\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/result.md
+#, no-wrap
+msgid "Filtering by a specific property"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"This list can be also filtered by a specific property. Only top-level "
+"attributes are supported."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid "$result->getPropertyErrorMessages('email');\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'This value is not a valid email address.',\n"
+"];\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/result.md
+#, no-wrap
+msgid "Error messages indexed by property"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"To group error messages by property, use the following `Result` API call:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result */\n"
+"$result->getErrorMessagesIndexedByProperty();\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "An example of output:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'name' => [\n"
+"        'Value cannot be blank.',\n"
+"        'This value must contain at least 4 characters.',\n"
+"    ],\n"
+"    'email' => ['This value is not a valid email address.'],\n"
+"    // Error messages not bound to specific property are grouped under empty string key.\n"
+"    '' => ['A custom error message.'],\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"Note that the result is always a 2-dimensional array with property names as "
+"keys at the first nesting level. This means that further nesting of "
+"properties is not supported (but could be achieved by using "
+"[`getErrorMessagesIndexedByPath()`](#error-messages-indexed-by-path)).  "
+"Returning to the previous example, when `name` and `email` belong to a "
+"`user` property, the output will be:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'user' => [\n"
+"        'Value cannot be blank.',\n"
+"        'This value must contain at least 4 characters.',\n"
+"        'This value is not a valid email address.'\n"
+"    ],\n"
+"    // Error messages not bound to specific property are grouped under empty string key.\n"
+"    '' => ['A custom error message.'],\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"Also keep in mind that property names must be strings, even when used with "
+"`Each`:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid "$rule = new Each([new Number(min: 21)]),\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"With input containing non-string keys for top level properties, for example, "
+"`[21, 22, 23, 20]`, `InvalidArgumentException` will be thrown."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+#, no-wrap
+msgid "Even array `['1' => 21, '2' => 22, '3' => 23, '4' => 20]` will cause an error, because PHP [will cast keys to the int type].\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+#, no-wrap
+msgid "But if given array with string keys `['1a' => 21, '2b' => 22, '3c' => 23, '4d' => 20]`, the output will be:\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    '4d' => [\n"
+"        0 => 'Value must be no less than 21.'\n"
+"    ]\n"
+"]\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/result.md
+#, no-wrap
+msgid "Error messages indexed by path"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"This is probably the most advanced representation offered by built-in "
+"methods. The grouping is done by path - a concatenated property sequence "
+"showing the location of errored value within a data structure. A separator "
+"is customizable, dot notation is set as the default one. Use the following "
+"`Result` API call:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result */\n"
+"$result->getErrorMessagesIndexedByPath();\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'user.firstName' => ['Value cannot be blank.'],\n"
+"    'user.lastName' => ['This value must contain at least 4 characters.'],\n"
+"    'email' => ['This value is not a valid email address.'],\n"
+"    // Error messages not bound to specific property are grouped under empty string key.\n"
+"    '' => ['A custom error message.'],\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"A path can contain integer elements too (when using the `Each` rule for "
+"example):"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],\n"
+"];\n"
+msgstr ""
+
+#. type: Title ####
+#: guide/en/result.md
+#, no-wrap
+msgid "Resolving special characters collision in property names"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"When the property name in the error messages list contains a path separator "
+"(dot `.` by default), it is automatically escaped using a backslash (`\\`):"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'country\\.code' => ['Value cannot be blank.'],\n"
+"],\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"In case of using a single property per rule set, any additional "
+"modifications of attribute names in the rules configuration are not "
+"required, so they must stay as is:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\In;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$rules = [\n"
+"    'country.code' => [\n"
+"        new Required();\n"
+"        new In(['ru', 'en'], skipOnError: true),\n"
+"    ],\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"However, when using the `Nested` rule with multiple properties per rule set, "
+"special characters need to be escaped with a backslash (`\\`) for value "
+"paths to be correct and to be possible to reverse them back from string to "
+"individual items. See the [Using keys containing separator / shortcut] "
+"section for more details."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "This can be used as an alternative to using a custom separator."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"This list can be also filtered by a specific property. Only top-level "
+"properties are supported."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result $result */\n"
+"$result->getPropertyErrorMessagesIndexedByPath('user');\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'firstName' => ['Value cannot be blank.'],\n"
+"    'lastName' => ['This value must contain at least 4 characters.'],\n"
+"];\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/result.md
+#, no-wrap
+msgid "Error objects list"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"When even these representations are not enough, an initial unmodified list "
+"of error objects can be accessed via this method:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result */\n"
+"$result->getErrors();\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "Each error stores the following data:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/result.md
+msgid ""
+"Message. Either a simple message like `This value is wrong.` or a template "
+"with placeholders enclosed in curly braces (`{}`), for example: `Value must "
+"be no less than {min}.`. The actual formatting is done in `Validator` "
+"depending on the configured translator."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/result.md
+msgid ""
+"Template parameters for substitution during formatting, for example: `['min' "
+"=> 7]`."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/result.md
+msgid ""
+"A path to a value within a checked data structure, for example: `['user', "
+"'name', 'firstName']`."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/result.md
+#, no-wrap
+msgid "An example of an application"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"What this can be useful for? For example, to build a nested tree of error "
+"messages indexed by property names:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'user' => [\n"
+"        'name' => [\n"
+"            'firstName' => ['Value cannot be blank.'],\n"
+"            'lastName' => ['This value must contain at least 4 characters.'],\n"
+"        ],\n"
+"    ],\n"
+"    'email' => ['This value is not a valid email address.'],    \n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"It's intentionally not provided out of the box due to the complexity of "
+"iteration. However, this can be useful for dumping as JSON and storing in "
+"logs for example."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid "Debugging original error objects is also more convenient."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result $result */\n"
+"$result->getPropertyErrors('email');\n"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/result.md
+#, no-wrap
+msgid "[Using keys containing separator / shortcut]: built-in-rules-nested.md#using-keys-containing-separator--shortcut"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/result.md
+#, no-wrap
+msgid "[will cast keys to the int type]: https://www.php.net/manual/en/language.types.array.php"
+msgstr ""

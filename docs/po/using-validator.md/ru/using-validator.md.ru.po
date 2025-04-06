@@ -1,0 +1,429 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-04-06 06:46+0000\n"
+"PO-Revision-Date: 2025-04-06 06:46+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Title ##
+#: guide/en/README.md guide/en/using-validator.md
+#, no-wrap
+msgid "Rules"
+msgstr ""
+
+#. type: Title #
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Using validator"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"Validator allows to check data in any format. Here are some of the most "
+"common use cases."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Data"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Single value"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"In the simplest case, the validator can be used to check a single value:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Regex;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$value = 'mrX';\n"
+"$rules = [\n"
+"    new Length(min: 4, max: 20),\n"
+"    new Regex('~^[a-z_\\-]*$~i'),\n"
+"];\n"
+"$result = (new Validator())->validate($value, $rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "> **Note:** Use [Each] rule to validate multiple values of the same type.\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Array"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"It's possible to validate an array both as a whole and by individual items. "
+"For example:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\FilledAtLeast;\n"
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Email;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [\n"
+"    'name' => 'John',\n"
+"    'age' => 17,\n"
+"    'email' => 'john@example.com',\n"
+"    'phone' => null,\n"
+"];\n"
+"$rules = [\n"
+"    // The rules that are not related to a specific property\n"
+"\n"
+"    // At least one of the properties (\"email\" and \"phone\") must be passed and have non-empty value.  \n"
+"    new FilledAtLeast(['email', 'phone']),\n"
+"\n"
+"    // The rules related to a specific property.\n"
+"\n"
+"    'name' => [\n"
+"        // The name is required (must be passed and have non-empty value).\n"
+"        new Required(),\n"
+"        // The name's length must be no less than 2 characters.\n"
+"        new Length(min: 2),\n"
+"    ],  \n"
+"    'age' => new Number(min: 21), // The age must be at least 21 years.  \n"
+"    'email' => new Email(), // Email must be a valid email address.  \n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "> **Note:** Use [Nested] rule to validate nested arrays and [Each] rule to validate multiple arrays.\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Object"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"Similar to arrays, it's possible to validate an object both as a whole and "
+"by individual properties."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"For objects there is an additional option to configure validation with PHP "
+"attributes which allows to not pass the rules separately in explicit way "
+"(passing just the object itself is enough). For example:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\FilledAtLeast;\n"
+"use Yiisoft\\Validator\\Rule\\Email;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"#[FilledAtLeast(['email', 'phone'])]\n"
+"final class Person\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Required]\n"
+"        #[Length(min: 2)]\n"
+"        public readonly ?string $name = null,\n"
+"\n"
+"        #[Number(min: 21)]\n"
+"        public readonly ?int $age = null,\n"
+"\n"
+"        #[Email]\n"
+"        public readonly ?string $email = null,\n"
+"\n"
+"        public readonly ?string $phone = null,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"$person = new Person(name: 'John', age: 17, email: 'john@example.com', phone: null);\n"
+"$result = (new Validator())->validate($person);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "> **Note:** [readonly properties] are supported only starting from PHP 8.1.\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "> **Note:** Use [Nested] rule to validate related objects and [Each] rule to validate multiple objects.\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Custom data set"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"Most of the time creating a custom data set is not needed because of built-"
+"in data sets and automatic normalization of all types during validation. "
+"However, this can be useful, for example, to change a default value for "
+"certain properties:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\DataSetInterface;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"final class MyArrayDataSet implements DataSetInterface\n"
+"{\n"
+"    public function __construct(private array $data = [],) \n"
+"    {\n"
+"    }\n"
+"\n"
+"    public function getPropertyValue(string $property): mixed\n"
+"    {\n"
+"        if ($this->hasProperty($property)) {\n"
+"            return $this->data[$property];\n"
+"        }\n"
+"\n"
+"        return $property === 'name' ? '' : null;\n"
+"    }\n"
+"\n"
+"    public function getData(): array\n"
+"    {\n"
+"        return $this->data;\n"
+"    }\n"
+"\n"
+"    public function hasProperty(string $property): bool\n"
+"    {\n"
+"        return array_key_exists($property, $this->data);\n"
+"    }\n"
+"}\n"
+"\n"
+"$data = new MyArrayDataSet([]);\n"
+"$rules = ['name' => new Length(min: 2), 'age' => new Number(min: 21)];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Passing single rule"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid "For a single rule, there is an option to omit the array:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$value = 7;\n"
+"$rule = new Number(min: 42);\n"
+"$result = (new Validator())->validate($value, $rule);\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Providing rules via dedicated object"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"Could help reuse the same set of rules across different places. Two ways are "
+"possible - using PHP attributes and specifying explicitly via interface "
+"method implementation."
+msgstr ""
+
+#. type: Title ####
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Using PHP attributes"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"In this case, the rules will be automatically parsed, no need to "
+"additionally do anything."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"final class PersonRulesProvider\n"
+"{\n"
+"    #[Length(min: 2)]\n"
+"    public string $name;\n"
+"\n"
+"    #[Number(min: 21)]\n"
+"    protected int $age;\n"
+"}\n"
+"\n"
+"$data = ['name' => 'John', 'age' => 18];\n"
+"$rulesProvider = new PersonRulesProvider();\n"
+"$result = (new Validator())->validate($data, $rulesProvider);\n"
+msgstr ""
+
+#. type: Title ####
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Using interface method implementation"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"Providing rules via interface method implementation has priority over PHP "
+"attributes. So, in case both are present, the attributes will be ignored "
+"without causing an exception."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\RulesProviderInterface;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"final class PersonRulesProvider implements RulesProviderInterface\n"
+"{\n"
+"    #[Length(min: 2)] // Will be silently ignored.\n"
+"    public string $name;\n"
+"\n"
+"    #[Number(min: 21)] // Will be silently ignored.\n"
+"    protected int $age;\n"
+"    \n"
+"    public function getRules() : iterable\n"
+"    {\n"
+"        return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];\n"
+"    }\n"
+"}\n"
+"\n"
+"$data = ['name' => 'John', 'age' => 18];\n"
+"$rulesProvider = new PersonRulesProvider();\n"
+"$result = (new Validator())->validate($data, $rulesProvider);\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "Providing rules via the data object"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/using-validator.md
+msgid ""
+"In this way, rules are provided in addition to data in the same object. Only "
+"interface method implementation is supported. Note that the `rules` argument "
+"is `null` in the `validate()` method call."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/using-validator.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\RulesProviderInterface;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"final class Person implements RulesProviderInterface\n"
+"{\n"
+"    #[Length(min: 2)] // Not supported for using with data objects. Will be silently ignored.\n"
+"    public string $name;\n"
+"\n"
+"    #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.\n"
+"    protected int $age;\n"
+"    \n"
+"    public function getRules(): iterable\n"
+"    {\n"
+"        return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];\n"
+"    }\n"
+"}\n"
+"\n"
+"$data = new Person(name: 'John', age: 18);\n"
+"$result = (new Validator())->validate($data);\n"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "[Each]: built-in-rules-each.md"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "[Nested]: built-in-rules-nested.md"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/using-validator.md
+#, no-wrap
+msgid "[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties"
+msgstr ""
