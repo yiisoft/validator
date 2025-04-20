@@ -42,6 +42,15 @@ final class EmailHandler implements RuleHandlerInterface
                 ? (bool) preg_match($rule->getIdnEmailPattern(), $value)
                 : false;
         } else {
+            /**
+             * @psalm-var array{
+             *     name: string,
+             *     local: non-empty-string,
+             *     open: string,
+             *     domain: non-empty-string,
+             *     close: string,
+             * } $matches
+             */
             $valid = $this->validateParsedValue(
                 $rule,
                 $value,
@@ -64,6 +73,10 @@ final class EmailHandler implements RuleHandlerInterface
         return $result;
     }
 
+    /**
+     * @param non-empty-string $local
+     * @param non-empty-string $domain
+     */
     private function validateParsedValue(
         Email $rule,
         string $value,

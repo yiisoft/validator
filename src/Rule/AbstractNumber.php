@@ -38,15 +38,23 @@ abstract class AbstractNumber implements
 
     /**
      * A default for {@see $incorrectInputMessage}.
+     *
+     * @psalm-suppress MissingClassConstType
      */
     protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float and ' .
-    'string. {type} given.';
+        'string. {type} given.';
+
     /**
      * A default for {@see $lessThanMinMessage}.
+     *
+     * @psalm-suppress MissingClassConstType
      */
     protected const DEFAULT_LESS_THAN_MIN_MESSAGE = '{Property} must be no less than {min}.';
+
     /**
      * A default for {@see $greaterThanMaxMessage}.
+     *
+     * @psalm-suppress MissingClassConstType
      */
     protected const DEFAULT_GREATER_THAN_MAX_MESSAGE = '{Property} must be no greater than {max}.';
 

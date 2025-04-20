@@ -72,6 +72,8 @@ use Yiisoft\Validator\WhenInterface;
  * @psalm-import-type WhenType from WhenInterface
  * @psalm-import-type NormalizedRulesList from RulesNormalizer
  * @psalm-import-type RawRulesList from ValidatorInterface
+ *
+ * @psalm-suppress ClassMustBeFinal We allow to extend this rule.
  */
 #[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Composite implements

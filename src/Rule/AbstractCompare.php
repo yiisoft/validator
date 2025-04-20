@@ -46,23 +46,34 @@ abstract class AbstractCompare implements
 
     /**
      * A default for {@see $incorrectInputMessage}.
+     *
+     * @psalm-suppress MissingClassConstType
      */
     protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float, string, ' .
-    'boolean, null and object implementing \Stringable interface or \DateTimeInterface. {type} given.';
+        'boolean, null and object implementing \Stringable interface or \DateTimeInterface. {type} given.';
+
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
+     *
+     * @psalm-suppress MissingClassConstType
      */
     protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = '{Property} returned from a custom data set must have ' .
-    'one of the following types: integer, float, string, boolean, null or an object implementing \Stringable ' .
-    'interface or \DateTimeInterface.';
+        'one of the following types: integer, float, string, boolean, null or an object implementing \Stringable ' .
+        'interface or \DateTimeInterface.';
+
     /**
      * List of valid types.
      *
      * @see CompareType
+     *
+     * @psalm-suppress MissingClassConstType
      */
     private const VALID_TYPES = [CompareType::ORIGINAL, CompareType::STRING, CompareType::NUMBER];
+
     /**
      * Map of valid operators. It's used instead of a list for better performance.
+     *
+     * @psalm-suppress MissingClassConstType
      */
     private const VALID_OPERATORS_MAP = [
         '==' => 1,
