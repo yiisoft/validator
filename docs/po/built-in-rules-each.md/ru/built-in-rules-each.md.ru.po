@@ -1,0 +1,146 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"PO-Revision-Date: 2025-04-19 08:39+0500\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.6\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "`Each` - applying the same rules for each data item in the set"
+msgstr "`Each` - применение одних и тех же правил для каждого элемента в наборе"
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid "The `Each` rule allows the same rules to be applied to each data item in the set. The following example shows the configuration for validating [RGB color](https://en.wikipedia.org/wiki/RGB_color_model) components:"
+msgstr "Правило `Each` позволяет применять одинаковые правила к каждому элементу данных в наборе. Следующий пример показывает конфигурацию для валидации компонентов [модели RGB-цветов](https://en.wikipedia.org/wiki/RGB_color_model):"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each([\n"
+"    new Integer(min: 0, max: 255),\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each([\n"
+"    new Integer(min: 0, max: 255),\n"
+"]);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid "By combining with another built-in rule called `Count` we can be sure that the number of components is exactly 3:"
+msgstr "Комбинируя его с другим встроенным правилом `Count`, мы можем быть уверены, что компонентов ровно три:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"$rules = [\n"
+"    // Applies to a whole set.\n"
+"    new Count(3),\n"
+"    // Applies to individual set items.\n"
+"    new Each(        \n"
+"        // For single rules, wrapping with array / iterable is not necessary.\n"
+"        new Integer(min: 0, max: 255),\n"
+"    ),\n"
+"];\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"$rules = [\n"
+"    // Применяется ко всему набору.\n"
+"    new Count(3),\n"
+"    // Применяется к отдельному элементу набора.\n"
+"    new Each(        \n"
+"        // Одиночные правила не требуется оборачивать в массив / итерируемый объект.\n"
+"        new Integer(min: 0, max: 255),\n"
+"    ),\n"
+"];\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid "Validated data items are not limited to only \"simple\" values - `Each` can be used both within a `Nested` and contain `Nested` rule covering one-to-many and many-to-many relations:"
+msgstr "Проверяемые элементы данных не ограничиваются только \"простыми значениями\" - `Each` может использоваться как внутри правила `Nested` так и содержать его:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts' => new Each([\n"
+"        new Nested([\n"
+"            'points' => new Each([\n"
+"                new Nested([\n"
+"                    'coordinates' => new Nested([\n"
+"                        'x' => [new Number(min: -10, max: 10)],\n"
+"                        'y' => [new Number(min: -10, max: 10)],\n"
+"                    ]),\n"
+"                    'rgb' => new Each([\n"
+"                        new Count(3),\n"
+"                        new Number(min: 0, max: 255),\n"
+"                    ]),\n"
+"                ]),\n"
+"            ]),\n"
+"        ]),\n"
+"    ]),\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts' => new Each([\n"
+"        new Nested([\n"
+"            'points' => new Each([\n"
+"                new Nested([\n"
+"                    'coordinates' => new Nested([\n"
+"                        'x' => [new Number(min: -10, max: 10)],\n"
+"                        'y' => [new Number(min: -10, max: 10)],\n"
+"                    ]),\n"
+"                    'rgb' => new Each([\n"
+"                        new Count(3),\n"
+"                        new Number(min: 0, max: 255),\n"
+"                    ]),\n"
+"                ]),\n"
+"            ]),\n"
+"        ]),\n"
+"    ]),\n"
+"]);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid "For more information about using it with `Nested`, see the [Nested](built-in-rules-nested.md) guide."
+msgstr "Дополнительную информацию об использовании с правилом `Nested` смотрите в [руководстве](built-in-rules-nested.md)."

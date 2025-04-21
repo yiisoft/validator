@@ -26,3 +26,6 @@ composer.phar
 /phpunit.phar
 /phpunit.xml
 /.phpunit.cache
+
+# po4a .mo files
+*.mo

@@ -1,17 +1,13 @@
 # Yii Validator
 
-Пакет для валидации данных.
-
-## Руководство
-
-### Валидация
+## Валидация
 
 - [Использование валидатора](using-validator.md)
 - [Результат](result.md)
 - [Условия валидации](conditional-validation.md)
 - [Настройка сообщений об ошибках](customizing-error-messages.md)
 
-### Rules
+## Правила
 
 - [Built-in rules](built-in-rules.md)
   - [Callback](built-in-rules-callback.md)
@@ -20,10 +16,11 @@
   - [Nested](built-in-rules-nested.md)
   - [Required](built-in-rules-required.md)
   - [StopOnError](built-in-rules-stop-on-error.md)
-- [Configuring rules via PHP attributes](configuring-rules-via-php-attributes.md)
+- [Configuring rules via PHP
+  attributes](configuring-rules-via-php-attributes.md)
 - [Creating custom rules](creating-custom-rules.md)
 
-### Miscellaneous
+## Miscellaneous
 
 - [Client-side validation](client-side-validation.md)
 - [Extensions](extensions.md)
