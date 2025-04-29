@@ -1,8 +1,8 @@
 # Yii Validator Change Log
 
-## 2.2.1 under development
+## 2.3.0 under development
 
-- Enh #766: Added Uuid rule for validating UUID strings. (@Sakhnovkrg)
+- New #766: Added Uuid rule for validating UUID strings (@Sakhnovkrg)
 
 ## 2.2.0 February 16, 2025
 
