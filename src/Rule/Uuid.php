@@ -62,7 +62,7 @@ final class Uuid implements DumpedRuleInterface, SkipOnEmptyInterface, SkipOnErr
     /**
      * Get a message used when the input it incorrect.
      *
-     * @return string Error message
+     * @return string Error message.
      *
      * @see $incorrectInputMessage
      */

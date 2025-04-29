@@ -2,7 +2,7 @@
 
 ## 2.2.1 under development
 
-- no changes in this release.
+- Enh #766: Added Uuid rule for validating UUID strings. (@Sakhnovkrg)
 
 ## 2.2.0 February 16, 2025
 

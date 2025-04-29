@@ -19,6 +19,12 @@ final class UuidTest extends RuleTestCase
     use SkipOnErrorTestTrait;
     use WhenTestTrait;
 
+    public function testGetName(): void
+    {
+        $rule = new Uuid();
+        $this->assertSame('uuid', $rule->getName());
+    }
+
     public static function dataValidationPassed(): array
     {
         return [
