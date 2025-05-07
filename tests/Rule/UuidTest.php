@@ -60,9 +60,9 @@ final class UuidTest extends RuleTestCase
                 ['' => ['Custom invalid UUID message.']],
             ],
             'custom invalid UUID message with parameters' => [
-                ['property' => 'invalid-uuid-string'],
-                ['property' => [new Uuid(message: 'Property - {property}, value - {value}.')]],
-                ['property' => ['Property - property, value - invalid-uuid-string.']],
+                ['childId' => 'invalid-uuid-string'],
+                ['childId' => [new Uuid(message: 'Property - {Property}, property - {property}, value - {value}.')]],
+                ['childId' => ['Property - ChildId, property - childId, value - invalid-uuid-string.']],
             ],
         ];
     }
