@@ -22,7 +22,7 @@ final class UuidTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Uuid();
-        $this->assertSame('uuid', $rule->getName());
+        $this->assertSame(Uuid::class, $rule->getName());
     }
 
     public static function dataValidationPassed(): array
@@ -51,8 +51,8 @@ final class UuidTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 123,
-                [new Uuid(incorrectInputMessage: 'Property - {Property}, type - {type}.')],
-                ['' => ['Property - Value, type - int.']],
+                [new Uuid(incorrectInputMessage: 'Property - {Property}, property - {property}, type - {type}.')],
+                ['' => ['Property - Value, property - value, type - int.']],
             ],
             'custom invalid UUID message' => [
                 'invalid-uuid-string',
@@ -60,9 +60,9 @@ final class UuidTest extends RuleTestCase
                 ['' => ['Custom invalid UUID message.']],
             ],
             'custom invalid UUID message with parameters' => [
-                ['property' => 'invalid-uuid-string'],
-                ['property' => [new Uuid(message: 'Property - {property}, value - {value}.')]],
-                ['property' => ['Property - property, value - invalid-uuid-string.']],
+                ['childId' => 'invalid-uuid-string'],
+                ['childId' => [new Uuid(message: 'Property - {Property}, property - {property}, value - {value}.')]],
+                ['childId' => ['Property - ChildId, property - childId, value - invalid-uuid-string.']],
             ],
         ];
     }
