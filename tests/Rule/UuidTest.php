@@ -22,7 +22,7 @@ final class UuidTest extends RuleTestCase
     public function testGetName(): void
     {
         $rule = new Uuid();
-        $this->assertSame('uuid', $rule->getName());
+        $this->assertSame(Uuid::class, $rule->getName());
     }
 
     public static function dataValidationPassed(): array
