@@ -51,8 +51,8 @@ final class UuidTest extends RuleTestCase
             ],
             'custom incorrect input message with parameters' => [
                 123,
-                [new Uuid(incorrectInputMessage: 'Property - {Property}, type - {type}.')],
-                ['' => ['Property - Value, type - int.']],
+                [new Uuid(incorrectInputMessage: 'Property - {Property}, property - {property}, type - {type}.')],
+                ['' => ['Property - Value, property - value, type - int.']],
             ],
             'custom invalid UUID message' => [
                 'invalid-uuid-string',
