@@ -6,7 +6,6 @@ namespace Yiisoft\Validator\Tests\Support\Data;
 
 use Yiisoft\Validator\Rule\Nested;
 
-
 final class NestedIterableOfObjects
 {
     /**
@@ -15,7 +14,7 @@ final class NestedIterableOfObjects
     #[Nested]
     private iterable $collection = [];
 
-    public function setCollection(iterable $collection): NestedIterableOfObjects
+    public function setCollection(iterable $collection): self
     {
         $this->collection = $collection;
         return $this;
@@ -25,6 +24,4 @@ final class NestedIterableOfObjects
     {
         return $this->collection;
     }
-
-
 }

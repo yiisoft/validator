@@ -1505,20 +1505,19 @@ final class NestedTest extends RuleTestCase
     public function testWithIterableOfObjects(): void
     {
         $obj = (new NestedIterableOfObjects())->setCollection([
-            new ObjectForIterableCollection('', '')
+            new ObjectForIterableCollection('', ''),
         ]);
         $result = (new Validator())->validate($obj);
         $this->assertFalse($result->isValid());
         $this->assertCount(4, $result->getErrorMessages());
 
         $obj = (new NestedIterableOfObjects())->setCollection([
-            new ObjectForIterableCollection('12345', 'myName')
+            new ObjectForIterableCollection('12345', 'myName'),
         ]);
         $result = (new Validator())->validate($obj);
         $this->assertTrue($result->isValid());
         $this->assertCount(0, $result->getErrorMessages());
     }
-
 
     /**
      * @see https://github.com/yiisoft/validator/issues/751
