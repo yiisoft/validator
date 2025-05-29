@@ -40,6 +40,8 @@ use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
 use Yiisoft\Validator\Tests\Support\Data\NestedHookProvider\NestedObjectWithPostValidationHook;
+use Yiisoft\Validator\Tests\Support\Data\NestedIterableOfObjects;
+use Yiisoft\Validator\Tests\Support\Data\ObjectForIterableCollection;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
@@ -51,6 +53,7 @@ use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 use function array_slice;
+use function PHPUnit\Framework\assertSame;
 
 final class NestedTest extends RuleTestCase
 {
@@ -1499,4 +1502,22 @@ final class NestedTest extends RuleTestCase
     {
         return [Nested::class, NestedHandler::class];
     }
+
+    public function testWithIterableOfObjects(): void
+    {
+        $obj = (new NestedIterableOfObjects())->setCollection([
+            new ObjectForIterableCollection('', '')
+        ]);
+        $result = (new Validator())->validate($obj);
+        $this->assertFalse($result->isValid());
+        $this->assertCount(4, $result->getErrorMessages());
+
+        $obj = (new NestedIterableOfObjects())->setCollection([
+            new ObjectForIterableCollection('12345', 'myName')
+        ]);
+        $result = (new Validator())->validate($obj);
+        $this->assertTrue($result->isValid());
+        $this->assertCount(0, $result->getErrorMessages());
+    }
+
 }
