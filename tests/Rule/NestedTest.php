@@ -69,7 +69,7 @@ final class NestedTest extends RuleTestCase
     {
         $rule = new Nested();
 
-        $this->assertNull($rule->getRules());
+        $this->assertNull(  $rule->getRules());
         $this->assertSame(
             ReflectionProperty::IS_PRIVATE | ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PUBLIC,
             $rule->getValidatedObjectPropertyVisibility(),
