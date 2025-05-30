@@ -1540,7 +1540,7 @@ final class NestedTest extends RuleTestCase
             'collection.0.id' => [
                 'Id cannot be blank.',
                 'Id must be a string. null given.',
-            ]
+            ],
         ], $result->getErrorMessagesIndexedByPath());
     }
 
