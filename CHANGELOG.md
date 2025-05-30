@@ -2,7 +2,7 @@
 
 ## 2.3.1 under development
 
-- Enh #611: Allow use callable rules into `Nested` (@Enjoyzz)
+- Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
 
 ## 2.3.0 May 07, 2025
 
