@@ -1536,8 +1536,12 @@ final class NestedTest extends RuleTestCase
         $result = (new Validator())->validate($classB);
 
         $this->assertFalse($result->isValid());
-        $this->assertCount(2, $result->getErrorMessages());
-        $this->assertSame('Id cannot be blank.', $result->getErrorMessages()[0]);
+        $this->assertSame([
+            'collection.0.id' => [
+                'Id cannot be blank.',
+                'Id must be a string. null given.'
+            ]
+        ], $result->getErrorMessagesIndexedByPath());
     }
 
     /**
@@ -1551,9 +1555,7 @@ final class NestedTest extends RuleTestCase
         };
 
         $classB = new class () {
-            #[Each([
-                new Nested()
-            ])]
+            #[Each([new Nested()])]
             public $array_of_a;
         };
 
@@ -1561,7 +1563,6 @@ final class NestedTest extends RuleTestCase
         $result = (new Validator())->validate($classB);
 
         $this->assertFalse($result->isValid());
-        $this->assertCount(1, $result->getErrorMessages());
-        $this->assertSame('Id cannot be blank.', $result->getErrorMessages()[0]);
+        $this->assertSame(['array_of_a.0.id' => ['Id cannot be blank.']], $result->getErrorMessagesIndexedByPath());
     }
 }
