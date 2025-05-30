@@ -39,14 +39,14 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
 use Yiisoft\Validator\Tests\Support\Data\NestedHookProvider\NestedObjectWithPostValidationHook;
+use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
-use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
-use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -879,7 +879,7 @@ final class NestedTest extends RuleTestCase
         $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
-            static fn (Error $error) => [
+            static fn(Error $error) => [
                 $error->getMessage(),
                 $error->getValuePath(),
             ],
@@ -1424,7 +1424,7 @@ final class NestedTest extends RuleTestCase
         $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
-            static fn (Error $error) => [
+            static fn(Error $error) => [
                 $error->getMessage(),
                 $error->getValuePath(),
             ],
@@ -1455,7 +1455,7 @@ final class NestedTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Nested(), new Nested(when: $when));
     }
 
@@ -1505,10 +1505,7 @@ final class NestedTest extends RuleTestCase
         $rules = new Nested([
             'tag' => static fn() => (new Result())->addError('Too short.'),
         ]);
-
-        $data = [
-            'tag' => 'value'
-        ];
+        $data = ['tag' => 'value'];
 
         $result = (new Validator())->validate($data, $rules);
         $this->assertSame(['tag' => ['Too short.']], $result->getErrorMessagesIndexedByPath());
