@@ -1502,7 +1502,7 @@ final class NestedTest extends RuleTestCase
         return [Nested::class, NestedHandler::class];
     }
 
-    public function testWithIterableOfObjects(): void
+    public function testWithArrayOfObjects(): void
     {
         $obj = (new NestedIterableOfObjects())->setCollection([
             new ObjectForIterableCollection('', ''),
@@ -1519,6 +1519,27 @@ final class NestedTest extends RuleTestCase
         $this->assertCount(0, $result->getErrorMessages());
     }
 
+    public function testWithNonArrayButIterableOfObjects(): void
+    {
+        $classA = new class () {
+            #[Required]
+            #[Length(min: 10)]
+            public $id;
+        };
+
+        $classB = new class () {
+            #[Each(new Nested())]
+            public iterable $collection;
+        };
+        $collection = new \ArrayIterator([$classA]);
+        $classB->collection = $collection;
+        $result = (new Validator())->validate($classB);
+
+        $this->assertFalse($result->isValid());
+        $this->assertCount(2, $result->getErrorMessages());
+        $this->assertSame('Id cannot be blank.', $result->getErrorMessages()[0]);
+    }
+
     /**
      * @see https://github.com/yiisoft/validator/issues/751
      */
@@ -1530,23 +1551,17 @@ final class NestedTest extends RuleTestCase
         };
 
         $classB = new class () {
-            // this is wrong, there will be an endless loop.
-            //#[Each([
-            //    new Nested()
-            //])]
-
-            //  this is right
-            #[Nested]
+            #[Each([
+                new Nested()
+            ])]
             public $array_of_a;
         };
 
         $classB->array_of_a = [$classA];
         $result = (new Validator())->validate($classB);
 
-        //echo $result->getErrorMessages()[0];
-        //"Id cannot be blank."
-
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrorMessages());
+        $this->assertSame('Id cannot be blank.', $result->getErrorMessages()[0]);
     }
 }
