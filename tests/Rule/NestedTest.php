@@ -1499,4 +1499,18 @@ final class NestedTest extends RuleTestCase
     {
         return [Nested::class, NestedHandler::class];
     }
+
+    public function testUseCallableRules()
+    {
+        $rules = new Nested([
+            'tag' => static fn() => (new Result())->addError('Too short.'),
+        ]);
+
+        $data = [
+            'tag' => 'value'
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertSame(['tag' => ['Too short.']], $result->getErrorMessagesIndexedByPath());
+    }
 }
