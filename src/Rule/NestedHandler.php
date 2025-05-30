@@ -44,7 +44,6 @@ final class NestedHandler implements RuleHandlerInterface
             return $context->validate($dataSet);
         }
 
-        /** @var mixed $value */
         $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
 
         if (is_array($value)) {

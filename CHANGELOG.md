@@ -2,7 +2,7 @@
 
 ## 2.3.1 under development
 
-- Bug #768: Fix incorrect operation `Each (new Nested)` rule for iterable of objects (@Enjoyzz)
+- Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 
 ## 2.3.0 May 07, 2025
 

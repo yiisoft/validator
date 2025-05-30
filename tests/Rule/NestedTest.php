@@ -1539,7 +1539,7 @@ final class NestedTest extends RuleTestCase
         $this->assertSame([
             'collection.0.id' => [
                 'Id cannot be blank.',
-                'Id must be a string. null given.'
+                'Id must be a string. null given.',
             ]
         ], $result->getErrorMessagesIndexedByPath());
     }
