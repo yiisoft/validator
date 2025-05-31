@@ -30,9 +30,6 @@ final class NestedHandler implements RuleHandlerInterface
             throw new UnexpectedRuleException(Nested::class, $rule);
         }
 
-        /** @var mixed $value */
-        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
-
         if ($rule->getRules() === null) {
             if (!is_object($value)) {
                 return (new Result())->addError($rule->getNoRulesWithNoObjectMessage(), [
@@ -46,6 +43,8 @@ final class NestedHandler implements RuleHandlerInterface
 
             return $context->validate($dataSet);
         }
+
+        $value = $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY) ?? $value;
 
         if (is_array($value)) {
             $data = $value;
@@ -79,7 +78,8 @@ final class NestedHandler implements RuleHandlerInterface
                     [
                         'path' => $valuePath,
                         'property' => $context->getTranslatedProperty(),
-                        'Property' => $context->getCapitalizedTranslatedProperty(),                    ],
+                        'Property' => $context->getCapitalizedTranslatedProperty(),
+                    ],
                     $valuePathList,
                 );
 

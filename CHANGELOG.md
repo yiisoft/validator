@@ -3,6 +3,7 @@
 ## 2.3.1 under development
 
 - Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
+- Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 
 ## 2.3.0 May 07, 2025
 
