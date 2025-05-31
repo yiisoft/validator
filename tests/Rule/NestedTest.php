@@ -39,14 +39,16 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\EachNestedObjects\Foo;
 use Yiisoft\Validator\Tests\Support\Data\InheritAttributesObject\InheritAttributesObject;
 use Yiisoft\Validator\Tests\Support\Data\IteratorWithBooleanKey;
+use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
 use Yiisoft\Validator\Tests\Support\Data\NestedHookProvider\NestedObjectWithPostValidationHook;
+use Yiisoft\Validator\Tests\Support\Data\NestedIterableOfObjects;
+use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
+use Yiisoft\Validator\Tests\Support\Data\ObjectForIterableCollection;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithNestedObject;
 use Yiisoft\Validator\Tests\Support\Helper\OptionsHelper;
 use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
-use Yiisoft\Validator\Tests\Support\Data\NestedClassAttribute;
-use Yiisoft\Validator\Tests\Support\Data\NestedWithCallbackAttribute;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -879,7 +881,7 @@ final class NestedTest extends RuleTestCase
         $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
-            static fn (Error $error) => [
+            static fn(Error $error) => [
                 $error->getMessage(),
                 $error->getValuePath(),
             ],
@@ -1424,7 +1426,7 @@ final class NestedTest extends RuleTestCase
         $result = (new Validator())->validate($data, $rules);
 
         $errorsData = array_map(
-            static fn (Error $error) => [
+            static fn(Error $error) => [
                 $error->getMessage(),
                 $error->getValuePath(),
             ],
@@ -1455,7 +1457,7 @@ final class NestedTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Nested(), new Nested(when: $when));
     }
 
@@ -1498,5 +1500,69 @@ final class NestedTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Nested::class, NestedHandler::class];
+    }
+
+    public function testWithArrayOfObjects(): void
+    {
+        $obj = (new NestedIterableOfObjects())->setCollection([
+            new ObjectForIterableCollection('', ''),
+        ]);
+        $result = (new Validator())->validate($obj);
+        $this->assertFalse($result->isValid());
+        $this->assertCount(4, $result->getErrorMessages());
+
+        $obj = (new NestedIterableOfObjects())->setCollection([
+            new ObjectForIterableCollection('12345', 'myName'),
+        ]);
+        $result = (new Validator())->validate($obj);
+        $this->assertTrue($result->isValid());
+        $this->assertCount(0, $result->getErrorMessages());
+    }
+
+    public function testWithNonArrayButIterableOfObjects(): void
+    {
+        $classA = new class () {
+            #[Required]
+            #[Length(min: 10)]
+            public $id;
+        };
+
+        $classB = new class () {
+            #[Each(new Nested())]
+            public iterable $collection;
+        };
+        $collection = new \ArrayIterator([$classA]);
+        $classB->collection = $collection;
+        $result = (new Validator())->validate($classB);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame([
+            'collection.0.id' => [
+                'Id cannot be blank.',
+                'Id must be a string. null given.',
+            ],
+        ], $result->getErrorMessagesIndexedByPath());
+    }
+
+    /**
+     * @see https://github.com/yiisoft/validator/issues/751
+     */
+    public function testExampleFromIssue751()
+    {
+        $classA = new class () {
+            #[Required]
+            public $id;
+        };
+
+        $classB = new class () {
+            #[Each([new Nested()])]
+            public $array_of_a;
+        };
+
+        $classB->array_of_a = [$classA];
+        $result = (new Validator())->validate($classB);
+
+        $this->assertFalse($result->isValid());
+        $this->assertSame(['array_of_a.0.id' => ['Id cannot be blank.']], $result->getErrorMessagesIndexedByPath());
     }
 }

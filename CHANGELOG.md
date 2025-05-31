@@ -2,7 +2,7 @@
 
 ## 2.3.1 under development
 
-- no changes in this release.
+- Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 
 ## 2.3.0 May 07, 2025
 
