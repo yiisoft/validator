@@ -201,7 +201,7 @@ final class Nested implements
      * validated value is empty / not passed. See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this `Nested` rule with all defined {@see $rules} if any of the previous
      * rules gave an error. See {@see SkipOnErrorInterface}.
-     * @param Closure|null $when  A callable to define a condition for applying this `Nested` rule with all defined
+     * @param Closure|null $when A callable to define a condition for applying this `Nested` rule with all defined
      * {@see $rules}. See {@see WhenInterface}.
      *
      * @psalm-param SkipOnEmptyValue $skipOnEmpty
@@ -457,9 +457,9 @@ final class Nested implements
         foreach ($rules as &$rule) {
             if (is_iterable($rule)) {
                 self::ensureArrayHasRules($rule);
-            } elseif (!$rule instanceof RuleInterface) {
+            } elseif (!$rule instanceof RuleInterface && !is_callable($rule)) {
                 $message = sprintf(
-                    'Every rule must be an instance of %s, %s given.',
+                    'Every rule must be an instance of %s or a callable, %s given.',
                     RuleInterface::class,
                     get_debug_type($rule)
                 );
