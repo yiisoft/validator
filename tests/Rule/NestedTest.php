@@ -11,6 +11,7 @@ use ReflectionProperty;
 use stdClass;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\DataSetInterface;
+use Yiisoft\Validator\EmptyCondition\WhenMissing;
 use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Helper\RulesDumper;
 use Yiisoft\Validator\PostValidationHookInterface;
@@ -29,6 +30,7 @@ use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Regex;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StringValue;
+use Yiisoft\Validator\Rule\Type\BooleanType;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -1259,7 +1261,7 @@ final class NestedTest extends RuleTestCase
                     ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
-                ['value' => ['Value cannot be blank.']],
+                ['value' => ['Value cannot be blank!.']],
             ],
             'nested context' => [
                 [
@@ -1564,5 +1566,58 @@ final class NestedTest extends RuleTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertSame(['array_of_a.0.id' => ['Id cannot be blank.']], $result->getErrorMessagesIndexedByPath());
+    }
+
+    public function testWhenMissing(): void
+    {
+        $rules = [
+            'regulations' => new Nested(
+                rules: [
+                    'is_one_time' => new BooleanType(
+                        skipOnEmpty: new WhenMissing()
+                    )
+                ],
+                skipOnEmpty: new WhenMissing()
+            ),
+        ];
+
+        $data = [
+            "service" => "service",
+            "amount" => 200
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertTrue($result->isValid());
+
+        $data = [
+            "service" => "service",
+            "amount" => 200,
+            "regulations" => [],
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertTrue($result->isValid());
+
+        $data = [
+            "service" => "service",
+            "amount" => 200,
+            "regulations" => [
+                'is_one_time' => null
+            ],
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertFalse($result->isValid());
+
+        $data = [
+            "service" => "service",
+            "amount" => 200,
+            "regulations" => [
+                'is_one_time' => true
+            ],
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertTrue($result->isValid());
     }
 }

@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Rule;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
+use Yiisoft\Validator\Exception\NestedRuleException;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\PostValidationHookInterface;
 use Yiisoft\Validator\Result;
@@ -89,11 +90,14 @@ final class NestedHandler implements RuleHandlerInterface
             $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
 
             if (is_int($valuePath)) {
-                $itemResult = $context->validate($validatedValue, $rules);
+                $itemResult = $context->validate($validatedValue === null ? $data : $validatedValue, $rules);
             } else {
                 $valuePathList = StringHelper::parsePath($valuePath);
                 $property = end($valuePathList);
-                $itemResult = $context->validate([$property => $validatedValue], [$property => $rules]);
+                $itemResult = $context->validate(
+                    $validatedValue === null ? $data : [$property => $validatedValue],
+                    [$property => $rules]
+                );
             }
 
             if ($itemResult->isValid()) {
