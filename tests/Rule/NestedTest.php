@@ -1261,7 +1261,7 @@ final class NestedTest extends RuleTestCase
                     ReflectionProperty::IS_PUBLIC,
                 ),
                 new Nested(['value' => new Required()]),
-                ['value' => ['Value cannot be blank!.']],
+                ['value' => ['Value not passed.']],
             ],
             'nested context' => [
                 [
