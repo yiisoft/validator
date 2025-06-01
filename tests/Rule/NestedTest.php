@@ -1568,6 +1568,9 @@ final class NestedTest extends RuleTestCase
         $this->assertSame(['array_of_a.0.id' => ['Id cannot be blank.']], $result->getErrorMessagesIndexedByPath());
     }
 
+    /**
+     * @see https://github.com/yiisoft/validator/issues/750
+     */
     public function testWhenMissing(): void
     {
         $rules = [
@@ -1619,5 +1622,60 @@ final class NestedTest extends RuleTestCase
 
         $result = (new Validator())->validate($data, $rules);
         $this->assertTrue($result->isValid());
+    }
+
+    public function testWhenMissingWithAllowNull(): void
+    {
+        $rules = [
+            'regulations' => new Nested(
+                rules: [
+                    'is_one_time' => new Callback(
+                        callback: static function (mixed $value): Result {
+                            $result = new Result();
+                            if (!in_array(get_debug_type($value), ['bool', 'null'], true)) {
+                                $result->addError('Value must be a boolean or null.');
+                            }
+                            return $result;
+                        },
+                        skipOnEmpty: new WhenMissing()
+                    )
+                ],
+                skipOnEmpty: new WhenMissing()
+            ),
+        ];
+
+        $data = [
+            "service" => "service",
+            "amount" => 200,
+            "regulations" => [
+                'is_one_time' => null
+            ],
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertTrue($result->isValid());
+
+
+        $data = [
+            "service" => "service",
+            "amount" => 200,
+            "regulations" => [
+                'is_one_time' => true
+            ],
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertTrue($result->isValid());
+
+        $data = [
+            "service" => "service",
+            "amount" => 200,
+            "regulations" => [
+                'is_one_time' => ""
+            ],
+        ];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertFalse($result->isValid());
     }
 }
