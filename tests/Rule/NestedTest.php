@@ -1571,7 +1571,7 @@ final class NestedTest extends RuleTestCase
     /**
      * @see https://github.com/yiisoft/validator/issues/750
      */
-    public function testWhenMissing(): void
+    public function testNestedRulesWithWhenMissing(): void
     {
         $rules = [
             'regulations' => new Nested(
@@ -1624,7 +1624,7 @@ final class NestedTest extends RuleTestCase
         $this->assertTrue($result->isValid());
     }
 
-    public function testWhenMissingWithAllowNull(): void
+    public function testNestedRulesWithWhenMissingAndNullableField(): void
     {
         $rules = [
             'regulations' => new Nested(
