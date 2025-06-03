@@ -453,11 +453,13 @@ final class Nested implements
             $rules = iterator_to_array($rules);
         }
 
-        /** @var mixed $rule */
         foreach ($rules as &$rule) {
+            if (is_callable($rule)){
+                $rule = new Callback($rule);
+            }
             if (is_iterable($rule)) {
                 self::ensureArrayHasRules($rule);
-            } elseif (!$rule instanceof RuleInterface && !is_callable($rule)) {
+            } elseif (!$rule instanceof RuleInterface) {
                 $message = sprintf(
                     'Every rule must be an instance of %s or a callable, %s given.',
                     RuleInterface::class,
