@@ -226,7 +226,7 @@ final class NestedTest extends RuleTestCase
         $this->expectException(InvalidArgumentException::class);
 
         $ruleInterfaceName = RuleInterface::class;
-        $message = "Every rule must be an instance of $ruleInterfaceName, class@anonymous given.";
+        $message = "Every rule must be an instance of $ruleInterfaceName or a callable, class@anonymous given.";
         $this->expectExceptionMessage($message);
 
         $rule = new Nested([
@@ -1440,7 +1440,7 @@ final class NestedTest extends RuleTestCase
     public function testInitWithNotARule(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Every rule must be an instance of Yiisoft\Validator\RuleInterface, string given.';
+        $message = 'Every rule must be an instance of Yiisoft\Validator\RuleInterface or a callable, string given.';
         $this->expectExceptionMessage($message);
         new Nested([
             'data' => new Nested([
@@ -1500,6 +1500,17 @@ final class NestedTest extends RuleTestCase
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Nested::class, NestedHandler::class];
+    }
+
+    public function testUseCallableRules()
+    {
+        $rules = new Nested([
+            'tag' => static fn() => (new Result())->addError('Too short.'),
+        ]);
+        $data = ['tag' => 'value'];
+
+        $result = (new Validator())->validate($data, $rules);
+        $this->assertSame(['tag' => ['Too short.']], $result->getErrorMessagesIndexedByPath());
     }
 
     public function testWithArrayOfObjects(): void
