@@ -456,8 +456,7 @@ final class Nested implements
         foreach ($rules as &$rule) {
             if (is_callable($rule)){
                 $rule = new Callback($rule);
-            }
-            if (is_iterable($rule)) {
+            } elseif (is_iterable($rule)) {
                 self::ensureArrayHasRules($rule);
             } elseif (!$rule instanceof RuleInterface) {
                 $message = sprintf(
