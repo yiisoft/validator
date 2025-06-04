@@ -454,7 +454,7 @@ final class Nested implements
         }
 
         foreach ($rules as &$rule) {
-            if (is_callable($rule)){
+            if (is_callable($rule)) {
                 $rule = new Callback($rule);
             } elseif (is_iterable($rule)) {
                 self::ensureArrayHasRules($rule);
