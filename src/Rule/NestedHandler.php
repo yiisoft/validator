@@ -8,6 +8,7 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
+use Yiisoft\Validator\Helper\MissingValue;
 use Yiisoft\Validator\PostValidationHookInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -86,7 +87,7 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
+            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath, new MissingValue());
 
             if (is_int($valuePath)) {
                 $itemResult = $context->validate($validatedValue, $rules);
@@ -94,7 +95,7 @@ final class NestedHandler implements RuleHandlerInterface
                 $valuePathList = StringHelper::parsePath($valuePath);
                 $property = end($valuePathList);
                 $itemResult = $context->validate(
-                    $validatedValue === null ? $data : [$property => $validatedValue],
+                    $validatedValue instanceof MissingValue ? [] : [$property => $validatedValue],
                     [$property => $rules]
                 );
             }

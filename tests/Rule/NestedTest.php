@@ -1589,34 +1589,34 @@ final class NestedTest extends RuleTestCase
                 rules: [
                     'is_one_time' => new BooleanType(
                         skipOnEmpty: new WhenMissing()
-                    )
+                    ),
                 ],
                 skipOnEmpty: new WhenMissing()
             ),
         ];
 
         $data = [
-            "service" => "service",
-            "amount" => 200
+            'service' => 'service',
+            'amount' => 200,
         ];
 
         $result = (new Validator())->validate($data, $rules);
         $this->assertTrue($result->isValid());
 
         $data = [
-            "service" => "service",
-            "amount" => 200,
-            "regulations" => [],
+            'service' => 'service',
+            'amount' => 200,
+            'regulations' => [],
         ];
 
         $result = (new Validator())->validate($data, $rules);
         $this->assertTrue($result->isValid());
 
         $data = [
-            "service" => "service",
-            "amount" => 200,
-            "regulations" => [
-                'is_one_time' => null
+            'service' => 'service',
+            'amount' => 200,
+            'regulations' => [
+                'is_one_time' => null,
             ],
         ];
 
@@ -1624,10 +1624,10 @@ final class NestedTest extends RuleTestCase
         $this->assertFalse($result->isValid());
 
         $data = [
-            "service" => "service",
-            "amount" => 200,
-            "regulations" => [
-                'is_one_time' => true
+            'service' => 'service',
+            'amount' => 200,
+            'regulations' => [
+                'is_one_time' => true,
             ],
         ];
 
@@ -1649,17 +1649,17 @@ final class NestedTest extends RuleTestCase
                             return $result;
                         },
                         skipOnEmpty: new WhenMissing()
-                    )
+                    ),
                 ],
                 skipOnEmpty: new WhenMissing()
             ),
         ];
 
         $data = [
-            "service" => "service",
-            "amount" => 200,
-            "regulations" => [
-                'is_one_time' => null
+            'service' => 'service',
+            'amount' => 200,
+            'regulations' => [
+                'is_one_time' => null,
             ],
         ];
 
@@ -1668,10 +1668,10 @@ final class NestedTest extends RuleTestCase
 
 
         $data = [
-            "service" => "service",
-            "amount" => 200,
-            "regulations" => [
-                'is_one_time' => true
+            'service' => 'service',
+            'amount' => 200,
+            'regulations' => [
+                'is_one_time' => true,
             ],
         ];
 
@@ -1679,10 +1679,10 @@ final class NestedTest extends RuleTestCase
         $this->assertTrue($result->isValid());
 
         $data = [
-            "service" => "service",
-            "amount" => 200,
-            "regulations" => [
-                'is_one_time' => ""
+            'service' => 'service',
+            'amount' => 200,
+            'regulations' => [
+                'is_one_time' => '',
             ],
         ];
 
