@@ -87,7 +87,7 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath, new MissingValue());
+            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
 
             if (is_int($valuePath)) {
                 $itemResult = $context->validate($validatedValue, $rules);
@@ -95,7 +95,7 @@ final class NestedHandler implements RuleHandlerInterface
                 $valuePathList = StringHelper::parsePath($valuePath);
                 $property = end($valuePathList);
                 $itemResult = $context->validate(
-                    $validatedValue instanceof MissingValue ? [] : [$property => $validatedValue],
+                    ArrayHelper::pathExists($data, $valuePath) ? [$property => $validatedValue] : [],
                     [$property => $rules]
                 );
             }
