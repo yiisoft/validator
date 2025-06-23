@@ -8,7 +8,6 @@ use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
 use Yiisoft\Validator\DataSet\ObjectDataSet;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
-use Yiisoft\Validator\Helper\MissingValue;
 use Yiisoft\Validator\PostValidationHookInterface;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
