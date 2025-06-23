@@ -2,6 +2,7 @@
 
 ## 2.3.1 under development
 
+- Bug #750: Fix `WhenMissing` not working in nested rules (@Enjoyzz)
 - Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
 - Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 

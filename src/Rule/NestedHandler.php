@@ -93,7 +93,10 @@ final class NestedHandler implements RuleHandlerInterface
             } else {
                 $valuePathList = StringHelper::parsePath($valuePath);
                 $property = end($valuePathList);
-                $itemResult = $context->validate([$property => $validatedValue], [$property => $rules]);
+                $itemResult = $context->validate(
+                    ArrayHelper::keyExists($data, $valuePathList) ? [$property => $validatedValue] : [],
+                    [$property => $rules]
+                );
             }
 
             if ($itemResult->isValid()) {
