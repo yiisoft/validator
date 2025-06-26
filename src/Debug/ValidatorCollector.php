@@ -50,11 +50,9 @@ final class ValidatorCollector implements SummaryCollectorInterface
         $countInvalid = $count - $countValid;
 
         return [
-            'validator' => [
-                'total' => $count,
-                'valid' => $countValid,
-                'invalid' => $countInvalid,
-            ],
+            'total' => $count,
+            'valid' => $countValid,
+            'invalid' => $countInvalid,
         ];
     }
 
