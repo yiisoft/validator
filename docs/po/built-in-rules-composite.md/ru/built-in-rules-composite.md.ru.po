@@ -1,0 +1,193 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2025-06-28 14:22+0000\n"
+"PO-Revision-Date: 2025-06-28 19:44+0500\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.6\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid "`Composite` - grouping multiple validation rules"
+msgstr "`Composite` - группировка нескольких правил валидации"
+
+#. type: Plain text
+#: guide/en/built-in-rules-composite.md
+msgid "`Composite` allows to group multiple rules and configure the common [skipping options](conditional-validation.md), such as `skipOnEmpty`, `skipOnError` and `when`, for the whole set only once instead of repeating them in each rule:"
+msgstr "`Composite` позволяет группировать несколько правил и конфигурировать общие [варианты пропуска](conditional-validation.md), такие как `skipOnEmpty`, `skipOnError` и `when`, для всего набора только один раз, а не повторять их в каждом правиле:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Email;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"\n"
+"new Composite(\n"
+"    [\n"
+"        new Length(max: 255),\n"
+"        new Email(),\n"
+"    ],\n"
+"    skipOnEmpty: true,\n"
+");\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Email;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"\n"
+"new Composite(\n"
+"    [\n"
+"        new Length(max: 255),\n"
+"        new Email(),\n"
+"    ],\n"
+"    skipOnEmpty: true,\n"
+");\n"
+
+#. type: Title ##
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid "Reusing multiple rules / single rule with the same options"
+msgstr "Повторное использование нескольких правил/одного правила с теми же параметрами"
+
+#. type: Plain text
+#: guide/en/built-in-rules-composite.md
+msgid "`Composite` is one of the few built-in rules that is not `final`. This means that you can extend it and override the `getRules()` method to create a reusable set of rules:"
+msgstr "`Composite` — одно из немногих встроенных правил, которое не является `final`. Это означает, что вы можете расширить его и переопределить метод `getRules()`, чтобы создать повторно используемый набор правил:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Regex;\n"
+"\n"
+"final class UsernameRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [\n"
+"            new Length(min: 2, max: 20),\n"
+"            new Regex('~^[a-z_\\-]*$~i'),\n"
+"        ];\n"
+"    }\n"
+"}\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Regex;\n"
+"\n"
+"final class UsernameRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [\n"
+"            new Length(min: 2, max: 20),\n"
+"            new Regex('~^[a-z_\\-]*$~i'),\n"
+"        ];\n"
+"    }\n"
+"}\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-composite.md
+msgid "And use it just like a single regular rule:"
+msgstr "И используйте его просто как обычное правило:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$result = (new Validator())->validate('John', new UsernameRuleSet());\n"
+msgstr ""
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$result = (new Validator())->validate('John', new UsernameRuleSet());\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-composite.md
+msgid "It can also be combined with [Nested](built-in-rules-nested.md) rule to reuse rules for multiple properties:"
+msgstr "Его также можно объединить с правилом [Nested](built-in-rules-nested.md) для повторного использования правил для нескольких свойств:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class CoordinatesRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [\n"
+"            new Nested(\n"
+"                'latitude' => new Number(min: -90, max: 90),\n"
+"                'longitude' => new Number(min: -90, max: 90),\n"
+"            ),\n"
+"        ];\n"
+"    }\n"
+"}\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class CoordinatesRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [\n"
+"            new Nested(\n"
+"                'latitude' => new Number(min: -90, max: 90),\n"
+"                'longitude' => new Number(min: -90, max: 90),\n"
+"            ),\n"
+"        ];\n"
+"    }\n"
+"}\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-composite.md
+msgid "Even the problem of reusing only one rule with the same arguments can be solved with `Composite`:"
+msgstr "Даже проблему повторного использования только одного правила с теми же аргументами можно решить с помощью Composite:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-composite.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class ChartCoordinateRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [new Number(min: -10, max: 10)];\n"
+"    }\n"
+"}\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class ChartCoordinateRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [new Number(min: -10, max: 10)];\n"
+"    }\n"
+"}\n"
