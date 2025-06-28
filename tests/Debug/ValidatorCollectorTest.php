@@ -36,14 +36,13 @@ final class ValidatorCollectorTest extends AbstractCollectorTestCase
 
     protected function checkSummaryData(array $data): void
     {
-        $this->assertArrayHasKey('validator', $data);
 
-        $this->assertArrayHasKey('total', $data['validator']);
-        $this->assertArrayHasKey('valid', $data['validator']);
-        $this->assertArrayHasKey('invalid', $data['validator']);
+        $this->assertArrayHasKey('total', $data);
+        $this->assertArrayHasKey('valid', $data);
+        $this->assertArrayHasKey('invalid', $data);
 
-        $this->assertEquals(2, $data['validator']['total']);
-        $this->assertEquals(1, $data['validator']['valid']);
-        $this->assertEquals(1, $data['validator']['invalid']);
+        $this->assertEquals(2, $data['total']);
+        $this->assertEquals(1, $data['valid']);
+        $this->assertEquals(1, $data['invalid']);
     }
 }

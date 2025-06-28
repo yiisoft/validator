@@ -5,6 +5,7 @@
 - Bug #750: Fix `WhenMissing` not working in nested rules (@Enjoyzz)
 - Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
 - Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
+- Enh #772: Adapt summary data in debug collector (@rustamwin)
 
 ## 2.3.0 May 07, 2025
 
