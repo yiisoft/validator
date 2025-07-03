@@ -6,6 +6,8 @@ namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
 
+use Stringable;
+
 use function array_slice;
 use function implode;
 use function is_string;
@@ -248,7 +250,7 @@ final class Result
     /**
      * Add an error.
      *
-     * @param string $message The raw validation error message. See {@see Error::$message}.
+     * @param string|Stringable $message The raw validation error message. See {@see Error::$message}.
      * @param array $parameters Parameters used for {@see $message} translation - a mapping between parameter
      * names and values. See {@see Error::$parameters}.
      *
@@ -261,7 +263,7 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addError(string $message, array $parameters = [], array $valuePath = []): self
+    public function addError(string|Stringable $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath);
         return $this;
@@ -277,7 +279,7 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addErrorWithFormatOnly(string $message, array $parameters = [], array $valuePath = []): self
+    public function addErrorWithFormatOnly(string|Stringable $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_FORMAT);
         return $this;
@@ -293,7 +295,7 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addErrorWithoutPostProcessing(string $message, array $parameters = [], array $valuePath = []): self
+    public function addErrorWithoutPostProcessing(string|Stringable $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_NONE);
         return $this;

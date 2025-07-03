@@ -6,6 +6,7 @@
 - Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
 - Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 - Enh #772: Adapt summary data in debug collector (@rustamwin)
+- Enh #773: Support stringable objects as validation error messages (@vjik)
 
 ## 2.3.0 May 07, 2025
 

@@ -11,6 +11,7 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Tests\Support\StringableObject;
 use Yiisoft\Validator\Validator;
 
 class ResultTest extends TestCase
@@ -29,10 +30,24 @@ class ResultTest extends TestCase
 
         $result
             ->addError('Error 1')
-            ->addError('Error 2');
+            ->addError(new StringableObject('Error 2'))
+            ->addErrorWithFormatOnly('Error 3')
+            ->addErrorWithFormatOnly(new StringableObject('Error 4'))
+            ->addErrorWithoutPostProcessing('Error 5')
+            ->addErrorWithoutPostProcessing(new StringableObject('Error 6'));
 
         $this->assertFalse($result->isValid());
-        $this->assertEquals(['Error 1', 'Error 2'], $result->getErrorMessages());
+        $this->assertEquals(
+            [
+                new Error('Error 1', messageProcessing: Error::MESSAGE_TRANSLATE),
+                new Error('Error 2', messageProcessing: Error::MESSAGE_TRANSLATE),
+                new Error('Error 3', messageProcessing: Error::MESSAGE_FORMAT),
+                new Error('Error 4', messageProcessing: Error::MESSAGE_FORMAT),
+                new Error('Error 5', messageProcessing: Error::MESSAGE_NONE),
+                new Error('Error 6', messageProcessing: Error::MESSAGE_NONE),
+            ],
+            $result->getErrors(),
+        );
     }
 
     public function testAddErrorSame(): void
