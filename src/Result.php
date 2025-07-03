@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
-
 use Stringable;
 
 use function array_slice;
