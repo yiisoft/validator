@@ -9,7 +9,7 @@ use Stringable;
 final class StringableObject implements Stringable
 {
     public function __construct(
-        private string $value,
+        private readonly string $value,
     ) {
     }
 
