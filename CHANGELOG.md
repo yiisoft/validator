@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.4.1 under development
+
+- no changes in this release.
+
 ## 2.4.0 July 07, 2025
 
 - Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
