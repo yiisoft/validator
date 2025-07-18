@@ -2,7 +2,7 @@
 
 ## 2.4.1 under development
 
-- no changes in this release.
+- New #774: Add `Result::getPropertyErrorMessagesByPath()` method (@vjik)
 
 ## 2.4.0 July 07, 2025
 

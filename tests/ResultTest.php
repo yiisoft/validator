@@ -189,6 +189,23 @@ class ResultTest extends TestCase
         $this->assertEquals(['error4.1', 'error4.2'], $result->getPropertyErrorMessages('attribute4'));
     }
 
+    public function testGetPropertyErrorMessagesByPath(): void
+    {
+        $result = (new Result())
+            ->addError('e1', valuePath: ['age'])
+            ->addError('e2', valuePath: ['person'])
+            ->addError('e3', valuePath: ['person', 'first_name'])
+            ->addError('e4', valuePath: ['person', 'first_name'])
+            ->addError('e5', valuePath: ['person', 'last_name'])
+            ->addError('e6');
+
+        $this->assertSame(['e1', 'e2', 'e3', 'e4', 'e5', 'e6'], $result->getPropertyErrorMessagesByPath([]));
+        $this->assertSame([], $result->getPropertyErrorMessagesByPath(['non-exists']));
+        $this->assertSame(['e1'], $result->getPropertyErrorMessagesByPath(['age']));
+        $this->assertSame(['e2', 'e3', 'e4', 'e5'], $result->getPropertyErrorMessagesByPath(['person']));
+        $this->assertSame(['e3', 'e4'], $result->getPropertyErrorMessagesByPath(['person', 'first_name']));
+    }
+
     public function testGetAttributeErrorMessagesIndexedByPath(): void
     {
         $result = $this->createAttributeErrorResult();
