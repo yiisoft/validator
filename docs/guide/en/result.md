@@ -86,6 +86,14 @@ The output for example above:
 ];
 ```
 
+#### Filtering by a specific path
+
+This list of error messages can be filtered by a specific path to property.
+
+```php
+$result->getPropertyErrorMessagesByPath(['person', 'first_name']);
+```
+
 ### Error messages indexed by property
 
 To group error messages by property, use the following `Result` API call:

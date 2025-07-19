@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Stringable;
 
 use function array_slice;
+use function count;
 use function implode;
 use function is_string;
 
@@ -196,6 +197,23 @@ final class Result
         foreach ($this->errors as $error) {
             $firstItem = $error->getValuePath()[0] ?? '';
             if ($firstItem === $property) {
+                $errors[] = $error->getMessage();
+            }
+        }
+        return $errors;
+    }
+
+    /**
+     * Get an array of error messages for the path specified.
+     *
+     * @psalm-param list<string> $path
+     * @psalm-return list<string>
+     */
+    public function getPropertyErrorMessagesByPath(array $path): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            if ($path === array_slice($error->getValuePath(), 0, count($path))) {
                 $errors[] = $error->getMessage();
             }
         }
