@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.5.1 under development
+
+- no changes in this release.
+
 ## 2.5.0 July 19, 2025
 
 - New #774: Add `Result::getPropertyErrorMessagesByPath()` method (@vjik)
