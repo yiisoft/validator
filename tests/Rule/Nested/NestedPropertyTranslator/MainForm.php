@@ -6,7 +6,8 @@ namespace Yiisoft\Validator\Tests\Rule\Nested\NestedPropertyTranslator;
 
 use Yiisoft\Validator\Rule\Nested;
 
-final class MainForm {
+final class MainForm
+{
     public function __construct(
         #[Nested]
         public SubForm $sub,

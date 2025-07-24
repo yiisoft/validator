@@ -9,10 +9,13 @@ use Yiisoft\Validator\PropertyTranslatorInterface;
 use Yiisoft\Validator\PropertyTranslatorProviderInterface;
 use Yiisoft\Validator\Rule\Length;
 
-final class SubForm implements PropertyTranslatorProviderInterface {
+final class SubForm implements PropertyTranslatorProviderInterface
+{
     #[Length(min: 5)]
     public string $phone = '123';
-    public function getPropertyTranslator(): ?PropertyTranslatorInterface {
+
+    public function getPropertyTranslator(): ?PropertyTranslatorInterface
+    {
         return new ArrayPropertyTranslator([
             'phone' => 'Телефон',
         ]);
