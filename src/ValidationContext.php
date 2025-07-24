@@ -156,15 +156,20 @@ final class ValidationContext
         $currentProperty = $this->property;
         $isCurrentDataSetMissing = $this->isDataSetMissing;
         $currentParameters = $this->parameters;
+        $currentDefaultPropertyTranslator = $this->defaultPropertyTranslator;
 
         // The lack of a property means that in the context of further validation there is no data set at all.
         $this->isDataSetMissing = $this->isPropertyMissing();
+        if ($data instanceof PropertyTranslatorProviderInterface) {
+            $this->defaultPropertyTranslator = $data->getPropertyTranslator() ?? $currentDefaultPropertyTranslator;
+        }
         $result = $this->validator->validate($data, $rules, $this);
 
         $this->dataSet = $currentDataSet;
         $this->property = $currentProperty;
         $this->isDataSetMissing = $isCurrentDataSetMissing;
         $this->parameters = $currentParameters;
+        $this->defaultPropertyTranslator = $currentDefaultPropertyTranslator;
 
         return $result;
     }
