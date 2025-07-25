@@ -25,7 +25,6 @@ use Yiisoft\Validator\RulesProvider\AttributesRulesProvider;
 use Yiisoft\Validator\RulesProviderInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
-use Yiisoft\Validator\Tests\Rule\NestedTest;
 use Yiisoft\Validator\WhenInterface;
 
 use function array_pop;

@@ -2,7 +2,7 @@
 
 ## 2.5.1 under development
 
-- no changes in this release.
+- Bug #776: Take `PropertyTranslatorProviderInterface` into account during context validation (@vjik)
 
 ## 2.5.0 July 19, 2025
 
