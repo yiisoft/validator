@@ -469,7 +469,7 @@ $data = [
 ```
 
 [Результаты]: result.md
-[Базовое использование]: #basic-usage-one-to-one-relation
+[Базовое использование]: #базовое-использование-связь-один-к-одному
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md
 [Использование валидатора]: using-validator.md
