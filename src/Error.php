@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
+use Stringable;
 use Yiisoft\Translator\IntlMessageFormatter;
 use Yiisoft\Translator\SimpleMessageFormatter;
 use Yiisoft\Validator\Rule\Callback;
@@ -19,9 +20,12 @@ final class Error
     public const MESSAGE_FORMAT = 1;
     public const MESSAGE_TRANSLATE = 2;
 
+    private readonly string $message;
+
     /**
-     * @param string $message The raw validation error message. Can be a simple text or a template with placeholders
-     * enclosed in curly braces (`{}`). In the end of the validation it will be translated using configured translator.
+     * @param string|Stringable $message The raw validation error message. Can be a simple text or a template with
+     * placeholders enclosed in curly braces (`{}`). In the end of the validation it will be translated using configured
+     * translator.
      * {@see SimpleMessageFormatter} is usually enough, but for more complex translations
      * {@see IntlMessageFormatter} can be used (requires "intl" PHP extension). Examples:
      *
@@ -73,11 +77,12 @@ final class Error
      * @psalm-param self::MESSAGE_* $messageProcessing
      */
     public function __construct(
-        private readonly string $message,
+        string|Stringable $message,
         private readonly array $parameters = [],
         private readonly array $valuePath = [],
         private readonly int $messageProcessing = self::MESSAGE_TRANSLATE,
     ) {
+        $this->message = (string) $message;
     }
 
     /**

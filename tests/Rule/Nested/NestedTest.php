@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Validator\Tests\Rule;
+namespace Yiisoft\Validator\Tests\Rule\Nested;
 
 use ArrayObject;
 use InvalidArgumentException;

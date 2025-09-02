@@ -1,11 +1,20 @@
 # Yii Validator Change Log
 
-## 2.3.1 under development
+## 2.5.1 under development
 
-- Bug #750: Fix `WhenMissing` not working in nested rules (@Enjoyzz)
+- Bug #776: Take `PropertyTranslatorProviderInterface` into account during context validation (@vjik)
+
+## 2.5.0 July 19, 2025
+
+- New #774: Add `Result::getPropertyErrorMessagesByPath()` method (@vjik)
+
+## 2.4.0 July 07, 2025
+
 - Enh #770: Allow use callable rules into `Nested` (@Enjoyzz)
-- Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 - Enh #772: Adapt summary data in debug collector (@rustamwin)
+- Enh #773: Support stringable objects as validation error messages (@vjik)
+- Bug #750: Fix `WhenMissing` not working in nested rules (@Enjoyzz)
+- Bug #751: Fix incorrect `Nested` rule processing within `Each` (@Enjoyzz)
 
 ## 2.3.0 May 07, 2025
 

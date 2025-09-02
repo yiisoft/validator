@@ -11,6 +11,7 @@ use Yiisoft\Validator\Error;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Tests\Support\StringableObject;
 use Yiisoft\Validator\Validator;
 
 class ResultTest extends TestCase
@@ -29,10 +30,24 @@ class ResultTest extends TestCase
 
         $result
             ->addError('Error 1')
-            ->addError('Error 2');
+            ->addError(new StringableObject('Error 2'))
+            ->addErrorWithFormatOnly('Error 3')
+            ->addErrorWithFormatOnly(new StringableObject('Error 4'))
+            ->addErrorWithoutPostProcessing('Error 5')
+            ->addErrorWithoutPostProcessing(new StringableObject('Error 6'));
 
         $this->assertFalse($result->isValid());
-        $this->assertEquals(['Error 1', 'Error 2'], $result->getErrorMessages());
+        $this->assertEquals(
+            [
+                new Error('Error 1', messageProcessing: Error::MESSAGE_TRANSLATE),
+                new Error('Error 2', messageProcessing: Error::MESSAGE_TRANSLATE),
+                new Error('Error 3', messageProcessing: Error::MESSAGE_FORMAT),
+                new Error('Error 4', messageProcessing: Error::MESSAGE_FORMAT),
+                new Error('Error 5', messageProcessing: Error::MESSAGE_NONE),
+                new Error('Error 6', messageProcessing: Error::MESSAGE_NONE),
+            ],
+            $result->getErrors(),
+        );
     }
 
     public function testAddErrorSame(): void
@@ -172,6 +187,23 @@ class ResultTest extends TestCase
         );
         $this->assertEquals(['error3.1', 'error3.2'], $result->getPropertyErrorMessages(''));
         $this->assertEquals(['error4.1', 'error4.2'], $result->getPropertyErrorMessages('attribute4'));
+    }
+
+    public function testGetPropertyErrorMessagesByPath(): void
+    {
+        $result = (new Result())
+            ->addError('e1', valuePath: ['age'])
+            ->addError('e2', valuePath: ['person'])
+            ->addError('e3', valuePath: ['person', 'first_name'])
+            ->addError('e4', valuePath: ['person', 'first_name'])
+            ->addError('e5', valuePath: ['person', 'last_name'])
+            ->addError('e6');
+
+        $this->assertSame(['e1', 'e2', 'e3', 'e4', 'e5', 'e6'], $result->getPropertyErrorMessagesByPath([]));
+        $this->assertSame([], $result->getPropertyErrorMessagesByPath(['non-exists']));
+        $this->assertSame(['e1'], $result->getPropertyErrorMessagesByPath(['age']));
+        $this->assertSame(['e2', 'e3', 'e4', 'e5'], $result->getPropertyErrorMessagesByPath(['person']));
+        $this->assertSame(['e3', 'e4'], $result->getPropertyErrorMessagesByPath(['person', 'first_name']));
     }
 
     public function testGetAttributeErrorMessagesIndexedByPath(): void

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2025-07-18 14:58+0000\n"
 "PO-Revision-Date: 2025-04-12 21:30+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -197,6 +197,27 @@ msgstr ""
 "[\n"
 "    'This value is not a valid email address.',\n"
 "];\n"
+
+#. type: Title ####
+#: guide/en/result.md
+#, fuzzy, no-wrap
+#| msgid "Filtering by a specific property"
+msgid "Filtering by a specific path"
+msgstr "Фильтрация по определенному свойству"
+
+#. type: Plain text
+#: guide/en/result.md
+#, fuzzy
+#| msgid "Error messages not bound to a specific property"
+msgid "This list of error messages can be filtered by a specific path to property."
+msgstr "Сообщения об ошибках, не привязанные к определенному свойству"
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, fuzzy, no-wrap
+#| msgid "$result->getPropertyErrorMessages('email');\n"
+msgid "$result->getPropertyErrorMessagesByPath(['person', 'first_name']);\n"
+msgstr "$result->getPropertyErrorMessages('email');\n"
 
 #. type: Title ###
 #: guide/en/result.md

@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2025-07-18 14:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -190,6 +190,24 @@ msgid ""
 "[\n"
 "    'This value is not a valid email address.',\n"
 "];\n"
+msgstr ""
+
+#. type: Title ####
+#: guide/en/result.md
+#, no-wrap
+msgid "Filtering by a specific path"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"This list of error messages can be filtered by a specific path to property."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid "$result->getPropertyErrorMessagesByPath(['person', 'first_name']);\n"
 msgstr ""
 
 #. type: Title ###

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator;
 
 use InvalidArgumentException;
+use Stringable;
 
 use function array_slice;
+use function count;
 use function implode;
 use function is_string;
 
@@ -202,6 +204,23 @@ final class Result
     }
 
     /**
+     * Get an array of error messages for the path specified.
+     *
+     * @psalm-param list<string> $path
+     * @psalm-return list<string>
+     */
+    public function getPropertyErrorMessagesByPath(array $path): array
+    {
+        $errors = [];
+        foreach ($this->errors as $error) {
+            if ($path === array_slice($error->getValuePath(), 0, count($path))) {
+                $errors[] = $error->getMessage();
+            }
+        }
+        return $errors;
+    }
+
+    /**
      * Get arrays of error messages for the property specified indexed by property path.
      * Each key is a dot-separated property path.
      * Each value is an array of error message strings.
@@ -248,7 +267,7 @@ final class Result
     /**
      * Add an error.
      *
-     * @param string $message The raw validation error message. See {@see Error::$message}.
+     * @param string|Stringable $message The raw validation error message. See {@see Error::$message}.
      * @param array $parameters Parameters used for {@see $message} translation - a mapping between parameter
      * names and values. See {@see Error::$parameters}.
      *
@@ -261,7 +280,7 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addError(string $message, array $parameters = [], array $valuePath = []): self
+    public function addError(string|Stringable $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath);
         return $this;
@@ -277,7 +296,7 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addErrorWithFormatOnly(string $message, array $parameters = [], array $valuePath = []): self
+    public function addErrorWithFormatOnly(string|Stringable $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_FORMAT);
         return $this;
@@ -293,7 +312,7 @@ final class Result
      *
      * @return $this Same instance of result.
      */
-    public function addErrorWithoutPostProcessing(string $message, array $parameters = [], array $valuePath = []): self
+    public function addErrorWithoutPostProcessing(string|Stringable $message, array $parameters = [], array $valuePath = []): self
     {
         $this->errors[] = new Error($message, $parameters, $valuePath, Error::MESSAGE_NONE);
         return $this;
