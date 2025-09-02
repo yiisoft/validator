@@ -80,23 +80,7 @@ $rule = new Nested([
 
 Для краткости часть кода можно опустить.
 
-#### Внутренние экземпляры `Nested`
-
-Внутренние экземпляры `Nested` могут быть опущены:
-
-```php
-use Yiisoft\Validator\Rule\Length;
-use Yiisoft\Validator\Rule\Nested;
-
-$rule = new Nested([
-    'author' => [
-        'name' => [new Length(min: 1)],
-    ],
-]);
-```
-
-#### Внутренние массивы для отдельных правил
-
+#### Внутренние экземпляры `Nested`Базовое использование (связь "один к одному")
 Внутренние массивы для отдельных правил могут быть опущены независимо от
 уровня вложенности:
 
@@ -206,20 +190,7 @@ $rule = new Nested([
 $result = (new Validator())->validate($data, $rule);
 $errors = $result->getErrorMessagesIndexedByPath();
 ```
-
-Содержание `$errors` будет следующим:
-
-```php
-$errors = [
-    'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.'],
-    // ...
-    'charts.0.points.0.rgb.0' => ['Value must be no less than 0. -1 given.'],
-    // ...
-];
-```
-
-### Использование сокращения `*`
-
+Базовое использование (связь "один к одному")
 Для упрощения комбинаций `Nested` и `Each` можно использовать сокращение
 `*`:
 
@@ -469,7 +440,7 @@ $data = [
 ```
 
 [Результаты]: result.md
-[Базовое использование]: #basic-usage-one-to-one-relation
+[Базовое использование]: #базовое-использование-связь-один-к-одному
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md
 [Использование валидатора]: using-validator.md
