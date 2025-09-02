@@ -1,0 +1,176 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-08-09 15:52+0000\n"
+"PO-Revision-Date: 2025-08-09 15:52+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Title #
+#: guide/en/client-side-validation.md
+#, no-wrap
+msgid "Client side validation"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "Unlike Yii2, the package does not provide any handling of the validation rules on the client side. Likely it will be added later as another related package."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "However, there is a possibility to export rules' options as an array for passing to the client side using `RulesDumper` class:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/client-side-validation.md
+msgid "Multiple rules and nesting of rules are supported."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/client-side-validation.md
+msgid "If a rule does not provide options, only the name is exported."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "- The option values that can't be serialized/reproduced on the client side - callables, for example, are excluded - either completely like `Callback::$callback` or partially like `$skipOnEmpty` if multiple types are supported."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "Given built-in `Length` rule:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/client-side-validation.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Helper\\RulesDumper;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"\n"
+"$rules = [  \n"
+"    'name' => [  \n"
+"        new Length(min: 4, max: 10),  \n"
+"    ],  \n"
+"];  \n"
+"$options = RulesDumper::asArray($rules);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "the output will be:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/client-side-validation.md
+#, no-wrap
+msgid ""
+"[  \n"
+"    'name' => [  \n"
+"        [  \n"
+"            'Yiisoft\\Validator\\Rule\\Length',  \n"
+"            'min' => 4,  \n"
+"            'max' => 10,  \n"
+"            'exactly' => null,  \n"
+"            'lessThanMinMessage' => [  \n"
+"                'template' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',  \n"
+"                'parameters' => ['min' => 4],  \n"
+"            ],  \n"
+"            'greaterThanMaxMessage' => [  \n"
+"                'template' => 'This value must contain at most {max, number} {max, plural, one{character} other{characters}}.',  \n"
+"                'parameters' => ['max' => 10],  \n"
+"            ],  \n"
+"            'notExactlyMessage' => [  \n"
+"                'template' => 'This value must contain exactly {exactly, number} {exactly, plural, one{character} other{characters}}.',  \n"
+"                'parameters' => ['exactly' => null],  \n"
+"            ],  \n"
+"            'incorrectInputMessage' => [  \n"
+"                'template' => 'The value must be a string.',  \n"
+"                'parameters' => [],  \n"
+"            ],  \n"
+"            'encoding' => 'UTF-8',  \n"
+"            'skipOnEmpty' => false,  \n"
+"            'skipOnError' => false,  \n"
+"        ],\n"
+"    ],  \n"
+"],\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "The resulting array, serialized as JSON, can be unserialized back and applied to an implementation of your choice."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/client-side-validation.md
+#, no-wrap
+msgid "Structure of exported options"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "Here are some specifics of the rules structure:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/client-side-validation.md
+msgid "The indexing of rules by property names is maintained."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/client-side-validation.md
+msgid "The first rule element is always a rule name with an integer index of `0`."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/client-side-validation.md
+msgid "The remaining rule elements are key-value pairs, where key is an option name and value is a corresponding option value."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/client-side-validation.md
+msgid "For complex rules, such as `Composite`, `Each` and `Nested`, the options of the child rules are located under the `rules` key."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "Note that the error messages have a special structure:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/client-side-validation.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'lessThanMinMessage' => [  \n"
+"        'template' => 'This value must contain at least {min, number} {min, plural, one{character} other{characters}}.',  \n"
+"        'parameters' => ['min' => 4],  \n"
+"    ],\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/client-side-validation.md
+msgid "It stays the same regardless of the presence of placeholders and parameters:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/client-side-validation.md
+#, no-wrap
+msgid ""
+"'message' => [\n"
+"    'template' => 'Value is invalid.',\n"
+"    'parameters' => [],\n"
+"],\n"
+msgstr ""
