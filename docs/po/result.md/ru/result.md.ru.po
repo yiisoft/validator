@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2025-07-18 14:58+0000\n"
-"PO-Revision-Date: 2025-04-12 21:30+0500\n"
+"PO-Revision-Date: 2025-09-03 15:36+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.7\n"
 
 #. type: Title #
 #: guide/en/result.md
@@ -200,24 +200,22 @@ msgstr ""
 
 #. type: Title ####
 #: guide/en/result.md
-#, fuzzy, no-wrap
-#| msgid "Filtering by a specific property"
+#, no-wrap
 msgid "Filtering by a specific path"
 msgstr "Фильтрация по определенному свойству"
 
 #. type: Plain text
 #: guide/en/result.md
-#, fuzzy
-#| msgid "Error messages not bound to a specific property"
 msgid "This list of error messages can be filtered by a specific path to property."
-msgstr "Сообщения об ошибках, не привязанные к определенному свойству"
+msgstr "Этот список сообщений об ошибках можно отфильтровать по определенному пути к свойству."
 
 #. type: Fenced code block (php)
 #: guide/en/result.md
-#, fuzzy, no-wrap
-#| msgid "$result->getPropertyErrorMessages('email');\n"
+#, no-wrap
 msgid "$result->getPropertyErrorMessagesByPath(['person', 'first_name']);\n"
-msgstr "$result->getPropertyErrorMessages('email');\n"
+msgstr ""
+"$result->getPropertyErrorMessagesByPath(['person', 'first_name']);\r\n"
+"\n"
 
 #. type: Title ###
 #: guide/en/result.md
