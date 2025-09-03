@@ -102,7 +102,6 @@ $result->getPropertyErrorMessages('email');
 
 ```php
 $result->getPropertyErrorMessagesByPath(['person', 'first_name']);
-
 ```
 
 ### Сообщения об ошибках, сгруппированные по свойству
