@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2025-07-18 14:58+0000\n"
-"PO-Revision-Date: 2025-09-03 15:36+0500\n"
+"PO-Revision-Date: 2025-09-03 15:43+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -202,7 +202,7 @@ msgstr ""
 #: guide/en/result.md
 #, no-wrap
 msgid "Filtering by a specific path"
-msgstr "Фильтрация по определенному свойству"
+msgstr "Фильтрация по определенному пути"
 
 #. type: Plain text
 #: guide/en/result.md
