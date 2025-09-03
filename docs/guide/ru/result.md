@@ -95,12 +95,14 @@ $result->getPropertyErrorMessages('email');
 ];
 ```
 
-#### Filtering by a specific path
+#### Фильтрация по определенному свойству
 
-This list of error messages can be filtered by a specific path to property.
+Этот список сообщений об ошибках можно отфильтровать по определенному пути к
+свойству.
 
 ```php
 $result->getPropertyErrorMessagesByPath(['person', 'first_name']);
+
 ```
 
 ### Сообщения об ошибках, сгруппированные по свойству
