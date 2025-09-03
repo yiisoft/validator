@@ -1,0 +1,997 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2025 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2025-08-09 15:52+0000\n"
+"PO-Revision-Date: 2025-09-02 18:54+0500\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.7\n"
+
+#. type: Title ###
+#: guide/en/using-validator.md guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Using PHP attributes"
+msgstr "Использование атрибутов"
+
+#. type: Title #
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "`Nested` - validation of nested and related data"
+msgstr "`Nested` - проверка вложенных и связанных данных"
+
+#. type: Title ##
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Basic usage (one-to-one relation)"
+msgstr "Базовое использование (связь \"один к одному\")"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "In many cases there is a need to validate related data in addition to the current entity / model.  There is a `Nested` rule for this purpose."
+msgstr "Во многих случаях необходимо проверять связанные данные в дополнение к текущей сущности/модели. Для этой цели существует правило `Nested`."
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = ['author' => ['name' => 'John', 'age' => '17']];\n"
+"$rule = new Nested([\n"
+"    'title' => [new Required()],\n"
+"    'author' => new Nested([\n"
+"        'name' => [new Length(min: 3)],\n"
+"        'age' => [new Number(min: 18)],\n"
+"    ]),\n"
+"]);\n"
+"$errors = (new Validator())->validate($data, $rule)->getErrorMessagesIndexedByPath();\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = ['author' => ['name' => 'John', 'age' => '17']];\n"
+"$rule = new Nested([\n"
+"    'title' => [new Required()],\n"
+"    'author' => new Nested([\n"
+"        'name' => [new Length(min: 3)],\n"
+"        'age' => [new Number(min: 18)],\n"
+"    ]),\n"
+"]);\n"
+"$errors = (new Validator())->validate($data, $rule)->getErrorMessagesIndexedByPath();\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "The output of `$errors` will be:"
+msgstr "Вывод `$errors` будет такой:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'title' => ['Value cannot be blank.'], \n"
+"    'author.age' => ['Value must be no less than 18.'],\n"
+"];\n"
+msgstr ""
+"[\n"
+"    'title' => ['Value cannot be blank.'], \n"
+"    'author.age' => ['Value must be no less than 18.'],\n"
+"];\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "In this example, an additional instance of the `Nested` rule is used for each relation. Other ways of configuration are possible, they are described below."
+msgstr "В этом примере для каждого отношения используется дополнительный экземпляр правила `Nested`. Возможны и другие варианты настройки, описанные ниже."
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Other representations of the error list are covered in the [Result] section."
+msgstr "Другие представления списка ошибок рассматриваются в разделе [Результат]."
+
+#. type: Title ##
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Configuration options"
+msgstr "Параметры конфигурации"
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Dot notation"
+msgstr "Нотация \"через точку\""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Dot notation can be used as an alternative method of configuration. In this case, the above example is represented as follows:"
+msgstr "В качестве альтернативного метода конфигурирования можно использовать нотацию через точку. В этом случае приведенный выше пример будет выглядеть следующим образом:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'title' => [new Required()],\n"
+"    'author.name' => [new Length(min: 3)],\n"
+"    'author.age' => [new Number(min: 18)],\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'title' => [new Required()],\n"
+"    'author.name' => [new Length(min: 3)],\n"
+"    'author.age' => [new Number(min: 18)],\n"
+"]);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "It's also possible to combine both approaches:"
+msgstr "Также возможно объединить оба подхода:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$data = ['author' => ['name' => 'Alexey', 'age' => '31']];\n"
+"$rule = new Nested([\n"
+"    'content' => new Nested([\n"
+"        'title' => [new Required()],\n"
+"        'description' => [new Required()],\n"
+"    ]),\n"
+"    'author.name' => [new Length(min: 3)],\n"
+"    'author.age' => [new Number(min: 18)],\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$data = ['author' => ['name' => 'Alexey', 'age' => '31']];\n"
+"$rule = new Nested([\n"
+"    'content' => new Nested([\n"
+"        'title' => [new Required()],\n"
+"        'description' => [new Required()],\n"
+"    ]),\n"
+"    'author.name' => [new Length(min: 3)],\n"
+"    'author.age' => [new Number(min: 18)],\n"
+"]);]\n"
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Omitting code"
+msgstr "Пропуск кода"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Some code can be omitted for brevity."
+msgstr "Для краткости часть кода можно опустить."
+
+#. type: Title ####
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Inner `Nested` instances"
+msgstr "Внутренние экземпляры `Nested`"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Inner `Nested` instances can be omitted:"
+msgstr "Внутренние экземпляры `Nested` могут быть опущены:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author' => [\n"
+"        'name' => [new Length(min: 1)],\n"
+"    ],\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author' => [\n"
+"        'name' => [new Length(min: 1)],\n"
+"    ],\n"
+"]);\n"
+
+#. type: Title ####
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Inner arrays for single rules"
+msgstr "Внутренние массивы для отдельных правил"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Inner arrays for single rules can be omitted regardless of nesting level:"
+msgstr "Внутренние массивы для отдельных правил могут быть опущены независимо от уровня вложенности:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author' => [\n"
+"        'name' => [\n"
+"            'surname' => new Length(min: 1),\n"
+"        ],\n"
+"    ],\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author' => [\n"
+"        'name' => [\n"
+"            'surname' => new Length(min: 1),\n"
+"        ],\n"
+"    ],\n"
+"]);\n"
+
+#. type: Title ##
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Advanced usage"
+msgstr "Расширенное использование"
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "One-to-many and many-to-many relations"
+msgstr "Отношения \"один ко многим\" и \"многие ко многим\""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "The example in the [Basic usage] section shows how to work with one-to-one relations only, where the `Nested` rule is sufficient for referencing relations. It can be combined with other complex rules, such as `Each`, to validate one-to-many and many-to-many relations as well:"
+msgstr "Пример в разделе [ Базовое использование] показывает, как работать только с отношениями \"один к одному\", где правила `Nested` достаточно для ссылки на отношения. Его можно комбинировать с другими сложными правилами, такими как `Each`, для проверки отношений \"один ко многим\" и \"многие ко многим\":"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Let's take this line chart set as an example:"
+msgstr "Давайте возьмем в качестве примера этот набор линейных диаграмм:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"$data = [\n"
+"    'charts' => [\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [1, 255, 0]],\n"
+"                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, 2, 255]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],\n"
+"                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [128, 128, 128]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [3, 255, 0]],\n"
+"                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, 4, 255]],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+msgstr ""
+"$data = [\n"
+"    'charts' => [\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [1, 255, 0]],\n"
+"                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, 2, 255]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],\n"
+"                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [128, 128, 128]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [3, 255, 0]],\n"
+"                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, 4, 255]],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Visual representation of it might look like this (also available at [JSFiddle]):"
+msgstr "Визуальное представление может выглядеть так (также доступно на [JSFiddle]):"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "![Chart example](../images/chart.png)"
+msgstr "![Chart example](../images/chart.png)"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Let's add the rules and modify the data a bit to contain invalid items:"
+msgstr "Давайте добавим правила и немного изменим данные, чтобы они содержали недопустимые элементы:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [\n"
+"    'charts' => [\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],\n"
+"                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],\n"
+"                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],\n"
+"                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+"$rule = new Nested([\n"
+"    'charts' => new Each([\n"
+"        new Nested([\n"
+"            'points' => new Each([\n"
+"                new Nested([\n"
+"                    'coordinates' => new Nested([\n"
+"                        'x' => [new Number(min: -10, max: 10)],\n"
+"                        'y' => [new Number(min: -10, max: 10)],\n"
+"                    ]),\n"
+"                    'rgb' => new Each([\n"
+"                        new Count(3),\n"
+"                        new Number(min: 0, max: 255),\n"
+"                    ]),\n"
+"                ]),\n"
+"            ]),\n"
+"        ]),\n"
+"    ]),\n"
+"]);\n"
+"$result = (new Validator())->validate($data, $rule);\n"
+"$errors = $result->getErrorMessagesIndexedByPath();\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [\n"
+"    'charts' => [\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],\n"
+"                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],\n"
+"                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],\n"
+"                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+"$rule = new Nested([\n"
+"    'charts' => new Each([\n"
+"        new Nested([\n"
+"            'points' => new Each([\n"
+"                new Nested([\n"
+"                    'coordinates' => new Nested([\n"
+"                        'x' => [new Number(min: -10, max: 10)],\n"
+"                        'y' => [new Number(min: -10, max: 10)],\n"
+"                    ]),\n"
+"                    'rgb' => new Each([\n"
+"                        new Count(3),\n"
+"                        new Number(min: 0, max: 255),\n"
+"                    ]),\n"
+"                ]),\n"
+"            ]),\n"
+"        ]),\n"
+"    ]),\n"
+"]);\n"
+"$result = (new Validator())->validate($data, $rule);\n"
+"$errors = $result->getErrorMessagesIndexedByPath();\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "The contents of the errors will be:"
+msgstr "Содержание `$errors` будет следующим:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"$errors = [\n"
+"    'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.'],\n"
+"    // ...\n"
+"    'charts.0.points.0.rgb.0' => ['Value must be no less than 0. -1 given.'],\n"
+"    // ...\n"
+"];\n"
+msgstr ""
+"$errors = [\n"
+"    'charts.0.points.0.coordinates.x' => ['Value must be no less than -10.'],\n"
+"    // ...\n"
+"    'charts.0.points.0.rgb.0' => ['Value must be no less than 0. -1 given.'],\n"
+"    // ...\n"
+"];\n"
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Using `*` shortcut"
+msgstr "Использование сокращения `*`"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "A `*` shortcut can be used to simplify `Nested` and `Each` combinations:"
+msgstr "Для упрощения комбинаций `Nested` и `Each` можно использовать сокращение `*`:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts.*.points.*.coordinates.x' => [new Number(min: -10, max: 10)],\n"
+"    'charts.*.points.*.coordinates.y' => [new Number(min: -10, max: 10)],\n"
+"    'charts.*.points.*.rgb' => [\n"
+"        new Count(3),\n"
+"        new Number(min: 0, max: 255),\n"
+"    ],\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts.*.points.*.coordinates.x' => [new Number(min: -10, max: 10)],\n"
+"    'charts.*.points.*.coordinates.y' => [new Number(min: -10, max: 10)],\n"
+"    'charts.*.points.*.rgb' => [\n"
+"        new Count(3),\n"
+"        new Number(min: 0, max: 255),\n"
+"    ],\n"
+"]);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "With additional grouping, it can also be rewritten like this:"
+msgstr "С дополнительной группировкой это можно переписать так:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts.*.points.*.coordinates' => new Nested([\n"
+"        'x' => [new Number(min: -10, max: 10)],\n"
+"        'y' => [new Number(min: -10, max: 10)],\n"
+"    ]),\n"
+"    'charts.*.points.*.rgb' => [\n"
+"        new Count(3),\n"
+"        new Number(min: 0, max: 255),\n"
+"    ],\n"
+"]);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts.*.points.*.coordinates' => new Nested([\n"
+"        'x' => [new Number(min: -10, max: 10)],\n"
+"        'y' => [new Number(min: -10, max: 10)],\n"
+"    ]),\n"
+"    'charts.*.points.*.rgb' => [\n"
+"        new Count(3),\n"
+"        new Number(min: 0, max: 255),\n"
+"    ],\n"
+"]);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "This is less verbose, but the downside of this approach is that you can't additionally configure dynamically generated `Nested` and `Each` pairs. If you need to do this, use the explicit form of configuration (see the example provided in [Basic usage] section)."
+msgstr "Это менее многословно, но недостаток такого подхода заключается в том, что вы не можете дополнительно настроить динамически генерируемые пары `Nested` и `Each`. Если вам это необходимо, используйте явную форму конфигурации (см. пример в разделе [Базовое использование])."
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Rules and relations can be declared via DTO with PHP attributes:"
+msgstr "Правила и отношения можно объявлять через DTO с PHP атрибутами:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class ChartSet\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Each([new Nested(Chart::class)])]\n"
+"        private array $charts,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"final class Chart\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Each([new Nested(Point::class)])]\n"
+"        private array $points,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"final class Point\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Nested(Coordinates::class)]\n"
+"        private Coordinates $coordinates,\n"
+"        #[Count(exactly: 3)]\n"
+"        #[Each([new Number(min: 0, max: 255)])]\n"
+"        private array $rgb,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"final class Coordinates\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Number(min: -10, max: 10)]\n"
+"        private int $x,\n"
+"        #[Number(min: -10, max: 10)]\n"
+"        private int $y,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"final class ChartSet\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Each([new Nested(Chart::class)])]\n"
+"        private array $charts,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"final class Chart\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Each([new Nested(Point::class)])]\n"
+"        private array $points,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"final class Point\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Nested(Coordinates::class)]\n"
+"        private Coordinates $coordinates,\n"
+"        #[Count(exactly: 3)]\n"
+"        #[Each([new Number(min: 0, max: 255)])]\n"
+"        private array $rgb,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+"\n"
+"final class Coordinates\n"
+"{\n"
+"    public function __construct(\n"
+"        #[Number(min: -10, max: 10)]\n"
+"        private int $x,\n"
+"        #[Number(min: -10, max: 10)]\n"
+"        private int $y,\n"
+"    ) {\n"
+"    }\n"
+"}\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "With the data in the associative array from the previous examples, we can use the class just to fetch the rules:"
+msgstr "Имея данные в ассоциативном массиве из предыдущих примеров, мы можем использовать класс только для извлечения правил:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"$data = [\n"
+"    'charts' => [\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],\n"
+"                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],\n"
+"                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],\n"
+"                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+"$result = $validator->validate($data, ChartSet::class);\n"
+msgstr ""
+"$data = [\n"
+"    'charts' => [\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0]],\n"
+"                ['coordinates' => ['x' => -12, 'y' => 12], 'rgb' => [0, -2, 257]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -1, 'y' => 1], 'rgb' => [0, 0, 0]],\n"
+"                ['coordinates' => ['x' => -2, 'y' => 2], 'rgb' => [255, 255, 255]],\n"
+"            ],\n"
+"        ],\n"
+"        [\n"
+"            'points' => [\n"
+"                ['coordinates' => ['x' => -13, 'y' => 13], 'rgb' => [-3, 258, 0]],\n"
+"                ['coordinates' => ['x' => -14, 'y' => 14], 'rgb' => [0, -4, 259]],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+"$result = $validator->validate($data, ChartSet::class);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Or provide data along with rules in the same objects:"
+msgstr "Или предоставьте данные вместе с правилами в тех же объектах:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"$chartSet = new ChartSet(\n"
+"    charts: [\n"
+"        new Chart(\n"
+"            points: [\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -11, y: 11),\n"
+"                    rgb: [-1, 256, 0],\n"
+"                ),\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -12, y: 12),\n"
+"                    rgb: [0, -2, 257],\n"
+"                ),\n"
+"            ],       \n"
+"        ),\n"
+"        new Chart(\n"
+"            points: [\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -1, y: 1),\n"
+"                    rgb: [0, 0, 0],\n"
+"                ),\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -2, y: 2),\n"
+"                    rgb: [255, 255, 255],\n"
+"                ),\n"
+"            ],       \n"
+"        ),\n"
+"        new Chart(\n"
+"            points: [\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -13, y: 13),\n"
+"                    rgb: [-3, 258, 0],\n"
+"                ),\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -14, y: 14),\n"
+"                    rgb: [0, -4, 259],\n"
+"                ),\n"
+"            ],       \n"
+"        ),\n"
+"    ],\n"
+");\n"
+"$result = $validator->validate($chartSet); // Note `$rules` argument is `null` here.\n"
+"$errors = $result->getErrorMessagesIndexedByPath();\n"
+msgstr ""
+"$chartSet = new ChartSet(\n"
+"    charts: [\n"
+"        new Chart(\n"
+"            points: [\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -11, y: 11),\n"
+"                    rgb: [-1, 256, 0],\n"
+"                ),\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -12, y: 12),\n"
+"                    rgb: [0, -2, 257],\n"
+"                ),\n"
+"            ],       \n"
+"        ),\n"
+"        new Chart(\n"
+"            points: [\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -1, y: 1),\n"
+"                    rgb: [0, 0, 0],\n"
+"                ),\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -2, y: 2),\n"
+"                    rgb: [255, 255, 255],\n"
+"                ),\n"
+"            ],       \n"
+"        ),\n"
+"        new Chart(\n"
+"            points: [\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -13, y: 13),\n"
+"                    rgb: [-3, 258, 0],\n"
+"                ),\n"
+"                new Point(\n"
+"                    coordinates: new Coordinates(x: -14, y: 14),\n"
+"                    rgb: [0, -4, 259],\n"
+"                ),\n"
+"            ],       \n"
+"        ),\n"
+"    ],\n"
+");\n"
+"$result = $validator->validate($chartSet); // Обратите внимание, что аргумент `$rules` здесь равен `null`.\n"
+"$errors = $result->getErrorMessagesIndexedByPath();\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "- For more information about the different ways to configure rules via PHP attributes, see [Configuring rules via PHP attributes] section.  - For more information about possible data / rules combinations passed for validation, refer to the [Using validator] section."
+msgstr "- Дополнительную информацию о различных способах настройки правил с помощью атрибутов PHP см. в разделе [Настройка правил с помощью PHP атрибутов]. - Дополнительную информацию о возможных комбинациях данных/правил, передаваемых для проверки, см. в разделе [Использование валидатора]."
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "Using keys containing separator / shortcut"
+msgstr "Использование ключей, содержащих разделитель/сокращение"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "If a key contains the separator (`.`), or `Each` shortcut (`*`), it must be escaped with backslash (`\\`) in the rule config to work correctly. In the input data escaping is not needed. Here is an example with 2 nested keys named `author.data` and `name.surname`:"
+msgstr "Если ключ содержит разделитель (`.`) или сокращение `Each` (`*`) для корректной работы его необходимо экранировать обратной косой чертой (`\\`) в конфигурации правила. Во входных данных экранирование не требуется. Вот пример с двумя вложенными ключами с именами `author.data` и `name.surname`:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author\\.data.name\\.surname' => [\n"
+"        new Length(min: 3),\n"
+"    ],\n"
+"]);\n"
+"$data = [\n"
+"    'author.data' => [\n"
+"        'name.surname' => 'Dmitry',\n"
+"    ],\n"
+"];\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author\\.data.name\\.surname' => [\n"
+"        new Length(min: 3),\n"
+"    ],\n"
+"]);\n"
+"$data = [\n"
+"    'author.data' => [\n"
+"        'name.surname' => 'Dmitry',\n"
+"    ],\n"
+"];\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "Note that escaping is still required when using multiple nested rules for configuration:"
+msgstr "Обратите внимание, что при использовании нескольких вложенных правил для конфигурации экранирование по-прежнему необходимо:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author\\.data' => new Nested([\n"
+"        'name\\.surname' => [\n"
+"            new Length(min: 3),\n"
+"        ],\n"
+"    ]),\n"
+"]);\n"
+"$data = [\n"
+"    'author.data' => [\n"
+"        'name.surname' => 'Dmitriy',\n"
+"    ],\n"
+"];\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'author\\.data' => new Nested([\n"
+"        'name\\.surname' => [\n"
+"            new Length(min: 3),\n"
+"        ],\n"
+"    ]),\n"
+"]);\n"
+"$data = [\n"
+"    'author.data' => [\n"
+"        'name.surname' => 'Dmitriy',\n"
+"    ],\n"
+"];\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "The example with the `Each` shortcut (`*`):"
+msgstr "Пример с сокращением `*`:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts\\.list.*.points\\*list.*.coordinates\\.data.x' => [\n"
+"        // ...\n"
+"    ],\n"
+"    'charts\\.list.*.points\\*list.*.coordinates\\.data.y' => [\n"
+"        // ...\n"
+"    ],\n"
+"    'charts\\.list.*.points\\*list.*.rgb' => [\n"
+"        // ...\n"
+"    ],\n"
+"]);\n"
+"$data = [\n"
+"    'charts.list' => [\n"
+"        [\n"
+"            'points*list' => [\n"
+"                [\n"
+"                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],\n"
+"                ],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts\\.list.*.points\\*list.*.coordinates\\.data.x' => [\n"
+"        // ...\n"
+"    ],\n"
+"    'charts\\.list.*.points\\*list.*.coordinates\\.data.y' => [\n"
+"        // ...\n"
+"    ],\n"
+"    'charts\\.list.*.points\\*list.*.rgb' => [\n"
+"        // ...\n"
+"    ],\n"
+"]);\n"
+"$data = [\n"
+"    'charts.list' => [\n"
+"        [\n"
+"            'points*list' => [\n"
+"                [\n"
+"                    'coordinates.data' => ['x' => -11, 'y' => 11], 'rgb' => [-1, 256, 0],\n"
+"                ],\n"
+"            ],\n"
+"        ],\n"
+"    ],\n"
+"];\n"
+
+#. type: Link reference
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Result]: result.md"
+msgstr "[Результаты]: result.md"
+
+#. type: Link reference
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Basic usage]: #basic-usage-one-to-one-relation"
+msgstr "[Базовое использование]: #базовое-использование-связь-один-к-одному"
+
+#. type: Link reference
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[JSFiddle]: https://jsfiddle.net/fys8uadr/"
+msgstr "[JSFiddle]: https://jsfiddle.net/fys8uadr/"
+
+#. type: Link reference
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
+msgstr "[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md"
+
+#. type: Link reference
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Using validator]: using-validator.md"
+msgstr "[Использование валидатора]: using-validator.md"

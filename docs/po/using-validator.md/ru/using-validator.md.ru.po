@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2025-09-02 15:26+0500\n"
 "PO-Revision-Date: 2025-04-12 20:36+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -387,8 +387,8 @@ msgstr "Передача правил посредством выделенно�
 msgid "Could help reuse the same set of rules across different places. Two ways are possible - using PHP attributes and specifying explicitly via interface method implementation."
 msgstr "Может помочь повторно использовать один и тот же набор правил в разных местах. Возможны два способа: использование атрибутов и явное указание через реализацию метода интерфейса."
 
-#. type: Title ####
-#: guide/en/using-validator.md
+#. type: Title ###
+#: guide/en/using-validator.md guide/en/built-in-rules-nested.md
 #, no-wrap
 msgid "Using PHP attributes"
 msgstr "Использование атрибутов"

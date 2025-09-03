@@ -1,0 +1,80 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-06-28 13:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "`Compare` - comparing validated value with target value"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Using with `DateTime` objects"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Basic usage"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid ""
+"use DateTime;\n"
+"use Yiisoft\\Validator\\Rule\\CompareType;\n"
+"use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+"\n"
+"$rules = [\n"
+"    'date_of_birth' => new GreaterThanOrEqual(new DateTime('1900-01-01'), type: CompareType::ORIGINAL),\n"
+"];\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Dynamic range"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid ""
+"use DateTime;\n"
+"use Yiisoft\\Validator\\Rule\\Callback;\n"
+"use Yiisoft\\Validator\\Rule\\CompareType;\n"
+"use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+"use Yiisoft\\Validator\\Rule\\LessThanOrEqual;\n"
+"\n"
+"$rules = [\n"
+"    'shipping_datetime' => [\n"
+"        new GreaterThan(\n"
+"            (new DateTime('now'))\n"
+"                ->add(DateInterval::createFromDateString('1 day')),\n"
+"            type: CompareType::ORIGINAL,\n"
+"        ),\n"
+"        new LessThan(\n"
+"            (new DateTime('now'))\n"
+"                ->add(DateInterval::createFromDateString('1 week')),\n"
+"            type: CompareType::ORIGINAL,\n"
+"        ),        \n"
+"    ],\n"
+"];\n"
+msgstr ""
