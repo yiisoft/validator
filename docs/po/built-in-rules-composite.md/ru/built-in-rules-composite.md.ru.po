@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2025-06-28 14:22+0000\n"
-"PO-Revision-Date: 2025-09-03 11:46+0500\n"
+"PO-Revision-Date: 2025-09-03 11:47+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -164,7 +164,7 @@ msgstr ""
 #. type: Plain text
 #: guide/en/built-in-rules-composite.md
 msgid "Even the problem of reusing only one rule with the same arguments can be solved with `Composite`:"
-msgstr "Даже проблему повторного использования только одного правила с теми же аргументами можно решить с помощью Composite:"
+msgstr "Даже проблему повторного использования только одного правила с теми же аргументами можно решить с помощью `Composite`:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-composite.md
