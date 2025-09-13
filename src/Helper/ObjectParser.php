@@ -279,8 +279,13 @@ final class ObjectParser
      */
     public function getPropertyValue(string $property): mixed
     {
-        return is_object($this->source)
-            ? ($this->getReflectionProperties()[$property] ?? null)?->getValue($this->source)
+        if (!is_object($this->source)) {
+            return null;
+        }
+
+        $reflectionProperty = $this->getReflectionProperties()[$property] ?? null;
+        return $reflectionProperty?->isInitialized($this->source)
+            ? $reflectionProperty?->getValue($this->source)
             : null;
     }
 
@@ -312,6 +317,9 @@ final class ObjectParser
 
         $data = [];
         foreach ($this->getReflectionProperties() as $name => $property) {
+            if (!$property->isInitialized($this->source)) {
+                continue;
+            }
             /** @var mixed */
             $data[$name] = $property->getValue($this->source);
         }
