@@ -284,9 +284,11 @@ final class ObjectParser
         }
 
         $reflectionProperty = $this->getReflectionProperties()[$property] ?? null;
-        return $reflectionProperty?->isInitialized($this->source)
-            ? $reflectionProperty?->getValue($this->source)
-            : null;
+        if ($reflectionProperty === null || !$reflectionProperty->isInitialized($this->source)) {
+            return null;
+        }
+
+        return $reflectionProperty?->getValue($this->source);
     }
 
     /**

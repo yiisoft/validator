@@ -190,6 +190,6 @@ final class ObjectParserTest extends TestCase
         $this->assertSame(4, $parser->getPropertyValue('a'));
         $this->assertNull($parser->getPropertyValue('uninitialized'));
 
-        $this->assertSame(['a' => 4], $parser->getData());;
+        $this->assertSame(['a' => 4], $parser->getData());
     }
 }
