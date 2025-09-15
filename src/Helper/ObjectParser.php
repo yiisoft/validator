@@ -288,7 +288,7 @@ final class ObjectParser
             return null;
         }
 
-        return $reflectionProperty?->getValue($this->source);
+        return $reflectionProperty->getValue($this->source);
     }
 
     /**
