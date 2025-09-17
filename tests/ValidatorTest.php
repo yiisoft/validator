@@ -42,6 +42,7 @@ use Yiisoft\Validator\Tests\Support\Data\ObjectWithDifferentPropertyVisibility;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithLabelsProvider;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithPostValidationHook;
 use Yiisoft\Validator\Tests\Support\Data\ObjectWithRulesProvider;
+use Yiisoft\Validator\Tests\Support\Data\ObjectWithUninitializedProperties;
 use Yiisoft\Validator\Tests\Support\Data\SimpleDto;
 use Yiisoft\Validator\Tests\Support\Data\SimpleForm;
 use Yiisoft\Validator\Tests\Support\Rule\NotNullRule\NotNull;
@@ -100,6 +101,14 @@ class ValidatorTest extends TestCase
                     'age' => ['Age must be no less than 21.'],
                 ],
                 new ObjectWithDifferentPropertyVisibility(),
+                null,
+            ],
+            'pure-object-with-uninitialized-properties-and-no-rules' => [
+                [
+                    'name' => ['Name cannot be blank.'],
+                    'age' => ['The allowed types for age are integer, float and string. null given.'],
+                ],
+                new ObjectWithUninitializedProperties(),
                 null,
             ],
             'dataset-object-and-array-of-rules' => [
