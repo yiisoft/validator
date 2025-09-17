@@ -3,7 +3,6 @@
 ## 2.5.1 under development
 
 - Bug #776: Take `PropertyTranslatorProviderInterface` into account during context validation (@vjik)
-- Enh #783: Default Intl locale in tests (@batyrmastyr)
 - Bug #783: Exception on uninitialized properties validation (@batyrmastyr)
 
 ## 2.5.0 July 19, 2025
