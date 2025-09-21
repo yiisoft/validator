@@ -178,4 +178,22 @@ final class ObjectParserTest extends TestCase
         $this->assertNotSame($rules, $parser->getRules());
         $this->assertArrayNotHasKey($cacheKey, $cacheProperty->getValue());
     }
+
+    public function testUninitializedProperty(): void
+    {
+        $parser = new ObjectParser(new class () {
+            public int $a = 4;
+            public int $uninitialized;
+        });
+
+        $this->assertNull($parser->getPropertyValue('not-existing'));
+        $this->assertSame(4, $parser->getPropertyValue('a'));
+        $this->assertNull($parser->getPropertyValue('uninitialized'));
+
+        $this->assertFalse($parser->hasProperty('not-existing'));
+        $this->assertTrue($parser->hasProperty('a'));
+        $this->assertTrue($parser->hasProperty('uninitialized'));
+
+        $this->assertSame(['a' => 4], $parser->getData());
+    }
 }

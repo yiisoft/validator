@@ -3,6 +3,7 @@
 ## 2.5.1 under development
 
 - Bug #776: Take `PropertyTranslatorProviderInterface` into account during context validation (@vjik)
+- Bug #783: Fix error on uninitialized properties validation (@batyrmastyr)
 
 ## 2.5.0 July 19, 2025
 
