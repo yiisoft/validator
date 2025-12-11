@@ -139,14 +139,14 @@ final class ImageTest extends RuleTestCase
         $notImageResult = ['' => ['Value must be an image.']];
 
         return [
-            'heic-with-width' => [__DIR__ . '/797x808.HEIC', new Image(width: 10), $notImageResult],
-            'heic-with-height' => [__DIR__ . '/797x808.HEIC', new Image(height: 10), $notImageResult],
-            'heic-with-min-width' => [__DIR__ . '/797x808.HEIC', new Image(minWidth: 10), $notImageResult],
-            'heic-with-max-height' => [__DIR__ . '/797x808.HEIC', new Image(minHeight: 10), $notImageResult],
-            'heic-with-max-width' => [__DIR__ . '/797x808.HEIC', new Image(maxWidth: 10), $notImageResult],
-            'heic-with-min-height' => [__DIR__ . '/797x808.HEIC', new Image(maxHeight: 10), $notImageResult],
+            'heic-with-width' => [__DIR__ . '/not-image.jpg', new Image(width: 10), $notImageResult],
+            'heic-with-height' => [__DIR__ . '/not-image.jpg', new Image(height: 10), $notImageResult],
+            'heic-with-min-width' => [__DIR__ . '/not-image.jpg', new Image(minWidth: 10), $notImageResult],
+            'heic-with-max-height' => [__DIR__ . '/not-image.jpg', new Image(minHeight: 10), $notImageResult],
+            'heic-with-max-width' => [__DIR__ . '/not-image.jpg', new Image(maxWidth: 10), $notImageResult],
+            'heic-with-min-height' => [__DIR__ . '/not-image.jpg', new Image(maxHeight: 10), $notImageResult],
             'heic-with-size-and-custom-message' => [
-                ['a' => __DIR__ . '/797x808.HEIC'],
+                ['a' => __DIR__ . '/not-image.jpg'],
                 ['a' => new Image(minWidth: 10, notImageMessage: 'Value of "{property}" must be an image.')],
                 ['a' => ['Value of "a" must be an image.']],
             ],
