@@ -154,7 +154,7 @@ final class InEnumTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new InEnum(EnumStatus::class), new InEnum(EnumStatus::class, when: $when));
     }
 

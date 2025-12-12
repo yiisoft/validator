@@ -91,7 +91,7 @@ final class RulesNormalizer
                     sprintf(
                         'A property can only have an integer or a string type. %s given.',
                         get_debug_type($property),
-                    )
+                    ),
                 );
             }
 

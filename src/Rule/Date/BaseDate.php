@@ -45,7 +45,7 @@ abstract class BaseDate implements RuleInterface, SkipOnErrorInterface, WhenInte
         private ?string $tooLateMessage,
         bool|callable|null $skipOnEmpty,
         private bool $skipOnError,
-        private Closure|null $when,
+        private ?Closure $when,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

@@ -104,7 +104,7 @@ class Composite implements
      *
      * @psalm-var WhenType
      */
-    private Closure|null $when = null;
+    private ?Closure $when = null;
 
     /**
      * @param iterable $rules A set of rules that needs to be grouped. They will be normalized using
@@ -126,7 +126,7 @@ class Composite implements
         iterable $rules = [],
         bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
-        Closure|null $when = null,
+        ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
         $this->rules = RulesNormalizer::normalizeList($rules);

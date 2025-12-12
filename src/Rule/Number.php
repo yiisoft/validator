@@ -80,7 +80,7 @@ final class Number extends AbstractNumber
         string $pattern = '/^\s*[-+]?\d*\.?\d+([eE][-+]?\d+)?\s*$/',
         bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
-        Closure|null $when = null,
+        ?Closure $when = null,
     ) {
         parent::__construct(
             min: $min,

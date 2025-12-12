@@ -33,8 +33,8 @@ final class GreaterThanTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetProperty' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
-                            'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null '
+                            . 'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -42,9 +42,9 @@ final class GreaterThanTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => '{Property} returned from a custom data set must have one of the following ' .
-                            'types: integer, float, string, boolean, null or an object implementing \Stringable ' .
-                            'interface or \DateTimeInterface.',
+                        'template' => '{Property} returned from a custom data set must have one of the following '
+                            . 'types: integer, float, string, boolean, null or an object implementing \Stringable '
+                            . 'interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -75,7 +75,7 @@ final class GreaterThanTest extends RuleTestCase
                     type: CompareType::ORIGINAL,
                     skipOnEmpty: true,
                     skipOnError: true,
-                    when: static fn (): bool => true,
+                    when: static fn(): bool => true,
                 ),
                 [
                     'targetProperty' => 'test',
@@ -132,7 +132,7 @@ final class GreaterThanTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new GreaterThan(1), new GreaterThan(1, when: $when));
     }
 }

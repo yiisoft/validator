@@ -83,7 +83,7 @@ EOD,
                 new StringType(),
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[StringType]
                     private string $name = 'test';
                 },
@@ -99,7 +99,7 @@ EOD,
             'float' => [1.5, new StringType(), ['' => ['Value must be a string. float given.']]],
             'ingeter' => [1, new StringType(), ['' => ['Value must be a string. int given.']]],
             'stringable' => [
-                new class () implements Stringable {
+                new class implements Stringable {
                     public function __toString(): string
                     {
                         return 'test';
@@ -115,11 +115,10 @@ EOD,
                 ['name' => ['Property - name, type - array']],
             ],
             'message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -144,7 +143,7 @@ EOD,
                 ['name' => ['"Название" - не строка.']],
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[StringType]
                     private array $name = ['test'];
                 },
@@ -161,7 +160,7 @@ EOD,
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new StringType(), new StringType(when: $when));
     }
 

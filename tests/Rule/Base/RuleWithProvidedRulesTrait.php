@@ -18,8 +18,7 @@ trait RuleWithProvidedRulesTrait
     {
         $rule = new $ruleClassName([
             new Required(),
-            new class () {
-            },
+            new class {},
             new Number(min: 1),
         ]);
         $this->assertInstanceOf(DumpedRuleInterface::class, $rule);

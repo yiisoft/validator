@@ -23,7 +23,7 @@ class NestedObjectWithPostValidationHook implements PostValidationHookInterface
         [
             new StringValue(),
             new Length(min: 6),
-        ]
+        ],
     )]
     public array $firstArray = [
         'short',

@@ -32,7 +32,7 @@ final class ObjectParserTest extends TestCase
         return [
             [
                 ['a' => 4, 'b' => 2],
-                new class () {
+                new class {
                     public int $a = 4;
                     public static int $b = 2;
                 },
@@ -40,7 +40,7 @@ final class ObjectParserTest extends TestCase
             ],
             [
                 ['a' => 4, 'c' => 'hello'],
-                new class () {
+                new class {
                     public int $a = 4;
                     public static int $b = 2;
                     public string $c = 'hello';
@@ -60,7 +60,7 @@ final class ObjectParserTest extends TestCase
 
     public function testSkipStaticPropertiesDefault(): void
     {
-        $object = new class () {
+        $object = new class {
             public int $a = 4;
             public static int $b = 2;
         };
@@ -83,7 +83,7 @@ final class ObjectParserTest extends TestCase
 
     public function testGetRulesExpectingAttributeInheritance(): void
     {
-        $object = new class () {
+        $object = new class {
             #[CustomUrlRuleSet]
             public string $url;
         };
@@ -181,7 +181,7 @@ final class ObjectParserTest extends TestCase
 
     public function testUninitializedProperty(): void
     {
-        $parser = new ObjectParser(new class () {
+        $parser = new ObjectParser(new class {
             public int $a = 4;
             public int $uninitialized;
         });

@@ -74,9 +74,9 @@ final class IpHandler implements RuleHandlerInterface
      */
     private static function getIpParsePattern(): string
     {
-        return '/^(?<not>' .
-            IpRanges::NEGATION_CHARACTER .
-            ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+        return '/^(?<not>'
+            . IpRanges::NEGATION_CHARACTER
+            . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
     }
 
     /**
@@ -95,8 +95,8 @@ final class IpHandler implements RuleHandlerInterface
         ?string $cidr,
         bool $negation,
         string $value,
-        ValidationContext $context
-    ): Result|null {
+        ValidationContext $context,
+    ): ?Result {
         if ($cidr === null && $rule->isSubnetRequired()) {
             return self::getGenericErrorResult($rule->getNoSubnetMessage(), $context, $value);
         }
@@ -126,8 +126,8 @@ final class IpHandler implements RuleHandlerInterface
         Ip $rule,
         int $ipVersion,
         string $value,
-        ValidationContext $context
-    ): Result|null {
+        ValidationContext $context,
+    ): ?Result {
         if ($ipVersion === IpHelper::IPV6 && !$rule->isIpv6Allowed()) {
             return self::getGenericErrorResult($rule->getIpv6NotAllowedMessage(), $context, $value);
         }
@@ -155,8 +155,8 @@ final class IpHandler implements RuleHandlerInterface
         ?string $cidr,
         string $ipCidr,
         string $value,
-        ValidationContext $context
-    ): Result|null {
+        ValidationContext $context,
+    ): ?Result {
         if ($cidr !== null) {
             try {
                 IpHelper::getCidrBits($ipCidr);

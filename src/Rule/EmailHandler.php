@@ -36,7 +36,7 @@ final class EmailHandler implements RuleHandlerInterface
         if (!preg_match(
             '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))/',
             $value,
-            $matches
+            $matches,
         )) {
             $valid = $rule->isIdnEnabled()
                 ? (bool) preg_match($rule->getIdnEmailPattern(), $value)

@@ -219,7 +219,7 @@ final class InTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new In(range(1, 10)), new In(range(1, 10), when: $when));
     }
 

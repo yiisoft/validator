@@ -21,9 +21,7 @@ class SecondNestedObjectWithPostValidationHook implements PostValidationHookInte
     public string $secondString = 'short';
     public ?Result $validationResult = null;
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function processValidationResult(Result $result): void
     {

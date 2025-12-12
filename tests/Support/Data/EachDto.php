@@ -17,8 +17,7 @@ final class EachDto
         public int $a,
         public int $b,
         public int $c,
-    ) {
-    }
+    ) {}
 
     private function validate(int $value): Result
     {

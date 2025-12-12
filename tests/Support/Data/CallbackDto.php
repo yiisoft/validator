@@ -13,8 +13,7 @@ final class CallbackDto
     public function __construct(
         public int $a,
         public int $b,
-    ) {
-    }
+    ) {}
 }
 
 function validate(CallbackDto $dto): Result

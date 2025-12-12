@@ -14,13 +14,12 @@ final class ValidatorInterfaceProxy implements ValidatorInterface
     public function __construct(
         private readonly ValidatorInterface $validator,
         private readonly ValidatorCollector $collector,
-    ) {
-    }
+    ) {}
 
     public function validate(
         mixed $data,
         callable|iterable|object|string|null $rules = null,
-        ?ValidationContext $context = null
+        ?ValidationContext $context = null,
     ): Result {
         $result = $this->validator->validate($data, $rules, $context);
 

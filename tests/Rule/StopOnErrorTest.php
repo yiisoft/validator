@@ -46,22 +46,22 @@ final class StopOnErrorTest extends RuleTestCase
                             'max' => null,
                             'exactly' => null,
                             'lessThanMinMessage' => [
-                                'template' => '{Property} must contain at least {min, number} {min, plural, ' .
-                                    'one{character} other{characters}}.',
+                                'template' => '{Property} must contain at least {min, number} {min, plural, '
+                                    . 'one{character} other{characters}}.',
                                 'parameters' => [
                                     'min' => 10,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{Property} must contain at most {max, number} {max, plural, ' .
-                                    'one{character} other{characters}}.',
+                                'template' => '{Property} must contain at most {max, number} {max, plural, '
+                                    . 'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,
                                 ],
                             ],
                             'notExactlyMessage' => [
-                                'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
-                                    'one{character} other{characters}}.',
+                                'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, '
+                                    . 'one{character} other{characters}}.',
                                 'parameters' => [
                                     'exactly' => null,
                                 ],
@@ -93,22 +93,22 @@ final class StopOnErrorTest extends RuleTestCase
                             'max' => null,
                             'exactly' => null,
                             'lessThanMinMessage' => [
-                                'template' => '{Property} must contain at least {min, number} {min, plural, ' .
-                                    'one{character} other{characters}}.',
+                                'template' => '{Property} must contain at least {min, number} {min, plural, '
+                                    . 'one{character} other{characters}}.',
                                 'parameters' => [
                                     'min' => 10,
                                 ],
                             ],
                             'greaterThanMaxMessage' => [
-                                'template' => '{Property} must contain at most {max, number} {max, plural, ' .
-                                    'one{character} other{characters}}.',
+                                'template' => '{Property} must contain at most {max, number} {max, plural, '
+                                    . 'one{character} other{characters}}.',
                                 'parameters' => [
                                     'max' => null,
                                 ],
                             ],
                             'notExactlyMessage' => [
-                                'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
-                                    'one{character} other{characters}}.',
+                                'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, '
+                                    . 'one{character} other{characters}}.',
                                 'parameters' => [
                                     'exactly' => null,
                                 ],
@@ -278,7 +278,7 @@ final class StopOnErrorTest extends RuleTestCase
             'rules normalization, callable' => [
                 [],
                 new StopOnError([
-                    static fn (): Result => (new Result())->addError('Custom error.'),
+                    static fn(): Result => (new Result())->addError('Custom error.'),
                 ]),
                 ['' => ['Custom error.']],
             ],
@@ -287,7 +287,7 @@ final class StopOnErrorTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(
             new StopOnError([new Length(min: 10)]),
             new StopOnError([new Length(min: 10)], when: $when),
@@ -302,7 +302,7 @@ final class StopOnErrorTest extends RuleTestCase
             [
                 '' => ['error A'],
             ],
-            $result->getErrorMessagesIndexedByProperty()
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 

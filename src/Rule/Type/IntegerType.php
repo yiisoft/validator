@@ -52,7 +52,7 @@ final class IntegerType implements DumpedRuleInterface, SkipOnEmptyInterface, Sk
         private string $message = '{Property} must be an integer.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

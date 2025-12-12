@@ -10,8 +10,7 @@ final class RuleWithCustomHandler implements RuleInterface
 {
     public function __construct(
         private readonly string $handlerClassName,
-    ) {
-    }
+    ) {}
 
     public function getHandler(): string
     {

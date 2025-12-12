@@ -67,7 +67,7 @@ final class FloatTypeTest extends RuleTestCase
             'float, capital e' => [7E-10, new FloatType()],
             'float, underscores, PHP >= 7.4' => [1_234.567, new FloatType()],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[FloatType]
                     private float $sum = 1.5;
                 },
@@ -93,11 +93,10 @@ final class FloatTypeTest extends RuleTestCase
                 ['sum' => ['Property - sum, type - array']],
             ],
             'message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?float $sum = null,
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -122,7 +121,7 @@ final class FloatTypeTest extends RuleTestCase
                 ['sum' => ['"Сумма" - невещественное число.']],
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[FloatType]
                     private int $sum = 1;
                 },
@@ -139,7 +138,7 @@ final class FloatTypeTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new FloatType(), new FloatType(when: $when));
     }
 

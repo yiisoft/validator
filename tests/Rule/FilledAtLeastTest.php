@@ -67,8 +67,8 @@ final class FilledAtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from ' .
-                            'this list must be filled for {property}: {properties}.',
+                        'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from '
+                            . 'this list must be filled for {property}: {properties}.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => false,
@@ -115,8 +115,8 @@ final class FilledAtLeastTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'message' => [
-                        'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from ' .
-                            'this list must be filled for {property}: {properties}.',
+                        'template' => 'At least {min, number} {min, plural, one{property} other{properties}} from '
+                            . 'this list must be filled for {property}: {properties}.',
                         'parameters' => ['min' => 1],
                     ],
                     'skipOnEmpty' => null,
@@ -130,21 +130,21 @@ final class FilledAtLeastTest extends RuleTestCase
     {
         return [
             [
-                new class () {
+                new class {
                     public $prop1 = 1;
                     public $prop2 = null;
                 },
                 [new FilledAtLeast(['prop1', 'prop2'])],
             ],
             [
-                new class () {
+                new class {
                     public $prop1 = null;
                     public $prop2 = 1;
                 },
                 [new FilledAtLeast(['prop2'])],
             ],
             [
-                new class () {
+                new class {
                     private int $prop1 = 1;
                     private $prop2 = null;
                 },
@@ -159,12 +159,12 @@ final class FilledAtLeastTest extends RuleTestCase
                 [new FilledAtLeast(['prop2'])],
             ],
             [
-                new class () {
+                new class {
                     public $obj;
 
                     public function __construct()
                     {
-                        $this->obj = new class () {
+                        $this->obj = new class {
                             public $prop1 = 1;
                             public $prop2 = null;
                         };
@@ -173,12 +173,12 @@ final class FilledAtLeastTest extends RuleTestCase
                 ['obj' => new FilledAtLeast(['prop1', 'prop2'])],
             ],
             [
-                new class () {
+                new class {
                     public $obj;
 
                     public function __construct()
                     {
-                        $this->obj = new class () {
+                        $this->obj = new class {
                             public $prop1 = null;
                             public $prop2 = 1;
                         };
@@ -214,7 +214,7 @@ final class FilledAtLeastTest extends RuleTestCase
 
     public static function dataValidationFailed(): array
     {
-        $class = new class () {
+        $class = new class {
             public $prop1 = 1;
             public $prop2 = null;
         };
@@ -296,7 +296,7 @@ final class FilledAtLeastTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new FilledAtLeast(['prop']), new FilledAtLeast(['prop'], when: $when));
     }
 

@@ -34,8 +34,8 @@ final class TrueValueTest extends RuleTestCase
                     'trueValue' => '1',
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
-                            'given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} '
+                            . 'given.',
                         'parameters' => [
                             'true' => '1',
                         ],
@@ -57,7 +57,7 @@ final class TrueValueTest extends RuleTestCase
                     incorrectInputMessage: 'Custom incorrect input message.',
                     message: 'Custom message.',
                     skipOnEmpty: true,
-                    skipOnError: true
+                    skipOnError: true,
                 ),
                 [
                     'trueValue' => 'YES',
@@ -84,8 +84,8 @@ final class TrueValueTest extends RuleTestCase
                     'trueValue' => true,
                     'strict' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
-                            'given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} '
+                            . 'given.',
                         'parameters' => [
                             'true' => 'true',
                         ],
@@ -213,7 +213,7 @@ final class TrueValueTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new TrueValue(), new TrueValue(when: $when));
     }
 

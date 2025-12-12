@@ -34,8 +34,7 @@ final class WhenEmpty
          * meaning no trimming is done.
          */
         private readonly bool $trimString = false,
-    ) {
-    }
+    ) {}
 
     /**
      * @param mixed $value The validated value.

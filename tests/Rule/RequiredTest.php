@@ -41,7 +41,7 @@ final class RequiredTest extends RuleTestCase
     {
         return [
             'skip on null' => [new WhenNull(), WhenNull::class],
-            'closure' => [static fn () => false, Closure::class],
+            'closure' => [static fn() => false, Closure::class],
         ];
     }
 
@@ -94,7 +94,7 @@ final class RequiredTest extends RuleTestCase
             [[], [new Required()], $singleMessageCannotBeBlank],
             'custom empty callback' => [
                 '42',
-                [new Required(emptyCondition: static fn (mixed $value): bool => $value === '42')],
+                [new Required(emptyCondition: static fn(mixed $value): bool => $value === '42')],
                 $singleMessageCannotBeBlank,
             ],
             'custom error' => [null, [new Required(message: 'Custom error')], ['' => ['Custom error']]],

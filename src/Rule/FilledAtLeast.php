@@ -68,7 +68,7 @@ final class FilledAtLeast implements DumpedRuleInterface, SkipOnErrorInterface, 
         private string $message = 'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null
+        private ?Closure $when = null,
     ) {
         if ($min > count($this->properties)) {
             throw new InvalidArgumentException('$min must be no greater than amount of $properties.');

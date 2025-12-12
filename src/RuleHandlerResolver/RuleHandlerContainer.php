@@ -37,8 +37,7 @@ final class RuleHandlerContainer implements RuleHandlerResolverInterface
          * @var ContainerInterface An instance of dependency injection container.
          */
         private readonly ContainerInterface $container,
-    ) {
-    }
+    ) {}
 
     /**
      * Resolves a rule handler name to a corresponding rule handler instance. The actual resolving is delegated to

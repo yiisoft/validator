@@ -16,8 +16,7 @@ final class SimpleForm implements RulesProviderInterface, PropertyTranslatorProv
     public function __construct(
         public string $name = '',
         public string $mail = '',
-    ) {
-    }
+    ) {}
 
     /**
      * @psalm-return array<string, string>

@@ -14,7 +14,7 @@ final class ConfigTest extends BaseConfigTestCase
     {
         $container = $this->createContainer();
 
-        $customFormatter = new class () implements MessageFormatterInterface {
+        $customFormatter = new class implements MessageFormatterInterface {
             public function format(string $message, array $parameters, string $locale): string
             {
                 return 'test';

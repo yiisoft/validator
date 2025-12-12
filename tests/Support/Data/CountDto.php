@@ -12,8 +12,7 @@ final class CountDto implements Countable
 {
     public function __construct(
         private readonly int $count = 0,
-    ) {
-    }
+    ) {}
 
     public function count(): int
     {

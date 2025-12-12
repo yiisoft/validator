@@ -10,8 +10,7 @@ final class SimpleRulesProvider implements RulesProviderInterface
 {
     public function __construct(
         private readonly iterable $rules,
-    ) {
-    }
+    ) {}
 
     public function getRules(): iterable
     {

@@ -41,7 +41,7 @@ final class RuleHandlerInterfaceNotImplementedException extends RuntimeException
                 RuleHandlerInterface::class,
             ),
             $code,
-            $previous
+            $previous,
         );
     }
 }

@@ -69,10 +69,10 @@ final class StringValueTest extends RuleTestCase
             'value: null, skipOnEmpty: true' => [null, [new StringValue(skipOnEmpty: true)]],
             'value: null, when: custom callable allowing everything except null' => [
                 null,
-                [new StringValue(when: static fn (mixed $value): bool => $value !== null)],
+                [new StringValue(when: static fn(mixed $value): bool => $value !== null)],
             ],
             'value: object providing rules and valid data' => [
-                new class () {
+                new class {
                     #[StringValue]
                     private string $name = 'test';
                 },
@@ -111,11 +111,11 @@ final class StringValueTest extends RuleTestCase
             ],
             'value: integer, when: custom callable allowing everything except null' => [
                 1,
-                [new StringValue(when: static fn (mixed $value): bool => $value !== null)],
+                [new StringValue(when: static fn(mixed $value): bool => $value !== null)],
                 ['' => [$message]],
             ],
             'value: object providing rules and wrong data' => [
-                new class () {
+                new class {
                     #[StringValue]
                     private ?string $name = null;
                 },
@@ -138,11 +138,10 @@ final class StringValueTest extends RuleTestCase
                 ['data' => ['Property - data, type - bool.']],
             ],
             'value: object providing rules, property labels and wrong data' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?string $name = null,
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -178,7 +177,7 @@ final class StringValueTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new StringValue(), new StringValue(when: $when));
     }
 

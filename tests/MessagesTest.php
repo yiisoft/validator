@@ -36,7 +36,7 @@ final class MessagesTest extends TestCase
 
         $result = $validator->validate(
             'hello',
-            new Regex('~\d+~')
+            new Regex('~\d+~'),
         );
 
         $this->assertSame(
@@ -76,7 +76,7 @@ final class MessagesTest extends TestCase
                 Validator::DEFAULT_TRANSLATION_CATEGORY,
                 new MessageSource($this->getMessagesPath()),
                 new SimpleMessageFormatter(),
-            )
+            ),
         );
         $validator = new Validator(translator: $translator);
 
@@ -98,9 +98,9 @@ final class MessagesTest extends TestCase
                 Validator::DEFAULT_TRANSLATION_CATEGORY,
                 new MessageSource($this->getMessagesPath()),
                 new SimpleMessageFormatter(),
-            )
+            ),
         );
-        $messageFormatter = new class () implements MessageFormatterInterface {
+        $messageFormatter = new class implements MessageFormatterInterface {
             public function format(string $message, array $parameters, string $locale): string
             {
                 $result = $message . '!';

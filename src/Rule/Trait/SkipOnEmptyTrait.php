@@ -73,7 +73,7 @@ trait SkipOnEmptyTrait
      * - `false` - do not skip an empty value.
      * - `null` - unable to determine because the callable was initially passed.
      */
-    private function getSkipOnEmptyOption(): bool|null
+    private function getSkipOnEmptyOption(): ?bool
     {
         if (is_bool($this->skipOnEmpty)) {
             return $this->skipOnEmpty;

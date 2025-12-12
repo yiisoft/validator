@@ -25,8 +25,7 @@ final class ImageAspectRatio
         private readonly int $width,
         private readonly int $height,
         private readonly float $margin = 0,
-    ) {
-    }
+    ) {}
 
     public function getWidth(): int
     {

@@ -41,8 +41,8 @@ final class CompareTest extends RuleTestCase
     public function testInitWithWrongOperator(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $message = 'Operator "=" is not supported. The valid operators are: "==", "===", "!=", "!==", ">", ">=", ' .
-            '"<", "<=".';
+        $message = 'Operator "=" is not supported. The valid operators are: "==", "===", "!=", "!==", ">", ">=", '
+            . '"<", "<=".';
         $this->expectExceptionMessage($message);
 
         new Compare(1, operator: '=');
@@ -63,8 +63,8 @@ final class CompareTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetProperty' => null,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
-                            'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null '
+                            . 'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -72,9 +72,9 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => '{Property} returned from a custom data set must have one of the following ' .
-                            'types: integer, float, string, boolean, null or an object implementing \Stringable ' .
-                            'interface or \DateTimeInterface.',
+                        'template' => '{Property} returned from a custom data set must have one of the following '
+                            . 'types: integer, float, string, boolean, null or an object implementing \Stringable '
+                            . 'interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => null,
@@ -106,7 +106,7 @@ final class CompareTest extends RuleTestCase
                     operator: '>=',
                     skipOnEmpty: true,
                     skipOnError: true,
-                    when: static fn (): bool => true,
+                    when: static fn(): bool => true,
                 ),
                 [
                     'targetProperty' => 'test',
@@ -143,8 +143,8 @@ final class CompareTest extends RuleTestCase
                     'targetValue' => 1,
                     'targetProperty' => 'test',
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null ' .
-                            'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean, null '
+                            . 'and object implementing \Stringable interface or \DateTimeInterface. {type} given.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => 'test',
@@ -152,9 +152,9 @@ final class CompareTest extends RuleTestCase
                         ],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => '{Property} returned from a custom data set must have one of the following ' .
-                            'types: integer, float, string, boolean, null or an object implementing \Stringable ' .
-                            'interface or \DateTimeInterface.',
+                        'template' => '{Property} returned from a custom data set must have one of the following '
+                            . 'types: integer, float, string, boolean, null or an object implementing \Stringable '
+                            . 'interface or \DateTimeInterface.',
                         'parameters' => [
                             'targetValue' => 1,
                             'targetProperty' => 'test',
@@ -180,25 +180,25 @@ final class CompareTest extends RuleTestCase
 
     public static function dataValidationPassed(): array
     {
-        $targetStringableFloat = new class () implements Stringable {
+        $targetStringableFloat = new class implements Stringable {
             public function __toString(): string
             {
                 return '100.5';
             }
         };
-        $stringableFloat = new class () implements Stringable {
+        $stringableFloat = new class implements Stringable {
             public function __toString(): string
             {
                 return '100.50';
             }
         };
-        $targetStringableUuid = new class () implements Stringable {
+        $targetStringableUuid = new class implements Stringable {
             public function __toString(): string
             {
                 return '3b98a689-7d49-48bb-8741-7e27f220b69a';
             }
         };
-        $stringableUuid = new class () implements Stringable {
+        $stringableUuid = new class implements Stringable {
             public function __toString(): string
             {
                 return 'd62f2b3f-707f-451a-8819-046ff8436a4f';
@@ -377,7 +377,7 @@ final class CompareTest extends RuleTestCase
 
     public static function dataValidationPassedWithDifferentTypes(): array
     {
-        $customDataSet = new class () implements DataSetInterface {
+        $customDataSet = new class implements DataSetInterface {
             public function getPropertyValue(string $property): mixed
             {
                 return 100;
@@ -524,7 +524,7 @@ final class CompareTest extends RuleTestCase
                 ['number' => new Compare(targetProperty: 'property', operator: '<=')],
             ],
             'target property: object property, target property value: integer, property value: integer with the same value, type: number, operator: ==' => [
-                new class () {
+                new class {
                     public int $property = 100;
                     public int $number = 100;
                 },
@@ -544,14 +544,14 @@ final class CompareTest extends RuleTestCase
     public function testValidationPassed(
         mixed $data,
         array|RuleInterface|null $rules = null,
-        ?array $ruleHandlers = null
+        ?array $ruleHandlers = null,
     ): void {
         parent::testValidationPassed($data, $rules, $ruleHandlers);
     }
 
     public static function dataValidationFailed(): array
     {
-        $incorrectDataSet = new class () implements DataWrapperInterface {
+        $incorrectDataSet = new class implements DataWrapperInterface {
             public function getPropertyValue(string $property): mixed
             {
                 return $property === 'test' ? new stdClass() : false;
@@ -572,25 +572,25 @@ final class CompareTest extends RuleTestCase
                 return false;
             }
         };
-        $targetStringableFloat = new class () implements Stringable {
+        $targetStringableFloat = new class implements Stringable {
             public function __toString(): string
             {
                 return '100.5';
             }
         };
-        $stringableFloat = new class () implements Stringable {
+        $stringableFloat = new class implements Stringable {
             public function __toString(): string
             {
                 return '100.50';
             }
         };
-        $targetStringableUuid = new class () implements Stringable {
+        $targetStringableUuid = new class implements Stringable {
             public function __toString(): string
             {
                 return '3b98a689-7d49-48bb-8741-7e27f220b69a';
             }
         };
-        $stringableUuid = new class () implements Stringable {
+        $stringableUuid = new class implements Stringable {
             public function __toString(): string
             {
                 return 'd62f2b3f-707f-451a-8819-046ff8436a4f';
@@ -611,8 +611,8 @@ final class CompareTest extends RuleTestCase
                 [new Compare(false)],
                 [
                     '' => [
-                        'The allowed types for value are integer, float, string, boolean, null and object ' .
-                        'implementing \Stringable interface or \DateTimeInterface. array given.',
+                        'The allowed types for value are integer, float, string, boolean, null and object '
+                        . 'implementing \Stringable interface or \DateTimeInterface. array given.',
                     ],
                 ],
             ],
@@ -639,8 +639,8 @@ final class CompareTest extends RuleTestCase
                 [new Compare(targetProperty: 'test')],
                 [
                     '' => [
-                        'Value returned from a custom data set must have one of the following types: integer, float, ' .
-                        'string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.',
+                        'Value returned from a custom data set must have one of the following types: integer, float, '
+                        . 'string, boolean, null or an object implementing \Stringable interface or \DateTimeInterface.',
                     ],
                 ],
             ],
@@ -669,8 +669,8 @@ final class CompareTest extends RuleTestCase
                 [
                     'data' => new Compare(
                         targetProperty: 'test',
-                        incorrectDataSetTypeMessage: 'Property - {property}, capitalized property - {Property}, ' .
-                        'Type - {type}.',
+                        incorrectDataSetTypeMessage: 'Property - {property}, capitalized property - {Property}, '
+                        . 'Type - {type}.',
                     ),
                 ],
                 ['data' => ['Property - data, capitalized property - Data, Type - stdClass.']],
@@ -684,14 +684,14 @@ final class CompareTest extends RuleTestCase
                 [
                     new Compare(
                         100,
-                        message: 'Property - {property}, target value - {targetValue}, target property - ' .
-                        '{targetProperty}, target value or property - {targetValueOrProperty}, value - {value}.',
+                        message: 'Property - {property}, target value - {targetValue}, target property - '
+                        . '{targetProperty}, target value or property - {targetValueOrProperty}, value - {value}.',
                     ),
                 ],
                 [
                     '' => [
-                        'Property - value, target value - 100, target property - , target value or property - 100, ' .
-                        'value - 101.',
+                        'Property - value, target value - 100, target property - , target value or property - 100, '
+                        . 'value - 101.',
                     ],
                 ],
             ],
@@ -700,16 +700,16 @@ final class CompareTest extends RuleTestCase
                 [
                     'number' => new Compare(
                         targetProperty: 'property',
-                        message: 'Property - {property}, target value - {targetValue}, target property - ' .
-                        '{targetProperty}, target property value - {targetPropertyValue}, target value or ' .
-                        'property - {targetValueOrProperty}, value - {value}.',
+                        message: 'Property - {property}, target value - {targetValue}, target property - '
+                        . '{targetProperty}, target property value - {targetPropertyValue}, target value or '
+                        . 'property - {targetValueOrProperty}, value - {value}.',
                         operator: '===',
                     ),
                 ],
                 [
                     'number' => [
-                        'Property - number, target value - , target property - property, target property value ' .
-                        '- 100, target value or property - property, value - 101.',
+                        'Property - number, target value - , target property - property, target property value '
+                        . '- 100, target value or property - property, value - 101.',
                     ],
                 ],
             ],
@@ -719,16 +719,16 @@ final class CompareTest extends RuleTestCase
                 [
                     'number' => new Compare(
                         targetProperty: 'property',
-                        message: 'Property - {Property}, target value - {targetValue}, target property - ' .
-                        '{TargetProperty}, target property value - {targetPropertyValue}, target value or ' .
-                        'property - {TargetValueOrProperty}, value - {value}.',
+                        message: 'Property - {Property}, target value - {targetValue}, target property - '
+                        . '{TargetProperty}, target property value - {targetPropertyValue}, target value or '
+                        . 'property - {TargetValueOrProperty}, value - {value}.',
                         operator: '===',
                     ),
                 ],
                 [
                     'number' => [
-                        'Property - Number, target value - , target property - Property, target property value ' .
-                        '- 100, target value or property - Property, value - 101.',
+                        'Property - Number, target value - , target property - Property, target property value '
+                        . '- 100, target value or property - Property, value - 101.',
                     ],
                 ],
             ],
@@ -1002,9 +1002,20 @@ final class CompareTest extends RuleTestCase
         mixed $data,
         array|RuleInterface|null $rules,
         array $errorMessagesIndexedByPath,
-        ?array $ruleHandlers = null
+        ?array $ruleHandlers = null,
     ): void {
         parent::testValidationFailed($data, $rules, $errorMessagesIndexedByPath, $ruleHandlers);
+    }
+
+    public function testSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Compare(), new Compare(skipOnError: true));
+    }
+
+    public function testWhen(): void
+    {
+        $when = static fn(mixed $value): bool => $value !== null;
+        $this->testWhenInternal(new Compare(), new Compare(when: $when));
     }
 
     private static function extendDataWithDifferentTypes(array $initialData): array
@@ -1047,16 +1058,5 @@ final class CompareTest extends RuleTestCase
         }
 
         return array_merge($initialData, $dynamicData);
-    }
-
-    public function testSkipOnError(): void
-    {
-        $this->testSkipOnErrorInternal(new Compare(), new Compare(skipOnError: true));
-    }
-
-    public function testWhen(): void
-    {
-        $when = static fn (mixed $value): bool => $value !== null;
-        $this->testWhenInternal(new Compare(), new Compare(when: $when));
     }
 }

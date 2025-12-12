@@ -28,6 +28,4 @@ use Attribute;
  * @see CompareHandler
  */
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
-final class Compare extends AbstractCompare
-{
-}
+final class Compare extends AbstractCompare {}

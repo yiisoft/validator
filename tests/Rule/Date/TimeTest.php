@@ -106,8 +106,8 @@ final class TimeTest extends RuleTestCase
         $this->testWhenInternal(
             new Date(),
             new Date(
-                when: static fn(mixed $value): bool => $value !== null
-            )
+                when: static fn(mixed $value): bool => $value !== null,
+            ),
         );
     }
 }

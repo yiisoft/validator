@@ -312,7 +312,7 @@ final class NumberTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Number(), new Number(when: $when));
     }
 }

@@ -19,8 +19,7 @@ final class ArrayPropertyTranslator implements PropertyTranslatorInterface
      */
     public function __construct(
         private array $translations,
-    ) {
-    }
+    ) {}
 
     public function translate(string $property): string
     {

@@ -56,13 +56,13 @@ trait CountableLimitTrait
      *
      * @see $lessThanMinMessage for related error message.
      */
-    private int|null $min = null;
+    private ?int $min = null;
     /**
      * @var int|null Maximum limit. Can't be combined with {@see $exactly}.
      *
      * @see $greaterThanMaxMessage for related error message.
      */
-    private int|null $max = null;
+    private ?int $max = null;
     /**
      * @var int|null "Exactly" number. A shortcut / replacement for the case when {@see $min} and {@see $max} have the
      * same not-null value. Mutually exclusive with both {@see $min} and {@see $max}. `null` means no strict comparison
@@ -70,7 +70,7 @@ trait CountableLimitTrait
      *
      * @see $notExactlyMessage for related error message.
      */
-    private int|null $exactly = null;
+    private ?int $exactly = null;
     /**
      * @var string Validation error message used when a validated value is less than minimum set in {@see $min}.
      */
@@ -86,67 +86,11 @@ trait CountableLimitTrait
     private string $notExactlyMessage;
 
     /**
-     * Initializes countable limit related properties and runs checks for required, mutually exclusive properties and
-     * their allowed values (including dependency on each other).
-     *
-     * @param int|null $min Minimum limit ({@see $min}).
-     * @param int|null $max Maximum limit ({@see $max}).
-     * @param int|null $exactly "Exactly" number ({@see $exactly}).
-     * @param string $lessThanMinMessage "Less than minimum" validation error message ({@see $lessThanMinMessage}).
-     * @param string $greaterThanMinMessage "Greater than maximum" validation error message
-     * ({@see $greaterThanMinMessage}).
-     * @param string $notExactlyMessage "Not exactly" validation error message ({@see $notExactlyMessage}).
-     */
-    private function initCountableLimitProperties(
-        int|null $min,
-        int|null $max,
-        int|null $exactly,
-        string $lessThanMinMessage,
-        string $greaterThanMinMessage,
-        string $notExactlyMessage
-    ): void {
-        $this->min = $min;
-        $this->max = $max;
-        $this->exactly = $exactly;
-        $this->lessThanMinMessage = $lessThanMinMessage;
-        $this->greaterThanMaxMessage = $greaterThanMinMessage;
-        $this->notExactlyMessage = $notExactlyMessage;
-
-        if ($this->min === null && $this->max === null && $this->exactly === null) {
-            throw new InvalidArgumentException(
-                'At least one of these properties must be specified: $min, $max, $exactly.'
-            );
-        }
-
-        if (($this->min !== null || $this->max !== null) && $this->exactly !== null) {
-            throw new InvalidArgumentException('$exactly is mutually exclusive with $min and $max.');
-        }
-
-        if (
-            ($this->min !== null && $this->min < 0) ||
-            ($this->max !== null && $this->max < 0) ||
-            ($this->exactly !== null && $this->exactly < 0)
-        ) {
-            throw new InvalidArgumentException('Only positive or zero values are allowed.');
-        }
-
-        if ($this->min !== null && $this->max !== null) {
-            if ($this->min > $this->max) {
-                throw new InvalidArgumentException('$min must be lower than $max.');
-            }
-
-            if ($this->min === $this->max) {
-                throw new InvalidArgumentException('Use $exactly instead.');
-            }
-        }
-    }
-
-    /**
      * A getter for {@see $min} property.
      *
      * @return int|null A number representing minimum boundary. `null` means no lower bound.
      */
-    public function getMin(): int|null
+    public function getMin(): ?int
     {
         return $this->min;
     }
@@ -156,7 +100,7 @@ trait CountableLimitTrait
      *
      * @return int|null A number representing maximum boundary. `null` means no upper bound.
      */
-    public function getMax(): int|null
+    public function getMax(): ?int
     {
         return $this->max;
     }
@@ -167,7 +111,7 @@ trait CountableLimitTrait
      * @return int|null A number representing "exactly" value. `null` means no strict comparison so lower / upper limits /
      * both must be set.
      */
-    public function getExactly(): int|null
+    public function getExactly(): ?int
     {
         return $this->exactly;
     }
@@ -200,6 +144,62 @@ trait CountableLimitTrait
     public function getNotExactlyMessage(): string
     {
         return $this->notExactlyMessage;
+    }
+
+    /**
+     * Initializes countable limit related properties and runs checks for required, mutually exclusive properties and
+     * their allowed values (including dependency on each other).
+     *
+     * @param int|null $min Minimum limit ({@see $min}).
+     * @param int|null $max Maximum limit ({@see $max}).
+     * @param int|null $exactly "Exactly" number ({@see $exactly}).
+     * @param string $lessThanMinMessage "Less than minimum" validation error message ({@see $lessThanMinMessage}).
+     * @param string $greaterThanMinMessage "Greater than maximum" validation error message
+     * ({@see $greaterThanMinMessage}).
+     * @param string $notExactlyMessage "Not exactly" validation error message ({@see $notExactlyMessage}).
+     */
+    private function initCountableLimitProperties(
+        ?int $min,
+        ?int $max,
+        ?int $exactly,
+        string $lessThanMinMessage,
+        string $greaterThanMinMessage,
+        string $notExactlyMessage,
+    ): void {
+        $this->min = $min;
+        $this->max = $max;
+        $this->exactly = $exactly;
+        $this->lessThanMinMessage = $lessThanMinMessage;
+        $this->greaterThanMaxMessage = $greaterThanMinMessage;
+        $this->notExactlyMessage = $notExactlyMessage;
+
+        if ($this->min === null && $this->max === null && $this->exactly === null) {
+            throw new InvalidArgumentException(
+                'At least one of these properties must be specified: $min, $max, $exactly.',
+            );
+        }
+
+        if (($this->min !== null || $this->max !== null) && $this->exactly !== null) {
+            throw new InvalidArgumentException('$exactly is mutually exclusive with $min and $max.');
+        }
+
+        if (
+            ($this->min !== null && $this->min < 0)
+            || ($this->max !== null && $this->max < 0)
+            || ($this->exactly !== null && $this->exactly < 0)
+        ) {
+            throw new InvalidArgumentException('Only positive or zero values are allowed.');
+        }
+
+        if ($this->min !== null && $this->max !== null) {
+            if ($this->min > $this->max) {
+                throw new InvalidArgumentException('$min must be lower than $max.');
+            }
+
+            if ($this->min === $this->max) {
+                throw new InvalidArgumentException('Use $exactly instead.');
+            }
+        }
     }
 
     /**

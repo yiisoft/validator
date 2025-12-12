@@ -208,7 +208,7 @@ final class UrlTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Url(), new Url(when: $when));
     }
 

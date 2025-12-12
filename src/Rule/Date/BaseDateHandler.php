@@ -40,8 +40,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         private readonly string $incorrectInputMessage,
         private readonly string $tooEarlyMessage,
         private readonly string $tooLateMessage,
-    ) {
-    }
+    ) {}
 
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
@@ -63,7 +62,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                 [
                     'property' => $context->getTranslatedProperty(),
                     'Property' => $context->getCapitalizedTranslatedProperty(),
-                ]
+                ],
             );
             return $result;
         }
@@ -77,7 +76,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                     'Property' => $context->getCapitalizedTranslatedProperty(),
                     'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($min, $rule, $timeZone),
-                ]
+                ],
             );
             return $result;
         }
@@ -91,7 +90,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
                     'Property' => $context->getCapitalizedTranslatedProperty(),
                     'value' => $this->formatDate($date, $rule, $timeZone),
                     'limit' => $this->formatDate($max, $rule, $timeZone),
-                ]
+                ],
             );
             return $result;
         }
@@ -103,7 +102,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         mixed $value,
         Date|DateTime|Time $rule,
         ?DateTimeZone $timeZone,
-        bool $strict
+        bool $strict,
     ): ?DateTimeInterface {
         $format = $rule->getFormat();
 
@@ -150,7 +149,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     private function prepareValueWithPhpFormat(
         string $value,
         string $format,
-        ?DateTimeZone $timeZone
+        ?DateTimeZone $timeZone,
     ): ?DateTimeInterface {
         $date = DateTimeImmutable::createFromFormat($format, $value, $timeZone);
         if ($date === false) {
@@ -213,7 +212,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         ?string $locale,
         int $dateType,
         int $timeType,
-        ?DateTimeZone $timeZone
+        ?DateTimeZone $timeZone,
     ): IntlDateFormatter {
         if ($format === null) {
             return new IntlDateFormatter($locale, $dateType, $timeType, $timeZone);
@@ -224,7 +223,7 @@ abstract class BaseDateHandler implements RuleHandlerInterface
             IntlDateFormatter::NONE,
             IntlDateFormatter::NONE,
             $timeZone,
-            pattern: $format
+            pattern: $format,
         );
     }
 

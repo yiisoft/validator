@@ -32,7 +32,7 @@ class RuleHandlerContainerTest extends TestCase
 
         $this->expectException(RuleHandlerNotFoundException::class);
         $this->expectExceptionMessage(
-            'Handler was not found for "not-exists-handler" rule or unresolved "not-exists-handler" class.'
+            'Handler was not found for "not-exists-handler" rule or unresolved "not-exists-handler" class.',
         );
         $this->expectExceptionCode(0);
         $handlersContainer->resolve('not-exists-handler');

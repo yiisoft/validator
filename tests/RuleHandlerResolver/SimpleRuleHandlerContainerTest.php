@@ -23,7 +23,7 @@ final class SimpleRuleHandlerContainerTest extends TestCase
 
     public function testPredefinedHandler(): void
     {
-        $handler = new class () implements RuleHandlerInterface {
+        $handler = new class implements RuleHandlerInterface {
             public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
             {
                 return new Result();

@@ -39,6 +39,7 @@
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.3",
+        "friendsofphp/php-cs-fixer": "^3.91",
         "jetbrains/phpstorm-attributes": "^1.2",
         "maglnet/composer-require-checker": "^4.7.1",
         "phpbench/phpbench": "^1.4.1",
@@ -93,6 +94,7 @@
         "rector": "vendor/bin/rector process",
         "infection": "vendor/bin/infection",
         "dry-run": "vendor/bin/rector process --dry-run",
-        "psalm": "vendor/bin/psalm --config=psalm.xml"
+        "psalm": "vendor/bin/psalm --config=psalm.xml",
+        "cs-fix": "php-cs-fixer fix"
     }
 }

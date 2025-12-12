@@ -63,7 +63,7 @@ final class BooleanTypeTest extends RuleTestCase
             'boolean, false' => [false, new BooleanType()],
             'boolean, true' => [true, new BooleanType()],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[BooleanType]
                     private bool $active = true;
                 },
@@ -92,11 +92,10 @@ final class BooleanTypeTest extends RuleTestCase
                 ['active' => ['Property - active, type - array']],
             ],
             'message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?bool $active = null,
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -121,7 +120,7 @@ final class BooleanTypeTest extends RuleTestCase
                 ['active' => ['"Активен" - не булево значение.']],
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[BooleanType]
                     private int $active = 1;
                 },
@@ -138,7 +137,7 @@ final class BooleanTypeTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new BooleanType(), new BooleanType(when: $when));
     }
 

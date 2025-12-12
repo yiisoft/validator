@@ -25,8 +25,7 @@ final class MessageProcessor
         private readonly string $translationCategory,
         private readonly MessageFormatterInterface $messageFormatter,
         private readonly string $messageFormatterLocale,
-    ) {
-    }
+    ) {}
 
     public function process(Error $error): string
     {
@@ -34,7 +33,7 @@ final class MessageProcessor
             Error::MESSAGE_TRANSLATE => $this->translator->translate(
                 $error->getMessage(),
                 $error->getParameters(),
-                $this->translationCategory
+                $this->translationCategory,
             ),
             Error::MESSAGE_FORMAT => $this->messageFormatter->format(
                 $error->getMessage(),

@@ -301,11 +301,6 @@ final class ImageTest extends RuleTestCase
         );
     }
 
-    protected function getDifferentRuleInHandlerItems(): array
-    {
-        return [Image::class, ImageHandler::class];
-    }
-
     public static function dataOptions(): array
     {
         return [
@@ -520,8 +515,8 @@ final class ImageTest extends RuleTestCase
         $this->testWhenInternal(
             new Image(),
             new Image(
-                when: static fn(mixed $value): bool => $value !== null
-            )
+                when: static fn(mixed $value): bool => $value !== null,
+            ),
         );
     }
 
@@ -535,7 +530,7 @@ final class ImageTest extends RuleTestCase
             static function (int $code, string $message) use (&$errorMessage): bool {
                 $errorMessage = $message;
                 return true;
-            }
+            },
         );
 
         $result = $validator->validate('test', new Image());
@@ -545,5 +540,10 @@ final class ImageTest extends RuleTestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(['Value must be an image.'], $result->getErrorMessages());
         $this->assertSame('mime_content_type(test): Failed to open stream: No such file or directory', $errorMessage);
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Image::class, ImageHandler::class];
     }
 }

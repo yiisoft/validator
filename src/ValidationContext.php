@@ -80,8 +80,7 @@ final class ValidationContext
     public function __construct(
         private array $parameters = [],
         private ?PropertyTranslatorInterface $propertyTranslator = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Set context data if it is not set yet.
@@ -128,7 +127,7 @@ final class ValidationContext
         return $this;
     }
 
-    public function setPropertyLabel(string|null $label): self
+    public function setPropertyLabel(?string $label): self
     {
         $this->propertyLabel = $label;
         return $this;

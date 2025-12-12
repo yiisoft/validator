@@ -43,8 +43,8 @@ final class UniqueIterableTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectItemValueMessage' => [
-                        'template' => 'The allowed types for iterable\'s item values of {property} are integer, ' .
-                            'float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
+                        'template' => 'The allowed types for iterable\'s item values of {property} are integer, '
+                            . 'float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
                         'parameters' => [],
                     ],
                     'differentTypesMessage' => [
@@ -66,7 +66,7 @@ final class UniqueIterableTest extends RuleTestCase
                     differentTypesMessage: 'Custom message 3.',
                     message: 'Custom message 4.',
                     skipOnEmpty: true,
-                    skipOnError: true
+                    skipOnError: true,
                 ),
                 [
                     'incorrectInputMessage' => [
@@ -101,13 +101,13 @@ final class UniqueIterableTest extends RuleTestCase
             'boolean values' => [[false, true], new UniqueIterable()],
             'stringable values' => [
                 [
-                    new class () implements Stringable {
+                    new class implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    new class () implements Stringable {
+                    new class implements Stringable {
                         public function __toString()
                         {
                             return 'b';
@@ -121,7 +121,7 @@ final class UniqueIterableTest extends RuleTestCase
                 new UniqueIterable(),
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[UniqueIterable]
                     private array $data = [1, 2];
                 },
@@ -133,8 +133,8 @@ final class UniqueIterableTest extends RuleTestCase
     public static function dataValidationFailed(): array
     {
         $incorrectInputMessage = 'Value must be array or iterable.';
-        $incorrectItemValueMessage = 'The allowed types for iterable\'s item values of value are integer, float, ' .
-            'string, boolean and object implementing \Stringable or \DateTimeInterface.';
+        $incorrectItemValueMessage = 'The allowed types for iterable\'s item values of value are integer, float, '
+            . 'string, boolean and object implementing \Stringable or \DateTimeInterface.';
         $message = 'Every iterable\'s item of value must be unique.';
 
         return [
@@ -146,11 +146,10 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Property - data, type - int.']],
             ],
             'incorrect input, custom message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public int $data = 1,
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -185,11 +184,10 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Property - data, type - array.']],
             ],
             'incorrect item value, custom message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, 2, [], 3],
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -221,25 +219,25 @@ final class UniqueIterableTest extends RuleTestCase
             'boolean values' => [[false, true, false], new UniqueIterable(), ['' => [$message]]],
             'stringable values' => [
                 [
-                    new class () implements Stringable {
+                    new class implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    new class () implements Stringable {
+                    new class implements Stringable {
                         public function __toString()
                         {
                             return 'b';
                         }
                     },
-                    new class () implements Stringable {
+                    new class implements Stringable {
                         public function __toString()
                         {
                             return 'a';
                         }
                     },
-                    new class () implements Stringable {
+                    new class implements Stringable {
                         public function __toString()
                         {
                             return 'c';
@@ -270,11 +268,10 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Property - data.']],
             ],
             'different types, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, '2', 3],
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -306,11 +303,10 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['Property - data.']],
             ],
             'custom message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public array $data = [1, 2, 1, 3],
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -333,7 +329,7 @@ final class UniqueIterableTest extends RuleTestCase
                 ['data' => ['"Данные" - в списке есть дубликаты.']],
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[UniqueIterable]
                     private array $data = [1, 2, 1, 3];
                 },
@@ -350,7 +346,7 @@ final class UniqueIterableTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new UniqueIterable(), new UniqueIterable(when: $when));
     }
 

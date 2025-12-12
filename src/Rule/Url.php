@@ -85,7 +85,7 @@ final class Url implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterf
         private string $message = '{Property} is not a valid URL.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $pattern = $this->preparePattern($pattern);
         if ($pattern === '') {

@@ -51,7 +51,7 @@ final class StringType implements DumpedRuleInterface, SkipOnEmptyInterface, Ski
         private string $message = '{Property} must be a string. {type} given.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

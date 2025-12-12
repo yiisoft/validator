@@ -57,10 +57,10 @@ final class Callback implements
      */
     public function __construct(
         private mixed $callback = null,
-        private string|null $method = null,
+        private ?string $method = null,
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         if ($this->callback === null && $this->method === null) {
             throw new InvalidArgumentException('Either "$callback" or "$method" must be specified.');
@@ -85,7 +85,7 @@ final class Callback implements
      *
      * @see $callback
      */
-    public function getCallback(): callable|null
+    public function getCallback(): ?callable
     {
         return $this->callback;
     }
@@ -97,7 +97,7 @@ final class Callback implements
      *
      * @see $method
      */
-    public function getMethod(): string|null
+    public function getMethod(): ?string
     {
         return $this->method;
     }
@@ -117,12 +117,12 @@ final class Callback implements
                     'Method "%s" does not exist in class "%s".',
                     $method,
                     $object::class,
-                )
+                ),
             );
         }
 
         /** @psalm-suppress MixedMethodCall */
-        $this->callback = Closure::bind(fn (mixed ...$args): mixed => $object->{$method}(...$args), $object, $object);
+        $this->callback = Closure::bind(fn(mixed ...$args): mixed => $object->{$method}(...$args), $object, $object);
     }
 
     public function getOptions(): array

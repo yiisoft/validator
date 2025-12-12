@@ -35,8 +35,8 @@ final class RegexHandler implements RuleHandlerInterface
         }
 
         if (
-            (!$rule->isNot() && !preg_match($rule->getPattern(), $value)) ||
-            ($rule->isNot() && preg_match($rule->getPattern(), $value))
+            (!$rule->isNot() && !preg_match($rule->getPattern(), $value))
+            || ($rule->isNot() && preg_match($rule->getPattern(), $value))
         ) {
             $result->addError($rule->getMessage(), [
                 'property' => $context->getTranslatedProperty(),

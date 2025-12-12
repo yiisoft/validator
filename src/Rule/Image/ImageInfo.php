@@ -9,8 +9,7 @@ final class ImageInfo
     public function __construct(
         private readonly int $width,
         private readonly int $height,
-    ) {
-    }
+    ) {}
 
     public function getWidth(): int
     {

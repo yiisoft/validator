@@ -15,7 +15,7 @@ trait WhenTestTrait
     {
         $this->assertNull($ruleWithoutWhen->getWhen());
 
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $new = $ruleWithoutWhen->when($when);
         $this->assertNull($ruleWithoutWhen->getWhen());
         $this->assertInstanceOf(Closure::class, $new->getWhen());

@@ -96,8 +96,8 @@ final class UrlHandler implements RuleHandlerInterface
          */
         return preg_replace_callback(
             '/:\/\/([^\/]+)/',
-            fn ($matches) => '://' . $this->idnToAscii($matches[1]),
-            $value
+            fn($matches) => '://' . $this->idnToAscii($matches[1]),
+            $value,
         );
     }
 }

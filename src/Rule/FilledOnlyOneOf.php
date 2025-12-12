@@ -62,7 +62,7 @@ final class FilledOnlyOneOf implements DumpedRuleInterface, SkipOnErrorInterface
         private string $message = 'Exactly 1 property from this list must be filled for {property}: {properties}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

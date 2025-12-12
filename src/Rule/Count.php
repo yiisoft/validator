@@ -85,20 +85,20 @@ final class Count implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        int|null $exactly = null,
-        int|null $min = null,
-        int|null $max = null,
-        private string $incorrectInputMessage = '{Property} must be an array or implement \Countable interface. ' .
-        '{type} given.',
-        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{item} ' .
-        'other{items}}.',
-        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{item} ' .
-        'other{items}}.',
-        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
-        'other{items}}.',
+        ?int $exactly = null,
+        ?int $min = null,
+        ?int $max = null,
+        private string $incorrectInputMessage = '{Property} must be an array or implement \Countable interface. '
+        . '{type} given.',
+        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{item} '
+        . 'other{items}}.',
+        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{item} '
+        . 'other{items}}.',
+        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} '
+        . 'other{items}}.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->initCountableLimitProperties(
             $min,
@@ -106,7 +106,7 @@ final class Count implements
             $exactly,
             $lessThanMinMessage,
             $greaterThanMaxMessage,
-            $notExactlyMessage
+            $notExactlyMessage,
         );
         $this->skipOnEmpty = $skipOnEmpty;
     }

@@ -53,7 +53,7 @@ final class UnexpectedRuleException extends InvalidArgumentException
             sprintf(
                 'Expected "%s", but "%s" given.',
                 implode('", "', (array) $expectedClassName),
-                $actualObject::class
+                $actualObject::class,
             ),
             $code,
             $previous,

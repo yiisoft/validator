@@ -20,7 +20,7 @@ interface CountableLimitInterface
      *
      * @see getLessThanMinMessage() for related error message.
      */
-    public function getMin(): int|null;
+    public function getMin(): ?int;
 
     /**
      * Returns current maximum limit.
@@ -29,7 +29,7 @@ interface CountableLimitInterface
      *
      * @see getGreaterThanMaxMessage() for related error message.
      */
-    public function getMax(): int|null;
+    public function getMax(): ?int;
 
     /**
      * Returns current "exactly" value meant for strict comparison. It is a shortcut for the case when {@see getMin()}
@@ -40,7 +40,7 @@ interface CountableLimitInterface
      *
      * @see getNotExactlyMessage() for related error message
      */
-    public function getExactly(): int|null;
+    public function getExactly(): ?int;
 
     /**
      * Returns message used when a validated value is less than minimum set in {@see getMin()}.

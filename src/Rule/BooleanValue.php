@@ -86,12 +86,12 @@ final class BooleanValue implements DumpedRuleInterface, SkipOnEmptyInterface, S
         private int|float|string|bool $trueValue = '1',
         private int|float|string|bool $falseValue = '0',
         private bool $strict = false,
-        private string $incorrectInputMessage = 'The allowed types for {property} are integer, float, string, ' .
-        'boolean. {type} given.',
+        private string $incorrectInputMessage = 'The allowed types for {property} are integer, float, string, '
+        . 'boolean. {type} given.',
         private string $message = '{Property} must be either "{true}" or "{false}".',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

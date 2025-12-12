@@ -108,11 +108,6 @@ final class UuidTest extends RuleTestCase
         ];
     }
 
-    protected function getDifferentRuleInHandlerItems(): array
-    {
-        return [Uuid::class, UuidHandler::class];
-    }
-
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(new Uuid(), new Uuid(skipOnError: true));
@@ -120,7 +115,12 @@ final class UuidTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Uuid(), new Uuid(when: $when));
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Uuid::class, UuidHandler::class];
     }
 }

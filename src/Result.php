@@ -68,7 +68,7 @@ final class Result
      */
     public function getErrorMessages(): array
     {
-        return array_map(static fn (Error $error): string => $error->getMessage(), $this->errors);
+        return array_map(static fn(Error $error): string => $error->getMessage(), $this->errors);
     }
 
     /**

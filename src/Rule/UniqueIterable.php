@@ -74,13 +74,13 @@ final class UniqueIterable implements
      */
     public function __construct(
         private string $incorrectInputMessage = '{Property} must be array or iterable.',
-        private string $incorrectItemValueMessage = 'The allowed types for iterable\'s item values of {property} are ' .
-        'integer, float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
+        private string $incorrectItemValueMessage = 'The allowed types for iterable\'s item values of {property} are '
+        . 'integer, float, string, boolean and object implementing \Stringable or \DateTimeInterface.',
         private string $differentTypesMessage = 'All iterable items of {property} must have the same type.',
         private string $message = 'Every iterable\'s item of {property} must be unique.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

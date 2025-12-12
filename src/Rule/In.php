@@ -76,7 +76,7 @@ final class In implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         private string $message = '{Property} is not in the list of acceptable values.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }
