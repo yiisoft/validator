@@ -1,10 +1,10 @@
 # Yii Validator Change Log
 
-## 2.5.1 under development
+## 2.5.1 December 12, 2025
 
+- Enh #784: Add PHP 8.5 support (@vjik)
 - Bug #776: Take `PropertyTranslatorProviderInterface` into account during context validation (@vjik)
 - Bug #783: Fix error on uninitialized properties validation (@batyrmastyr)
-- Enh #784: Add PHP 8.5 support (@vjik)
 
 ## 2.5.0 July 19, 2025
 
