@@ -49,7 +49,7 @@ final class Uuid implements DumpedRuleInterface, SkipOnEmptyInterface, SkipOnErr
         private string $message = 'The value of {property} is not a valid UUID.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

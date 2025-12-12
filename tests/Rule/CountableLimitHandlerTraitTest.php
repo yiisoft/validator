@@ -21,18 +21,18 @@ final class CountableLimitHandlerTraitTest extends TestCase
     {
         return [
             [
-                new class () implements CountableLimitInterface {
-                    public function getMin(): int|null
+                new class implements CountableLimitInterface {
+                    public function getMin(): ?int
                     {
                         return null;
                     }
 
-                    public function getMax(): int|null
+                    public function getMax(): ?int
                     {
                         return null;
                     }
 
-                    public function getExactly(): int|null
+                    public function getExactly(): ?int
                     {
                         return 1;
                     }
@@ -62,7 +62,7 @@ final class CountableLimitHandlerTraitTest extends TestCase
     #[DataProvider('validateLimitsWithWrongRuleData')]
     public function testValidateLimitsWithWrongRule(CountableLimitInterface|RuleInterface $rule): void
     {
-        $handler = new class () implements RuleHandlerInterface {
+        $handler = new class implements RuleHandlerInterface {
             use CountableLimitHandlerTrait;
 
             public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
@@ -74,7 +74,7 @@ final class CountableLimitHandlerTraitTest extends TestCase
                 CountableLimitInterface|RuleInterface $rule,
                 ValidationContext $context,
                 int $number,
-                Result $result
+                Result $result,
             ): void {
                 $this->validateCountableLimits($rule, $context, $number, $result);
             }

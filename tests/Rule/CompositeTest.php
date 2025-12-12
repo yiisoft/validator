@@ -53,8 +53,8 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                    '{type} given.',
+                                'template' => 'The allowed types for {property} are integer, float and string. '
+                                    . '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -78,8 +78,8 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 14,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                    '{type} given.',
+                                'template' => 'The allowed types for {property} are integer, float and string. '
+                                    . '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -115,8 +115,8 @@ final class CompositeTest extends RuleTestCase
                             'min' => null,
                             'max' => 13,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                    '{type} given.',
+                                'template' => 'The allowed types for {property} are integer, float and string. '
+                                    . '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -147,7 +147,7 @@ final class CompositeTest extends RuleTestCase
             ],
             'callable' => [
                 new Composite([
-                    static fn () => (new Result())->addError('Bad value.'),
+                    static fn() => (new Result())->addError('Bad value.'),
                 ]),
                 [
                     'skipOnEmpty' => false,
@@ -163,7 +163,7 @@ final class CompositeTest extends RuleTestCase
                 ],
             ],
             'inheritance' => [
-                new class () extends Composite {
+                new class extends Composite {
                     public function getRules(): array
                     {
                         return [
@@ -216,17 +216,15 @@ final class CompositeTest extends RuleTestCase
                             new Number(max: 13),
                             new Number(max: 14),
                         ],
-                        when: fn () => false,
+                        when: fn() => false,
                     ),
                 ],
             ],
             'override constructor' => [
                 20,
                 [
-                    new class () extends Composite {
-                        public function __construct()
-                        {
-                        }
+                    new class extends Composite {
+                        public function __construct() {}
                     },
                 ],
             ],
@@ -256,8 +254,8 @@ final class CompositeTest extends RuleTestCase
                 20,
                 [
                     new Composite([
-                        static fn () => (new Result())->addError('Bad value.'),
-                        static fn () => (new Result())->addError('Very bad value.'),
+                        static fn() => (new Result())->addError('Bad value.'),
+                        static fn() => (new Result())->addError('Very bad value.'),
                     ]),
                 ],
                 [
@@ -272,7 +270,7 @@ final class CompositeTest extends RuleTestCase
                 [
                     new Composite(
                         [new Number(max: 13), new Number(min: 21)],
-                        when: fn () => true,
+                        when: fn() => true,
                     ),
                 ],
                 [
@@ -312,7 +310,7 @@ final class CompositeTest extends RuleTestCase
                 [
                     new Composite(
                         [new Number(max: 13, greaterThanMaxMessage: 'Custom error')],
-                        when: fn () => true,
+                        when: fn() => true,
                     ),
                 ],
                 ['' => ['Custom error']],
@@ -320,7 +318,7 @@ final class CompositeTest extends RuleTestCase
             'override rules' => [
                 null,
                 [
-                    new class () extends Composite {
+                    new class extends Composite {
                         public function getRules(): array
                         {
                             return [new Required()];
@@ -347,7 +345,7 @@ final class CompositeTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Composite([]), new Composite([], when: $when));
     }
 
@@ -360,7 +358,7 @@ final class CompositeTest extends RuleTestCase
                 '' => ['Invalid A.'],
                 'b' => ['Invalid B.'],
             ],
-            $result->getErrorMessagesIndexedByProperty()
+            $result->getErrorMessagesIndexedByProperty(),
         );
     }
 

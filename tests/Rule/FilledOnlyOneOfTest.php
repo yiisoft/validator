@@ -100,21 +100,21 @@ final class FilledOnlyOneOfTest extends RuleTestCase
     {
         return [
             [
-                new class () {
+                new class {
                     public $prop1 = 1;
                     public $prop2 = null;
                 },
                 [new FilledOnlyOneOf(['prop1', 'prop2'])],
             ],
             [
-                new class () {
+                new class {
                     public $prop1 = null;
                     public $prop2 = 1;
                 },
                 [new FilledOnlyOneOf(['prop1', 'prop2'])],
             ],
             [
-                new class () {
+                new class {
                     private int $prop1 = 1;
                     private $prop2 = null;
                 },
@@ -129,12 +129,12 @@ final class FilledOnlyOneOfTest extends RuleTestCase
                 [new FilledOnlyOneOf(['prop1', 'prop2'])],
             ],
             [
-                new class () {
+                new class {
                     public $obj;
 
                     public function __construct()
                     {
-                        $this->obj = new class () {
+                        $this->obj = new class {
                             public $prop1 = 1;
                             public $prop2 = null;
                         };
@@ -143,12 +143,12 @@ final class FilledOnlyOneOfTest extends RuleTestCase
                 ['obj' => new FilledOnlyOneOf(['prop1', 'prop2'])],
             ],
             [
-                new class () {
+                new class {
                     public $obj;
 
                     public function __construct()
                     {
-                        $this->obj = new class () {
+                        $this->obj = new class {
                             public $prop1 = null;
                             public $prop2 = 1;
                         };
@@ -172,7 +172,7 @@ final class FilledOnlyOneOfTest extends RuleTestCase
 
     public static function dataValidationFailed(): array
     {
-        $object = new class () {
+        $object = new class {
             public $prop1 = null;
             public $prop2 = null;
         };
@@ -249,7 +249,7 @@ final class FilledOnlyOneOfTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new FilledOnlyOneOf([]), new FilledOnlyOneOf([], when: $when));
     }
 

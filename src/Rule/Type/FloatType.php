@@ -52,7 +52,7 @@ final class FloatType implements DumpedRuleInterface, SkipOnEmptyInterface, Skip
         private string $message = '{Property} must be a float.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

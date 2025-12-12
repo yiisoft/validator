@@ -42,18 +42,18 @@ final class CountTest extends RuleTestCase
                     'max' => 5,
                     'exactly' => null,
                     'lessThanMinMessage' => [
-                        'template' => '{Property} must contain at least {min, number} {min, plural, one{item} ' .
-                            'other{items}}.',
+                        'template' => '{Property} must contain at least {min, number} {min, plural, one{item} '
+                            . 'other{items}}.',
                         'parameters' => ['min' => 1],
                     ],
                     'greaterThanMaxMessage' => [
-                        'template' => '{Property} must contain at most {max, number} {max, plural, one{item} ' .
-                            'other{items}}.',
+                        'template' => '{Property} must contain at most {max, number} {max, plural, one{item} '
+                            . 'other{items}}.',
                         'parameters' => ['max' => 5],
                     ],
                     'notExactlyMessage' => [
-                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} ' .
-                            'other{items}}.',
+                        'template' => '{Property} must contain exactly {exactly, number} {exactly, plural, one{item} '
+                            . 'other{items}}.',
                         'parameters' => ['exactly' => null],
                     ],
                     'incorrectInputMessage' => [
@@ -116,14 +116,14 @@ final class CountTest extends RuleTestCase
             ],
             [
                 new SingleValueDataSet(
-                    new class () implements Countable {
+                    new class implements Countable {
                         protected int $myCount = 3;
 
                         public function count(): int
                         {
                             return $this->myCount;
                         }
-                    }
+                    },
                 ),
                 [new Count(min: 3)],
             ],
@@ -196,7 +196,7 @@ final class CountTest extends RuleTestCase
             // https://www.php.net/manual/ru/class.countable.php
             'value: class with min count returned from count method but not implenting Countable interface, min: 3' => [
                 [
-                    new class () {
+                    new class {
                         protected int $myCount = 3;
 
                         public function count(): int
@@ -302,7 +302,7 @@ final class CountTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Count(min: 3), new Count(min: 3, when: $when));
     }
 

@@ -105,7 +105,7 @@ final class DataSetUsageTest extends TestCase
                         return $result;
                     },
                 ],
-            ]
+            ],
         );
         $result = (new Validator())->validate($dataObject);
 
@@ -129,7 +129,7 @@ final class DataSetUsageTest extends TestCase
                 'age' => [
                     new Number(max: 25),
                 ],
-            ]
+            ],
         );
         $validator = new Validator();
         $result = $validator->validate(
@@ -138,7 +138,7 @@ final class DataSetUsageTest extends TestCase
                 'username' => [
                     new Length(max: 10),
                 ],
-            ]
+            ],
         );
 
         $this->assertTrue($result->isValid());
@@ -159,12 +159,12 @@ final class DataSetUsageTest extends TestCase
                 'age' => [
                     new Number(max: 25),
                 ],
-            ]
+            ],
         );
         $validator = new Validator();
         $result = $validator->validate(
             $dataSet,
-            []
+            [],
         );
 
         $this->assertTrue($result->isValid());

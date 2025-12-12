@@ -141,7 +141,7 @@ final class IpTest extends RuleTestCase
                     notInRangeMessage: 'Custom message 8.',
                     ranges: ['private'],
                     skipOnEmpty: true,
-                    skipOnError: true
+                    skipOnError: true,
                 ),
                 [
                     'networks' => [
@@ -628,7 +628,7 @@ final class IpTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Ip(), new Ip(when: $when));
     }
 

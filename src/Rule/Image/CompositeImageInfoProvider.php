@@ -12,7 +12,7 @@ final class CompositeImageInfoProvider implements ImageInfoProviderInterface
     private readonly array $providers;
 
     public function __construct(
-        ImageInfoProviderInterface ...$providers
+        ImageInfoProviderInterface ...$providers,
     ) {
         $this->providers = $providers;
     }

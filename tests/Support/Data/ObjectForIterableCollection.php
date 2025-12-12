@@ -16,6 +16,5 @@ final class ObjectForIterableCollection
         #[Required]
         #[Length(min: 5)]
         public ?string $name = null,
-    ) {
-    }
+    ) {}
 }

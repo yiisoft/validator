@@ -121,11 +121,11 @@ final class Each implements
     public function __construct(
         callable|iterable|object|string $rules = [],
         private string $incorrectInputMessage = '{Property} must be array or iterable. {type} given.',
-        private string $incorrectInputKeyMessage = 'Every iterable key of {property} must have an integer or a ' .
-        'string type. {type} given.',
+        private string $incorrectInputKeyMessage = 'Every iterable key of {property} must have an integer or a '
+        . 'string type. {type} given.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
         public readonly bool $stopOnError = false,
     ) {
         $this->rules = RulesNormalizer::normalize($rules);

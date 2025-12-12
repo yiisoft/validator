@@ -9,6 +9,5 @@ final class CompareObject
     public function __construct(
         private readonly mixed $a,
         private readonly mixed $b,
-    ) {
-    }
+    ) {}
 }

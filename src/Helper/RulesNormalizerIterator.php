@@ -83,8 +83,8 @@ final class RulesNormalizerIterator implements IteratorAggregate
                 sprintf(
                     'Rule must be either an instance of %s or a callable, %s given.',
                     RuleInterface::class,
-                    get_debug_type($rule)
-                )
+                    get_debug_type($rule),
+                ),
             );
         }
 

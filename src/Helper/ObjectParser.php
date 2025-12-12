@@ -142,7 +142,7 @@ final class ObjectParser
     /**
      * @var string|null A cache key. Dynamically generated on instantiation.
      */
-    private string|null $cacheKey = null;
+    private ?string $cacheKey = null;
 
     /**
      * @throws InvalidArgumentException If a class name string provided in {@see $source} refers to a non-existing
@@ -163,9 +163,9 @@ final class ObjectParser
          *
          * @psalm-var int-mask-of<ReflectionProperty::IS_*>
          */
-        private readonly int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
-        ReflectionProperty::IS_PROTECTED |
-        ReflectionProperty::IS_PUBLIC,
+        private readonly int $propertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC,
         /**
          * @var bool Whether the properties with "static" modifier must be skipped.
          */
@@ -179,7 +179,7 @@ final class ObjectParser
         /** @var object|string $source */
         if (is_string($source) && !class_exists($source)) {
             throw new InvalidArgumentException(
-                sprintf('Class "%s" not found.', $source)
+                sprintf('Class "%s" not found.', $source),
             );
         }
 

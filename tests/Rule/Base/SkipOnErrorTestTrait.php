@@ -12,7 +12,7 @@ trait SkipOnErrorTestTrait
 
     private function testSkipOnErrorInternal(
         SkipOnErrorInterface $nonSkippingRule,
-        SkipOnErrorInterface $skippingRule
+        SkipOnErrorInterface $skippingRule,
     ): void {
         $this->assertFalse($nonSkippingRule->shouldSkipOnError());
 

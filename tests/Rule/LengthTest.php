@@ -288,7 +288,7 @@ final class LengthTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Length(min: 3), new Length(min: 3, when: $when));
     }
 

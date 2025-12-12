@@ -16,8 +16,7 @@ final class AtLeastDto implements PropertyTranslatorProviderInterface
         public ?int $a = null,
         public ?int $b = null,
         public ?int $c = null,
-    ) {
-    }
+    ) {}
 
     public function getPropertyLabels(): array
     {

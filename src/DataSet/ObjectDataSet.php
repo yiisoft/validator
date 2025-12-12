@@ -188,9 +188,9 @@ final class ObjectDataSet implements
          * @var object An object containing rules and data.
          */
         private readonly object $object,
-        int $propertyVisibility = ReflectionProperty::IS_PRIVATE |
-        ReflectionProperty::IS_PROTECTED |
-        ReflectionProperty::IS_PUBLIC,
+        int $propertyVisibility = ReflectionProperty::IS_PRIVATE
+        | ReflectionProperty::IS_PROTECTED
+        | ReflectionProperty::IS_PUBLIC,
         bool $useCache = true,
     ) {
         $this->dataSetProvided = $this->object instanceof DataSetInterface;
@@ -198,7 +198,7 @@ final class ObjectDataSet implements
         $this->parser = new ObjectParser(
             source: $object,
             propertyVisibility: $propertyVisibility,
-            useCache: $useCache
+            useCache: $useCache,
         );
     }
 

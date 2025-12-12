@@ -36,7 +36,7 @@ trait WhenTrait
      *
      * @return $this The new instance with a changed value.
      */
-    public function when(Closure|null $value): static
+    public function when(?Closure $value): static
     {
         $new = clone $this;
         $new->when = $value;
@@ -53,7 +53,7 @@ trait WhenTrait
      * - `null` - always apply the validation.
      * - `callable` - apply the validation depending on a return value: `true` - apply, `false` - do not apply.
      */
-    public function getWhen(): Closure|null
+    public function getWhen(): ?Closure
     {
         return $this->when;
     }

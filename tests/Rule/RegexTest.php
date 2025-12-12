@@ -141,7 +141,7 @@ final class RegexTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Regex('//'), new Regex('//', when: $when));
     }
 

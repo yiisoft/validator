@@ -35,8 +35,8 @@ final class BooleanValueTest extends RuleTestCase
                     'falseValue' => '0',
                     'strict' => false,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
-                            'given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} '
+                            . 'given.',
                         'parameters' => [
                             'true' => '1',
                             'false' => '0',
@@ -61,7 +61,7 @@ final class BooleanValueTest extends RuleTestCase
                     incorrectInputMessage: 'Custom message 1.',
                     message: 'Custom message 2.',
                     skipOnEmpty: true,
-                    skipOnError: true
+                    skipOnError: true,
                 ),
                 [
                     'trueValue' => 'YES',
@@ -92,8 +92,8 @@ final class BooleanValueTest extends RuleTestCase
                     'falseValue' => false,
                     'strict' => true,
                     'incorrectInputMessage' => [
-                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} ' .
-                            'given.',
+                        'template' => 'The allowed types for {property} are integer, float, string, boolean. {type} '
+                            . 'given.',
                         'parameters' => [
                             'true' => 'true',
                             'false' => 'false',
@@ -248,7 +248,7 @@ final class BooleanValueTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new BooleanValue(), new BooleanValue(when: $when));
     }
 

@@ -49,17 +49,17 @@ abstract class AbstractCompare implements
      *
      * @psalm-suppress MissingClassConstType
      */
-    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float, string, ' .
-        'boolean, null and object implementing \Stringable interface or \DateTimeInterface. {type} given.';
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float, string, '
+        . 'boolean, null and object implementing \Stringable interface or \DateTimeInterface. {type} given.';
 
     /**
      * A default for {@see $incorrectDataSetTypeMessage}.
      *
      * @psalm-suppress MissingClassConstType
      */
-    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = '{Property} returned from a custom data set must have ' .
-        'one of the following types: integer, float, string, boolean, null or an object implementing \Stringable ' .
-        'interface or \DateTimeInterface.';
+    protected const DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE = '{Property} returned from a custom data set must have '
+        . 'one of the following types: integer, float, string, boolean, null or an object implementing \Stringable '
+        . 'interface or \DateTimeInterface.';
 
     /**
      * List of valid types.
@@ -156,15 +156,15 @@ abstract class AbstractCompare implements
      */
     public function __construct(
         private mixed $targetValue = null,
-        private string|null $targetProperty = null,
+        private ?string $targetProperty = null,
         private string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         private string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
-        private string|null $message = null,
+        private ?string $message = null,
         private string $type = CompareType::NUMBER,
         private string $operator = '==',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         if (!in_array($this->type, self::VALID_TYPES)) {
             $validTypesString = $this->getQuotedList(self::VALID_TYPES);
@@ -208,7 +208,7 @@ abstract class AbstractCompare implements
      *
      * @see $targetProperty
      */
-    public function getTargetProperty(): string|null
+    public function getTargetProperty(): ?string
     {
         return $this->targetProperty;
     }

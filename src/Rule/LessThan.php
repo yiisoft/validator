@@ -86,14 +86,14 @@ final class LessThan extends AbstractCompare
      */
     public function __construct(
         mixed $targetValue = null,
-        string|null $targetProperty = null,
+        ?string $targetProperty = null,
         string $incorrectInputMessage = self::DEFAULT_INCORRECT_INPUT_MESSAGE,
         string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
-        string|null $message = null,
+        ?string $message = null,
         string $type = CompareType::NUMBER,
         bool|callable|null $skipOnEmpty = false,
         bool $skipOnError = false,
-        Closure|null $when = null,
+        ?Closure $when = null,
     ) {
         parent::__construct(
             targetValue: $targetValue,

@@ -73,7 +73,7 @@ final class Regex implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private string $message = '{Property} is invalid.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         if ($pattern === '') {
             throw new InvalidArgumentException('Pattern can\'t be empty.');

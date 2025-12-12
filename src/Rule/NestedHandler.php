@@ -95,7 +95,7 @@ final class NestedHandler implements RuleHandlerInterface
                 $property = end($valuePathList);
                 $itemResult = $context->validate(
                     ArrayHelper::keyExists($data, $valuePathList) ? [$property => $validatedValue] : [],
-                    [$property => $rules]
+                    [$property => $rules],
                 );
             }
 
@@ -111,7 +111,7 @@ final class NestedHandler implements RuleHandlerInterface
                 $compoundResult->addErrorWithoutPostProcessing(
                     $error->getMessage(),
                     $error->getParameters(),
-                    $valuePathList
+                    $valuePathList,
                 );
             }
         }

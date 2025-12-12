@@ -43,7 +43,7 @@ interface WhenInterface
      *
      * @see ValidationContext for publicly available methods and properties for building condition.
      */
-    public function when(Closure|null $value): static;
+    public function when(?Closure $value): static;
 
     /**
      * Returns current "when" value.
@@ -53,5 +53,5 @@ interface WhenInterface
      * - `null` - always apply the validation.
      * - `callable` - apply the validation depending on a return value: `true` - apply, `false` - do not apply.
      */
-    public function getWhen(): Closure|null;
+    public function getWhen(): ?Closure;
 }

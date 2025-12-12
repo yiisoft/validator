@@ -41,8 +41,8 @@ abstract class AbstractNumber implements
      *
      * @psalm-suppress MissingClassConstType
      */
-    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float and ' .
-        'string. {type} given.';
+    protected const DEFAULT_INCORRECT_INPUT_MESSAGE = 'The allowed types for {property} are integer, float and '
+        . 'string. {type} given.';
 
     /**
      * A default for {@see $lessThanMinMessage}.
@@ -115,7 +115,7 @@ abstract class AbstractNumber implements
         string $pattern,
         bool|callable|null $skipOnEmpty,
         private bool $skipOnError,
-        private Closure|null $when,
+        private ?Closure $when,
     ) {
         if ($pattern === '') {
             throw new InvalidArgumentException('Pattern can\'t be empty.');

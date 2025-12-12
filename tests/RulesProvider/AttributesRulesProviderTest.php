@@ -40,14 +40,13 @@ final class AttributesRulesProviderTest extends TestCase
             ],
             'object with no properties' => [
                 [],
-                new class () {
-                },
+                new class {},
             ],
             'object with properties without rule attributes' => [
                 [
                     'title' => [Length::class],
                 ],
-                new class () {
+                new class {
                     #[Deprecated(reason: 'test reason', replacement: 'test replacement')]
                     private int $viewsCount = 1;
 
@@ -153,7 +152,7 @@ final class AttributesRulesProviderTest extends TestCase
         return [
             [
                 ['a' => [Required::class], 'b' => [TrueValue::class]],
-                new class () {
+                new class {
                     #[Required]
                     public int $a = 1;
                     #[TrueValue]
@@ -163,7 +162,7 @@ final class AttributesRulesProviderTest extends TestCase
             ],
             [
                 ['a' => [Required::class]],
-                new class () {
+                new class {
                     #[Required]
                     public int $a = 1;
                     #[TrueValue]
@@ -173,7 +172,7 @@ final class AttributesRulesProviderTest extends TestCase
             ],
             [
                 ['a' => [Required::class], 'b' => [TrueValue::class]],
-                new class () {
+                new class {
                     #[Required]
                     public int $a = 1;
                     #[TrueValue]
@@ -204,8 +203,8 @@ final class AttributesRulesProviderTest extends TestCase
         $classNames = [];
         foreach ($rules as $property => $propertyRules) {
             $classNames[$property] = array_map(
-                static fn (RuleInterface $rule): string => $rule::class,
-                $propertyRules instanceof Traversable ? iterator_to_array($propertyRules) : $propertyRules
+                static fn(RuleInterface $rule): string => $rule::class,
+                $propertyRules instanceof Traversable ? iterator_to_array($propertyRules) : $propertyRules,
             );
         }
 

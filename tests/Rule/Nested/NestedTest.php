@@ -110,8 +110,8 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data for {property} can only have an array type. {type} ' .
-                            'given.',
+                        'template' => 'An object data set data for {property} can only have an array type. {type} '
+                            . 'given.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -131,8 +131,8 @@ final class NestedTest extends RuleTestCase
                             'min' => null,
                             'max' => null,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                    '{type} given.',
+                                'template' => 'The allowed types for {property} are integer, float and string. '
+                                    . '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [
@@ -165,8 +165,8 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data for {property} can only have an array type. {type} ' .
-                            'given.',
+                        'template' => 'An object data set data for {property} can only have an array type. {type} '
+                            . 'given.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -199,8 +199,8 @@ final class NestedTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectDataSetTypeMessage' => [
-                        'template' => 'An object data set data for {property} can only have an array type. {type} ' .
-                            'given.',
+                        'template' => 'An object data set data for {property} can only have an array type. {type} '
+                            . 'given.',
                         'parameters' => [],
                     ],
                     'incorrectInputMessage' => [
@@ -233,8 +233,7 @@ final class NestedTest extends RuleTestCase
 
         $rule = new Nested([
             'a' => new Required(),
-            'b' => new class () {
-            },
+            'b' => new class {},
             'c' => new Number(min: 1),
         ]);
         $rule->getOptions();
@@ -257,7 +256,7 @@ final class NestedTest extends RuleTestCase
     {
         return [
             'class-string-rules' => [
-                new class () {
+                new class {
                     #[Nested(ObjectWithDifferentPropertyVisibility::class)]
                     private array $array = [
                         'name' => 'hello',
@@ -271,7 +270,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'class-string-rules-private-only' => [
-                new class () {
+                new class {
                     #[Nested(
                         rules: ObjectWithDifferentPropertyVisibility::class,
                         rulesSourceClassPropertyVisibility: ReflectionProperty::IS_PRIVATE,
@@ -287,7 +286,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'rules-provider' => [
-                new class () implements RulesProviderInterface {
+                new class implements RulesProviderInterface {
                     private array $array = [
                         'name' => 'hello',
                         'age' => 17,
@@ -300,7 +299,7 @@ final class NestedTest extends RuleTestCase
                             'array' => new Nested(
                                 new SimpleRulesProvider([
                                     'age' => new Number(min: 99),
-                                ])
+                                ]),
                             ),
                         ];
                     }
@@ -310,7 +309,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'empty-rules' => [
-                new class () {
+                new class {
                     #[Nested([])]
                     private readonly ObjectWithDifferentPropertyVisibility $object;
 
@@ -322,7 +321,7 @@ final class NestedTest extends RuleTestCase
                 [],
             ],
             'rules-from-validated-value' => [
-                new class () {
+                new class {
                     #[Nested]
                     private readonly ObjectWithDifferentPropertyVisibility $object;
 
@@ -337,7 +336,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'rules-from-validated-value-only-public' => [
-                new class () {
+                new class {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PUBLIC)]
                     private readonly ObjectWithDifferentPropertyVisibility $object;
 
@@ -351,7 +350,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'rules-from-validated-value-only-protected' => [
-                new class () {
+                new class {
                     #[Nested(validatedObjectPropertyVisibility: ReflectionProperty::IS_PROTECTED)]
                     private readonly ObjectWithDifferentPropertyVisibility $object;
 
@@ -365,7 +364,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'rules-from-validated-value-inherit-attributes' => [
-                new class () {
+                new class {
                     #[Nested]
                     private readonly InheritAttributesObject $object;
 
@@ -390,7 +389,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'object' => [
-                new class () {
+                new class {
                     #[Nested(['number' => new Number(max: 7)])]
                     private readonly ObjectWithDifferentPropertyVisibility $object;
 
@@ -404,7 +403,7 @@ final class NestedTest extends RuleTestCase
                 ],
             ],
             'object-private-only' => [
-                new class () {
+                new class {
                     #[Nested(
                         ['age' => new Number(min: 100, skipOnEmpty: true), 'number' => new Number(max: 7)],
                         validatedObjectPropertyVisibility: ReflectionProperty::IS_PRIVATE,
@@ -631,7 +630,7 @@ final class NestedTest extends RuleTestCase
                 'caption' => ['Caption must contain at least 3 characters.'],
                 'object.name' => ['Name must contain at least 5 characters.'],
             ],
-            $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath(),
         );
     }
 
@@ -878,7 +877,7 @@ final class NestedTest extends RuleTestCase
         array $rules,
         array $expectedDetailedErrors,
         array $expectedErrorMessages,
-        array $expectedErrorMessagesIndexedByPath
+        array $expectedErrorMessagesIndexedByPath,
     ): void {
         $result = (new Validator())->validate($data, $rules);
 
@@ -887,7 +886,7 @@ final class NestedTest extends RuleTestCase
                 $error->getMessage(),
                 $error->getValuePath(),
             ],
-            $result->getErrors()
+            $result->getErrors(),
         );
 
         $this->assertSame($expectedDetailedErrors, $errorsData);
@@ -897,7 +896,7 @@ final class NestedTest extends RuleTestCase
 
     public function testNestedPostValidationHook(): void
     {
-        $object = new class () implements PostValidationHookInterface {
+        $object = new class implements PostValidationHookInterface {
             #[Required]
             #[StringValue]
             #[Length(min: 6)]
@@ -933,7 +932,7 @@ final class NestedTest extends RuleTestCase
                 'nested.secondNested.secondInt',
                 'nested.secondNested.secondString',
             ],
-            array_keys($object->validationResult->getFirstErrorMessagesIndexedByPath())
+            array_keys($object->validationResult->getFirstErrorMessagesIndexedByPath()),
         );
         $this->assertSame(
             [
@@ -943,14 +942,14 @@ final class NestedTest extends RuleTestCase
                 'secondNested.secondInt',
                 'secondNested.secondString',
             ],
-            array_keys($object->nested->validationResult->getFirstErrorMessagesIndexedByPath())
+            array_keys($object->nested->validationResult->getFirstErrorMessagesIndexedByPath()),
         );
         $this->assertSame(
             [
                 'secondInt',
                 'secondString',
             ],
-            array_keys($object->nested->secondNested->validationResult->getFirstErrorMessagesIndexedByPath())
+            array_keys($object->nested->secondNested->validationResult->getFirstErrorMessagesIndexedByPath()),
         );
     }
 
@@ -1041,7 +1040,7 @@ final class NestedTest extends RuleTestCase
                 [0 => 'a', 1 => 'b'],
                 [
                     new Nested(
-                        new class () implements RulesProviderInterface {
+                        new class implements RulesProviderInterface {
                             public function getRules(): iterable
                             {
                                 yield false => new Length(min: 1);
@@ -1064,7 +1063,7 @@ final class NestedTest extends RuleTestCase
 
     public static function dataValidationFailed(): array
     {
-        $incorrectDataSet = new class () implements DataSetInterface {
+        $incorrectDataSet = new class implements DataSetInterface {
             public function getPropertyValue(string $property): mixed
             {
                 return false;
@@ -1084,7 +1083,7 @@ final class NestedTest extends RuleTestCase
         return [
             // No rules with no object
             'no rules with no object, array' => [
-                new class () {
+                new class {
                     #[Nested]
                     public array $value = [];
                 },
@@ -1092,7 +1091,7 @@ final class NestedTest extends RuleTestCase
                 ['value' => ['Nested rule without rules requires value to be an object. array given.']],
             ],
             'no rules with no object, boolean' => [
-                new class () {
+                new class {
                     #[Nested]
                     public bool $value = false;
                 },
@@ -1100,7 +1099,7 @@ final class NestedTest extends RuleTestCase
                 ['value' => ['Nested rule without rules requires value to be an object. bool given.']],
             ],
             'no rules with no object, integer' => [
-                new class () {
+                new class {
                     #[Nested]
                     public int $value = 42;
                 },
@@ -1108,7 +1107,7 @@ final class NestedTest extends RuleTestCase
                 ['value' => ['Nested rule without rules requires value to be an object. int given.']],
             ],
             'custom no rules with no object message' => [
-                new class () {
+                new class {
                     #[Nested(noRulesWithNoObjectMessage: 'Custom no rules with no object message.')]
                     public array $value = [];
                 },
@@ -1116,7 +1115,7 @@ final class NestedTest extends RuleTestCase
                 ['value' => ['Custom no rules with no object message.']],
             ],
             'custom no rules with no object message with parameters' => [
-                new class () {
+                new class {
                     #[Nested(noRulesWithNoObjectMessage: 'Property - {Property}, {property}, type - {type}.')]
                     public array $value = [];
                 },
@@ -1255,7 +1254,7 @@ final class NestedTest extends RuleTestCase
             ],
             [
                 new ObjectDataSet(
-                    new class () {
+                    new class {
                         private int $value = 7;
                     },
                     ReflectionProperty::IS_PUBLIC,
@@ -1432,7 +1431,7 @@ final class NestedTest extends RuleTestCase
                 $error->getMessage(),
                 $error->getValuePath(),
             ],
-            $result->getErrors()
+            $result->getErrors(),
         );
 
         $this->assertFalse($result->isValid());
@@ -1467,8 +1466,8 @@ final class NestedTest extends RuleTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
-            'RulesProviderInterface, a class string or an iterable.'
+            'The $rules argument passed to Nested rule can be either: a null, an object implementing '
+            . 'RulesProviderInterface, a class string or an iterable.',
         );
         new Nested(new Required());
     }
@@ -1497,11 +1496,6 @@ final class NestedTest extends RuleTestCase
             ],
             $result->getErrorMessagesIndexedByProperty(),
         );
-    }
-
-    protected function getDifferentRuleInHandlerItems(): array
-    {
-        return [Nested::class, NestedHandler::class];
     }
 
     public function testUseCallableRules()
@@ -1534,13 +1528,13 @@ final class NestedTest extends RuleTestCase
 
     public function testWithNonArrayButIterableOfObjects(): void
     {
-        $classA = new class () {
+        $classA = new class {
             #[Required]
             #[Length(min: 10)]
             public $id;
         };
 
-        $classB = new class () {
+        $classB = new class {
             #[Each(new Nested())]
             public iterable $collection;
         };
@@ -1562,12 +1556,12 @@ final class NestedTest extends RuleTestCase
      */
     public function testExampleFromIssue751()
     {
-        $classA = new class () {
+        $classA = new class {
             #[Required]
             public $id;
         };
 
-        $classB = new class () {
+        $classB = new class {
             #[Each([new Nested()])]
             public $array_of_a;
         };
@@ -1588,10 +1582,10 @@ final class NestedTest extends RuleTestCase
             'regulations' => new Nested(
                 rules: [
                     'is_one_time' => new BooleanType(
-                        skipOnEmpty: new WhenMissing()
+                        skipOnEmpty: new WhenMissing(),
                     ),
                 ],
-                skipOnEmpty: new WhenMissing()
+                skipOnEmpty: new WhenMissing(),
             ),
         ];
 
@@ -1648,10 +1642,10 @@ final class NestedTest extends RuleTestCase
                             }
                             return $result;
                         },
-                        skipOnEmpty: new WhenMissing()
+                        skipOnEmpty: new WhenMissing(),
                     ),
                 ],
-                skipOnEmpty: new WhenMissing()
+                skipOnEmpty: new WhenMissing(),
             ),
         ];
 
@@ -1688,5 +1682,10 @@ final class NestedTest extends RuleTestCase
 
         $result = (new Validator())->validate($data, $rules);
         $this->assertFalse($result->isValid());
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Nested::class, NestedHandler::class];
     }
 }

@@ -28,9 +28,9 @@ final class RulesDumperTest extends TestCase
                             lessThanMinMessage: 'Value must be greater than 10.',
                             greaterThanMaxMessage: 'Value must be no greater than 100.',
                             skipOnEmpty: true,
-                            skipOnError: true
+                            skipOnError: true,
                         ),
-                        (fn () => yield from [$rule, $rule])(),
+                        (fn() => yield from [$rule, $rule])(),
                     ],
                 ],
                 [
@@ -40,8 +40,8 @@ final class RulesDumperTest extends TestCase
                             'min' => 10,
                             'max' => 100,
                             'incorrectInputMessage' => [
-                                'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                    '{type} given.',
+                                'template' => 'The allowed types for {property} are integer, float and string. '
+                                    . '{type} given.',
                                 'parameters' => [],
                             ],
                             'notNumberMessage' => [

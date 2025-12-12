@@ -86,20 +86,20 @@ final class Length implements
      * @psalm-param WhenType $when
      */
     public function __construct(
-        int|null $exactly = null,
-        int|null $min = null,
-        int|null $max = null,
+        ?int $exactly = null,
+        ?int $min = null,
+        ?int $max = null,
         private string $incorrectInputMessage = '{Property} must be a string. {type} given.',
-        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{character} ' .
-        'other{characters}}.',
-        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{character} ' .
-        'other{characters}}.',
-        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, ' .
-        'one{character} other{characters}}.',
+        string $lessThanMinMessage = '{Property} must contain at least {min, number} {min, plural, one{character} '
+        . 'other{characters}}.',
+        string $greaterThanMaxMessage = '{Property} must contain at most {max, number} {max, plural, one{character} '
+        . 'other{characters}}.',
+        string $notExactlyMessage = '{Property} must contain exactly {exactly, number} {exactly, plural, '
+        . 'one{character} other{characters}}.',
         private string $encoding = 'UTF-8',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null
+        private ?Closure $when = null,
     ) {
         $this->initCountableLimitProperties(
             $min,
@@ -107,7 +107,7 @@ final class Length implements
             $exactly,
             $lessThanMinMessage,
             $greaterThanMaxMessage,
-            $notExactlyMessage
+            $notExactlyMessage,
         );
         $this->skipOnEmpty = $skipOnEmpty;
     }

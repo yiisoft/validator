@@ -40,12 +40,12 @@ final class CallbackTest extends RuleTestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('"$callback" and "$method" are mutually exclusive.');
-        new Callback(callback: static fn (): Result => new Result(), method: 'test');
+        new Callback(callback: static fn(): Result => new Result(), method: 'test');
     }
 
     public function testGetName(): void
     {
-        $rule = new Callback(callback: static fn (): Result => new Result());
+        $rule = new Callback(callback: static fn(): Result => new Result());
         $this->assertSame(Callback::class, $rule->getName());
     }
 
@@ -57,7 +57,7 @@ final class CallbackTest extends RuleTestCase
 
     public function testAfterInitAttributeWithNoMethod(): void
     {
-        $rule = new Callback(callback: static fn (): Result => new Result());
+        $rule = new Callback(callback: static fn(): Result => new Result());
         $callback = $rule->getCallback();
         $this->assertIsCallable($callback);
         $this->assertNull($rule->getMethod());
@@ -73,7 +73,7 @@ final class CallbackTest extends RuleTestCase
         return [
             [
                 new Callback(
-                    static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result(),
+                    static fn(mixed $value, object $rule, ValidationContext $context): Result => new Result(),
                 ),
                 [
                     'method' => null,
@@ -83,7 +83,7 @@ final class CallbackTest extends RuleTestCase
             ],
             [
                 new Callback(
-                    static fn (mixed $value, object $rule, ValidationContext $context): Result => new Result(),
+                    static fn(mixed $value, object $rule, ValidationContext $context): Result => new Result(),
                     skipOnEmpty: true,
                 ),
                 [
@@ -159,8 +159,7 @@ final class CallbackTest extends RuleTestCase
                         #[Callback(method: 'validateName')]
                         #[Callback(method: 'staticValidateName')]
                         private $age,
-                    ) {
-                    }
+                    ) {}
 
                     private function validateName(mixed $value, RuleInterface $rule, ValidationContext $context): Result
                     {
@@ -177,7 +176,7 @@ final class CallbackTest extends RuleTestCase
                     private static function staticValidateName(
                         mixed $value,
                         RuleInterface $rule,
-                        ValidationContext $context
+                        ValidationContext $context,
                     ): Result {
                         if ($value !== $context->getDataSet()->getPropertyValue('age')) {
                             throw new RuntimeException('Method scope was not bound to the object.');
@@ -202,7 +201,7 @@ final class CallbackTest extends RuleTestCase
 
     public function testThrowExceptionWithInvalidReturn(): void
     {
-        $callback = static fn (mixed $value, object $rule, ValidationContext $context): string => 'invalid return';
+        $callback = static fn(mixed $value, object $rule, ValidationContext $context): string => 'invalid return';
         $rule = new Callback($callback);
         $validator = new Validator();
 
@@ -225,17 +224,17 @@ final class CallbackTest extends RuleTestCase
     public function testSkipOnError(): void
     {
         $this->testSkipOnErrorInternal(
-            new Callback(callback: static fn (): Result => new Result()),
-            new Callback(callback: static fn (): Result => new Result(), skipOnError: true),
+            new Callback(callback: static fn(): Result => new Result()),
+            new Callback(callback: static fn(): Result => new Result(), skipOnError: true),
         );
     }
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(
-            new Callback(callback: static fn (): Result => new Result()),
-            new Callback(callback: static fn (): Result => new Result(), when: $when),
+            new Callback(callback: static fn(): Result => new Result()),
+            new Callback(callback: static fn(): Result => new Result(), when: $when),
         );
     }
 

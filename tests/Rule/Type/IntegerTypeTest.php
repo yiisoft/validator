@@ -68,7 +68,7 @@ final class IntegerTypeTest extends RuleTestCase
             'binary number' => [0b11111111, new IntegerType()],
             'decimal number, underscores, PHP >= 7.4' => [1_234_567, new IntegerType()],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[IntegerType]
                     private int $sum = 1;
                 },
@@ -93,11 +93,10 @@ final class IntegerTypeTest extends RuleTestCase
                 ['sum' => ['Property - sum, type - array']],
             ],
             'message, translated property' => [
-                new class () implements RulesProviderInterface, PropertyTranslatorProviderInterface {
+                new class implements RulesProviderInterface, PropertyTranslatorProviderInterface {
                     public function __construct(
                         public ?int $sum = null,
-                    ) {
-                    }
+                    ) {}
 
                     public function getPropertyLabels(): array
                     {
@@ -122,7 +121,7 @@ final class IntegerTypeTest extends RuleTestCase
                 ['sum' => ['"Сумма" - нецелое число.']],
             ],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[IntegerType]
                     private float $sum = 1.5;
                 },
@@ -139,7 +138,7 @@ final class IntegerTypeTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new IntegerType(), new IntegerType(when: $when));
     }
 

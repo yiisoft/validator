@@ -11,6 +11,5 @@ final class MainForm
     public function __construct(
         #[Nested]
         public SubForm $sub,
-    ) {
-    }
+    ) {}
 }

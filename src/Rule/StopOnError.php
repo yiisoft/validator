@@ -87,7 +87,7 @@ final class StopOnError implements
         iterable $rules,
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
         $this->skipOnEmpty = $skipOnEmpty;

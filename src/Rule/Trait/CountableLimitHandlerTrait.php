@@ -30,7 +30,7 @@ trait CountableLimitHandlerTrait
         CountableLimitInterface|RuleInterface $rule,
         ValidationContext $context,
         int $number,
-        Result $result
+        Result $result,
     ): void {
         if (!$rule instanceof CountableLimitInterface || !$rule instanceof RuleInterface) {
             throw new InvalidArgumentException('$rule must implement both LimitInterface and RuleInterface.');

@@ -171,8 +171,8 @@ final class ImageHandler implements RuleHandlerInterface
         $absoluteMargin = $rule->getAspectRatio()->getMargin() / 100;
 
         if (
-            ($validatedAspectRatio < $expectedAspectRatio - $absoluteMargin) ||
-            ($validatedAspectRatio > $expectedAspectRatio + $absoluteMargin)
+            ($validatedAspectRatio < $expectedAspectRatio - $absoluteMargin)
+            || ($validatedAspectRatio > $expectedAspectRatio + $absoluteMargin)
         ) {
             $result->addError(
                 $rule->getInvalidAspectRatioMessage(),

@@ -132,7 +132,7 @@ final class Image implements DumpedRuleInterface, SkipOnErrorInterface, WhenInte
         private string $invalidAspectRatioMessage = 'The aspect ratio of {property} must be {aspectRatioWidth, number}:{aspectRatioHeight, number} with margin {aspectRatioMargin, number}%.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         if ($this->width !== null && ($this->minWidth !== null || $this->maxWidth !== null)) {
             throw new InvalidArgumentException('Exact width and min / max width can\'t be specified together.');

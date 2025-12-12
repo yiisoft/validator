@@ -117,7 +117,7 @@ final class Error
      * @return array A list of keys for nested structures or an empty array otherwise.
      * @psalm-return list<int|string>
      */
-    public function getValuePath(string|null $escape = null): array
+    public function getValuePath(?string $escape = null): array
     {
         if ($escape === null) {
             return $this->valuePath;

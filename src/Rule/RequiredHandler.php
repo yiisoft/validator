@@ -43,7 +43,7 @@ final class RequiredHandler implements RuleHandlerInterface
      * @psalm-param EmptyConditionType|null $defaultEmptyCondition
      */
     public function __construct(
-        callable|null $defaultEmptyCondition = null,
+        ?callable $defaultEmptyCondition = null,
     ) {
         $this->defaultEmptyCondition = $defaultEmptyCondition ?? new WhenEmpty(trimString: true);
     }

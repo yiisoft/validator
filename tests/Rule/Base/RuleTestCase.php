@@ -19,10 +19,10 @@ abstract class RuleTestCase extends TestCase
     public function testValidationPassed(
         mixed $data,
         array|RuleInterface|null $rules = null,
-        ?array $ruleHandlers = null
+        ?array $ruleHandlers = null,
     ): void {
         $validator = new Validator(
-            ruleHandlerResolver: $ruleHandlers === null ? null : new SimpleRuleHandlerContainer($ruleHandlers)
+            ruleHandlerResolver: $ruleHandlers === null ? null : new SimpleRuleHandlerContainer($ruleHandlers),
         );
         $result = $validator->validate($data, $rules);
 
@@ -36,10 +36,10 @@ abstract class RuleTestCase extends TestCase
         mixed $data,
         array|RuleInterface|null $rules,
         array $errorMessagesIndexedByPath,
-        ?array $ruleHandlers = null
+        ?array $ruleHandlers = null,
     ): void {
         $validator = new Validator(
-            ruleHandlerResolver: $ruleHandlers === null ? null : new SimpleRuleHandlerContainer($ruleHandlers)
+            ruleHandlerResolver: $ruleHandlers === null ? null : new SimpleRuleHandlerContainer($ruleHandlers),
         );
         $result = $validator->validate($data, $rules);
 
@@ -52,7 +52,7 @@ abstract class RuleTestCase extends TestCase
         return array_map(
             static fn(array $errors) => array_map(
                 static fn(string $error) => str_replace(' ', ' ', $error),
-                $errors
+                $errors,
             ),
             $result->getErrorMessagesIndexedByPath(),
         );

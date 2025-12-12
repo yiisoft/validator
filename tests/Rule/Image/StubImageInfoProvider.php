@@ -11,8 +11,7 @@ final class StubImageInfoProvider implements ImageInfoProviderInterface
 {
     public function __construct(
         private readonly ?ImageInfo $info = null,
-    ) {
-    }
+    ) {}
 
     public function get(string $path): ?ImageInfo
     {

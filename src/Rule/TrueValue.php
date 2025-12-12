@@ -78,12 +78,12 @@ final class TrueValue implements DumpedRuleInterface, SkipOnErrorInterface, When
     public function __construct(
         private int|float|string|bool $trueValue = '1',
         private bool $strict = false,
-        private string $incorrectInputMessage = 'The allowed types for {property} are integer, float, string, ' .
-        'boolean. {type} given.',
+        private string $incorrectInputMessage = 'The allowed types for {property} are integer, float, string, '
+        . 'boolean. {type} given.',
         private string $message = '{Property} must be "{true}".',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

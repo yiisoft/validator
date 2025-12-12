@@ -69,7 +69,7 @@ final class ObjectDataSetTest extends TestCase
             [
                 new ObjectDataSet(
                     new ObjectWithDifferentPropertyVisibility(),
-                    ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED
+                    ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED,
                 ),
                 ['name' => '', 'age' => 17],
                 ['name' => '', 'age' => 17, 'number' => null, 'non-exist' => null],
@@ -83,7 +83,7 @@ final class ObjectDataSetTest extends TestCase
         ObjectDataSet $initialDataSet,
         array $expectedData,
         array $expectedPropertyValuesMap,
-        array $expectedRulesKeys
+        array $expectedRulesKeys,
     ): void {
         $dataSets = [
             $initialDataSet,
@@ -234,25 +234,24 @@ final class ObjectDataSetTest extends TestCase
     {
         return [
             [
-                new class () {
-                },
+                new class {},
                 [],
             ],
             [
-                new class () {
+                new class {
                     private $property1;
                 },
                 [],
             ],
             [
-                new class () {
+                new class {
                     #[NotRuleAttribute]
                     private $property1;
                 },
                 [],
             ],
             [
-                new class () {
+                new class {
                     #[Required()]
                     private $property1;
                 },
@@ -263,7 +262,7 @@ final class ObjectDataSetTest extends TestCase
                 ],
             ],
             [
-                new class () {
+                new class {
                     use TitleTrait;
                 },
                 [
@@ -273,7 +272,7 @@ final class ObjectDataSetTest extends TestCase
                 ],
             ],
             [
-                new class () {
+                new class {
                     #[Required()]
                     #[Length(max: 255, skipOnEmpty: true)]
                     private $property1;
@@ -293,7 +292,7 @@ final class ObjectDataSetTest extends TestCase
                 ],
             ],
             [
-                new class () {
+                new class {
                     #[Each([
                         new Required(),
                         new Length(max: 255, skipOnEmpty: true),
@@ -312,7 +311,7 @@ final class ObjectDataSetTest extends TestCase
                 ],
             ],
             [
-                new class () {
+                new class {
                     #[Nested([
                         new Required(),
                         new Length(max: 255, skipOnEmpty: true),
@@ -339,7 +338,7 @@ final class ObjectDataSetTest extends TestCase
                 ],
             ],
             [
-                new class () {
+                new class {
                     #[Length(max: 255, skipOnEmpty: true)]
                     #[Length(max: 255, skipOnEmpty: false)]
                     private $property1;
@@ -352,7 +351,7 @@ final class ObjectDataSetTest extends TestCase
                 ],
             ],
             [
-                new class () {
+                new class {
                     #[Nested([
                         new Required(),
                         new Length(max: 255, skipOnEmpty: true),
@@ -423,7 +422,7 @@ final class ObjectDataSetTest extends TestCase
                 'Method "%s" does not exist in class "%s".',
                 'validateName',
                 $object::class,
-            )
+            ),
         );
         $dataSet->getRules();
     }
@@ -480,7 +479,7 @@ final class ObjectDataSetTest extends TestCase
             [$dataSet, $expectedResult],
             [$dataSet, $expectedResult], // Not a duplicate. Used to test caching.
             [
-                new ObjectDataSet(new class () {
+                new ObjectDataSet(new class {
                     #[Required]
                     #[Label('Test label')]
                     public string $property;

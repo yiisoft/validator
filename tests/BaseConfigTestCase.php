@@ -12,14 +12,14 @@ use function dirname;
 
 abstract class BaseConfigTestCase extends TestCase
 {
-    final protected function createContainer(array|null $params = null): Container
+    final protected function createContainer(?array $params = null): Container
     {
         $config = ContainerConfig::create()->withDefinitions($this->getContainerDefinitions($params));
 
         return new Container($config);
     }
 
-    final protected function getContainerDefinitions(array|null $params): array
+    final protected function getContainerDefinitions(?array $params): array
     {
         if ($params === null) {
             $params = $this->getParams();

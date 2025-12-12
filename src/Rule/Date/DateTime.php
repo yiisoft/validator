@@ -142,7 +142,7 @@ final class DateTime extends BaseDate
         ?string $tooLateMessage = null,
         bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
-        Closure|null $when = null,
+        ?Closure $when = null,
     ) {
         parent::__construct(
             $format,

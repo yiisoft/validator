@@ -120,7 +120,7 @@ final class Validator implements ValidatorInterface
     public function validate(
         mixed $data,
         callable|iterable|object|string|null $rules = null,
-        ?ValidationContext $context = null
+        ?ValidationContext $context = null,
     ): Result {
         $dataSet = DataSetNormalizer::normalize($data);
         $originalData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
@@ -128,11 +128,11 @@ final class Validator implements ValidatorInterface
         $rules = RulesNormalizer::normalize(
             $rules,
             $dataSet,
-            $this->defaultSkipOnEmptyCondition
+            $this->defaultSkipOnEmptyCondition,
         );
 
-        $defaultPropertyTranslator =
-            ($dataSet instanceof PropertyTranslatorProviderInterface ? $dataSet->getPropertyTranslator() : null)
+        $defaultPropertyTranslator
+            = ($dataSet instanceof PropertyTranslatorProviderInterface ? $dataSet->getPropertyTranslator() : null)
             ?? $this->defaultPropertyTranslator;
 
         $context ??= new ValidationContext();
@@ -167,7 +167,7 @@ final class Validator implements ValidatorInterface
                 $result->addErrorWithoutPostProcessing(
                     $this->messageProcessor->process($error),
                     $error->getParameters(),
-                    $error->getValuePath()
+                    $error->getValuePath(),
                 );
             }
         }
@@ -222,12 +222,12 @@ final class Validator implements ValidatorInterface
                     Error::MESSAGE_FORMAT => $compoundResult->addErrorWithFormatOnly(
                         $error->getMessage(),
                         $error->getParameters(),
-                        $valuePath
+                        $valuePath,
                     ),
                     default => $compoundResult->addErrorWithoutPostProcessing(
                         $error->getMessage(),
                         $error->getParameters(),
-                        $valuePath
+                        $valuePath,
                     ),
                 };
             }
@@ -253,8 +253,8 @@ final class Validator implements ValidatorInterface
     private function shouldSkipRule(RuleInterface $rule, mixed $value, ValidationContext $context): bool
     {
         if (
-            $rule instanceof SkipOnEmptyInterface &&
-            (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isPropertyMissing())
+            $rule instanceof SkipOnEmptyInterface
+            && (SkipOnEmptyNormalizer::normalize($rule->getSkipOnEmpty()))($value, $context->isPropertyMissing())
         ) {
             return true;
         }

@@ -163,7 +163,7 @@ final class DateTest extends RuleTestCase
 
         $this->expectException(UnexpectedRuleException::class);
         $this->expectExceptionMessage(
-            'Expected "' . Date::class . '", "' . DateTime::class . '", "' . Time::class . '", but "' . RuleWithCustomHandler::class . '" given.'
+            'Expected "' . Date::class . '", "' . DateTime::class . '", "' . Time::class . '", but "' . RuleWithCustomHandler::class . '" given.',
         );
         $validator->validate([], $rule);
     }
@@ -198,8 +198,8 @@ final class DateTest extends RuleTestCase
         $this->testWhenInternal(
             new Date(),
             new Date(
-                when: static fn(mixed $value): bool => $value !== null
-            )
+                when: static fn(mixed $value): bool => $value !== null,
+            ),
         );
     }
 }

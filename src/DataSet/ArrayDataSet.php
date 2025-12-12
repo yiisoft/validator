@@ -27,8 +27,7 @@ final class ArrayDataSet implements DataWrapperInterface
          * @var array A mapping between property names and their values.
          */
         private array $data = [],
-    ) {
-    }
+    ) {}
 
     /**
      * Returns a property value by its name.

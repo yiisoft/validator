@@ -33,8 +33,7 @@ final class SingleValueDataSet implements DataWrapperInterface
          * @var mixed Single value of any (mixed) data type.
          */
         private readonly mixed $value,
-    ) {
-    }
+    ) {}
 
     /**
      * Returns a property value by its name. {@see SingleValueDataSet} does not support properties so `null` is always

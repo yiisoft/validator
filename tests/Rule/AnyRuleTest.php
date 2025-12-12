@@ -99,7 +99,7 @@ final class AnyRuleTest extends RuleTestCase
             'right away' => [1, new AnyRule([new IntegerType(), new FloatType()])],
             'later' => [1.5, new AnyRule([new IntegerType(), new FloatType()])],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[AnyRule([new IntegerType(), new FloatType()])]
                     private int|float $sum = 1.5;
                 },
@@ -115,7 +115,7 @@ final class AnyRuleTest extends RuleTestCase
         return [
             'none' => ['1', new AnyRule([new IntegerType(), new FloatType()]), ['' => [$message]]],
             'using as attribute' => [
-                new class () {
+                new class {
                     #[AnyRule([new IntegerType(), new FloatType()])]
                     private string $sum = '1.5';
                 },
@@ -135,16 +135,11 @@ final class AnyRuleTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(
             new AnyRule([new IntegerType(), new FloatType()]),
             new AnyRule([new IntegerType(), new FloatType()], when: $when),
         );
-    }
-
-    protected function getDifferentRuleInHandlerItems(): array
-    {
-        return [AnyRule::class, AnyRuleHandler::class];
     }
 
     public function testAfterInitAttribute(): void
@@ -156,5 +151,10 @@ final class AnyRuleTest extends RuleTestCase
         (new AnyRule([$innerRule1, $innerRule2]))->afterInitAttribute($object);
         $this->assertSame($object, $innerRule1->getObject());
         $this->assertSame($object, $innerRule2->getObject());
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [AnyRule::class, AnyRuleHandler::class];
     }
 }

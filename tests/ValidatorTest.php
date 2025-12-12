@@ -62,7 +62,7 @@ class ValidatorTest extends TestCase
         $this->assertFalse($result->isValid());
         $this->assertSame(
             ['name' => ['Name must contain at least 5 characters.']],
-            $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath(),
         );
     }
 
@@ -195,7 +195,7 @@ class ValidatorTest extends TestCase
                 [
                     'age' => 17,
                 ],
-                new class () implements RulesProviderInterface {
+                new class implements RulesProviderInterface {
                     public function getRules(): iterable
                     {
                         return [
@@ -215,7 +215,7 @@ class ValidatorTest extends TestCase
             'array-and-callable' => [
                 ['' => ['test message']],
                 [],
-                static fn (): Result => (new Result())->addError('test message'),
+                static fn(): Result => (new Result())->addError('test message'),
             ],
         ];
     }
@@ -313,7 +313,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $result = $validator->validate(
             new ArrayDataSet(['property' => '']),
-            ['property' => [new Required(when: static fn (mixed $value, ?ValidationContext $context): bool => false)]],
+            ['property' => [new Required(when: static fn(mixed $value, ?ValidationContext $context): bool => false)]],
         );
 
         $this->assertTrue($result->isValid());
@@ -321,17 +321,14 @@ class ValidatorTest extends TestCase
 
     public function testRuleHandlerWithoutImplement(): void
     {
-        $ruleHandler = new class () {
-        };
+        $ruleHandler = new class {};
         $validator = new Validator();
 
         $this->expectException(RuleHandlerInterfaceNotImplementedException::class);
         $validator->validate(new ArrayDataSet(['property' => '']), [
             'property' => [
                 new class ($ruleHandler) implements RuleInterface {
-                    public function __construct(private $ruleHandler)
-                    {
-                    }
+                    public function __construct(private $ruleHandler) {}
 
                     public function getHandler(): string
                     {
@@ -349,7 +346,7 @@ class ValidatorTest extends TestCase
         $validator = new Validator();
         $validator->validate(new ArrayDataSet(['property' => '']), [
             'property' => [
-                new class () implements RuleInterface {
+                new class implements RuleInterface {
                     public function getHandler(): string
                     {
                         return 'NonExistClass';
@@ -366,7 +363,7 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new In(
                     ['asc', 'desc'],
-                    skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $isPropertyMissing
+                    skipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $isPropertyMissing,
                 ),
             ],
         ];
@@ -375,10 +372,10 @@ class ValidatorTest extends TestCase
             'sort' => [
                 new In(
                     ['asc', 'desc'],
-                    skipOnEmpty: static fn (
+                    skipOnEmpty: static fn(
                         mixed $value,
-                        bool $isPropertyMissing
-                    ): bool => $isPropertyMissing || $value === ''
+                        bool $isPropertyMissing,
+                    ): bool => $isPropertyMissing || $value === '',
                 ),
             ],
         ];
@@ -523,10 +520,10 @@ class ValidatorTest extends TestCase
                     'description' => [new Required(), new Length(min: 5, skipOnError: true)],
                 ],
                 new ObjectDataSet(
-                    new class () {
+                    new class {
                         private string $title = '';
                         private string $description = 'abc123';
-                    }
+                    },
                 ),
                 [new Error('Name not passed.', ['property' => 'name', 'Property' => 'Name'], ['name'], Error::MESSAGE_NONE)],
             ],
@@ -543,7 +540,7 @@ class ValidatorTest extends TestCase
      * @link https://github.com/yiisoft/validator/issues/289
      */
     #[DataProvider('requiredDataProvider')]
-    public function testRequired(array|null $rules, DataSetInterface $dataSet, array $expectedErrors): void
+    public function testRequired(?array $rules, DataSetInterface $dataSet, array $expectedErrors): void
     {
         $validator = new Validator();
         $result = $validator->validate($dataSet, $rules);
@@ -831,7 +828,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                            skipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                         ),
                     ],
                 ],
@@ -860,7 +857,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                            skipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                         ),
                     ],
                 ],
@@ -884,7 +881,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                            skipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                         ),
                     ],
                 ],
@@ -914,7 +911,7 @@ class ValidatorTest extends TestCase
                     'age' => [
                         new Integer(
                             min: 18,
-                            skipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                            skipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                         ),
                     ],
                 ],
@@ -1064,7 +1061,7 @@ class ValidatorTest extends TestCase
 
             'validator, skipOnEmpty: custom callback, value not passed' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1086,7 +1083,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is empty' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1104,7 +1101,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is not empty' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1128,7 +1125,7 @@ class ValidatorTest extends TestCase
             ],
             'validator, skipOnEmpty: custom callback, value is not empty (null)' => [
                 new Validator(
-                    defaultSkipOnEmpty: static fn (mixed $value, bool $isPropertyMissing): bool => $value === 0
+                    defaultSkipOnEmpty: static fn(mixed $value, bool $isPropertyMissing): bool => $value === 0,
                 ),
                 new ArrayDataSet([
                     'name' => 'Dmitriy',
@@ -1168,7 +1165,7 @@ class ValidatorTest extends TestCase
         return [
             'null' => [
                 null,
-                new class () {
+                new class {
                     #[Number]
                     public ?string $name = null;
                 },
@@ -1176,7 +1173,7 @@ class ValidatorTest extends TestCase
             ],
             'false' => [
                 false,
-                new class () {
+                new class {
                     #[Number]
                     public ?string $name = null;
                 },
@@ -1184,7 +1181,7 @@ class ValidatorTest extends TestCase
             ],
             'true' => [
                 true,
-                new class () {
+                new class {
                     #[Number]
                     public ?string $name = null;
                 },
@@ -1192,7 +1189,7 @@ class ValidatorTest extends TestCase
             ],
             'callable' => [
                 new WhenNull(),
-                new class () {
+                new class {
                     #[Number]
                     public ?string $name = null;
                 },
@@ -1200,7 +1197,7 @@ class ValidatorTest extends TestCase
             ],
             'do-not-override-rule' => [
                 false,
-                new class () {
+                new class {
                     #[Number(skipOnEmpty: true)]
                     public string $name = '';
                 },
@@ -1239,7 +1236,7 @@ class ValidatorTest extends TestCase
     {
         $validator = new Validator(defaultSkipOnEmpty: new WhenNull());
 
-        $data = new class () {
+        $data = new class {
             #[NotNull]
             public ?string $name = null;
         };
@@ -1262,7 +1259,7 @@ class ValidatorTest extends TestCase
 
     public function testComposition(): void
     {
-        $validator = new class () implements ValidatorInterface {
+        $validator = new class implements ValidatorInterface {
             private readonly Validator $validator;
 
             public function __construct()
@@ -1273,7 +1270,7 @@ class ValidatorTest extends TestCase
             public function validate(
                 mixed $data,
                 callable|iterable|object|string|null $rules = null,
-                ?ValidationContext $context = null
+                ?ValidationContext $context = null,
             ): Result {
                 $context ??= new ValidationContext();
 
@@ -1354,7 +1351,7 @@ class ValidatorTest extends TestCase
     {
         $data = ['agree' => false, 'viewsCount' => -1];
         $rules = [
-            'agree' => [new BooleanValue(skipOnEmpty: static fn (): bool => true), new TrueValue()],
+            'agree' => [new BooleanValue(skipOnEmpty: static fn(): bool => true), new TrueValue()],
             'viewsCount' => [new Integer(min: 0)],
         ];
         $validator = new Validator();
@@ -1421,7 +1418,7 @@ class ValidatorTest extends TestCase
 
         $this->assertSame(
             $expectedMessages,
-            $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath(),
         );
     }
 
@@ -1472,7 +1469,7 @@ class ValidatorTest extends TestCase
 
         $this->assertSame(
             ['' => ['Value must be 42.']],
-            $result->getErrorMessagesIndexedByPath()
+            $result->getErrorMessagesIndexedByPath(),
         );
     }
 
@@ -1492,24 +1489,24 @@ class ValidatorTest extends TestCase
     {
         return [
             [
-                new class () {
+                new class {
                     #[Label('Test')]
                     #[Length(
                         min: 20,
-                        lessThanMinMessage: '{property} value must contain at least {min, number} {min, plural, ' .
-                        'one{character} other{characters}}.',
+                        lessThanMinMessage: '{property} value must contain at least {min, number} {min, plural, '
+                        . 'one{character} other{characters}}.',
                     )]
                     public string $property = 'test';
                 },
                 ['property' => ['Test value must contain at least 20 characters.']],
             ],
             [
-                new class () {
+                new class {
                     #[Label('проверка кириллицы')]
                     #[Length(
                         min: 20,
-                        lessThanMinMessage: '{Property} value must contain at least {min, number} {min, plural, ' .
-                        'one{character} other{characters}}.',
+                        lessThanMinMessage: '{Property} value must contain at least {min, number} {min, plural, '
+                        . 'one{character} other{characters}}.',
                     )]
                     public string $property = 'test';
                 },

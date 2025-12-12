@@ -85,7 +85,7 @@ final class AnyRule implements
         private string $message = 'At least one of the inner rules must pass the validation.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->rules = RulesNormalizer::normalizeList($rules);
         $this->skipOnEmpty = $skipOnEmpty;

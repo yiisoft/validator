@@ -20,7 +20,7 @@ final class NestedPropertyTranslatorTest extends TestCase
 
         assertSame(
             ['Телефон must contain at least 5 characters.'],
-            $result->getErrorMessages()
+            $result->getErrorMessages(),
         );
     }
 }

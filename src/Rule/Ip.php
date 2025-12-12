@@ -169,7 +169,7 @@ final class Ip implements DumpedRuleInterface, SkipOnErrorInterface, WhenInterfa
         array $ranges = [],
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         if (!$this->allowIpv4 && !$this->allowIpv6) {
             throw new InvalidArgumentException('Both IPv4 and IPv6 checks can not be disabled at the same time.');

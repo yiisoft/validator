@@ -60,7 +60,7 @@ final class Json implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         private string $message = '{Property} is not a valid JSON.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
     }

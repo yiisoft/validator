@@ -52,7 +52,7 @@ final class ValidatorInterfaceProxyTest extends AbstractCollectorTestCase
                     'errors' => [],
                 ],
             ],
-            $data
+            $data,
         );
     }
 
@@ -60,7 +60,7 @@ final class ValidatorInterfaceProxyTest extends AbstractCollectorTestCase
     {
         $this->assertEquals(
             ['total' => 2, 'valid' => 1, 'invalid' => 1],
-            $data
+            $data,
         );
     }
 }

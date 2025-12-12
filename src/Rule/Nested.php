@@ -128,7 +128,7 @@ final class Nested implements
      *
      * @psalm-var NormalizedNestedRulesArray|null
      */
-    private array|null $rules;
+    private ?array $rules;
 
     /**
      * @param iterable|object|string|null $rules Rules for validating nested structure. The following types are
@@ -214,10 +214,10 @@ final class Nested implements
         private int $rulesSourceClassPropertyVisibility = ReflectionProperty::IS_PRIVATE
         | ReflectionProperty::IS_PROTECTED
         | ReflectionProperty::IS_PUBLIC,
-        private string $noRulesWithNoObjectMessage = 'Nested rule without rules requires {property} to be an object. ' .
-        '{type} given.',
-        private string $incorrectDataSetTypeMessage = 'An object data set data for {property} can only have an array ' .
-        'type. {type} given.',
+        private string $noRulesWithNoObjectMessage = 'Nested rule without rules requires {property} to be an object. '
+        . '{type} given.',
+        private string $incorrectDataSetTypeMessage = 'An object data set data for {property} can only have an array '
+        . 'type. {type} given.',
         private string $incorrectInputMessage = '{Property} must be an array or an object. {type} given.',
         private bool $requirePropertyPath = false,
         private string $noPropertyPathMessage = 'Property "{path}" is not found in {property}.',
@@ -225,7 +225,7 @@ final class Nested implements
         private bool $propagateOptions = false,
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->skipOnEmpty = $skipOnEmpty;
         $this->prepareRules($rules);
@@ -243,7 +243,7 @@ final class Nested implements
      *
      * @psalm-return NormalizedNestedRulesArray
      */
-    public function getRules(): array|null
+    public function getRules(): ?array
     {
         return $this->rules;
     }
@@ -327,6 +327,84 @@ final class Nested implements
         return $this->noPropertyPathMessage;
     }
 
+    public function propagateOptions(): void
+    {
+        if ($this->rules === null) {
+            return;
+        }
+
+        $rules = [];
+        foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
+            $rules[$attributeRulesIndex] = is_iterable($attributeRules)
+                ? PropagateOptionsHelper::propagate($this, $attributeRules)
+                : PropagateOptionsHelper::propagateToRule($this, $attributeRules);
+        }
+
+        $this->rules = $rules;
+    }
+
+    public function afterInitAttribute(object $object): void
+    {
+        if ($this->rules === null) {
+            return;
+        }
+
+        foreach ($this->rules as $rules) {
+            if (is_array($rules)) {
+                foreach ($rules as $rule) {
+                    if ($rule instanceof AfterInitAttributeEventInterface) {
+                        $rule->afterInitAttribute($object);
+                    }
+                }
+            } else {
+                if ($rules instanceof AfterInitAttributeEventInterface) {
+                    $rules->afterInitAttribute($object);
+                }
+            }
+        }
+    }
+
+    #[ArrayShape([
+        'requirePropertyPath' => 'bool',
+        'noRulesWithNoObjectMessage' => 'array',
+        'incorrectDataSetTypeMessage' => 'array',
+        'incorrectInputMessage' => 'array',
+        'noPropertyPathMessage' => 'array',
+        'skipOnEmpty' => 'bool',
+        'skipOnError' => 'bool',
+        'rules' => 'array|null',
+    ])]
+    public function getOptions(): array
+    {
+        return [
+            'noRulesWithNoObjectMessage' => [
+                'template' => $this->noRulesWithNoObjectMessage,
+                'parameters' => [],
+            ],
+            'incorrectDataSetTypeMessage' => [
+                'template' => $this->incorrectDataSetTypeMessage,
+                'parameters' => [],
+            ],
+            'incorrectInputMessage' => [
+                'template' => $this->incorrectInputMessage,
+                'parameters' => [],
+            ],
+            'noPropertyPathMessage' => [
+                'template' => $this->getNoPropertyPathMessage(),
+                'parameters' => [],
+            ],
+            'requirePropertyPath' => $this->isPropertyPathRequired(),
+            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
+            'skipOnError' => $this->skipOnError,
+            'rules' => $this->rules === null ? null : RulesDumper::asArray($this->rules),
+        ];
+    }
+
+    public function getHandler(): string
+    {
+        return NestedHandler::class;
+    }
+
     /**
      * Prepares raw rules passed in the constructor for usage in handler. As a result, {@see $rules} property will
      * contain ready to use rules.
@@ -351,8 +429,8 @@ final class Nested implements
             $rules = $source;
         } else {
             throw new InvalidArgumentException(
-                'The $rules argument passed to Nested rule can be either: a null, an object implementing ' .
-                'RulesProviderInterface, a class string or an iterable.'
+                'The $rules argument passed to Nested rule can be either: a null, an object implementing '
+                . 'RulesProviderInterface, a class string or an iterable.',
             );
         }
 
@@ -461,7 +539,7 @@ final class Nested implements
                 $message = sprintf(
                     'Every rule must be an instance of %s or a callable, %s given.',
                     RuleInterface::class,
-                    get_debug_type($rule)
+                    get_debug_type($rule),
                 );
 
                 throw new InvalidArgumentException($message);
@@ -490,7 +568,7 @@ final class Nested implements
                 $parts = StringHelper::parsePath(
                     (string) $valuePath,
                     delimiter: self::EACH_SHORTCUT,
-                    preserveDelimiterEscaping: true
+                    preserveDelimiterEscaping: true,
                 );
                 if (count($parts) === 1) {
                     continue;
@@ -535,83 +613,5 @@ final class Nested implements
                 break;
             }
         }
-    }
-
-    public function propagateOptions(): void
-    {
-        if ($this->rules === null) {
-            return;
-        }
-
-        $rules = [];
-        foreach ($this->rules as $attributeRulesIndex => $attributeRules) {
-            $rules[$attributeRulesIndex] = is_iterable($attributeRules)
-                ? PropagateOptionsHelper::propagate($this, $attributeRules)
-                : PropagateOptionsHelper::propagateToRule($this, $attributeRules);
-        }
-
-        $this->rules = $rules;
-    }
-
-    public function afterInitAttribute(object $object): void
-    {
-        if ($this->rules === null) {
-            return;
-        }
-
-        foreach ($this->rules as $rules) {
-            if (is_array($rules)) {
-                foreach ($rules as $rule) {
-                    if ($rule instanceof AfterInitAttributeEventInterface) {
-                        $rule->afterInitAttribute($object);
-                    }
-                }
-            } else {
-                if ($rules instanceof AfterInitAttributeEventInterface) {
-                    $rules->afterInitAttribute($object);
-                }
-            }
-        }
-    }
-
-    #[ArrayShape([
-        'requirePropertyPath' => 'bool',
-        'noRulesWithNoObjectMessage' => 'array',
-        'incorrectDataSetTypeMessage' => 'array',
-        'incorrectInputMessage' => 'array',
-        'noPropertyPathMessage' => 'array',
-        'skipOnEmpty' => 'bool',
-        'skipOnError' => 'bool',
-        'rules' => 'array|null',
-    ])]
-    public function getOptions(): array
-    {
-        return [
-            'noRulesWithNoObjectMessage' => [
-                'template' => $this->noRulesWithNoObjectMessage,
-                'parameters' => [],
-            ],
-            'incorrectDataSetTypeMessage' => [
-                'template' => $this->incorrectDataSetTypeMessage,
-                'parameters' => [],
-            ],
-            'incorrectInputMessage' => [
-                'template' => $this->incorrectInputMessage,
-                'parameters' => [],
-            ],
-            'noPropertyPathMessage' => [
-                'template' => $this->getNoPropertyPathMessage(),
-                'parameters' => [],
-            ],
-            'requirePropertyPath' => $this->isPropertyPathRequired(),
-            'skipOnEmpty' => $this->getSkipOnEmptyOption(),
-            'skipOnError' => $this->skipOnError,
-            'rules' => $this->rules === null ? null : RulesDumper::asArray($this->rules),
-        ];
-    }
-
-    public function getHandler(): string
-    {
-        return NestedHandler::class;
     }
 }

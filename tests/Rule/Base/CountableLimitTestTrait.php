@@ -9,11 +9,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 trait CountableLimitTestTrait
 {
-    /**
-     * @return class-string
-     */
-    abstract protected function getRuleClass(): string;
-
     public static function dataInitWithMinAndMaxAndExactly(): array
     {
         return [
@@ -93,4 +88,9 @@ trait CountableLimitTestTrait
         $this->expectExceptionMessage('$min must be lower than $max.');
         new $ruleClass(min: 2, max: 1);
     }
+
+    /**
+     * @return class-string
+     */
+    abstract protected function getRuleClass(): string;
 }

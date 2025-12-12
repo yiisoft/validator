@@ -56,8 +56,8 @@ final class EachTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
-                        'template' => 'Every iterable key of {property} must have an integer or a string type. ' .
-                            '{type} given.',
+                        'template' => 'Every iterable key of {property} must have an integer or a string type. '
+                            . '{type} given.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -70,8 +70,8 @@ final class EachTest extends RuleTestCase
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
-                                    'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                        '{type} given.',
+                                    'template' => 'The allowed types for {property} are integer, float and string. '
+                                        . '{type} given.',
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
@@ -97,8 +97,8 @@ final class EachTest extends RuleTestCase
                                 'min' => null,
                                 'max' => 14,
                                 'incorrectInputMessage' => [
-                                    'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                        '{type} given.',
+                                    'template' => 'The allowed types for {property} are integer, float and string. '
+                                        . '{type} given.',
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
@@ -132,8 +132,8 @@ final class EachTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'incorrectInputKeyMessage' => [
-                        'template' => 'Every iterable key of {property} must have an integer or a string type. ' .
-                            '{type} given.',
+                        'template' => 'Every iterable key of {property} must have an integer or a string type. '
+                            . '{type} given.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => false,
@@ -146,8 +146,8 @@ final class EachTest extends RuleTestCase
                                 'min' => null,
                                 'max' => 13,
                                 'incorrectInputMessage' => [
-                                    'template' => 'The allowed types for {property} are integer, float and string. ' .
-                                        '{type} given.',
+                                    'template' => 'The allowed types for {property} are integer, float and string. '
+                                        . '{type} given.',
                                     'parameters' => [],
                                 ],
                                 'notNumberMessage' => [
@@ -293,7 +293,7 @@ final class EachTest extends RuleTestCase
             ],
             'single callable rule' => [
                 [10, 20],
-                [new Each(static fn (): Result => (new Result())->addError('error'))],
+                [new Each(static fn(): Result => (new Result())->addError('error'))],
                 [
                     0 => ['error'],
                     1 => ['error'],
@@ -301,7 +301,7 @@ final class EachTest extends RuleTestCase
             ],
             'rules array with callable' => [
                 [10, 20],
-                [new Each([static fn (): Result => (new Result())->addError('error')])],
+                [new Each([static fn(): Result => (new Result())->addError('error')])],
                 [
                     0 => ['error'],
                     1 => ['error'],
@@ -383,7 +383,7 @@ final class EachTest extends RuleTestCase
                 [[10, 20, 30], [11, 12, 13], [20, 30, 40]],
                 new Each(
                     new Each(new Integer(max: 15)),
-                    stopOnError: true
+                    stopOnError: true,
                 ),
                 [
                     '0.1' => ['Value must be no greater than 15.'],
@@ -400,13 +400,8 @@ final class EachTest extends RuleTestCase
 
     public function testWhen(): void
     {
-        $when = static fn (mixed $value): bool => $value !== null;
+        $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Each(), new Each(when: $when));
-    }
-
-    protected function getDifferentRuleInHandlerItems(): array
-    {
-        return [Each::class, EachHandler::class];
     }
 
     public static function dataContextEachKey(): array
@@ -437,7 +432,7 @@ final class EachTest extends RuleTestCase
                     function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
                         $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
                         return new Result();
-                    }
+                    },
                 ),
             ),
         ];
@@ -455,7 +450,7 @@ final class EachTest extends RuleTestCase
             function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
                 $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
                 return new Result();
-            }
+            },
         );
 
         (new Validator())->validate(
@@ -481,7 +476,12 @@ final class EachTest extends RuleTestCase
                 'a' => ['Value must be zero.'],
                 'c' => ['Value must be zero.'],
             ],
-            $result->getErrorMessagesIndexedByProperty()
+            $result->getErrorMessagesIndexedByProperty(),
         );
+    }
+
+    protected function getDifferentRuleInHandlerItems(): array
+    {
+        return [Each::class, EachHandler::class];
     }
 }

@@ -61,7 +61,7 @@ final class RulesNormalizerTest extends TestCase
     public function testNormalizeWithArrayResult(
         array $expected,
         callable|iterable|object|string|null $rules = null,
-        mixed $data = null
+        mixed $data = null,
     ): void {
         $rules = RulesNormalizer::normalize($rules, $data);
 
@@ -85,7 +85,7 @@ final class RulesNormalizerTest extends TestCase
             ],
             [
                 [Callback::class],
-                static fn () => new Result(),
+                static fn() => new Result(),
             ],
             [
                 [Number::class],
@@ -93,7 +93,7 @@ final class RulesNormalizerTest extends TestCase
             ],
             [
                 [Number::class, Callback::class],
-                [new Number(), static fn () => new Result()],
+                [new Number(), static fn() => new Result()],
             ],
         ];
     }

@@ -78,9 +78,9 @@ final class Required implements DumpedRuleInterface, SkipOnErrorInterface, WhenI
     public function __construct(
         private string $message = '{Property} cannot be blank.',
         private string $notPassedMessage = '{Property} not passed.',
-        callable|null $emptyCondition = null,
+        ?callable $emptyCondition = null,
         private bool $skipOnError = false,
-        private Closure|null $when = null,
+        private ?Closure $when = null,
     ) {
         $this->emptyCondition = $emptyCondition;
     }
