@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.5.2 under development
+
+- no changes in this release.
+
 ## 2.5.1 December 12, 2025
 
 - Enh #784: Add PHP 8.5 support (@vjik)
