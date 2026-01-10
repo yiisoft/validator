@@ -2,7 +2,7 @@
 
 ## 2.5.2 under development
 
-- no changes in this release.
+- Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 
 ## 2.5.1 December 12, 2025
 
