@@ -14,6 +14,9 @@ use Yiisoft\Validator\ValidationContext;
 
 use function count;
 use function gettype;
+use function is_scalar;
+
+use const SORT_REGULAR;
 
 /**
  * A handler for {@see UniqueIterable} rule. Validates uniqueness of each element of an iterable.

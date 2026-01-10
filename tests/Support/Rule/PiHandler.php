@@ -11,6 +11,9 @@ use Yiisoft\Validator\ValidationContext;
 
 use function abs;
 
+use const M_PI;
+use const PHP_FLOAT_EPSILON;
+
 final class PiHandler implements RuleHandlerInterface
 {
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result

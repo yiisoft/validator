@@ -53,8 +53,10 @@ use Yiisoft\Validator\Tests\Support\Rule\StubRule\StubDumpedRule;
 use Yiisoft\Validator\Tests\Support\RulesProvider\SimpleRulesProvider;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
+use ArrayIterator;
 
 use function array_slice;
+use function in_array;
 
 final class NestedTest extends RuleTestCase
 {
@@ -1538,7 +1540,7 @@ final class NestedTest extends RuleTestCase
             #[Each(new Nested())]
             public iterable $collection;
         };
-        $collection = new \ArrayIterator([$classA]);
+        $collection = new ArrayIterator([$classA]);
         $classB->collection = $collection;
         $result = (new Validator())->validate($classB);
 

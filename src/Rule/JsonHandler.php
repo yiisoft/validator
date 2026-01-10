@@ -13,6 +13,8 @@ use Yiisoft\Validator\ValidationContext;
 use function function_exists;
 use function is_string;
 
+use const JSON_ERROR_NONE;
+
 /**
  * A handler for {@see Json} rule. Validates that the value is a valid JSON string.
  *

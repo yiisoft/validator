@@ -11,6 +11,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\CallbackHandler;
 
+use function sprintf;
+
 /**
  * An exception used by the handler ({@see CallbackHandler}) of {@see Callback} rule for the cases when returned value
  * is not a {@see Result} instance.

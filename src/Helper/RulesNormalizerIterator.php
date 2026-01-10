@@ -12,6 +12,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\SkipOnEmptyInterface;
 
 use function is_callable;
+use function sprintf;
 
 /**
  * An iterator for a set of rules, performs normalization for every individual rule unifying other provided types and

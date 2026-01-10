@@ -7,6 +7,8 @@ namespace Yiisoft\Validator\Exception;
 use InvalidArgumentException;
 use Throwable;
 
+use function sprintf;
+
 /**
  * An exception used by rule handlers to guarantee that passed rule have desired type. Every handler's validation code
  * must start with this check. An example for `MyRule` and `MyRuleHandler`:

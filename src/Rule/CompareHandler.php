@@ -14,6 +14,9 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function gettype;
+use function is_scalar;
+
+use const PHP_FLOAT_EPSILON;
 
 /**
  * Compares the specified value with "target" value provided directly or within a property.

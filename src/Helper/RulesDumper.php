@@ -10,6 +10,7 @@ use Yiisoft\Validator\DumpedRuleInterface;
 
 use function is_int;
 use function is_string;
+use function sprintf;
 
 /**
  * RulesDumper allows to get an array of rule names and corresponding settings from a set of rules.

@@ -16,6 +16,8 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 
+use const PHP_INT_MAX;
+
 final class NumberTest extends RuleTestCase
 {
     use RuleWithOptionsTestTrait;

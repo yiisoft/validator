@@ -12,6 +12,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_bool;
+use function is_scalar;
 
 /**
  * Validates that the value is a number.

@@ -10,6 +10,8 @@ use Yiisoft\Validator\RuleHandlerResolver\RuleHandlerContainer;
 use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleHandlerResolverInterface;
 
+use function sprintf;
+
 /**
  * An exception used by {@see RuleHandlerResolverInterface} implementations (e. g., {@see RuleHandlerContainer}) for
  * the case when a retrieved value is not an object or an object that does not implement {@see RuleHandlerInterface}.

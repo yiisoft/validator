@@ -20,6 +20,9 @@ use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Validator;
 
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_OK;
+
 final class ImageTest extends RuleTestCase
 {
     use DifferentRuleInHandlerTestTrait;

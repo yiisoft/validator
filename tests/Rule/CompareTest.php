@@ -22,6 +22,10 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Data\CompareObject;
 
 use function is_string;
+use function sprintf;
+
+use const PHP_FLOAT_EPSILON;
+use const PHP_INT_MAX;
 
 final class CompareTest extends RuleTestCase
 {
