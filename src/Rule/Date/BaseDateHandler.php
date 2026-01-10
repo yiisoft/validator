@@ -15,6 +15,9 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_int;
+use function is_string;
+
 /**
  * @see Date
  * @see DateTime

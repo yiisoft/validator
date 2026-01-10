@@ -29,6 +29,7 @@ composer.phar
 
 # PHP CS Fixer
 /.php-cs-fixer.cache
+/.php-cs-fixer.php
 
 # po4a .mo files
 *.mo

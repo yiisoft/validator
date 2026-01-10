@@ -17,6 +17,8 @@ use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
+use function sprintf;
+
 /**
  * Defines validation options to validating the value using a callback.
  *

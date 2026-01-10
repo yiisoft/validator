@@ -37,6 +37,8 @@ use Yiisoft\Validator\Tests\Support\Rule\NotRuleAttribute;
 use Yiisoft\Validator\Tests\Support\Data\Charts\Chart;
 use Yiisoft\Validator\Validator;
 
+use function sprintf;
+
 final class ObjectDataSetTest extends TestCase
 {
     public static function propertyVisibilityDataProvider(): array

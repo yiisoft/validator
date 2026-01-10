@@ -36,6 +36,7 @@ use function is_string;
 use function ltrim;
 use function rtrim;
 use function sprintf;
+use function is_callable;
 
 /**
  * Used to define rules for validation of nested structures:

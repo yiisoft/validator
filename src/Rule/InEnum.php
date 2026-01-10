@@ -17,6 +17,8 @@ use Yiisoft\Validator\SkipOnEmptyInterface;
 use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
+use function sprintf;
+
 /**
  * Defines validation options to check that the value is one of the values (or names) contained in an enum of the
  * specified class.

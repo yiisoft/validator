@@ -9,6 +9,8 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Yii\Debug\Collector\CollectorTrait;
 use Yiisoft\Yii\Debug\Collector\SummaryCollectorInterface;
 
+use function count;
+
 final class ValidatorCollector implements SummaryCollectorInterface
 {
     use CollectorTrait;

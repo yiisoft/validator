@@ -17,6 +17,8 @@ use Yiisoft\Validator\ValidatorInterface;
 use function is_callable;
 use function is_int;
 use function is_string;
+use function is_object;
+use function sprintf;
 
 /**
  * A helper class used to normalize different types of data to the iterable with rule instances ({@see RuleInterface}).

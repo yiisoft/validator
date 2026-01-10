@@ -10,6 +10,8 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function is_scalar;
+
 /**
  * A handler for {@see TrueValue} rule.
  */

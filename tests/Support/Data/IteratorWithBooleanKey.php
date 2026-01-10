@@ -7,8 +7,9 @@ namespace Yiisoft\Validator\Tests\Support\Data;
 use ReturnTypeWillChange;
 use Yiisoft\Validator\Rule\Length;
 use Yiisoft\Validator\RuleInterface;
+use Iterator;
 
-class IteratorWithBooleanKey implements \Iterator
+class IteratorWithBooleanKey implements Iterator
 {
     private int $position = 0;
     private array $array;

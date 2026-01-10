@@ -22,6 +22,7 @@ use function array_key_exists;
 use function is_int;
 use function is_object;
 use function is_string;
+use function sprintf;
 
 /**
  * A helper class used to parse rules from PHP attributes (attached to class properties and class itself) and data from

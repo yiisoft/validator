@@ -17,6 +17,7 @@ use Yiisoft\Validator\SkipOnErrorInterface;
 use Yiisoft\Validator\WhenInterface;
 
 use function in_array;
+use function is_scalar;
 
 /**
  * Abstract base for all the comparison validation rules.
