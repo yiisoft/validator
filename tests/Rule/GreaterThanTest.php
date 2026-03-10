@@ -11,6 +11,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Validator;
 
 final class GreaterThanTest extends RuleTestCase
 {
@@ -134,5 +135,12 @@ final class GreaterThanTest extends RuleTestCase
     {
         $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new GreaterThan(1), new GreaterThan(1, when: $when));
+    }
+
+    public function testDefaultSkipOnEmptyCondition(): void
+    {
+        $validator = (new Validator())->withDefaultSkipOnEmptyCondition(true);
+        $result = $validator->validate('', [new GreaterThan(5)]);
+        $this->assertTrue($result->isValid());
     }
 }
