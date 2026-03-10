@@ -91,7 +91,7 @@ final class LessThanOrEqual extends AbstractCompare
         string $incorrectDataSetTypeMessage = self::DEFAULT_INCORRECT_DATA_SET_TYPE_MESSAGE,
         ?string $message = null,
         string $type = CompareType::NUMBER,
-        bool|callable|null $skipOnEmpty = false,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         ?Closure $when = null,
     ) {
