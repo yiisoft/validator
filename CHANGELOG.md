@@ -2,7 +2,7 @@
 
 ## 2.5.2 under development
 
-- Bug #788: Fix `skipOnEmpty` default value in `Equal`, `GreaterThan`, `GreaterThanOrEqual`, `LessThan`, `LessThanOrEqual` and `NotEqual` rules from `false` to `null` (@copilot)
+- Bug #788: Fix `skipOnEmpty` default value in `Equal`, `GreaterThan`, `GreaterThanOrEqual`, `LessThan`, `LessThanOrEqual` and `NotEqual` rules from `false` to `null` (@vjik)
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 
 ## 2.5.1 December 12, 2025
