@@ -2,6 +2,7 @@
 
 ## 2.5.2 under development
 
+- Bug #791: Allow access to sibling properties in nested validation context (@WarLikeLaux)
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 
 ## 2.5.1 December 12, 2025

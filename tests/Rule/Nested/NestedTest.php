@@ -1060,6 +1060,54 @@ final class NestedTest extends RuleTestCase
                 ['' => 17],
                 new Nested(['' => new Integer(min: 15)]),
             ],
+            'sibling access skips rule when sibling is false' => [
+                [
+                    'push' => [
+                        'isEnabled' => false,
+                        'content' => null,
+                    ],
+                ],
+                new Nested([
+                    'push' => new Nested([
+                        'isEnabled' => [new BooleanValue()],
+                        'content' => [
+                            new Required(
+                                when: static function (mixed $value, ValidationContext $context): bool {
+                                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                },
+                            ),
+                        ],
+                    ]),
+                ]),
+            ],
+            'sibling access with each and nested' => [
+                [
+                    'tasks' => [
+                        [
+                            'push' => [
+                                'isEnabled' => false,
+                                'content' => null,
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'tasks' => new Each(
+                        new Nested([
+                            'push' => new Nested([
+                                'isEnabled' => [new BooleanValue()],
+                                'content' => [
+                                    new Required(
+                                        when: static function (mixed $value, ValidationContext $context): bool {
+                                            return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                        },
+                                    ),
+                                ],
+                            ]),
+                        ]),
+                    ),
+                ]),
+            ],
         ];
     }
 
@@ -1284,6 +1332,29 @@ final class NestedTest extends RuleTestCase
                     'properties.abc' => ['Abc cannot be blank.'],
                 ],
             ],
+            'sibling access in when callback' => [
+                [
+                    'push' => [
+                        'isEnabled' => true,
+                        'content' => null,
+                    ],
+                ],
+                new Nested([
+                    'push' => new Nested([
+                        'isEnabled' => [new BooleanValue()],
+                        'content' => [
+                            new Required(
+                                when: static function (mixed $value, ValidationContext $context): bool {
+                                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                },
+                            ),
+                        ],
+                    ]),
+                ]),
+                [
+                    'push.content' => ['Content cannot be blank.'],
+                ],
+            ],
             'deep level of nesting with plain keys' => [
                 [
                     'level1' => [
@@ -1311,6 +1382,19 @@ final class NestedTest extends RuleTestCase
                 [
                     'level1.level2.level3.key' => ['Key must be no less than 9.', 'Key must be no greater than 5.'],
                     'level1.level2.level3.name' => ['Name must contain at least 5 characters.'],
+                ],
+            ],
+            'dotted path with missing intermediate key' => [
+                [
+                    'level1' => [
+                        'x' => 1,
+                    ],
+                ],
+                new Nested([
+                    'level1.level2.key' => [new Required()],
+                ]),
+                [
+                    'level1.level2.key' => ['Key not passed.'],
                 ],
             ],
             'error messages with properties in nested structure' => [
