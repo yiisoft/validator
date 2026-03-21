@@ -193,8 +193,8 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 #### Using interface method implementation
 
-Providing rules via interface method implementation has priority over PHP attributes. So, in case both are present,
-the attributes will be ignored without causing an exception.
+When an object implementing `RulesProviderInterface` is passed as the `$rules` argument (second argument of
+`validate()`), only the rules from `getRules()` are used. PHP attributes on the object are not parsed in this case.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -204,13 +204,13 @@ use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Will be silently ignored.
+    #[Length(min: 2)] // Ignored because the object is passed as the $rules argument.
     public string $name;
 
-    #[Number(min: 21)] // Will be silently ignored.
+    #[Number(min: 21)] // Ignored because the object is passed as the $rules argument.
     protected int $age;
-    
-    public function getRules() : iterable
+
+    public function getRules(): iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
     }
@@ -223,8 +223,9 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 ### Providing rules via the data object
 
-In this way, rules are provided in addition to data in the same object. Only interface method implementation is 
-supported. Note that the `rules` argument is `null` in the `validate()` method call.
+In this way, rules are provided in addition to data in the same object. Both PHP attributes and `getRules()` method
+are supported — their rules are merged (attribute rules are applied first). Note that the `rules` argument is `null`
+in the `validate()` method call.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -234,12 +235,14 @@ use Yiisoft\Validator\Validator;
 
 final class Person implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Not supported for using with data objects. Will be silently ignored.
-    public string $name;
+    public function __construct(
+        #[Length(min: 2)] // Merged with rules from getRules(). Attribute rules are applied first.
+        public string $name = '',
+        #[Number(min: 21)] // Merged with rules from getRules(). Attribute rules are applied first.
+        protected int $age = 0,
+    ) {
+    }
 
-    #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.
-    protected int $age;
-    
     public function getRules(): iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
