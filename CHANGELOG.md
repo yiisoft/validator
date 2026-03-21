@@ -2,6 +2,7 @@
 
 ## 2.5.2 under development
 
+- Chg #789: Use `format` property for formatting dates in error messages when message format properties are not set (@WarLikeLaux)
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 
 ## 2.5.1 December 12, 2025

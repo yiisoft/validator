@@ -187,14 +187,20 @@ abstract class BaseDateHandler implements RuleHandlerInterface
 
     private function formatDate(DateTimeInterface $date, Date|DateTime|Time $rule, ?DateTimeZone $timeZone): string
     {
-        $formatterDateType = $this->getMessageDateTypeFromRule($rule)
+        $ruleMessageDateType = $this->getMessageDateTypeFromRule($rule);
+        $ruleMessageTimeType = $this->getMessageTimeTypeFromRule($rule);
+
+        $formatterDateType = $ruleMessageDateType
             ?? $this->messageDateType
             ?? $this->getDateTypeFromRule($rule);
-        $formatterTimeType = $this->getMessageTimeTypeFromRule($rule)
+        $formatterTimeType = $ruleMessageTimeType
             ?? $this->messageTimeType
             ?? $this->getTimeTypeFromRule($rule);
 
         $format = $rule->getMessageFormat() ?? $this->messageFormat;
+        if ($format === null && $ruleMessageDateType === null && $ruleMessageTimeType === null) {
+            $format = $rule->getFormat();
+        }
         if (is_string($format) && str_starts_with($format, 'php:')) {
             return $date->format(substr($format, 4));
         }
