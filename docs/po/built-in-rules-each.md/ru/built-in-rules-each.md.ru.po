@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: 2025-04-19 08:39+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -83,14 +83,106 @@ msgstr ""
 "    ),\n"
 "];\n"
 
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Stopping on first error"
+msgstr ""
+
 #. type: Plain text
 #: guide/en/built-in-rules-each.md
-msgid "Validated data items are not limited to only \"simple\" values - `Each` can be used both within a `Nested` and contain `Nested` rule covering one-to-many and many-to-many relations:"
-msgstr "Проверяемые элементы данных не ограничиваются только \"простыми значениями\" - `Each` может использоваться как внутри правила `Nested` так и содержать его:"
+msgid "By default, `Each` validates all items in the set and collects all errors. To stop validation at the first item that produces an error, use the `stopOnError` parameter:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, fuzzy, no-wrap
+#| msgid ""
+#| "use Yiisoft\\Validator\\Rule\\Each;\n"
+#| "use Yiisoft\\Validator\\Rule\\Integer;\n"
+#| "\n"
+#| "new Each([\n"
+#| "    new Integer(min: 0, max: 255),\n"
+#| "]);\n"
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each(\n"
+"    rules: [new Integer(min: 0, max: 255)],\n"
+"    stopOnError: true,\n"
+");\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each([\n"
+"    new Integer(min: 0, max: 255),\n"
+"]);\n"
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Accessing the current key"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid "During validation of each item, the current iteration key is available through the validation context parameter `Each::PARAMETER_EACH_KEY`. This can be useful in `when` callbacks or custom rule handlers:"
+msgstr ""
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-each.md
 #, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"// Inside a when callback or custom rule handler:\n"
+"$currentKey = $context->getParameter(Each::PARAMETER_EACH_KEY);\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, fuzzy, no-wrap
+#| msgid "Using with `DateTime` objects"
+msgid "Using with `Nested`"
+msgstr "Использование с объектом `DateTime`"
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+#, fuzzy
+#| msgid "Validated data items are not limited to only \"simple\" values - `Each` can be used both within a `Nested` and contain `Nested` rule covering one-to-many and many-to-many relations:"
+msgid "Validated data items are not limited to only \"simple\" values — `Each` can be used both within a `Nested` and contain `Nested` rule covering one-to-many and many-to-many relations:"
+msgstr "Проверяемые элементы данных не ограничиваются только \"простыми значениями\" - `Each` может использоваться как внутри правила `Nested` так и содержать его:"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, fuzzy, no-wrap
+#| msgid ""
+#| "use Yiisoft\\Validator\\Rule\\Count;\n"
+#| "use Yiisoft\\Validator\\Rule\\Each;\n"
+#| "use Yiisoft\\Validator\\Rule\\Nested;\n"
+#| "use Yiisoft\\Validator\\Rule\\Number;\n"
+#| "\n"
+#| "$rule = new Nested([\n"
+#| "    'charts' => new Each([\n"
+#| "        new Nested([\n"
+#| "            'points' => new Each([\n"
+#| "                new Nested([\n"
+#| "                    'coordinates' => new Nested([\n"
+#| "                        'x' => [new Number(min: -10, max: 10)],\n"
+#| "                        'y' => [new Number(min: -10, max: 10)],\n"
+#| "                    ]),\n"
+#| "                    'rgb' => new Each([\n"
+#| "                        new Count(3),\n"
+#| "                        new Number(min: 0, max: 255),\n"
+#| "                    ]),\n"
+#| "                ]),\n"
+#| "            ]),\n"
+#| "        ]),\n"
+#| "    ]),\n"
+#| "]);\n"
 msgid ""
 "use Yiisoft\\Validator\\Rule\\Count;\n"
 "use Yiisoft\\Validator\\Rule\\Each;\n"
@@ -106,10 +198,10 @@ msgid ""
 "                        'x' => [new Number(min: -10, max: 10)],\n"
 "                        'y' => [new Number(min: -10, max: 10)],\n"
 "                    ]),\n"
-"                    'rgb' => new Each([\n"
+"                    'rgb' => [\n"
 "                        new Count(3),\n"
-"                        new Number(min: 0, max: 255),\n"
-"                    ]),\n"
+"                        new Each([new Number(min: 0, max: 255)]),\n"
+"                    ],\n"
 "                ]),\n"
 "            ]),\n"
 "        ]),\n"

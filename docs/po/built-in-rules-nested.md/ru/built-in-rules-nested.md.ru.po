@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-08-09 15:52+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: 2025-09-02 18:54+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -16,6 +16,80 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 3.7\n"
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md guide/en/built-in-rules-nested.md
+#, fuzzy, no-wrap
+#| msgid ""
+#| "use Yiisoft\\Validator\\Rule\\Length;\n"
+#| "use Yiisoft\\Validator\\Rule\\Required;\n"
+#| "use Yiisoft\\Validator\\ValidationContext;\n"
+#| "use Yiisoft\\Validator\\Validator;\n"
+#| "\n"
+#| "$data = [];\n"
+#| "$rules = [\n"
+#| "    'country' => [\n"
+#| "        new Required(),\n"
+#| "        new Length(min: 2),\n"
+#| "    ],\n"
+#| "    'state' => new Required(\n"
+#| "        when: static function (mixed $value, ValidationContext $context): bool {\n"
+#| "            return $context->getDataSet()->getPropertyValue('country') === 'Brazil';\n"
+#| "        },\n"
+#| "    )\n"
+#| "];\n"
+#| "$result = (new Validator())->validate($data, $rules);\n"
+msgid ""
+"use Yiisoft\\Validator\\Rule\\BooleanValue;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [\n"
+"    'push' => [\n"
+"        'isEnabled' => true,\n"
+"        'content' => null,\n"
+"    ],\n"
+"];\n"
+"$rules = new Nested([\n"
+"    'push' => new Nested([\n"
+"        'isEnabled' => [new BooleanValue()],\n"
+"        'content' => [\n"
+"            new Required(\n"
+"                when: static function (mixed $value, ValidationContext $context): bool {\n"
+"                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');\n"
+"                },\n"
+"            ),\n"
+"        ],\n"
+"    ]),\n"
+"]);\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [];\n"
+"$rules = [\n"
+"    'country' => [\n"
+"        new Required(),\n"
+"        new Length(min: 2),\n"
+"    ],\n"
+"    'state' => new Required(\n"
+"        when: static function (mixed $value, ValidationContext $context): bool {\n"
+"            return $context->getDataSet()->getPropertyValue('country') === 'Brazil';\n"
+"        },\n"
+"    )\n"
+"];\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
+msgstr "[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md"
 
 #. type: Title ###
 #: guide/en/using-validator.md guide/en/built-in-rules-nested.md
@@ -825,6 +899,31 @@ msgstr "- Дополнительную информацию о различны�
 
 #. type: Title ###
 #: guide/en/built-in-rules-nested.md
+#, fuzzy, no-wrap
+#| msgid "Conditional validation"
+msgid "Conditional validation within nested structures"
+msgstr "Условия валидации"
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"When using `when` callbacks inside `Nested`, the validation context provides access to sibling properties — other\n"
+"properties at the same nesting level. Use `$context->getDataSet()->getPropertyValue()` to read them.\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "For example, to require `content` only when `isEnabled` is `true`:"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "This works at any depth, including when combined with `Each`. For more details and examples, see the [Conditional validation] guide."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
 #, no-wrap
 msgid "Using keys containing separator / shortcut"
 msgstr "Использование ключей, содержащих разделитель/сокращение"
@@ -986,9 +1085,10 @@ msgstr "[JSFiddle]: https://jsfiddle.net/fys8uadr/"
 
 #. type: Link reference
 #: guide/en/built-in-rules-nested.md
-#, no-wrap
-msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
-msgstr "[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md"
+#, fuzzy, no-wrap
+#| msgid "[Conditional validation](conditional-validation.md)"
+msgid "[Conditional validation]: conditional-validation.md"
+msgstr "[Условия валидации](conditional-validation.md)"
 
 #. type: Link reference
 #: guide/en/built-in-rules-nested.md

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-06-28 13:58+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: 2025-06-28 19:18+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -22,6 +22,127 @@ msgstr ""
 #, no-wrap
 msgid "`Compare` - comparing validated value with target value"
 msgstr "`Compare` - сравнение валидируемого значения с целевым"
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid "The `Compare` rule and its shortcut classes validate a value by comparing it with a target value or another property."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid "Available shortcut classes:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`Equal` (`==`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`NotEqual` (`!=`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`GreaterThan` (`>`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`GreaterThanOrEqual` (`>=`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`LessThan` (`<`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`LessThanOrEqual` (`<=`)"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Comparison types"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid "The `type` parameter controls how values are compared:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`CompareType::NUMBER` — values are compared as numbers (default)."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`CompareType::STRING` — values are compared as strings, byte by byte."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`CompareType::ORIGINAL` — values are compared as-is, without type casting. Required for `DateTime` objects."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, fuzzy, no-wrap
+#| msgid "`Compare` - comparing validated value with target value"
+msgid "Comparing with a target value"
+msgstr "`Compare` - сравнение валидируемого значения с целевым"
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-compare.md
+#, fuzzy, no-wrap
+#| msgid ""
+#| "use DateTime;\n"
+#| "use Yiisoft\\Validator\\Rule\\CompareType;\n"
+#| "use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+#| "\n"
+#| "$rules = [\n"
+#| "    'date_of_birth' => new GreaterThanOrEqual(new DateTime('1900-01-01'), type: CompareType::ORIGINAL),\n"
+#| "];\n"
+msgid ""
+"use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+"\n"
+"$rules = [\n"
+"    'age' => new GreaterThanOrEqual(18),\n"
+"];\n"
+msgstr ""
+"use DateTime;\n"
+"use Yiisoft\\Validator\\Rule\\CompareType;\n"
+"use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+"\n"
+"$rules = [\n"
+"    'date_of_birth' => new GreaterThanOrEqual(new DateTime('1900-01-01'), type: CompareType::ORIGINAL),\n"
+"];\n"
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Comparing with another property"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid "Use the `targetProperty` parameter to compare against another property in the same data set:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Equal;\n"
+"\n"
+"$rules = [\n"
+"    'password_repeat' => new Equal(targetProperty: 'password'),\n"
+"];\n"
+msgstr ""
 
 #. type: Title ##
 #: guide/en/built-in-rules-compare.md
@@ -63,13 +184,34 @@ msgstr "Динамический диапазон"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-compare.md
-#, no-wrap
+#, fuzzy, no-wrap
+#| msgid ""
+#| "use DateTime;\n"
+#| "use Yiisoft\\Validator\\Rule\\Callback;\n"
+#| "use Yiisoft\\Validator\\Rule\\CompareType;\n"
+#| "use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+#| "use Yiisoft\\Validator\\Rule\\LessThanOrEqual;\n"
+#| "\n"
+#| "$rules = [\n"
+#| "    'shipping_datetime' => [\n"
+#| "        new GreaterThan(\n"
+#| "            (new DateTime('now'))\n"
+#| "                ->add(DateInterval::createFromDateString('1 day')),\n"
+#| "            type: CompareType::ORIGINAL,\n"
+#| "        ),\n"
+#| "        new LessThan(\n"
+#| "            (new DateTime('now'))\n"
+#| "                ->add(DateInterval::createFromDateString('1 week')),\n"
+#| "            type: CompareType::ORIGINAL,\n"
+#| "        ),        \n"
+#| "    ],\n"
+#| "];\n"
 msgid ""
+"use DateInterval;\n"
 "use DateTime;\n"
-"use Yiisoft\\Validator\\Rule\\Callback;\n"
 "use Yiisoft\\Validator\\Rule\\CompareType;\n"
-"use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
-"use Yiisoft\\Validator\\Rule\\LessThanOrEqual;\n"
+"use Yiisoft\\Validator\\Rule\\GreaterThan;\n"
+"use Yiisoft\\Validator\\Rule\\LessThan;\n"
 "\n"
 "$rules = [\n"
 "    'shipping_datetime' => [\n"
@@ -82,7 +224,7 @@ msgid ""
 "            (new DateTime('now'))\n"
 "                ->add(DateInterval::createFromDateString('1 week')),\n"
 "            type: CompareType::ORIGINAL,\n"
-"        ),        \n"
+"        ),\n"
 "    ],\n"
 "];\n"
 msgstr ""
