@@ -18,6 +18,8 @@ use function array_slice;
 use function is_array;
 use function is_int;
 use function is_object;
+use function array_key_exists;
+use function count;
 
 /**
  * A handler for {@see Nested} rule. Validates nested structures.
