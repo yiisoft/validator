@@ -1,6 +1,6 @@
 # Result
 
-The validation result is an object containing of errors occurred during validation.
+The validation result is an object containing errors that occurred during validation.
 
 ## Is validation successful?
 
