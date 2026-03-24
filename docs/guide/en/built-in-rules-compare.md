@@ -18,10 +18,10 @@ $rules = [
 
 ```php
 use DateTime;
-use Yiisoft\Validator\Rule\Callback;
+use DateInterval;
 use Yiisoft\Validator\Rule\CompareType;
-use Yiisoft\Validator\Rule\GreaterThanOrEqual;
-use Yiisoft\Validator\Rule\LessThanOrEqual;
+use Yiisoft\Validator\Rule\GreaterThan;
+use Yiisoft\Validator\Rule\LessThan;
 
 $rules = [
     'shipping_datetime' => [
