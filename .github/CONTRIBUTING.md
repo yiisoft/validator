@@ -8,7 +8,7 @@
 
 # Getting started
 
-Since Yii 3 consists of many packages, we have a [special development tool](https://github.com/yiisoft/docs/blob/master/005-development-tool.md).
+Since Yii 3 consists of many packages, we have a [special development tool](https://github.com/yiisoft/docs/blob/master/src/internals/005-development-tool.md).
 
 1. [Clone the repository](https://github.com/yiisoft/yii-dev-tool).
 
