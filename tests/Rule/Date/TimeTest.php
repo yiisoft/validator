@@ -82,8 +82,8 @@ final class TimeTest extends RuleTestCase
                 [TimeHandler::class => new TimeHandler(messageFormat: 'php:H_i')],
             ],
             'handler-message-type' => [
-                "1:30\u{202F}PM",
-                new Time(max: "11:30\u{202F}AM", locale: 'en_US'),
+                '1:30 PM',
+                new Time(max: '11:30 AM', locale: 'en_US'),
                 ['' => ['Value must be no late than 11:30:00 AM Coordinated Universal Time.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: IntlDateFormatter::FULL)],
             ],
