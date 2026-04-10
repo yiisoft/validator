@@ -1,7 +1,7 @@
 # Результат
 
-Результатом валидации является объект, содержащий ошибки, возникшие во время
-проверки.
+The validation result is an object containing errors that occurred during
+validation.
 
 ## Валидация успешна?
 
