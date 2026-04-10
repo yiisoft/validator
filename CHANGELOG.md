@@ -3,6 +3,7 @@
 ## 2.5.2 under development
 
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
+- Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
 
 ## 2.5.1 December 12, 2025
 
