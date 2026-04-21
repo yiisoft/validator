@@ -1,0 +1,688 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2026 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"PO-Revision-Date: 2026-04-21 14:32+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Link reference
+#: guide/en/configuring-rules-via-php-attributes.md
+#: guide/en/creating-custom-rules.md guide/en/using-validator.md
+#, no-wrap
+msgid "[readonly properties]: https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties"
+msgstr "[readonly-свойства]: https://www.php.net/manual/ru/language.oop5.properties.php#language.oop5.properties.readonly-properties"
+
+#. type: Title #
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Creating custom rules"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "When desired validation logic is missing in both built-in rules and extensions - it's time to create a custom rule."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Rules concept"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "The key feature of the rules' concept is a separation into 2 parts:"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "- Rule (a class implementing `RuleInterface`). It only stores configuration options and a reference to its handler. Does not perform actual validation.  - Rule handler (a class implementing `RuleHandlerInterface`). Given a rule and input data, performs the actual validation within a current validation context."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Besides responsibilities' separation, this approach allows to automatically resolve dependencies for a handler. For example, if you need a database connection object within a handler, you don't have to pass it there explicitly - it can be automatically obtained from a dependency container."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Instructions for creating a custom rule and what to avoid"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Let's try to create a rule for checking that a value is a valid [RGB color]."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Creating a rule"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "The 1st step is creating a rule:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"\n"
+"final class RgbColor implements RuleInterface \n"
+"{  \n"
+"    public function __construct(\n"
+"        public readonly string $message = 'Invalid RGB color value.',  \n"
+"    ) {  \n"
+"    }\n"
+"  \n"
+"    public function getHandler(): string  \n"
+"    {  \n"
+"        return RgbColorHandler::class;  \n"
+"    }  \n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md guide/en/using-validator.md
+#, no-wrap
+msgid "> **Note:** [readonly properties] are supported only starting from PHP 8.1.\n"
+msgstr "> **Примечание:** [readonly-свойства] поддерживаются только начиная с версии PHP 8.1.\n"
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Besides required interface method implementations it only contains customizable error message. Of course, more features can be added - conditional validation, client options, etc. But this is a bare minimum to start with."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Creating a handler"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "The 2nd step is creating the handler. Let's define what is exactly a valid RGB color:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/creating-custom-rules.md
+msgid "It's an array (list to be exact)."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/creating-custom-rules.md
+msgid "Contains exactly 3 items."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/creating-custom-rules.md
+msgid "Each item is an integer number within 0 - 255 range."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Exception\\UnexpectedRuleException;\n"
+"use Yiisoft\\Validator\\Result;\n"
+"use Yiisoft\\Validator\\RuleHandlerInterface;\n"
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"final class RgbColorHandler implements RuleHandlerInterface\n"
+"{\n"
+"    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result\n"
+"    {\n"
+"        // Every rule handler must start with this check.  \n"
+"        if (!$rule instanceof RgbColor) {\n"
+"            throw new UnexpectedRuleException(RgbColor::class, $rule);\n"
+"        }\n"
+"\n"
+"        if (!is_array($value) || array_keys($value) !== [0, 1, 2]) {\n"
+"            return (new Result())->addError($rule->message);\n"
+"        }\n"
+"\n"
+"        foreach ($value as $item) {\n"
+"            if (!is_int($item) || $item < 0 || $item > 255) {\n"
+"                return (new Result())->addError($rule->message);\n"
+"            }\n"
+"        }\n"
+"\n"
+"        return new Result();\n"
+"    }\n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"> **Note:** A `validate()` method is not intended to be called directly. Both resolving handler and calling the method\n"
+"> happen automatically when using `Validator`.\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Tips for improving code"
+msgstr ""
+
+#. type: Title ####
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "More specific error messages"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Prefer more specific error messages to broad ones. Even this requires a bigger amount of messages and code, it helps to quicker understand what exactly is wrong with input data. RGB color is quite simple and compact structure, but in case of more complex data it will definitely pay off."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Keeping this in mind the rule can be rewritten something like this:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"\n"
+"final class RgbColor implements RuleInterface \n"
+"{  \n"
+"    public function __construct(\n"
+"        public readonly string $incorrectInputTypeMessage = 'Value must be an array. {type} given.',\n"
+"        public readonly string $incorrectInputRepresentationMessage = 'Value must be a list.',\n"
+"        public readonly string $incorrectItemsCountMessage = 'Value must contain exactly 3 items. ' . \n"
+"        '{itemsCount} {itemsCount, plural, one{item} other{items}} given.',\n"
+"        public readonly string $incorrectItemTypeMessage = 'Every item must be an integer. {type} given at ' .\n"
+"        '{position, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} position.',          \n"
+"        public readonly string $incorrectItemValueMessage = 'Every item must be between 0 and 255. {value} given at ' . \n"
+"        '{position, selectordinal, one {#st} two {#nd} few {#rd} other {#th}} position.',          \n"
+"    ) {  \n"
+"    }\n"
+"  \n"
+"    public function getHandler(): string  \n"
+"    {  \n"
+"        return RgbColorHandler::class;  \n"
+"    }  \n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"> **Note:** Formatting used in `$incorrectItemTypeMessage` and `$incorrectItemValueMessage` requires `intl` PHP \n"
+"> extension.\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "The handler needs to be changed accordingly. Let's also add error parameters to be able to use them as placeholders in message templates:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Exception\\UnexpectedRuleException;\n"
+"use Yiisoft\\Validator\\Result;\n"
+"use Yiisoft\\Validator\\RuleHandlerInterface;\n"
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"final class RgbColorHandler implements RuleHandlerInterface\n"
+"{\n"
+"    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result\n"
+"    {\n"
+"        if (!$rule instanceof RgbColor) {\n"
+"            throw new UnexpectedRuleException(RgbColor::class, $rule);\n"
+"        }\n"
+"\n"
+"        if (!is_array($value)) {\n"
+"            return (new Result())->addError($rule->incorrectInputTypeMessage, [\n"
+"                'property' => $context->getTranslatedProperty(),\n"
+"                'type' => get_debug_type($value),\n"
+"            ]);\n"
+"        }\n"
+"\n"
+"        $itemsCount = 0;\n"
+"        foreach (array_keys($value) as $index => $keyValue) {\n"
+"            if ($keyValue !== $index) {\n"
+"                return (new Result())->addError($rule->incorrectInputRepresentationMessage, [\n"
+"                    'property' => $context->getTranslatedProperty(),\n"
+"                ]);\n"
+"            }\n"
+"\n"
+"            $itemsCount++;\n"
+"        }\n"
+"\n"
+"        if ($itemsCount !== 3) {\n"
+"            return (new Result())->addError($rule->incorrectItemsCountMessage, [\n"
+"                'property' => $context->getTranslatedProperty(),\n"
+"                'itemsCount' => $itemsCount,\n"
+"            ]);\n"
+"        }\n"
+"\n"
+"        foreach ($value as $index => $item) {\n"
+"            if (!is_int($item)) {\n"
+"                return (new Result())->addError($rule->incorrectItemTypeMessage, [\n"
+"                    'property' => $context->getTranslatedProperty(),\n"
+"                    'position' => $index + 1,\n"
+"                    'type' => get_debug_type($item),\n"
+"                ]);\n"
+"            }\n"
+"\n"
+"            if ($item < 0 || $item > 255) {\n"
+"                return (new Result())->addError($rule->incorrectItemValueMessage, [\n"
+"                    'property' => $context->getTranslatedProperty(),\n"
+"                    'position' => $index + 1,\n"
+"                    'value' => $value,\n"
+"                ]);\n"
+"            }\n"
+"        }\n"
+"\n"
+"        return new Result();\n"
+"    }\n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"> **Note:** It's also a good idea to utilize the features of used language version. For example, for PHP >= 8.1 we can \n"
+"> simplify checking that a given array is a list with [array_is_list] function.\n"
+msgstr ""
+
+#. type: Title ####
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Using built-in rules if possible"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Before creating a custom rule, please check if it can be replaced with a built-in rule or set of rules. If so, it's unnecessary to create a custom rule."
+msgstr ""
+
+#. type: Title #####
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Replacing with `Composite`"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "The example with RGB color can be significantly simplified after realizing that it's also possible to achieve the same effect by just using only built-in rules:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"$rules = [\n"
+"    new Count(3),\n"
+"    new Each([new Integer(min: 0, max: 255)])\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Making them reusable isn't much harder - the whole set can be placed inside a `Composite` rule and used as a single regular rule."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Composite;\n"
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"final class RgbColorRuleSet extends Composite\n"
+"{\n"
+"    public function getRules(): array\n"
+"    {\n"
+"        return [\n"
+"            new Count(3),\n"
+"            new Each([new Integer(min: 0, max: 255)])\n"
+"        ];\n"
+"    }\n"
+"}\n"
+"\n"
+"$result = (new Validator())->validate([205, 92, 92], new RgbColorRuleSet());\n"
+msgstr ""
+
+#. type: Title #####
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Replacing with separate rules and `when`"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Below is an attempt at using validation context for validating properties depending on each other:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/creating-custom-rules.md
+msgid "Validate company name only when the other property `hasCompany` name is filled."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/creating-custom-rules.md
+msgid "The company name must be a string with a length between 1 and 50 characters."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Exception\\UnexpectedRuleException;\n"
+"use Yiisoft\\Validator\\Result;\n"
+"use Yiisoft\\Validator\\RuleHandlerInterface;\n"
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"final class CompanyNameHandler implements RuleHandlerInterface\n"
+"{\n"
+"    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result\n"
+"    {\n"
+"        if (!$rule instanceof CompanyName) {\n"
+"            throw new UnexpectedRuleException(CompanyName::class, $rule);\n"
+"        }\n"
+"\n"
+"        if ($context->getDataSet()->getPropertyValue('hasCompany') !== true) {\n"
+"            return new Result();\n"
+"        }\n"
+"\n"
+"        if (!is_string($value)) {\n"
+"            return (new Result())->addError($rule->getIncorrectInputMessage());\n"
+"        }\n"
+"\n"
+"        $length = strlen($value);\n"
+"        if ($length < 1 || $length > 50) {\n"
+"            return (new Result())->addError($rule->getMessage());\n"
+"        }\n"
+"\n"
+"        return new Result();\n"
+"    }\n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "This custom rule can also be separated and refactored using built-in rules reducing coupling:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\BooleanValue;\n"
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"$rules = [\n"
+"    'hasCompany' => new BooleanValue(),\n"
+"    'companyName' => new Length(\n"
+"        min: 1,\n"
+"        max: 50,\n"
+"        when: static function (mixed $value, ValidationContext $context): bool {\n"
+"            return $context->getDataSet()->getPropertyValue('hasCompany') === true;\n"
+"        },\n"
+"    ),\n"
+"];\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "More examples"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "The idea for previous examples was to show the process of creating custom rules with handlers using \"learn by mistakes\" principle. So in terms of practical usage they probably less valuable because of replacement with built-in-rules.  Knowing the core principles, let's explore more appropriate real-life examples."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Verifying `YAML`"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "There is built-in rule for validating JSON. But what if we need the same, but for [YAML]? Let's try to implement it."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Rule:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"\n"
+"final class Yaml implements RuleInterface \n"
+"{  \n"
+"    public function __construct(\n"
+"        public readonly string $incorrectInputMessage = 'Value must be a string. {type} given.',        \n"
+"        public readonly string $message = 'The value is not a valid YAML.',          \n"
+"    ) {  \n"
+"    }\n"
+"  \n"
+"    public function getHandler(): string  \n"
+"    {  \n"
+"        return YamlHandler::class;  \n"
+"    }  \n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "Handler:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Exception;\n"
+"use Yiisoft\\Validator\\Exception\\UnexpectedRuleException;\n"
+"use Yiisoft\\Validator\\Result;\n"
+"use Yiisoft\\Validator\\RuleHandlerInterface;\n"
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"final class YamlHandler implements RuleHandlerInterface\n"
+"{  \n"
+"    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result \n"
+"    {  \n"
+"        if (!$rule instanceof Yaml) {\n"
+"            throw new UnexpectedRuleException(Yaml::class, $rule);\n"
+"        }\n"
+"\n"
+"        if (!is_string($value)) {\n"
+"            return (new Result())->addError($rule->incorrectInputMessage, [\n"
+"                'property' => $context->getTranslatedProperty(),\n"
+"                'type' => get_debug_type($value),\n"
+"            ]);\n"
+"        }\n"
+"\n"
+"        try {\n"
+"            $data = yaml_parse($value);\n"
+"        } catch (Exception $e) {\n"
+"            return (new Result())->addError($rule->message, [\n"
+"                'property' => $context->getTranslatedProperty(),\n"
+"            ]);\n"
+"        }\n"
+"\n"
+"        if ($data === false) {\n"
+"            return (new Result())->addError($rule->message, [\n"
+"                'property' => $context->getTranslatedProperty(),\n"
+"            ]);\n"
+"        }\n"
+"\n"
+"        return new Result();  \n"
+"    }\n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "> **Note:** Using [yaml_parse] additionally requires `yaml` PHP extension.\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"> **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to\n"
+"> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details.\n"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Wrapping validation"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "One of the right usages of validation context can be wrapping validation with some additional logic. This can be used for implementing [scenarios from Yii 2] for example."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Exception\\UnexpectedRuleException;\n"
+"use Yiisoft\\Validator\\Result;\n"
+"use Yiisoft\\Validator\\RuleHandlerInterface;\n"
+"use Yiisoft\\Validator\\RuleInterface;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"final class OnHandler implements RuleHandlerInterface\n"
+"{\n"
+"    public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result\n"
+"    {\n"
+"        if (!$rule instanceof On) {\n"
+"            throw new UnexpectedRuleException(On::class, $rule);\n"
+"        }\n"
+"\n"
+"        $scenario = $context->getParameter(On::SCENARIO_PARAMETER);\n"
+"\n"
+"        try {\n"
+"            $scenario = $this->prepareScenarioValue($scenario);\n"
+"        } catch (InvalidArgumentException) {\n"
+"            return (new Result())\n"
+"                ->addError(\n"
+"                    sprintf(\n"
+"                        'Scenario must be null, a string or \"\\Stringable\" type, \"%s\" given.',\n"
+"                        get_debug_type($scenario),\n"
+"                    ),\n"
+"                );\n"
+"        }\n"
+"\n"
+"        return $this->isSatisfied($rule, $scenario)\n"
+"            // With active scenario, perform the validation.\n"
+"            ? $context->validate($value, $rule->getRules())\n"
+"            // With all other scenarios, skip the validation.\n"
+"            : new Result();\n"
+"    }\n"
+"}\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "This code snippet is taken from [Yii Validator Scenarios] extension by [Sergei Predvoditelev]. Read more in [Scenarios] section."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "Making an extension"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/creating-custom-rules.md
+msgid "With a custom rule, you can go even further. If it's not too project-specific, and you feel that it might be useful to someone else - make it available as an extension."
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "[RGB color]: https://en.wikipedia.org/wiki/RGB_color_model"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "[array_is_list]: https://www.php.net/manual/en/function.array-is-list.php"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "[YAML]: https://en.wikipedia.org/wiki/YAML"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "[yaml_parse]: https://www.php.net/manual/en/function.yaml-parse.php"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "[scenarios from Yii 2]: https://www.yiiframework.com/doc/guide/2.0/en/structure-models#scenarios"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md guide/en/extensions.md
+#, no-wrap
+msgid "[Yii Validator Scenarios]: https://github.com/vjik/yii-validator-scenarios"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md guide/en/extensions.md
+#, no-wrap
+msgid "[Sergei Predvoditelev]: https://github.com/vjik"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/creating-custom-rules.md
+#, no-wrap
+msgid "[Scenarios]: extensions.md#scenarios"
+msgstr ""

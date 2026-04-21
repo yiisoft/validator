@@ -1,0 +1,86 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2026 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"PO-Revision-Date: 2026-04-21 14:32+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-stop-on-error.md
+#, no-wrap
+msgid "`StopOnError` - stop validation on the first error"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-stop-on-error.md
+msgid "This rule applies to a group of rules and allows you to stop the validation for the whole group immediately after an error occurs in any of the rules. This means that all rules following the rule that failed validation won't be run at all."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-stop-on-error.md
+msgid "This can be useful for performance-intensive validations, such as database queries or some complex calculations.  The order of rules within a group is crucial here - the \"lightweight\" rules need to be placed above the \"heavy\" ones:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-stop-on-error.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\Rule\\StopOnError;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = 2;\n"
+"$rule = new StopOnError([\n"
+"    new Length(min: 3), // \"Lightweight\" rule, will be run and won't pass the validation.\n"
+"    new MyHeavyRule(), // \"Heavy\" rule, won't be run at all because of the existing error.\n"
+"]);\n"
+"$result = (new Validator())->validate($data, $rule);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-stop-on-error.md
+msgid "When using with other rules and conditional validation, it behaves like a single unit. For example, with default settings it will not be skipped if the previous rule didn't pass the validation. To change this behavior, set `$skipOnError` to `true`. This allows to use it for limiting the list of errors per property to just the first one (in HTML forms, for example)."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-stop-on-error.md
+#, no-wrap
+msgid ""
+"$rules = [\n"
+"    'property1' => new SimpleRule1(), // Let's say there is an error.\n"
+"    // Then this rule is skipped completely with all its related rules because `skipOnError` is set to `true`. Useful\n"
+"    // when all rules within `StopOnError` are heavy.\n"
+"    'property2' => new StopOnError(\n"
+"        [\n"
+"            new HeavyRule1(), // Skipped.\n"
+"            new HeavyRule2(), // Skipped.\n"
+"        ],\n"
+"        skipOnError: true,\n"
+"    ),\n"
+"    // This rule is not skipped because `skipOnError` is `false` by default. Useful for forcing validation and\n"
+"    // limiting the errors.\n"
+"    'property3' => new StopOnError([\n"
+"        new SimpleRule2(), // Assuming there is another error.\n"
+"        new SimpleRule3(), // Skipped.\n"
+"    ]),\n"
+"    // Skipping of other intermediate rules depends on `skipOnError` option set in these intermediate rules.\n"
+"    'property4' => new SimpleRule4(), // Not skipped, because `skipOnError` is `false` by default.\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-stop-on-error.md
+msgid "Use grouping / ordering / `skipOnError` option to achieve the desired effect."
+msgstr ""
