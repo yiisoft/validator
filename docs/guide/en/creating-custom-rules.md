@@ -70,12 +70,12 @@ final class RgbColorHandler implements RuleHandlerInterface
         }
 
         if (!is_array($value) || array_keys($value) !== [0, 1, 2]) {
-            return (new Result())->addError($rule->getMessage());
+            return (new Result())->addError($rule->message);
         }
 
         foreach ($value as $item) {
             if (!is_int($item) || $item < 0 || $item > 255) {
-                return (new Result())->addError($rule->getMessage());
+                return (new Result())->addError($rule->message);
             }
         }
 
@@ -145,7 +145,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         }
 
         if (!is_array($value)) {
-            return (new Result())->addError($rule->getIncorrectInputMessage(), [
+            return (new Result())->addError($rule->incorrectInputTypeMessage, [
                 'property' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
@@ -154,7 +154,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         $itemsCount = 0;
         foreach (array_keys($value) as $index => $keyValue) {
             if ($keyValue !== $index) {
-                return (new Result())->addError($rule->getIncorrectInputRepresentationMessage(), [
+                return (new Result())->addError($rule->incorrectInputRepresentationMessage, [
                     'property' => $context->getTranslatedProperty(),
                 ]);
             }
@@ -163,7 +163,7 @@ final class RgbColorHandler implements RuleHandlerInterface
         }
 
         if ($itemsCount !== 3) {
-            return (new Result())->addError($rule->getIncorrectItemsCountMessage(), [
+            return (new Result())->addError($rule->incorrectItemsCountMessage, [
                 'property' => $context->getTranslatedProperty(),
                 'itemsCount' => $itemsCount,
             ]);
@@ -171,7 +171,7 @@ final class RgbColorHandler implements RuleHandlerInterface
 
         foreach ($value as $index => $item) {
             if (!is_int($item)) {
-                return (new Result())->addError($rule->getIncorrectItemTypeMessage(), [
+                return (new Result())->addError($rule->incorrectItemTypeMessage, [
                     'property' => $context->getTranslatedProperty(),
                     'position' => $index + 1,
                     'type' => get_debug_type($item),
@@ -179,7 +179,7 @@ final class RgbColorHandler implements RuleHandlerInterface
             }
 
             if ($item < 0 || $item > 255) {
-                return (new Result())->addError($rule->getIncorrectItemValueMessage(), [
+                return (new Result())->addError($rule->incorrectItemValueMessage, [
                     'property' => $context->getTranslatedProperty(),
                     'position' => $index + 1,
                     'value' => $value,
@@ -347,11 +347,11 @@ final class YamlHandler implements RuleHandlerInterface
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result 
     {  
         if (!$rule instanceof Yaml) {
-            throw new UnexpectedRuleException(RgbColor::class, $rule);
+            throw new UnexpectedRuleException(Yaml::class, $rule);
         }
-  
+
         if (!is_string($value)) {
-            return (new Result())->addError($rule->getMessage(), [
+            return (new Result())->addError($rule->incorrectInputMessage, [
                 'property' => $context->getTranslatedProperty(),
                 'type' => get_debug_type($value),
             ]);
@@ -360,13 +360,13 @@ final class YamlHandler implements RuleHandlerInterface
         try {
             $data = yaml_parse($value);
         } catch (Exception $e) {
-            return (new Result())->addError($rule->getMessage(), [
+            return (new Result())->addError($rule->message, [
                 'property' => $context->getTranslatedProperty(),
             ]);
         }
 
         if ($data === false) {
-            return (new Result())->addError($rule->getMessage(), [
+            return (new Result())->addError($rule->message, [
                 'property' => $context->getTranslatedProperty(),
             ]);
         }

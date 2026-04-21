@@ -30,7 +30,37 @@ $rules = [
 ];
 ```
 
-Validated data items are not limited to only "simple" values - `Each` can be used both within a `Nested` and contain
+## Stopping on first error
+
+By default, `Each` validates all items in the set and collects all errors. To stop validation at the first item
+that produces an error, use the `stopOnError` parameter:
+
+```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Integer;
+
+new Each(
+    rules: [new Integer(min: 0, max: 255)],
+    stopOnError: true,
+);
+```
+
+## Accessing the current key
+
+During validation of each item, the current iteration key is available through the validation context
+parameter `Each::PARAMETER_EACH_KEY`. This can be useful in `when` callbacks or custom rule handlers:
+
+```php
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\ValidationContext;
+
+// Inside a when callback or custom rule handler:
+$currentKey = $context->getParameter(Each::PARAMETER_EACH_KEY);
+```
+
+## Using with `Nested`
+
+Validated data items are not limited to only "simple" values — `Each` can be used both within a `Nested` and contain
 `Nested` rule covering one-to-many and many-to-many relations:
 
 ```php
@@ -48,10 +78,10 @@ $rule = new Nested([
                         'x' => [new Number(min: -10, max: 10)],
                         'y' => [new Number(min: -10, max: 10)],
                     ]),
-                    'rgb' => new Each([
+                    'rgb' => [
                         new Count(3),
-                        new Number(min: 0, max: 255),
-                    ]),
+                        new Each([new Number(min: 0, max: 255)]),
+                    ],
                 ]),
             ]),
         ]),

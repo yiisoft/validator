@@ -22,6 +22,117 @@ msgstr ""
 msgid "`Compare` - comparing validated value with target value"
 msgstr ""
 
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid ""
+"The `Compare` rule and its shortcut classes validate a value by comparing it "
+"with a target value or another property."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid "Available shortcut classes:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`Equal` (`==`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`NotEqual` (`!=`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`GreaterThan` (`>`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`GreaterThanOrEqual` (`>=`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`LessThan` (`<`)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`LessThanOrEqual` (`<=`)"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Comparison types"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid "The `type` parameter controls how values are compared:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`CompareType::NUMBER` — values are compared as numbers (default)."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid "`CompareType::STRING` — values are compared as strings, byte by byte."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-compare.md
+msgid ""
+"`CompareType::ORIGINAL` — values are compared as-is, without type casting. "
+"Required for `DateTime` objects."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Comparing with a target value"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\GreaterThanOrEqual;\n"
+"\n"
+"$rules = [\n"
+"    'age' => new GreaterThanOrEqual(18),\n"
+"];\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid "Comparing with another property"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-compare.md
+msgid ""
+"Use the `targetProperty` parameter to compare against another property in "
+"the same data set:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-compare.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Equal;\n"
+"\n"
+"$rules = [\n"
+"    'password_repeat' => new Equal(targetProperty: 'password'),\n"
+"];\n"
+msgstr ""
+
 #. type: Title ##
 #: guide/en/built-in-rules-compare.md
 #, no-wrap
@@ -57,8 +168,8 @@ msgstr ""
 #: guide/en/built-in-rules-compare.md
 #, no-wrap
 msgid ""
-"use DateTime;\n"
 "use DateInterval;\n"
+"use DateTime;\n"
 "use Yiisoft\\Validator\\Rule\\CompareType;\n"
 "use Yiisoft\\Validator\\Rule\\GreaterThan;\n"
 "use Yiisoft\\Validator\\Rule\\LessThan;\n"
@@ -74,7 +185,7 @@ msgid ""
 "            (new DateTime('now'))\n"
 "                ->add(DateInterval::createFromDateString('1 week')),\n"
 "            type: CompareType::ORIGINAL,\n"
-"        ),        \n"
+"        ),\n"
 "    ],\n"
 "];\n"
 msgstr ""

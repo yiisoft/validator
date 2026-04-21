@@ -48,7 +48,7 @@ msgstr ""
 msgid ""
 "use Yiisoft\\Validator\\Result;\n"
 "\n"
-"/** @var Result */\n"
+"/** @var Result $result */\n"
 "$result->isValid();\n"
 msgstr ""
 
@@ -102,7 +102,7 @@ msgstr ""
 msgid ""
 "use Yiisoft\\Validator\\Result;\n"
 "\n"
-"/** @var Result */\n"
+"/** @var Result $result */\n"
 "$result->getErrorMessages();\n"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgstr ""
 msgid ""
 "use Yiisoft\\Validator\\Result;\n"
 "\n"
-"/** @var Result */\n"
+"/** @var Result $result */\n"
 "$result->getErrorMessagesIndexedByProperty();\n"
 msgstr ""
 
@@ -288,7 +288,7 @@ msgstr ""
 #. type: Fenced code block (php)
 #: guide/en/result.md
 #, no-wrap
-msgid "$rule = new Each([new Number(min: 21)]),\n"
+msgid "$rule = new Each([new Number(min: 21)]);\n"
 msgstr ""
 
 #. type: Plain text
@@ -324,6 +324,47 @@ msgstr ""
 #. type: Title ###
 #: guide/en/result.md
 #, no-wrap
+msgid "First error messages indexed by property"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"To get only the first error message for each property (useful for displaying "
+"a single error per field), use:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result $result */\n"
+"$result->getFirstErrorMessagesIndexedByProperty();\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'name' => 'Value cannot be blank.',\n"
+"    'email' => 'This value is not a valid email address.',\n"
+"    '' => 'A custom error message.',\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"Note that unlike `getErrorMessagesIndexedByProperty()`, each value is a "
+"single string, not an array."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/result.md
+#, no-wrap
 msgid "Error messages indexed by path"
 msgstr ""
 
@@ -343,7 +384,7 @@ msgstr ""
 msgid ""
 "use Yiisoft\\Validator\\Result;\n"
 "\n"
-"/** @var Result */\n"
+"/** @var Result $result */\n"
 "$result->getErrorMessagesIndexedByPath();\n"
 msgstr ""
 
@@ -374,6 +415,48 @@ msgid ""
 "[\n"
 "    'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],\n"
 "];\n"
+msgstr ""
+
+#. type: Title ####
+#: guide/en/result.md
+#, no-wrap
+msgid "First error messages indexed by path"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"To get only the first error message for each path (useful for displaying a "
+"single error per field), use:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"/** @var Result $result */\n"
+"$result->getFirstErrorMessagesIndexedByPath();\n"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"[\n"
+"    'user.firstName' => 'Value cannot be blank.',\n"
+"    'user.lastName' => 'This value must contain at least 4 characters.',\n"
+"    'email' => 'This value is not a valid email address.',\n"
+"    '' => 'A custom error message.',\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"Note that unlike `getErrorMessagesIndexedByPath()`, each value is a single "
+"string, not an array."
 msgstr ""
 
 #. type: Title ####
@@ -482,7 +565,7 @@ msgstr ""
 msgid ""
 "use Yiisoft\\Validator\\Result;\n"
 "\n"
-"/** @var Result */\n"
+"/** @var Result $result */\n"
 "$result->getErrors();\n"
 msgstr ""
 
@@ -563,6 +646,80 @@ msgid ""
 "\n"
 "/** @var Result $result */\n"
 "$result->getPropertyErrors('email');\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/result.md
+#, no-wrap
+msgid "Adding errors"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"When writing custom rule handlers, errors are added to a `Result` object. "
+"There are three methods available, each with different post-processing "
+"behavior:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/result.md
+msgid "`addError()` — message is translated and formatted (default behavior)."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/result.md
+msgid ""
+"`addErrorWithFormatOnly()` — message is formatted (parameter substitution) "
+"but not translated."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/result.md
+msgid ""
+"`addErrorWithoutPostProcessing()` — message is used as-is, with no "
+"formatting or translation."
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"$result = new Result();\n"
+"$result->addError('Value must be no less than {min}.', ['min' => 7]);\n"
+"$result->addErrorWithFormatOnly('Already formatted: {value}.', ['value' => 42]);\n"
+"$result->addErrorWithoutPostProcessing('This message is used exactly as written.');\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/result.md
+#, no-wrap
+msgid "Merging results"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/result.md
+msgid ""
+"To merge other validation results into the current one, use the `add()` "
+"method:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/result.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Result;\n"
+"\n"
+"$result1 = new Result();\n"
+"$result1->addError('Error 1.');\n"
+"\n"
+"$result2 = new Result();\n"
+"$result2->addError('Error 2.');\n"
+"\n"
+"$result1->add($result2);\n"
+"$result1->getErrorMessages(); // ['Error 1.', 'Error 2.']\n"
 msgstr ""
 
 #. type: Link reference

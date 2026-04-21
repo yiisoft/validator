@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-08-09 15:52+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,6 +15,43 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#. type: Fenced code block (php)
+#: guide/en/conditional-validation.md guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\BooleanValue;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$data = [\n"
+"    'push' => [\n"
+"        'isEnabled' => true,\n"
+"        'content' => null,\n"
+"    ],\n"
+"];\n"
+"$rules = new Nested([\n"
+"    'push' => new Nested([\n"
+"        'isEnabled' => [new BooleanValue()],\n"
+"        'content' => [\n"
+"            new Required(\n"
+"                when: static function (mixed $value, ValidationContext $context): bool {\n"
+"                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');\n"
+"                },\n"
+"            ),\n"
+"        ],\n"
+"    ]),\n"
+"]);\n"
+"$result = (new Validator())->validate($data, $rules);\n"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
+msgstr ""
 
 #. type: Title ###
 #: guide/en/using-validator.md guide/en/built-in-rules-nested.md
@@ -578,6 +615,32 @@ msgstr ""
 #. type: Title ###
 #: guide/en/built-in-rules-nested.md
 #, no-wrap
+msgid "Conditional validation within nested structures"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid ""
+"When using `when` callbacks inside `Nested`, the validation context provides access to sibling properties — other\n"
+"properties at the same nesting level. Use `$context->getDataSet()->getPropertyValue()` to read them.\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid "For example, to require `content` only when `isEnabled` is `true`:"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-nested.md
+msgid ""
+"This works at any depth, including when combined with `Each`. For more "
+"details and examples, see the [Conditional validation] guide."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules-nested.md
+#, no-wrap
 msgid "Using keys containing separator / shortcut"
 msgstr ""
 
@@ -693,7 +756,7 @@ msgstr ""
 #. type: Link reference
 #: guide/en/built-in-rules-nested.md
 #, no-wrap
-msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
+msgid "[Conditional validation]: conditional-validation.md"
 msgstr ""
 
 #. type: Link reference

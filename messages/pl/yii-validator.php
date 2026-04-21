@@ -6,6 +6,9 @@ use Yiisoft\Validator\Rule\AnyRule;
 use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Compare;
 use Yiisoft\Validator\Rule\Count;
+use Yiisoft\Validator\Rule\Date\Date;
+use Yiisoft\Validator\Rule\Date\DateTime;
+use Yiisoft\Validator\Rule\Date\Time;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
@@ -40,6 +43,8 @@ use Yiisoft\Validator\Rule\Uuid;
 return [
     // Used in single rule
 
+    /** @see AnyRule */
+    'At least one of the inner rules must pass the validation.' => 'Co najmniej jedna z wewnętrznych reguł musi przejść walidację.',
     /** @see FilledAtLeast */
     'At least {min, number} {min, plural, one{property} other{properties}} from this list must be filled for {property}: {properties}.' =>
         'Co najmniej {min, number} {min, plural, one{właściwość} few{właściwości} many{właściwości} other{właściwości}} z tej listy musi być wypełniona dla {property}: {properties}.',

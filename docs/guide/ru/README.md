@@ -11,6 +11,7 @@
 
 - [Built-in rules](built-in-rules.md)
   - [Callback](built-in-rules-callback.md)
+  - [Compare](built-in-rules-compare.md)
   - [Composite](built-in-rules-composite.md)
   - [Each](built-in-rules-each.md)
   - [Nested](built-in-rules-nested.md)

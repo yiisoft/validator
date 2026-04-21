@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,10 +68,68 @@ msgid ""
 "];\n"
 msgstr ""
 
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Stopping on first error"
+msgstr ""
+
 #. type: Plain text
 #: guide/en/built-in-rules-each.md
 msgid ""
-"Validated data items are not limited to only \"simple\" values - `Each` can "
+"By default, `Each` validates all items in the set and collects all errors. "
+"To stop validation at the first item that produces an error, use the "
+"`stopOnError` parameter:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each(\n"
+"    rules: [new Integer(min: 0, max: 255)],\n"
+"    stopOnError: true,\n"
+");\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Accessing the current key"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"During validation of each item, the current iteration key is available "
+"through the validation context parameter `Each::PARAMETER_EACH_KEY`. This "
+"can be useful in `when` callbacks or custom rule handlers:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"// Inside a when callback or custom rule handler:\n"
+"$currentKey = $context->getParameter(Each::PARAMETER_EACH_KEY);\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Using with `Nested`"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"Validated data items are not limited to only \"simple\" values — `Each` can "
 "be used both within a `Nested` and contain `Nested` rule covering one-to-"
 "many and many-to-many relations:"
 msgstr ""
@@ -94,10 +152,10 @@ msgid ""
 "                        'x' => [new Number(min: -10, max: 10)],\n"
 "                        'y' => [new Number(min: -10, max: 10)],\n"
 "                    ]),\n"
-"                    'rgb' => new Each([\n"
+"                    'rgb' => [\n"
 "                        new Count(3),\n"
-"                        new Number(min: 0, max: 255),\n"
-"                    ]),\n"
+"                        new Each([new Number(min: 0, max: 255)]),\n"
+"                    ],\n"
 "                ]),\n"
 "            ]),\n"
 "        ]),\n"
