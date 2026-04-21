@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: 2025-04-06 12:34+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -64,6 +64,13 @@ msgstr ""
 #: guide/en/README.md
 msgid "[Callback](built-in-rules-callback.md)"
 msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+#, fuzzy
+#| msgid "[Each]: built-in-rules-each.md"
+msgid "[Compare](built-in-rules-compare.md)"
+msgstr "[Each]: built-in-rules-each.md"
 
 #. type: Bullet: '  - '
 #: guide/en/README.md

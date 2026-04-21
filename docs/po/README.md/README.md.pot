@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,6 +62,11 @@ msgstr ""
 #. type: Bullet: '  - '
 #: guide/en/README.md
 msgid "[Callback](built-in-rules-callback.md)"
+msgstr ""
+
+#. type: Bullet: '  - '
+#: guide/en/README.md
+msgid "[Compare](built-in-rules-compare.md)"
 msgstr ""
 
 #. type: Bullet: '  - '

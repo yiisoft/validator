@@ -11,9 +11,8 @@
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
+/** @var Result $result */
 $result->isValid();
-
 ```
 
 Его можно сузить до определенного свойства:
@@ -42,7 +41,7 @@ $result->isPropertyValid('name');
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
+/** @var Result $result */
 $result->getErrorMessages();
 ```
 
@@ -112,7 +111,7 @@ API-вызов `Result`:
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
+/** @var Result $result */
 $result->getErrorMessagesIndexedByProperty();
 ```
 
@@ -154,7 +153,7 @@ $result->getErrorMessagesIndexedByProperty();
 они используются с `Each`:
 
 ```php
-$rule = new Each([new Number(min: 21)]),
+$rule = new Each([new Number(min: 21)]);
 ```
 
 Если входные данные содержат нестроковые ключи для свойств верхнего уровня,
@@ -173,6 +172,31 @@ $rule = new Each([new Number(min: 21)]),
 ]
 ```
 
+### First error messages indexed by property
+
+To get only the first error message for each property (useful for displaying
+a single error per field), use:
+
+```php
+use Yiisoft\Validator\Result;
+
+/** @var Result $result */
+$result->getFirstErrorMessagesIndexedByProperty();
+```
+
+Пример результата:
+
+```php
+[
+    'name' => 'Value cannot be blank.',
+    'email' => 'This value is not a valid email address.',
+    '' => 'A custom error message.',
+];
+```
+
+Note that unlike `getErrorMessagesIndexedByProperty()`, each value is a
+single string, not an array.
+
 ### Сообщения об ошибках, сгруппированные по пути
 
 Вероятно, это самое продвинутое представление, предлагаемое встроенными
@@ -184,7 +208,7 @@ $rule = new Each([new Number(min: 21)]),
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
+/** @var Result $result */
 $result->getErrorMessagesIndexedByPath();
 ```
 
@@ -208,6 +232,32 @@ $result->getErrorMessagesIndexedByPath();
     'charts.0.points.0.coordinates.y' => ['Value must be no greater than 10.'],
 ];
 ```
+
+#### First error messages indexed by path
+
+To get only the first error message for each path (useful for displaying a
+single error per field), use:
+
+```php
+use Yiisoft\Validator\Result;
+
+/** @var Result $result */
+$result->getFirstErrorMessagesIndexedByPath();
+```
+
+Пример результата:
+
+```php
+[
+    'user.firstName' => 'Value cannot be blank.',
+    'user.lastName' => 'This value must contain at least 4 characters.',
+    'email' => 'This value is not a valid email address.',
+    '' => 'A custom error message.',
+];
+```
+
+Note that unlike `getErrorMessagesIndexedByPath()`, each value is a single
+string, not an array.
 
 #### Разрешение конфликтов специальных символов в именах свойств
 
@@ -276,7 +326,7 @@ $result->getPropertyErrorMessagesIndexedByPath('user');
 ```php
 use Yiisoft\Validator\Result;
 
-/** @var Result */
+/** @var Result $result */
 $result->getErrors();
 ```
 
@@ -316,13 +366,52 @@ $result->getErrors();
 ### Фильтрация по определенному свойству
 
 Список также может быть отфильтрован по конкретному свойству. Поддерживаются
-свойства только верхнего уровня.
+атрибуты только верхнего уровня.
 
 ```php
 use Yiisoft\Validator\Result;
 
 /** @var Result $result */
 $result->getPropertyErrors('email');
+```
+
+## Adding errors
+
+When writing custom rule handlers, errors are added to a `Result`
+object. There are three methods available, each with different
+post-processing behavior:
+
+- `addError()` — message is translated and formatted (default behavior).
+- `addErrorWithFormatOnly()` — message is formatted (parameter substitution)
+  but not translated.
+- `addErrorWithoutPostProcessing()` — message is used as-is, with no
+  formatting or translation.
+
+```php
+use Yiisoft\Validator\Result;
+
+$result = new Result();
+$result->addError('Value must be no less than {min}.', ['min' => 7]);
+$result->addErrorWithFormatOnly('Already formatted: {value}.', ['value' => 42]);
+$result->addErrorWithoutPostProcessing('This message is used exactly as written.');
+```
+
+## Merging results
+
+To merge other validation results into the current one, use the `add()`
+method:
+
+```php
+use Yiisoft\Validator\Result;
+
+$result1 = new Result();
+$result1->addError('Error 1.');
+
+$result2 = new Result();
+$result2->addError('Error 2.');
+
+$result1->add($result2);
+$result1->getErrorMessages(); // ['Error 1.', 'Error 2.']
 ```
 
 [Использование ключей, содержащих разделитель / сокращение]: built-in-rules-nested.md#using-keys-containing-separator--shortcut

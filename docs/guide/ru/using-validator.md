@@ -203,9 +203,10 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 #### Использование реализации метода интерфейса
 
-Передача правил через реализацию метода интерфейса имеет приоритет над
-атрибутами. Поэтому в случае одновременного использования, атрибуты будут
-игнорироваться без выбрасывания исключения.
+When an object implementing `RulesProviderInterface` is passed as the
+`$rules` argument (second argument of `validate()`), only the rules from
+`getRules()` are used. PHP attributes on the object are not parsed in this
+case.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -215,13 +216,13 @@ use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Будет тихо проигнорировано.
+    #[Length(min: 2)] // Ignored because the object is passed as the $rules argument.
     public string $name;
 
-    #[Number(min: 21)] // Будет тихо проигнорировано.
+    #[Number(min: 21)] // Ignored because the object is passed as the $rules argument.
     protected int $age;
-    
-    public function getRules() : iterable
+
+    public function getRules(): iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];
     }
@@ -234,10 +235,10 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 ### Передача правил через объект данных
 
-В этом случае правила передаются в дополнение к данным в одном и том же
-объекте.
-Поддерживается только реализация метода интерфейса. Обратите внимание, что
-аргумент `rules` имеет значение `null` при вызове метода `validate()`.
+In this way, rules are provided in addition to data in the same object. Both
+PHP attributes and `getRules()` method are supported — their rules are
+merged (attribute rules are applied first). Note that the `rules` argument
+is `null` in the `validate()` method call.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -247,12 +248,14 @@ use Yiisoft\Validator\Validator;
 
 final class Person implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Не поддерживается для использования с объектами данных. Будет тихо проигнорировано.
-    public string $name;
+    public function __construct(
+        #[Length(min: 2)] // Merged with rules from getRules(). Attribute rules are applied first.
+        public string $name = '',
+        #[Number(min: 21)] // Merged with rules from getRules(). Attribute rules are applied first.
+        protected int $age = 0,
+    ) {
+    }
 
-    #[Number(min: 21)] // Не поддерживается для использования с объектами данных. Будет тихо проигнорировано.
-    protected int $age;
-    
     public function getRules(): iterable
     {
         return ['name' => new Length(min: 2), 'age' => new Number(min: 21)];

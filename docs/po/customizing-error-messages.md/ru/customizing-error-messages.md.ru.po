@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2025-04-06 07:24+0000\n"
+"POT-Creation-Date: 2026-03-21 23:19+0000\n"
 "PO-Revision-Date: 2025-04-19 07:44+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -144,8 +144,15 @@ msgstr "Перевод имен свойств"
 
 #. type: Plain text
 #: guide/en/customizing-error-messages.md
-msgid "Almost all error templates have support for a `{property}` placeholder which is substituted with an actual property name that was set during rules configuration. By default, a property name is formatted as is. It can be acceptable for English language (for example, `currentPassword is required.`), but when using translations for error messages, it's better to provide an additional property translation."
+#, fuzzy
+#| msgid "Almost all error templates have support for a `{property}` placeholder which is substituted with an actual property name that was set during rules configuration. By default, a property name is formatted as is. It can be acceptable for English language (for example, `currentPassword is required.`), but when using translations for error messages, it's better to provide an additional property translation."
+msgid "Almost all error templates have support for `{property}` and `{Property}` placeholders which are substituted with an actual property name that was set during rules configuration. The `{Property}` variant capitalizes the first letter. By default, a property name is formatted as is. It can be acceptable for English language (for example, `currentPassword is required.`), but when using translations for error messages, it's better to provide an additional property translation."
 msgstr "Почти все шаблоны ошибок поддерживают плейсхолдер `{property}`, который заменяется фактическим именем свойства, заданным во время настройки правил. По умолчанию имя свойства форматируется без изменений. Это может быть приемлемо для английского языка (например, `currentPassword is required.`), но при использовании перевода сообщений об ошибках, лучше предоставить дополнительный перевод свойства."
+
+#. type: Plain text
+#: guide/en/customizing-error-messages.md
+msgid "The simplest approach for properties defined via PHP attributes is to use the `Label` attribute directly on the property. See [Configuring rules via PHP attributes] for details."
+msgstr ""
 
 #. type: Plain text
 #: guide/en/customizing-error-messages.md
@@ -288,6 +295,12 @@ msgstr ""
 #, no-wrap
 msgid "[PR]: https://github.com/yiisoft/validator/pulls"
 msgstr "[PR]: https://github.com/yiisoft/validator/pulls"
+
+#. type: Link reference
+#: guide/en/customizing-error-messages.md guide/en/built-in-rules-nested.md
+#, no-wrap
+msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
+msgstr "[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md"
 
 #. type: Link reference
 #: guide/en/customizing-error-messages.md
