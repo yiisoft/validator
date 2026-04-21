@@ -59,10 +59,10 @@ final class CoordinatesRuleSet extends Composite
     public function getRules(): array
     {
         return [
-            new Nested(
+            new Nested([
                 'latitude' => new Number(min: -90, max: 90),
                 'longitude' => new Number(min: -90, max: 90),
-            ),
+            ]),
         ];
     }
 }
