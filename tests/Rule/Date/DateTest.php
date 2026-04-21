@@ -77,7 +77,7 @@ final class DateTest extends RuleTestCase
             'min' => [
                 '2024-03-29',
                 new Date(format: 'yyyy-MM-dd', min: '2025-01-01'),
-                ['' => ['Value must be no early than 1/1/25.']],
+                ['' => ['Value must be no early than 2025-01-01.']],
             ],
             'min-custom-message' => [
                 ['a' => '2024-03-29'],
@@ -88,12 +88,12 @@ final class DateTest extends RuleTestCase
                         tooEarlyMessage: 'Prop — {property}. Date — {value}. Min — {limit}.',
                     ),
                 ],
-                ['a' => ['Prop — a. Date — 3/29/24. Min — 1/1/25.']],
+                ['a' => ['Prop — a. Date — 2024-03-29. Min — 2025-01-01.']],
             ],
             'max' => [
                 '2024-03-29',
                 new Date(format: 'php:Y-m-d', max: '2024-01-01'),
-                ['' => ['Value must be no late than 1/1/24.']],
+                ['' => ['Value must be no late than 2024-01-01.']],
             ],
             'max-custom-message' => [
                 ['a' => '2024-03-29'],
@@ -104,18 +104,18 @@ final class DateTest extends RuleTestCase
                         tooLateMessage: 'Prop — {property}. Date — {value}. Max — {limit}.',
                     ),
                 ],
-                ['a' => ['Prop — a. Date — 3/29/24. Max — 1/1/24.']],
+                ['a' => ['Prop — a. Date — 2024-03-29. Max — 2024-01-01.']],
             ],
             'rule-and-handler-locales' => [
                 '2024-03-29',
                 new Date(format: 'php:Y-m-d', locale: 'ru', max: '2024-01-01'),
-                ['' => ['Value must be no late than 01.01.2024.']],
+                ['' => ['Value must be no late than 2024-01-01.']],
                 [DateHandler::class => new DateHandler(locale: 'en')],
             ],
             'handler-locale' => [
                 '2024-03-29',
                 new Date(format: 'php:Y-m-d', max: '2024-01-01'),
-                ['' => ['Value must be no late than 01.01.2024.']],
+                ['' => ['Value must be no late than 2024-01-01.']],
                 [DateHandler::class => new DateHandler(locale: 'ru')],
             ],
             'timestamp' => [
@@ -125,8 +125,8 @@ final class DateTest extends RuleTestCase
             ],
             'without-message-date-type' => [
                 '29*03*2024',
-                new Date(format: 'php:d*m*Y', max: '11*11*2023', ),
-                ['' => ['Value must be no late than 11/11/23.']],
+                new Date(format: 'php:d*m*Y', max: '11*11*2023'),
+                ['' => ['Value must be no late than 11*11*2023.']],
                 [DateHandler::class => new DateHandler(messageDateType: null)],
             ],
             'rule-message-format' => [
@@ -152,6 +152,24 @@ final class DateTest extends RuleTestCase
                 new Date(max: '10.11.2002', locale: 'ru'),
                 ['' => ['Value must be no late than 10.11.2002.']],
                 [DateHandler::class => new DateHandler(locale: 'en')],
+            ],
+            'format-used-for-message' => [
+                '01.01.2100',
+                new Date(
+                    format: 'php:d.m.Y',
+                    min: '19.11.2013',
+                    max: '31.12.2099',
+                ),
+                ['' => ['Value must be no late than 31.12.2099.']],
+            ],
+            'format-overridden-by-message-format' => [
+                '01.01.2100',
+                new Date(
+                    format: 'php:d.m.Y',
+                    max: '31.12.2099',
+                    messageFormat: 'php:Y/m/d',
+                ),
+                ['' => ['Value must be no late than 2099/12/31.']],
             ],
         ];
     }
