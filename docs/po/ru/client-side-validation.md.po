@@ -31,7 +31,7 @@ msgstr "В отличие от Yii2, этот пакет не обеспечив
 #. type: Plain text
 #: guide/en/client-side-validation.md
 msgid "However, there is a possibility to export rules' options as an array for passing to the client side using `RulesDumper` class:"
-msgstr "Однако существует возможность экспортировать параметры правил в виде массива для передачи на сторону клиента с помощью класса `RulesDumper`:"
+msgstr "Однако1 существует возможность экспортировать параметры правил в виде массива для передачи на сторону клиента с помощью класса `RulesDumper`:"
 
 #. type: Bullet: '- '
 #: guide/en/client-side-validation.md
