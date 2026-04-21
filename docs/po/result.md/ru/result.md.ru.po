@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2026-03-21 23:19+0000\n"
+"POT-Creation-Date: 2026-03-24 11:57+0000\n"
 "PO-Revision-Date: 2025-09-03 15:50+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -25,7 +25,9 @@ msgstr "Результат"
 
 #. type: Plain text
 #: guide/en/result.md
-msgid "The validation result is an object containing of errors occurred during validation."
+#, fuzzy
+#| msgid "The validation result is an object containing of errors occurred during validation."
+msgid "The validation result is an object containing errors that occurred during validation."
 msgstr "Результатом валидации является объект, содержащий ошибки, возникшие во время проверки."
 
 #. type: Title ##

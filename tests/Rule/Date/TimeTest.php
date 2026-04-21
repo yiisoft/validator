@@ -57,40 +57,40 @@ final class TimeTest extends RuleTestCase
             'min' => [
                 '15:30',
                 new Time(format: 'HH:mm', min: '15:40'),
-                ['' => ['Value must be no early than 3:40 PM.']],
+                ['' => ['Value must be no earlier than 3:40 PM.']],
             ],
             'max' => [
                 '15:30',
                 new Time(format: 'php:H:i', max: '12:00'),
-                ['' => ['Value must be no late than 12:00 PM.']],
+                ['' => ['Value must be no later than 12:00 PM.']],
             ],
             'timestamp' => [
                 1711705158,
                 new Time(format: 'php:d.m.Y, H:i:s', min: 1711705200),
-                ['' => ['Value must be no early than 9:40 AM.']],
+                ['' => ['Value must be no earlier than 9:40 AM.']],
             ],
             'without-message-time-type' => [
                 '13*30',
                 new Time(format: 'php:H*i', max: '11*30'),
-                ['' => ['Value must be no late than 11:30 AM.']],
+                ['' => ['Value must be no later than 11:30 AM.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: null)],
             ],
             'rule-message-format' => [
                 '13*30',
                 new Time(format: 'php:H*i', max: '11*30', messageFormat: 'php:H-i'),
-                ['' => ['Value must be no late than 11-30.']],
+                ['' => ['Value must be no later than 11-30.']],
                 [TimeHandler::class => new TimeHandler(messageFormat: 'php:H_i')],
             ],
             'handler-message-type' => [
                 '13*30',
                 new Time(format: 'php:H*i', max: '11*30', timeType: IntlDateFormatter::SHORT),
-                ['' => ['Value must be no late than 11:30:00 AM Coordinated Universal Time.']],
+                ['' => ['Value must be no later than 11:30:00 AM Coordinated Universal Time.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: IntlDateFormatter::FULL)],
             ],
             'rule-message-type-override-handler' => [
                 '13*30',
                 new Time(format: 'php:H*i', max: '11*30', messageTimeType: IntlDateFormatter::SHORT),
-                ['' => ['Value must be no late than 11:30 AM.']],
+                ['' => ['Value must be no later than 11:30 AM.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: IntlDateFormatter::FULL)],
             ],
         ];
