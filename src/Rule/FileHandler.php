@@ -17,7 +17,9 @@ use function basename;
 use function implode;
 use function in_array;
 use function is_file;
+use function is_readable;
 use function is_string;
+use function mime_content_type;
 use function pathinfo;
 use function str_contains;
 use function str_ends_with;
@@ -26,6 +28,8 @@ use function str_starts_with;
 use function strtolower;
 use function function_exists;
 use function is_int;
+use function restore_error_handler;
+use function set_error_handler;
 
 use const PATHINFO_EXTENSION;
 use const UPLOAD_ERR_NO_FILE;
@@ -302,16 +306,30 @@ final class FileHandler implements RuleHandlerInterface
     private function detectMimeType(array $file): ?string
     {
         if ($file['path'] !== null && is_file($file['path'])) {
-            if (function_exists('mime_content_type')) {
-                $mimeType = mime_content_type($file['path']);
-            } else {
+            if (!is_readable($file['path'])) {
                 return null;
             }
 
-            return is_string($mimeType) ? $mimeType : null;
+            if (!function_exists('mime_content_type')) {
+                return null;
+            }
+
+            $mimeType = $this->detectMimeTypeFromPath($file['path']);
+            return $mimeType === false ? null : $mimeType;
         }
 
         return $file['clientMediaType'];
+    }
+
+    private function detectMimeTypeFromPath(string $path): string|false
+    {
+        set_error_handler(static fn(int $severity, string $message): bool => true);
+
+        try {
+            return mime_content_type($path);
+        } finally {
+            restore_error_handler();
+        }
     }
 
     private function getUploadedFilePath(UploadedFileInterface $value): ?string

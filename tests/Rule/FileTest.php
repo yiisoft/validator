@@ -21,10 +21,19 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Validator;
 
+use function chmod;
+use function file_put_contents;
 use function fopen;
 use function fwrite;
+use function is_readable;
 use function rewind;
+use function restore_error_handler;
+use function set_error_handler;
+use function sys_get_temp_dir;
+use function tempnam;
+use function unlink;
 
 use const UPLOAD_ERR_CANT_WRITE;
 use const UPLOAD_ERR_NO_FILE;
@@ -433,6 +442,40 @@ final class FileTest extends RuleTestCase
     {
         $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new File(), new File(when: $when));
+    }
+
+    public function testUnreadableFileMimeValidationDoesNotEmitWarning(): void
+    {
+        $path = tempnam(sys_get_temp_dir(), 'yii-validator-file-');
+        $this->assertIsString($path);
+        file_put_contents($path, "Unreadable notes\n");
+        chmod($path, 0000);
+
+        if (is_readable($path)) {
+            chmod($path, 0644);
+            unlink($path);
+            $this->markTestSkipped('The current environment cannot create an unreadable file.');
+        }
+
+        $warnings = [];
+        set_error_handler(static function (int $severity, string $message) use (&$warnings): bool {
+            $warnings[] = $message;
+            return true;
+        });
+
+        try {
+            $result = (new Validator())->validate($path, new File(mimeTypes: ['text/plain']));
+        } finally {
+            restore_error_handler();
+            chmod($path, 0644);
+            unlink($path);
+        }
+
+        $this->assertSame([], $warnings);
+        $this->assertSame(
+            ['' => ['Only files with these MIME types are allowed: text/plain.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
     }
 
     protected function getDifferentRuleInHandlerItems(): array
