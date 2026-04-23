@@ -67,9 +67,12 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * as an array or as a comma / space separated string. Wildcards like `image/*` are supported. For in-memory
      * stream uploads without a real file path, MIME validation falls back to client-provided metadata. If
      * `mime_content_type()` is unavailable, MIME checks for filesystem-backed files will fail validation.
-     * @param int|null $size Expected exact size of the validated file in bytes.
-     * @param int|null $minSize Expected minimum size of the validated file in bytes.
-     * @param int|null $maxSize Expected maximum size of the validated file in bytes.
+     * @param int|null $size Expected exact size of the validated file in bytes. Validation fails if size cannot be
+     * determined.
+     * @param int|null $minSize Expected minimum size of the validated file in bytes. Validation fails if size cannot
+     * be determined.
+     * @param int|null $maxSize Expected maximum size of the validated file in bytes. Validation fails if size cannot
+     * be determined.
      * @param string $message A message used when the validated value is not a valid file.
      *
      * You may use the following placeholders in the message:
@@ -123,6 +126,13 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * - `{property}`: the translated label of the property being validated.
      * - `{file}`: the validated file name when it is available.
      * - `{limit}`: expected maximum size in bytes.
+     * @param string $unableToDetermineSizeMessage A message used when file size constraints are configured, but the
+     * file size can't be determined.
+     *
+     * You may use the following placeholders in the message:
+     *
+     * - `{property}`: the translated label of the property being validated.
+     * - `{file}`: the validated file name when it is available.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty.
      * See {@see SkipOnEmptyInterface}.
      * @param bool $skipOnError Whether to skip this rule if any of the previous rules gave an error.
@@ -148,6 +158,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         private string $notExactSizeMessage = 'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
         private string $tooSmallMessage = 'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
         private string $tooBigMessage = 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        private string $unableToDetermineSizeMessage = 'The size of {property} cannot be determined.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,
@@ -328,6 +339,18 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         return $this->tooBigMessage;
     }
 
+    /**
+     * Get error message used when the file size cannot be determined for configured size constraints.
+     *
+     * @return string Error message.
+     *
+     * @see $unableToDetermineSizeMessage
+     */
+    public function getUnableToDetermineSizeMessage(): string
+    {
+        return $this->unableToDetermineSizeMessage;
+    }
+
     public function getHandler(): string
     {
         return FileHandler::class;
@@ -371,6 +394,10 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
             ],
             'tooBigMessage' => [
                 'template' => $this->tooBigMessage,
+                'parameters' => [],
+            ],
+            'unableToDetermineSizeMessage' => [
+                'template' => $this->unableToDetermineSizeMessage,
                 'parameters' => [],
             ],
             'skipOnEmpty' => $this->getSkipOnEmptyOption(),

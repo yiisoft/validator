@@ -264,6 +264,13 @@ final class FileHandler implements RuleHandlerInterface
     {
         $size = $file['size'];
         if ($size === null) {
+            if ($rule->getSize() !== null || $rule->getMinSize() !== null || $rule->getMaxSize() !== null) {
+                $result->addError(
+                    $rule->getUnableToDetermineSizeMessage(),
+                    $this->getParameters($context, $file),
+                );
+            }
+
             return;
         }
 

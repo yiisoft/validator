@@ -145,6 +145,10 @@ final class FileTest extends RuleTestCase
                         'template' => 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
                         'parameters' => [],
                     ],
+                    'unableToDetermineSizeMessage' => [
+                        'template' => 'The size of {property} cannot be determined.',
+                        'parameters' => [],
+                    ],
                     'skipOnEmpty' => false,
                     'skipOnError' => false,
                 ],
@@ -162,6 +166,7 @@ final class FileTest extends RuleTestCase
                     notExactSizeMessage: 'Custom exact size.',
                     tooSmallMessage: 'Custom too small.',
                     tooBigMessage: 'Custom too big.',
+                    unableToDetermineSizeMessage: 'Custom unknown size.',
                     skipOnEmpty: true,
                     skipOnError: true,
                 ),
@@ -201,6 +206,10 @@ final class FileTest extends RuleTestCase
                     ],
                     'tooBigMessage' => [
                         'template' => 'Custom too big.',
+                        'parameters' => [],
+                    ],
+                    'unableToDetermineSizeMessage' => [
+                        'template' => 'Custom unknown size.',
                         'parameters' => [],
                     ],
                     'skipOnEmpty' => true,
@@ -244,10 +253,6 @@ final class FileTest extends RuleTestCase
             'uploaded file from stream with unknown size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
                 new File(extensions: 'txt', mimeTypes: 'text/plain'),
-            ],
-            'uploaded file from stream with unknown size and size rule' => [
-                self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22),
             ],
             'mime wildcard' => [self::PNG_FILE, new File(mimeTypes: ['image/*'])],
             'min size boundary' => [self::TEXT_FILE, new File(minSize: 22)],
@@ -337,6 +342,21 @@ final class FileTest extends RuleTestCase
                 self::JPG_FILE,
                 new File(maxSize: 920),
                 ['' => ['The size of value cannot be larger than 920 bytes.']],
+            ],
+            'stream upload unknown exact size' => [
+                self::createStreamUpload('resume.txt', 'text/plain', null),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22),
+                ['' => ['The size of value cannot be determined.']],
+            ],
+            'stream upload unknown minimum size' => [
+                self::createStreamUpload('resume.txt', 'text/plain', null),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', minSize: 1),
+                ['' => ['The size of value cannot be determined.']],
+            ],
+            'stream upload unknown maximum size' => [
+                self::createStreamUpload('resume.txt', 'text/plain', null),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', maxSize: 100),
+                ['' => ['The size of value cannot be determined.']],
             ],
             'stream upload wrong extension' => [
                 self::createStreamUpload('resume.txt', 'text/plain'),
