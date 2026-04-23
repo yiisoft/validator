@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Rule\Image;
 
 use Psr\Http\Message\UploadedFileInterface;
+use RuntimeException;
+use SplFileInfo;
 use Yiisoft\Validator\Exception\UnexpectedRuleException;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\RuleHandlerInterface;
@@ -152,8 +154,21 @@ final class ImageHandler implements RuleHandlerInterface
     private function getFilePath(mixed $value): ?string
     {
         if ($value instanceof UploadedFileInterface) {
-            $value = $value->getError() === UPLOAD_ERR_OK ? $value->getStream()->getMetadata('uri') : null;
+            if ($value->getError() !== UPLOAD_ERR_OK) {
+                return null;
+            }
+
+            try {
+                $value = $value->getStream()->getMetadata('uri');
+            } catch (RuntimeException) {
+                return null;
+            }
         }
+
+        if ($value instanceof SplFileInfo) {
+            $value = $value->getPathname();
+        }
+
         return is_string($value) ? $value : null;
     }
 

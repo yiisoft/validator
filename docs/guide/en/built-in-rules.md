@@ -57,6 +57,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### File rules
 
+- [File](../../../src/Rule/File.php)
 - [Image](../../../src/Rule/Image/Image.php)
 
 ### Date rules

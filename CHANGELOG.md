@@ -5,6 +5,7 @@
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 - Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
 - Chg #795: Update Polish translations (@rbrzezinski)
+- Enh #591: Add `File` validator, add `SplFileInfo` support to `Image` validator (@samdark)
 
 ## 2.5.1 December 12, 2025
 
