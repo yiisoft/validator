@@ -5,7 +5,7 @@
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 - Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
 - Chg #795: Update Polish translations (@rbrzezinski)
-- Enh #798: Add `SplFileInfo` support to `Image` validator (@samdark)
+- New #798: Add `SplFileInfo` value support to `Image` validator (@samdark)
 - Bug #798: Fix `Image` validator when unable to read from stream (@samdark)
 
 ## 2.5.1 December 12, 2025
