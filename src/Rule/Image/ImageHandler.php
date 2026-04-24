@@ -166,7 +166,7 @@ final class ImageHandler implements RuleHandlerInterface
         }
 
         if ($value instanceof SplFileInfo) {
-            $value = $value->getPathname();
+            return $value->getPathname();
         }
 
         return is_string($value) ? $value : null;
