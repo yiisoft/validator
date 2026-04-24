@@ -193,7 +193,7 @@ final class PersonRulesProvider
     public string $name;
 
     #[Number(min: 21)]
-    protected int $age;
+    public int $age;
 }
 
 $data = ['name' => 'John', 'age' => 18];
@@ -220,7 +220,7 @@ final class PersonRulesProvider implements RulesProviderInterface
     public string $name;
 
     #[Number(min: 21)] // Ignored because the object is passed as the $rules argument.
-    protected int $age;
+    public int $age;
 
     public function getRules(): iterable
     {
@@ -252,7 +252,7 @@ final class Person implements RulesProviderInterface
         #[Length(min: 2)] // Merged with rules from getRules(). Attribute rules are applied first.
         public string $name = '',
         #[Number(min: 21)] // Merged with rules from getRules(). Attribute rules are applied first.
-        protected int $age = 0,
+        public int $age = 0,
     ) {
     }
 
