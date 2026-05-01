@@ -50,14 +50,16 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     use WhenTrait;
 
     /**
-     * @var list<string>|null
+     * @var string[]|null
+     * @psalm-var list<string>|null
      */
-    private ?array $extensions;
+    public readonly ?array $extensions;
 
     /**
-     * @var list<string>|null
+     * @var string[]|null
+     * @psalm-var list<string>|null
      */
-    private ?array $mimeTypes;
+    public readonly ?array $mimeTypes;
 
     /**
      * @param array|string|null $extensions Allowed file extensions without a leading dot. Values are case-insensitive
@@ -78,12 +80,14 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * @param string $uploadFailedMessage A message used when uploaded file contains an upload error.
      *
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * - `{error}`: the upload error code.
      * @param string $uploadRequiredMessage A message used when no file was provided.
@@ -91,11 +95,13 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * @param string $wrongExtensionMessage A message used when the file extension is not allowed.
      *
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * - `{extensions}`: the list of allowed extensions.
      * @param string $wrongMimeTypeMessage A message used when the file MIME type is not allowed.
@@ -103,6 +109,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * - `{mimeTypes}`: the list of allowed MIME types.
      * @param string $notExactSizeMessage A message used when the file size doesn't exactly equal {@see $size}.
@@ -110,6 +117,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * - `{exactly}`: expected exact size in bytes.
      * @param string $tooSmallMessage A message used when the file size is less than {@see $minSize}.
@@ -117,6 +125,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * - `{limit}`: expected minimum size in bytes.
      * @param string $tooBigMessage A message used when the file size is greater than {@see $maxSize}.
@@ -124,6 +133,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * - `{limit}`: expected maximum size in bytes.
      * @param string $unableToDetermineSizeMessage A message used when file size constraints are configured, but the
@@ -132,6 +142,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * You may use the following placeholders in the message:
      *
      * - `{property}`: the translated label of the property being validated.
+     * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
      * @param bool|callable|null $skipOnEmpty Whether to skip this rule if the validated value is empty.
      * See {@see SkipOnEmptyInterface}.
@@ -147,18 +158,18 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     public function __construct(
         array|string|null $extensions = null,
         array|string|null $mimeTypes = null,
-        private ?int $size = null,
-        private ?int $minSize = null,
-        private ?int $maxSize = null,
-        private string $message = '{Property} must be a file.',
-        private string $uploadFailedMessage = 'Failed to upload {property}. Error code: {error, number}.',
-        private string $uploadRequiredMessage = 'Please upload a file.',
-        private string $wrongExtensionMessage = 'Only files with these extensions are allowed: {extensions}.',
-        private string $wrongMimeTypeMessage = 'Only files with these MIME types are allowed: {mimeTypes}.',
-        private string $notExactSizeMessage = 'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
-        private string $tooSmallMessage = 'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
-        private string $tooBigMessage = 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
-        private string $unableToDetermineSizeMessage = 'The size of {property} cannot be determined.',
+        public readonly ?int $size = null,
+        public readonly ?int $minSize = null,
+        public readonly ?int $maxSize = null,
+        public readonly string $message = '{Property} must be a file.',
+        public readonly string $uploadFailedMessage = 'Failed to upload {property}. Error code: {error, number}.',
+        public readonly string $uploadRequiredMessage = 'Please upload a file.',
+        public readonly string $wrongExtensionMessage = 'Only files with these extensions are allowed: {extensions}.',
+        public readonly string $wrongMimeTypeMessage = 'Only files with these MIME types are allowed: {mimeTypes}.',
+        public readonly string $notExactSizeMessage = 'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
+        public readonly string $tooSmallMessage = 'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        public readonly string $tooBigMessage = 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        public readonly string $unableToDetermineSizeMessage = 'The size of {property} cannot be determined.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,
@@ -408,7 +419,8 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     /**
      * @psalm-param list<string>|string|null $value
      *
-     * @return list<string>|null
+     * @return string[]|null
+     * @psalm-return list<string>|null
      */
     private function normalizeList(array|string|null $value): ?array
     {
