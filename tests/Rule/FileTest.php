@@ -7,6 +7,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 use GuzzleHttp\Psr7\UploadedFile;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use ReflectionException;
 use SplFileInfo;
 use stdClass;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
@@ -171,8 +172,8 @@ final class FileTest extends RuleTestCase
                 new File(
                     extensions: '  JPG, jpg  , png ',
                     mimeTypes: [' IMAGE/JPEG ', 'text/plain', 'TEXT/PLAIN'],
-                    trustClientMediaType: true,
                     size: 921,
+                    trustClientMediaType: true,
                     message: 'Custom file message.',
                     uploadFailedMessage: 'Custom upload failed.',
                     uploadRequiredMessage: 'Custom upload required.',
@@ -256,15 +257,15 @@ final class FileTest extends RuleTestCase
             ],
             'uploaded file from stream with client metadata' => [
                 self::createStreamUpload('resume.txt', 'text/plain'),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22, trustClientMediaType: true),
             ],
             'uploaded file from stream with uppercase client metadata' => [
                 self::createStreamUpload('resume.txt', 'TEXT/PLAIN'),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22, trustClientMediaType: true),
             ],
             'uploaded file from php stream uri without filename' => [
-                self::createStreamUpload(null, 'text/plain', 22),
-                new File(mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
+                self::createStreamUpload(null, 'text/plain'),
+                new File(mimeTypes: 'text/plain', size: 22, trustClientMediaType: true),
             ],
             'uploaded file from stream with unknown size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
@@ -370,17 +371,17 @@ final class FileTest extends RuleTestCase
             ],
             'stream upload unknown exact size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22, trustClientMediaType: true),
                 ['' => ['The size of value cannot be determined.']],
             ],
             'stream upload unknown minimum size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, minSize: 1),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', minSize: 1, trustClientMediaType: true),
                 ['' => ['The size of value cannot be determined.']],
             ],
             'stream upload unknown maximum size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, maxSize: 100),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', maxSize: 100, trustClientMediaType: true),
                 ['' => ['The size of value cannot be determined.']],
             ],
             'stream upload client media type is not trusted by default' => [
@@ -465,6 +466,9 @@ final class FileTest extends RuleTestCase
         $this->testWhenInternal(new File(), new File(when: $when));
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function testUnreadableFileMimeValidationDoesNotEmitWarning(): void
     {
         $path = tempnam(sys_get_temp_dir(), 'yii-validator-file-');

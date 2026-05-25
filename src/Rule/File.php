@@ -52,16 +52,20 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     use WhenTrait;
 
     /**
+     * Allowed file extensions without a leading dot.
+     *
      * @var string[]|null
      * @psalm-var list<string>|null
      */
-    public readonly ?array $extensions;
+    private readonly ?array $extensions;
 
     /**
+     * Allowed MIME types.
+     *
      * @var string[]|null
      * @psalm-var list<string>|null
      */
-    public readonly ?array $mimeTypes;
+    private readonly ?array $mimeTypes;
 
     /**
      * @param array|string|null $extensions Allowed file extensions without a leading dot. Values are case-insensitive
@@ -162,19 +166,19 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     public function __construct(
         array|string|null $extensions = null,
         array|string|null $mimeTypes = null,
-        public readonly ?int $size = null,
-        public readonly ?int $minSize = null,
-        public readonly ?int $maxSize = null,
-        public readonly bool $trustClientMediaType = false,
-        public readonly string $message = '{Property} must be a file.',
-        public readonly string $uploadFailedMessage = 'Failed to upload {property}. Error code: {error, number}.',
-        public readonly string $uploadRequiredMessage = 'Please upload a file.',
-        public readonly string $wrongExtensionMessage = 'Only files with these extensions are allowed: {extensions}.',
-        public readonly string $wrongMimeTypeMessage = 'Only files with these MIME types are allowed: {mimeTypes}.',
-        public readonly string $notExactSizeMessage = 'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
-        public readonly string $tooSmallMessage = 'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
-        public readonly string $tooBigMessage = 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
-        public readonly string $unableToDetermineSizeMessage = 'The size of {property} cannot be determined.',
+        private ?int $size = null,
+        private ?int $minSize = null,
+        private ?int $maxSize = null,
+        private bool $trustClientMediaType = false,
+        private string $message = '{Property} must be a file.',
+        private string $uploadFailedMessage = 'Failed to upload {property}. Error code: {error, number}.',
+        private string $uploadRequiredMessage = 'Please upload a file.',
+        private string $wrongExtensionMessage = 'Only files with these extensions are allowed: {extensions}.',
+        private string $wrongMimeTypeMessage = 'Only files with these MIME types are allowed: {mimeTypes}.',
+        private string $notExactSizeMessage = 'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
+        private string $tooSmallMessage = 'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        private string $tooBigMessage = 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        private string $unableToDetermineSizeMessage = 'The size of {property} cannot be determined.',
         bool|callable|null $skipOnEmpty = null,
         private bool $skipOnError = false,
         private ?Closure $when = null,
@@ -461,7 +465,8 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         }
 
         if (is_string($value)) {
-            $value = preg_split('/[\s,]+/', $value, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            $items = preg_split('/[\s,]+/', $value, -1, PREG_SPLIT_NO_EMPTY);
+            $value = $items === false ? [] : $items;
         }
 
         $value = array_values(
