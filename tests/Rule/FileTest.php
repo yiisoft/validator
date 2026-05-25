@@ -123,6 +123,7 @@ final class FileTest extends RuleTestCase
                 [
                     'extensions' => null,
                     'mimeTypes' => null,
+                    'trustClientMediaType' => false,
                     'size' => null,
                     'minSize' => null,
                     'maxSize' => null,
@@ -170,6 +171,7 @@ final class FileTest extends RuleTestCase
                 new File(
                     extensions: '  JPG, jpg  , png ',
                     mimeTypes: [' IMAGE/JPEG ', 'text/plain', 'TEXT/PLAIN'],
+                    trustClientMediaType: true,
                     size: 921,
                     message: 'Custom file message.',
                     uploadFailedMessage: 'Custom upload failed.',
@@ -186,6 +188,7 @@ final class FileTest extends RuleTestCase
                 [
                     'extensions' => ['jpg', 'png'],
                     'mimeTypes' => ['image/jpeg', 'text/plain'],
+                    'trustClientMediaType' => true,
                     'size' => 921,
                     'minSize' => null,
                     'maxSize' => null,
@@ -253,19 +256,19 @@ final class FileTest extends RuleTestCase
             ],
             'uploaded file from stream with client metadata' => [
                 self::createStreamUpload('resume.txt', 'text/plain'),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
             ],
             'uploaded file from stream with uppercase client metadata' => [
                 self::createStreamUpload('resume.txt', 'TEXT/PLAIN'),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
             ],
             'uploaded file from php stream uri without filename' => [
                 self::createStreamUpload(null, 'text/plain', 22),
-                new File(mimeTypes: 'text/plain', size: 22),
+                new File(mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
             ],
             'uploaded file from stream with unknown size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain'),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true),
             ],
             'mime wildcard' => [self::PNG_FILE, new File(mimeTypes: ['image/*'])],
             'min size boundary' => [self::TEXT_FILE, new File(minSize: 22)],
@@ -367,18 +370,23 @@ final class FileTest extends RuleTestCase
             ],
             'stream upload unknown exact size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, size: 22),
                 ['' => ['The size of value cannot be determined.']],
             ],
             'stream upload unknown minimum size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', minSize: 1),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, minSize: 1),
                 ['' => ['The size of value cannot be determined.']],
             ],
             'stream upload unknown maximum size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
-                new File(extensions: 'txt', mimeTypes: 'text/plain', maxSize: 100),
+                new File(extensions: 'txt', mimeTypes: 'text/plain', trustClientMediaType: true, maxSize: 100),
                 ['' => ['The size of value cannot be determined.']],
+            ],
+            'stream upload client media type is not trusted by default' => [
+                self::createStreamUpload('resume.txt', 'text/plain'),
+                new File(mimeTypes: ['text/plain']),
+                ['' => ['Only files with these MIME types are allowed: text/plain.']],
             ],
             'stream upload wrong extension' => [
                 self::createStreamUpload('resume.txt', 'text/plain'),
@@ -397,7 +405,7 @@ final class FileTest extends RuleTestCase
             ],
             'stream upload wildcard mismatch' => [
                 self::createStreamUpload('resume.txt', 'text/plain'),
-                new File(mimeTypes: ['image/*']),
+                new File(mimeTypes: ['image/*'], trustClientMediaType: true),
                 ['' => ['Only files with these MIME types are allowed: image/*.']],
             ],
             'custom messages with parameters' => [

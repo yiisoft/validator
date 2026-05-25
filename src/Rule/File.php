@@ -69,14 +69,16 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * pass validation if it is configured.
      * @param array|string|null $mimeTypes Allowed MIME types. Values are case-insensitive and may be provided either
      * as an array or as a comma / space separated string. Wildcards like `image/*` are supported. For in-memory
-     * stream uploads without a real file path, MIME validation falls back to client-provided metadata. If
-     * `mime_content_type()` is unavailable, MIME checks for filesystem-backed files will fail validation.
+     * stream uploads without a real file path, MIME validation fails unless {@see $trustClientMediaType} is enabled.
+     * If `mime_content_type()` is unavailable, MIME checks for filesystem-backed files will fail validation.
      * @param int|null $size Expected exact size of the validated file in bytes. Validation fails if size cannot be
      * determined.
      * @param int|null $minSize Expected minimum size of the validated file in bytes. Validation fails if size cannot
      * be determined.
      * @param int|null $maxSize Expected maximum size of the validated file in bytes. Validation fails if size cannot
      * be determined.
+     * @param bool $trustClientMediaType Whether to use client-provided media type for MIME validation when the
+     * uploaded file has no real filesystem path. Client-provided media type is not trusted by default.
      * @param string $message A message used when the validated value is not a valid file.
      *
      * You may use the following placeholders in the message:
@@ -163,6 +165,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         public readonly ?int $size = null,
         public readonly ?int $minSize = null,
         public readonly ?int $maxSize = null,
+        public readonly bool $trustClientMediaType = false,
         public readonly string $message = '{Property} must be a file.',
         public readonly string $uploadFailedMessage = 'Failed to upload {property}. Error code: {error, number}.',
         public readonly string $uploadRequiredMessage = 'Please upload a file.',
@@ -236,6 +239,14 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     public function getMimeTypes(): ?array
     {
         return $this->mimeTypes;
+    }
+
+    /**
+     * Whether to use client-provided media type for MIME validation when a validated upload has no real filesystem path.
+     */
+    public function getTrustClientMediaType(): bool
+    {
+        return $this->trustClientMediaType;
     }
 
     /**
@@ -392,6 +403,7 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         return [
             'extensions' => $this->extensions,
             'mimeTypes' => $this->mimeTypes,
+            'trustClientMediaType' => $this->trustClientMediaType,
             'size' => $this->size,
             'minSize' => $this->minSize,
             'maxSize' => $this->maxSize,

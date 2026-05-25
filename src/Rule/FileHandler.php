@@ -85,7 +85,7 @@ final class FileHandler implements RuleHandlerInterface
             );
         }
 
-        if (!$this->isMimeTypeValid($file, $rule->getMimeTypes())) {
+        if (!$this->isMimeTypeValid($file, $rule->getMimeTypes(), $rule->getTrustClientMediaType())) {
             $result->addError(
                 $rule->getWrongMimeTypeMessage(),
                 $this->getParameters($context, $file, ['mimeTypes' => implode(', ', $rule->getMimeTypes() ?? [])]),
@@ -236,13 +236,13 @@ final class FileHandler implements RuleHandlerInterface
      * @psalm-param FileData $file
      * @psalm-param list<string>|null $mimeTypes
      */
-    private function isMimeTypeValid(array $file, ?array $mimeTypes): bool
+    private function isMimeTypeValid(array $file, ?array $mimeTypes, bool $trustClientMediaType): bool
     {
         if ($mimeTypes === null) {
             return true;
         }
 
-        $mimeType = $this->detectMimeType($file);
+        $mimeType = $this->detectMimeType($file, $trustClientMediaType);
         if ($mimeType === null) {
             return false;
         }
@@ -303,7 +303,7 @@ final class FileHandler implements RuleHandlerInterface
     /**
      * @psalm-param FileData $file
      */
-    private function detectMimeType(array $file): ?string
+    private function detectMimeType(array $file, bool $trustClientMediaType): ?string
     {
         if ($file['path'] !== null && is_file($file['path'])) {
             if (!is_readable($file['path'])) {
@@ -318,7 +318,7 @@ final class FileHandler implements RuleHandlerInterface
             return $mimeType === false ? null : $mimeType;
         }
 
-        return $file['clientMediaType'];
+        return $trustClientMediaType ? $file['clientMediaType'] : null;
     }
 
     private function detectMimeTypeFromPath(string $path): string|false
