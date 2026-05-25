@@ -9,6 +9,7 @@ use Closure;
 use InvalidArgumentException;
 use Psr\Http\Message\UploadedFileInterface;
 use Yiisoft\Validator\DumpedRuleInterface;
+use Yiisoft\Validator\EmptyCondition\WhenEmpty;
 use Yiisoft\Validator\Rule\Trait\SkipOnEmptyTrait;
 use Yiisoft\Validator\Rule\Trait\SkipOnErrorTrait;
 use Yiisoft\Validator\Rule\Trait\WhenTrait;
@@ -24,6 +25,7 @@ use function strtolower;
 use function trim;
 
 use const PREG_SPLIT_NO_EMPTY;
+use const UPLOAD_ERR_NO_FILE;
 
 /**
  * Defines validation options to check that a value is a valid file and optionally validate its extension, MIME type
@@ -184,6 +186,10 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
             }
         }
 
+        if ($this->minSize !== null && $this->maxSize !== null && $this->minSize > $this->maxSize) {
+            throw new InvalidArgumentException('Min size must be less than or equal to max size.');
+        }
+
         $this->extensions = $this->normalizeList($extensions);
         $this->mimeTypes = $this->normalizeList($mimeTypes);
         $this->skipOnEmpty = $skipOnEmpty;
@@ -192,6 +198,20 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
     public function getName(): string
     {
         return 'file';
+    }
+
+    /**
+     * @psalm-return SkipOnEmptyValue
+     */
+    public function getSkipOnEmpty(): bool|callable|null
+    {
+        if ($this->skipOnEmpty === true || $this->skipOnEmpty instanceof WhenEmpty) {
+            $emptyCondition = $this->skipOnEmpty === true ? new WhenEmpty() : $this->skipOnEmpty;
+            return static fn(mixed $value, bool $isPropertyMissing): bool => self::isUploadMissing($value)
+                || $emptyCondition($value, $isPropertyMissing);
+        }
+
+        return $this->skipOnEmpty;
     }
 
     /**
@@ -446,5 +466,10 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
         }
 
         return $value;
+    }
+
+    private static function isUploadMissing(mixed $value): bool
+    {
+        return $value instanceof UploadedFileInterface && $value->getError() === UPLOAD_ERR_NO_FILE;
     }
 }

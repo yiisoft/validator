@@ -63,6 +63,10 @@ final class FileTest extends RuleTestCase
                 ['size' => 100, 'maxSize' => 100],
                 'Exact size and min / max size can\'t be specified together.',
             ],
+            'min size greater than max size' => [
+                ['minSize' => 100, 'maxSize' => 50],
+                'Min size must be less than or equal to max size.',
+            ],
             'negative size' => [
                 ['size' => -1],
                 'Size must be greater than or equal to 0.',
@@ -243,9 +247,9 @@ final class FileTest extends RuleTestCase
                 new UploadedFile(self::JPG_FILE, 921, UPLOAD_ERR_OK, 'avatar.JPG', 'image/jpeg'),
                 new File(extensions: ['jpg'], mimeTypes: ['image/jpeg'], size: 921),
             ],
-            'uploaded file from path without client metadata' => [
+            'uploaded file from path with inaccurate size metadata' => [
                 new UploadedFile(self::JPG_FILE, 999, UPLOAD_ERR_OK),
-                new File(extensions: ['jpg'], mimeTypes: ['image/jpeg'], size: 999),
+                new File(extensions: ['jpg'], mimeTypes: ['image/jpeg'], size: 921),
             ],
             'uploaded file from stream with client metadata' => [
                 self::createStreamUpload('resume.txt', 'text/plain'),
@@ -271,6 +275,10 @@ final class FileTest extends RuleTestCase
                 new Each(new File()),
             ],
             'null with skipOnEmpty' => [null, new File(skipOnEmpty: true)],
+            'uploaded file missing with skipOnEmpty' => [
+                new UploadedFile(self::JPG_FILE, 921, UPLOAD_ERR_NO_FILE),
+                new File(skipOnEmpty: true),
+            ],
             'null with when returning false' => [
                 null,
                 new File(when: static fn(mixed $value): bool => $value !== null),
@@ -341,6 +349,11 @@ final class FileTest extends RuleTestCase
                 self::JPG_FILE,
                 new File(size: 920),
                 ['' => ['The size of value must be exactly 920 bytes.']],
+            ],
+            'uploaded file exact size mismatch uses actual file size' => [
+                new UploadedFile(self::JPG_FILE, 921, UPLOAD_ERR_OK),
+                new File(size: 999),
+                ['' => ['The size of value must be exactly 999 bytes.']],
             ],
             'too small' => [
                 self::EMPTY_JPG_FILE,

@@ -142,12 +142,12 @@ final class FileHandler implements RuleHandlerInterface
             }
 
             $name = $name !== '' ? $name : $this->normalizeFileName($path);
-            $size = $value->getSize();
             $isFile = $path === null || is_file($path);
-
-            if ($size === null && $path !== null && $isFile) {
+            if ($path !== null && $isFile) {
                 $fileInfoSize = (new SplFileInfo($path))->getSize();
                 $size = is_int($fileInfoSize) ? $fileInfoSize : null;
+            } else {
+                $size = $value->getSize();
             }
 
             return [
