@@ -167,6 +167,8 @@ return [
      * @see \Yiisoft\Validator\Rule\Date\DateTime
      * @see \Yiisoft\Validator\Rule\Date\Time
      */
+    '{Property} must be no early than {limit}.' => '{Property} должно быть не ранее {limit}.',
+    '{Property} must be no late than {limit}.' => '{Property} должно быть не позднее {limit}.',
     '{Property} must be no earlier than {limit}.' => '{Property} должно быть не ранее {limit}.',
     '{Property} must be no later than {limit}.' => '{Property} должно быть не позднее {limit}.',
 
