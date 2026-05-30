@@ -31,3 +31,4 @@ jobs:
         ['ubuntu-latest']
       php: >-
         ['8.1']
+      install-development-dependencies: true
