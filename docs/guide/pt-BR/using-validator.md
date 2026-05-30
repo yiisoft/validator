@@ -183,7 +183,7 @@ final class PersonRulesProvider
     public string $name;
 
     #[Number(min: 21)]
-    protected int $age;
+    public int $age;
 }
 
 $data = ['name' => 'John', 'age' => 18];
@@ -208,7 +208,7 @@ final class PersonRulesProvider implements RulesProviderInterface
     public string $name;
 
     #[Number(min: 21)] // Will be silently ignored.
-    protected int $age;
+    public int $age;
 
     public function getRules() : iterable
     {
@@ -238,7 +238,7 @@ final class Person implements RulesProviderInterface
     public string $name;
 
     #[Number(min: 21)] // Not supported for using with data objects. Will be silently ignored.
-    protected int $age;
+    public int $age;
 
     public function getRules(): iterable
     {

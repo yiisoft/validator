@@ -71,8 +71,6 @@ final class User
 }
 ```
 
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
-
 Error messages may include `{property}` placeholder that is replaced with the name of the property. To capitalize the 
 first letter, you can use the `{Property}` placeholder. If you would like the name to be replaced with a custom value, 
 you can specify it using the `Label` attribute:
@@ -90,8 +88,6 @@ final class User
     public readonly string $name;
 }
 ```
-
-> **Note:** [readonly properties] are supported only starting from PHP 8.1.
 
 ## Configuring for multiple entities / models with relations
 
@@ -150,7 +146,6 @@ final class Post
     #[Nested]
     public Author|null $author = null;
 
-    // Passing instances is available only since PHP 8.1.
     #[Each(new Nested(File::class))]
     public array $files = [];
 
@@ -330,15 +325,9 @@ final class Yaml implements RuleInterface
 
 ## Limitations and workarounds
 
-### Instances
+### Alternative approaches for complex rules
 
-Passing instances in the scope of attributes is only possible as of PHP 8.1. This means using attributes for complex
-rules such as `Composite`, `Each` and `Nested` or rules that take instances as arguments, can be problematic with PHP 8.0.
-
-The first workaround is to upgrade to PHP 8.1 - this is fairly simple since it is a minor version. Tools like 
-[Rector] can ease the process of upgrading the code base by automating routine tasks.
-
-If this is not an option, you can use other ways of providing rules, such as rule providers:
+For complex rules involving relations (`Nested`, `Each`), you can use rule providers as an alternative to attributes:
 
 ```php
 use Yiisoft\Validator\Rule\Integer;
@@ -451,6 +440,15 @@ method for validation - use a `Callback` rule with [method reference]. Otherwise
 
 - Use `Composite` or rules provider described in the [Instances] section.
 - Create a [custom rule].
+
+## Combining attributes with `RulesProviderInterface`
+
+When a data object has rules declared via PHP attributes and also implements `RulesProviderInterface`, rules from both
+sources are merged. Rules from PHP attributes are applied first, followed by rules from `getRules()`. If the same
+property has rules in both sources, they are combined.
+
+> **Note:** This merging only applies when the object is passed as the data (first argument of `validate()`). When
+> passed as the rules argument (second argument), only `getRules()` is used — see [Using validator] for details.
 
 ## Using rules
 
@@ -565,7 +563,7 @@ $dataSet = new ObjectDataSet(
 $result = (new Validator())->validate($dataSet);
 ```
 
-Some edge cases, like skipping DTO's static properties, require using of `AttributeRulesProvider`. After initializing it 
+Some edge cases, like skipping DTO's static properties, require using of `AttributesRulesProvider`. After initializing it 
 can be passed for validation right away - no need to extract rules manually beforehand.
 
 ```php
@@ -625,6 +623,7 @@ $options = RulesDumper::asArray($rules);
 [Rector]: https://github.com/rectorphp/rector
 [when]: conditional-validation.md#when
 [conditional validation]: conditional-validation.md
-[Instances]: #instances
+[Instances]: #alternative-approaches-for-complex-rules
+[Using validator]: using-validator.md
 [custom rule]: creating-custom-rules.md
 [method reference]: built-in-rules-callback.md#for-property

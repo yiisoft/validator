@@ -1,0 +1,377 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[Callback](built-in-rules-callback.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[Compare](built-in-rules-compare.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[Composite](built-in-rules-composite.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[Each](built-in-rules-each.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[Nested](built-in-rules-nested.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[Required](built-in-rules-required.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[StopOnError](built-in-rules-stop-on-error.md)"
+msgstr ""
+
+#. type: Title #
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Built-in rules"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Available rules"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules.md
+msgid "Here is a list of all available built-in rules, divided by category."
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Type rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[BooleanType](../../../src/Rule/Type/BooleanType.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[FloatType](../../../src/Rule/Type/FloatType.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[IntegerType](../../../src/Rule/Type/IntegerType.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[StringType](../../../src/Rule/Type/StringType.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "String rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[StringValue](../../../src/Rule/StringValue.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Length](../../../src/Rule/Length.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Regex](../../../src/Rule/Regex.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Email](../../../src/Rule/Email.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Ip](../../../src/Rule/Ip.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Json](../../../src/Rule/Json.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Url](../../../src/Rule/Url.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Uuid](../../../src/Rule/Uuid.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Boolean rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[BooleanValue](../../../src/Rule/BooleanValue.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[TrueValue](../../../src/Rule/TrueValue.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Number rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Number](../../../src/Rule/Number.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Integer](../../../src/Rule/Integer.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Comparison rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Compare](../../../src/Rule/Compare.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Equal](../../../src/Rule/Equal.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[NotEqual](../../../src/Rule/NotEqual.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[GreaterThan](../../../src/Rule/GreaterThan.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[GreaterThanOrEqual](../../../src/Rule/GreaterThanOrEqual.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[LessThan](../../../src/Rule/LessThan.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[LessThanOrEqual](../../../src/Rule/LessThanOrEqual.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Set rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[In](../../../src/Rule/In.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[InEnum](../../../src/Rule/InEnum.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Subset](../../../src/Rule/Subset.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[UniqueIterable](../../../src/Rule/UniqueIterable.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Count rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Count](../../../src/Rule/Count.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[FilledAtLeast](../../../src/Rule/FilledAtLeast.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[FilledOnlyOneOf](../../../src/Rule/FilledOnlyOneOf.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "File rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Image](../../../src/Rule/Image/Image.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Date rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Date](../../../src/Rule/Date/Date.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[DateTime](../../../src/Rule/Date/DateTime.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Time](../../../src/Rule/Date/Time.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "General purpose rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Callback](../../../src/Rule/Callback.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Required](../../../src/Rule/Required.php)"
+msgstr ""
+
+#. type: Title ###
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Complex rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[AnyRule](../../../src/Rule/AnyRule.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Composite](../../../src/Rule/Composite.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Each](../../../src/Rule/Each.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[Nested](../../../src/Rule/Nested.php)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[StopOnError](../../../src/Rule/StopOnError.php)"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Guides"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules.md
+msgid "Some rules also have guides in addition to PHPDoc:"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "Missing rules"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules.md
+msgid ""
+"Can't find a rule? Feel free to submit an issue / PR, so it can be included "
+"in the package after review. Another option, if your use case is less "
+"generic, is to search for [an extension] or [create a custom rule]."
+msgstr ""
+
+#. type: Link reference
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "[an extension]: extensions.md"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/built-in-rules.md
+#, no-wrap
+msgid "[create a custom rule]: creating-custom-rules.md"
+msgstr ""

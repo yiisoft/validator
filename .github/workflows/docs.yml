@@ -3,6 +3,14 @@ name: Update docs translation
 on:
   pull_request_target:
     paths:
+      - 'docs/po/**'
+      - 'docs/pot/**'
+      - 'docs/po4a.conf'
+      - 'docs/po4a-base.conf'
+      - 'docs/prepare-config.sh'
+  push:
+    branches: [ "master" ]
+    paths:
       - 'docs/**'
 
 jobs:
@@ -17,14 +25,16 @@ jobs:
           ref: ${{ github.head_ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
+      - name: Prepare po4a configuration
+        run: docs/prepare-config.sh
+
       - name: Use po4a
-        uses: addnab/docker-run-action@v3
+        uses: vjik/docker-run@v1
         with:
-            image: arduanovdanil/po4a-fork:v0.73
-            options: -v ${{ github.workspace }}:/src
-            run: |
-                cd docs
-                po4a po4a.cfg
+          image: ghcr.io/yiisoft-contrib/po4a:0.74
+          volumes: ${{ github.workspace }}:/src
+          workdir: /src/docs
+          command: po4a po4a.conf && po4a po4a.conf
 
       - name: Commit changed files
         uses: stefanzweifel/git-auto-commit-action@v5

@@ -20,11 +20,12 @@ Here is a list of all available built-in rules, divided by category.
 - [Ip](../../../src/Rule/Ip.php)
 - [Json](../../../src/Rule/Json.php)
 - [Url](../../../src/Rule/Url.php)
+- [Uuid](../../../src/Rule/Uuid.php)
 
 ### Boolean rules
 
-- [Boolean](../../../src/Rule/BooleanValue.php)
-- [IsTrue](../../../src/Rule/TrueValue.php)
+- [BooleanValue](../../../src/Rule/BooleanValue.php)
+- [TrueValue](../../../src/Rule/TrueValue.php)
 
 ### Number rules
 

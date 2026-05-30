@@ -63,12 +63,16 @@ missing, feel free to submit a [PR].
 
 ## Translating property names
 
-Almost all error templates have support for a `{property}` placeholder which is substituted with an actual property
-name that was set during rules configuration. By default, a property name is formatted as is. It can be acceptable for 
-English language (for example, `currentPassword is required.`), but when using translations for error messages, it's 
-better to provide an additional property translation.
+Almost all error templates have support for `{property}` and `{Property}` placeholders which are substituted with an
+actual property name that was set during rules configuration. The `{Property}` variant capitalizes the first letter. By
+default, a property name is formatted as is. It can be acceptable for English language (for example,
+`currentPassword is required.`), but when using translations for error messages, it's better to provide an additional
+property translation.
 
-There is a separate interface called `PropertyTranslatorInterface` to solve exactly this task. It ships with 3 
+The simplest approach for properties defined via PHP attributes is to use the `Label` attribute directly on the
+property. See [Configuring rules via PHP attributes] for details.
+
+There is a separate interface called `PropertyTranslatorInterface` to solve exactly this task. It ships with 3
 implementations out of the box:
 
 - `ArrayPropertyTranslator` - uses an associative array, where keys are initial property names and values are their 
@@ -139,6 +143,7 @@ $result = (new Validator())->validate($form);
 ```
 
 [PR]: https://github.com/yiisoft/validator/pulls
+[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Yii Translator]: https://github.com/yiisoft/translator
 [Yii Config]: https://github.com/yiisoft/config
 [Yii DI]: https://github.com/yiisoft/di
