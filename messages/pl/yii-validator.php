@@ -179,8 +179,8 @@ return [
      * @see DateTime
      * @see Time
      */
-    '{Property} must be no early than {limit}.' => '{Property} nie może być wcześniej niż {limit}.',
-    '{Property} must be no late than {limit}.' => '{Property} nie może być później niż {limit}.',
+    '{Property} must be no earlier than {limit}.' => '{Property} nie może być wcześniej niż {limit}.',
+    '{Property} must be no later than {limit}.' => '{Property} nie może być później niż {limit}.',
 
     /**
      * @see Date
