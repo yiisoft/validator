@@ -1,0 +1,152 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2026 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"PO-Revision-Date: 2026-04-21 14:32+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Link reference
+#: guide/en/built-in-rules-nested.md guide/en/built-in-rules-required.md
+#, fuzzy, no-wrap
+msgid "[Conditional validation]: conditional-validation.md"
+msgstr ""
+"#-#-#-#-#  built-in-rules-nested.md.po  #-#-#-#-#\n"
+"[Условия валидации](conditional-validation.md)\n"
+"#-#-#-#-#  built-in-rules-required.md.po (PACKAGE VERSION)  #-#-#-#-#\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid "`Required` - verifying that a value is provided"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "Use the `Required` rule to ensure that a value is provided (not empty)."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "By default, a value is considered empty only when it is either:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-required.md
+msgid "Not passed at all."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-required.md
+msgid "`null`."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-required.md
+msgid "An empty string (after trimming)."
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-required.md
+msgid "An empty iterable."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid "Customizing empty condition"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "Which values are considered empty can be customized via the `$emptyCondition` option. Unlike in [skipOnEmpty], no normalization is performed here, so only a callable or a special class is accepted. For more details see the [Empty condition basics] section."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "An example with custom empty condition that limits empty values to `null` only:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"use Yiisoft\\Validator\\EmptyCondition\\WhenNull;\n"
+"\n"
+"new Required(emptyCondition: new WhenNull());\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "It's also possible to set it globally for all rules of this type at the handler level via `RequiredHandler::$defaultEmptyCondition`."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid "Usage with other rules"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "`Required` is rarely used by itself. When combining it with other rules, make sure it's placed first:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$rules = [\n"
+"    new Required(),\n"
+"    new Length(min: 1, max: 50),\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "With these settings, `Length` will still run in the case of an empty value. To prevent this, set up a conditional validation:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Length;\n"
+"use Yiisoft\\Validator\\Rule\\Required;\n"
+"\n"
+"$rules = [\n"
+"    new Required(),\n"
+"    new Length(min: 1, max: 50, skipOnError: true),\n"
+"];\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-required.md
+msgid "Other ways of configuring conditional validation are described in the [Conditional validation] section."
+msgstr ""
+
+#. type: Link reference
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid "[skipOnEmpty]: conditional-validation.md#skiponempty---skipping-a-rule-if-the-validated-value-is-empty"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/built-in-rules-required.md
+#, no-wrap
+msgid "[Empty condition basics]: conditional-validation.md#empty-condition-basics"
+msgstr ""

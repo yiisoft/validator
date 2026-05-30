@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\UploadedFile;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\WithoutErrorHandler;
+use SplFileInfo;
 use Yiisoft\Validator\Rule\Image\Image;
 use Yiisoft\Validator\Rule\Image\ImageAspectRatio;
 use Yiisoft\Validator\Rule\Image\ImageHandler;
@@ -72,6 +73,7 @@ final class ImageTest extends RuleTestCase
             'png' => [__DIR__ . '/16x18.png', new Image()],
             'jpg' => [__DIR__ . '/16x18.jpg', new Image()],
             'heic' => [__DIR__ . '/797x808.HEIC', new Image()],
+            'spl-file-info' => [new SplFileInfo(__DIR__ . '/16x18.jpg'), new Image()],
             'uploaded-file' => [new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_OK), new Image()],
             'exactly' => [__DIR__ . '/16x18.jpg', new Image(width: 16, height: 18)],
             'min-width' => [__DIR__ . '/16x18.jpg', new Image(minWidth: 12)],
@@ -160,8 +162,14 @@ final class ImageTest extends RuleTestCase
                 ['a' => new Image(notImageMessage: 'Value of "{property}" must be an image.')],
                 ['a' => ['Value of "a" must be an image.']],
             ],
+            'spl-file-info-not-image' => [new SplFileInfo(__DIR__ . '/ImageTest.php'), new Image(), $notImageResult],
             'not-uploaded-file' => [
                 new UploadedFile(__DIR__ . '/16x18.jpg', 0, UPLOAD_ERR_NO_FILE),
+                new Image(),
+                $notImageResult,
+            ],
+            'uploaded-file-with-missing-temp-path' => [
+                new UploadedFile('/definitely/missing/upload-image.tmp', null, UPLOAD_ERR_OK, 'avatar.jpg'),
                 new Image(),
                 $notImageResult,
             ],

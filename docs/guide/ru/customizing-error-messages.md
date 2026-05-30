@@ -69,12 +69,17 @@ $validator = new Validator(translator: $translator);
 
 ## Перевод имен свойств
 
-Почти все шаблоны ошибок поддерживают плейсхолдер `{property}`, который
-заменяется фактическим именем свойства, заданным во время настройки
-правил. По умолчанию имя свойства форматируется без изменений. Это может
-быть приемлемо для английского языка (например, `currentPassword is
-required.`), но при использовании перевода сообщений об ошибках, лучше
-предоставить дополнительный перевод свойства.
+Almost all error templates have support for `{property}` and `{Property}`
+placeholders which are substituted with an actual property name that was set
+during rules configuration. The `{Property}` variant capitalizes the first
+letter. By default, a property name is formatted as is. It can be acceptable
+for English language (for example, `currentPassword is required.`), but when
+using translations for error messages, it's better to provide an additional
+property translation.
+
+The simplest approach for properties defined via PHP attributes is to use
+the `Label` attribute directly on the property. See [Configuring rules via
+PHP attributes] for details.
 
 Для решения именно этой задачи существует отдельный интерфейс
 `PropertyTranslatorInterface`. Он поставляется с тремя реализациями из
@@ -152,6 +157,7 @@ $result = (new Validator())->validate($form);
 ```
 
 [PR]: https://github.com/yiisoft/validator/pulls
+[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md
 [Yii Translator]: https://github.com/yiisoft/translator
 [Yii Config]: https://github.com/yiisoft/config
 [Yii DI]: https://github.com/yiisoft/di

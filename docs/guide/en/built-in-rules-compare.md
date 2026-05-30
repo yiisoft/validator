@@ -1,5 +1,46 @@
 # `Compare` - comparing validated value with target value
 
+The `Compare` rule and its shortcut classes validate a value by comparing it with a target value or another property.
+
+Available shortcut classes:
+
+- `Equal` (`==`)
+- `NotEqual` (`!=`)
+- `GreaterThan` (`>`)
+- `GreaterThanOrEqual` (`>=`)
+- `LessThan` (`<`)
+- `LessThanOrEqual` (`<=`)
+
+## Comparison types
+
+The `type` parameter controls how values are compared:
+
+- `CompareType::NUMBER` — values are compared as numbers (default).
+- `CompareType::STRING` — values are compared as strings, byte by byte.
+- `CompareType::ORIGINAL` — values are compared as-is, without type casting. Required for `DateTime` objects.
+
+## Comparing with a target value
+
+```php
+use Yiisoft\Validator\Rule\GreaterThanOrEqual;
+
+$rules = [
+    'age' => new GreaterThanOrEqual(18),
+];
+```
+
+## Comparing with another property
+
+Use the `targetProperty` parameter to compare against another property in the same data set:
+
+```php
+use Yiisoft\Validator\Rule\Equal;
+
+$rules = [
+    'password_repeat' => new Equal(targetProperty: 'password'),
+];
+```
+
 ## Using with `DateTime` objects
 
 ### Basic usage
@@ -17,11 +58,11 @@ $rules = [
 ### Dynamic range
 
 ```php
+use DateInterval;
 use DateTime;
-use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\CompareType;
-use Yiisoft\Validator\Rule\GreaterThanOrEqual;
-use Yiisoft\Validator\Rule\LessThanOrEqual;
+use Yiisoft\Validator\Rule\GreaterThan;
+use Yiisoft\Validator\Rule\LessThan;
 
 $rules = [
     'shipping_datetime' => [
@@ -34,7 +75,7 @@ $rules = [
             (new DateTime('now'))
                 ->add(DateInterval::createFromDateString('1 week')),
             type: CompareType::ORIGINAL,
-        ),        
+        ),
     ],
 ];
 ```

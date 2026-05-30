@@ -1,0 +1,171 @@
+# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "`Each` - applying the same rules for each data item in the set"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"The `Each` rule allows the same rules to be applied to each data item in the "
+"set. The following example shows the configuration for validating [RGB color]"
+"(https://en.wikipedia.org/wiki/RGB_color_model) components:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each([\n"
+"    new Integer(min: 0, max: 255),\n"
+"]);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"By combining with another built-in rule called `Count` we can be sure that "
+"the number of components is exactly 3:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"$rules = [\n"
+"    // Applies to a whole set.\n"
+"    new Count(3),\n"
+"    // Applies to individual set items.\n"
+"    new Each(        \n"
+"        // For single rules, wrapping with array / iterable is not necessary.\n"
+"        new Integer(min: 0, max: 255),\n"
+"    ),\n"
+"];\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Stopping on first error"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"By default, `Each` validates all items in the set and collects all errors. "
+"To stop validation at the first item that produces an error, use the "
+"`stopOnError` parameter:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each(\n"
+"    rules: [new Integer(min: 0, max: 255)],\n"
+"    stopOnError: true,\n"
+");\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Accessing the current key"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"During validation of each item, the current iteration key is available "
+"through the validation context parameter `Each::PARAMETER_EACH_KEY`. This "
+"can be useful in `when` callbacks or custom rule handlers:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"// Inside a when callback or custom rule handler:\n"
+"$currentKey = $context->getParameter(Each::PARAMETER_EACH_KEY);\n"
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid "Using with `Nested`"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"Validated data items are not limited to only \"simple\" values — `Each` can "
+"be used both within a `Nested` and contain `Nested` rule covering one-to-"
+"many and many-to-many relations:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-each.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Count;\n"
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Nested;\n"
+"use Yiisoft\\Validator\\Rule\\Number;\n"
+"\n"
+"$rule = new Nested([\n"
+"    'charts' => new Each([\n"
+"        new Nested([\n"
+"            'points' => new Each([\n"
+"                new Nested([\n"
+"                    'coordinates' => new Nested([\n"
+"                        'x' => [new Number(min: -10, max: 10)],\n"
+"                        'y' => [new Number(min: -10, max: 10)],\n"
+"                    ]),\n"
+"                    'rgb' => [\n"
+"                        new Count(3),\n"
+"                        new Each([new Number(min: 0, max: 255)]),\n"
+"                    ],\n"
+"                ]),\n"
+"            ]),\n"
+"        ]),\n"
+"    ]),\n"
+"]);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-each.md
+msgid ""
+"For more information about using it with `Nested`, see the [Nested](built-in-"
+"rules-nested.md) guide."
+msgstr ""

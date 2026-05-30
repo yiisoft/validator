@@ -266,6 +266,83 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
+### `when` within nested structures
+
+`$context->getDataSet()->getPropertyValue()` also works within nested validation, giving access to sibling properties
+at the same nesting level.
+
+In this example `content` is only required when its sibling property `isEnabled` is `true`:
+
+```php
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
+
+$data = [
+    'push' => [
+        'isEnabled' => true,
+        'content' => null,
+    ],
+];
+$rules = new Nested([
+    'push' => new Nested([
+        'isEnabled' => [new BooleanValue()],
+        'content' => [
+            new Required(
+                when: static function (mixed $value, ValidationContext $context): bool {
+                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                },
+            ),
+        ],
+    ]),
+]);
+$result = (new Validator())->validate($data, $rules);
+```
+
+Since `isEnabled` is `true`, the `Required` rule is applied and `content` fails validation because it is `null`.
+Setting `isEnabled` to `false` would skip the `Required` rule entirely.
+
+This approach works at any depth, including inside `Each`:
+
+```php
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
+
+$data = [
+    'tasks' => [
+        [
+            'push' => [
+                'isEnabled' => false,
+                'content' => null,
+            ],
+        ],
+    ],
+];
+$rules = new Nested([
+    'tasks' => new Each(
+        new Nested([
+            'push' => new Nested([
+                'isEnabled' => [new BooleanValue()],
+                'content' => [
+                    new Required(
+                        when: static function (mixed $value, ValidationContext $context): bool {
+                            return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                        },
+                    ),
+                ],
+            ]),
+        ]),
+    ),
+]);
+$result = (new Validator())->validate($data, $rules);
+```
+
 As an alternative to functions, callable classes can be used instead. This approach has the advantage of code reusability.
 See the [Skip on empty] section for an example.
 

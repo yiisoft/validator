@@ -388,6 +388,44 @@ attributes] section.
 - For more information about possible data / rules combinations passed for validation, refer to the [Using validator] 
 section. 
 
+### Conditional validation within nested structures
+
+When using `when` callbacks inside `Nested`, the validation context provides access to sibling properties — other
+properties at the same nesting level. Use `$context->getDataSet()->getPropertyValue()` to read them.
+
+For example, to require `content` only when `isEnabled` is `true`:
+
+```php
+use Yiisoft\Validator\Rule\BooleanValue;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Required;
+use Yiisoft\Validator\ValidationContext;
+use Yiisoft\Validator\Validator;
+
+$data = [
+    'push' => [
+        'isEnabled' => true,
+        'content' => null,
+    ],
+];
+$rules = new Nested([
+    'push' => new Nested([
+        'isEnabled' => [new BooleanValue()],
+        'content' => [
+            new Required(
+                when: static function (mixed $value, ValidationContext $context): bool {
+                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                },
+            ),
+        ],
+    ]),
+]);
+$result = (new Validator())->validate($data, $rules);
+```
+
+This works at any depth, including when combined with `Each`. For more details and examples, see the
+[Conditional validation] guide.
+
 ### Using keys containing separator / shortcut
 
 If a key contains the separator (`.`), or `Each` shortcut (`*`), it must be escaped with backslash (`\`) in
@@ -462,5 +500,6 @@ $data = [
 [Result]: result.md
 [Basic usage]: #basic-usage-one-to-one-relation
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
+[Conditional validation]: conditional-validation.md
 [Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Using validator]: using-validator.md
