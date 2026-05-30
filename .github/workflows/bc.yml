@@ -31,5 +31,3 @@ jobs:
         ['ubuntu-latest']
       php: >-
         ['8.1']
-      required-packages: >-
-        ["yiisoft/yii-debug:dev-master"]
