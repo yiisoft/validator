@@ -88,9 +88,8 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
-
             if (is_int($valuePath)) {
+                $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
                 $itemResult = $context->validate($validatedValue, $rules);
             } else {
                 $valuePathList = StringHelper::parsePath($valuePath);
