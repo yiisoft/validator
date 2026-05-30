@@ -105,6 +105,10 @@ final class NestedHandler implements RuleHandlerInterface
                     $scopeData = $scopeData[$key];
                 }
 
+                if (!is_array($scopeData)) {
+                    $scopeData = [];
+                }
+
                 $itemResult = $context->validate(
                     $scopeData,
                     [$property => $rules],
