@@ -1397,6 +1397,17 @@ final class NestedTest extends RuleTestCase
                     'level1.level2.key' => ['Key not passed.'],
                 ],
             ],
+            'dotted path with scalar intermediate value' => [
+                [
+                    'level1' => 'scalar',
+                ],
+                new Nested([
+                    'level1.level2' => [new Required()],
+                ]),
+                [
+                    'level1.level2' => ['Level2 not passed.'],
+                ],
+            ],
             'error messages with properties in nested structure' => [
                 [
                     'user' => [
