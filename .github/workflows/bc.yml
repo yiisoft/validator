@@ -25,23 +25,7 @@ name: backwards compatibility
 
 jobs:
   roave_bc_check:
-    name: roave_bc_check / PHP 8.1-ubuntu-latest
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout.
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Install PHP.
-        uses: shivammathur/setup-php@v2
-        with:
-          ini-values: date.timezone='UTC'
-          php-version: '8.1'
-
-      - name: Install roave/backward-compatibility-check.
-        run: composer require --dev roave/backward-compatibility-check --no-interaction --no-progress --optimize-autoloader --ansi
-
-      - name: Run roave/backward-compatibility-check.
-        run: vendor/bin/roave-backward-compatibility-check --install-development-dependencies
+    uses: yiisoft/actions/.github/workflows/bc.yml@master
+    with:
+      php: '["8.1"]'
+      install-development-dependencies: true
