@@ -2,7 +2,7 @@
 
 ## 2.5.2 under development
 
-- Chg #709: Use `format` property for formatting dates in error messages when message format properties are not set (@WarLikeLaux)
+- Enh #709: In date rules use `format` property for formatting dates in error messages when message format properties are not set (@WarLikeLaux)
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 - Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
 - Chg #795: Update Polish translations (@rbrzezinski)
