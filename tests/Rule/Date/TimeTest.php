@@ -64,6 +64,12 @@ final class TimeTest extends RuleTestCase
                 new Time(format: 'php:H:i', max: '12:00'),
                 ['' => ['Value must be no later than 12:00.']],
             ],
+            'handler-custom-message' => [
+                '15:30',
+                new Time(format: 'php:H:i', max: '12:00'),
+                ['' => ['Max: 12:00.']],
+                [TimeHandler::class => new TimeHandler(tooLateMessage: 'Max: {limit}.')],
+            ],
             'timestamp' => [
                 1711705158,
                 new Time(format: 'php:d.m.Y, H:i:s', min: 1711705200),

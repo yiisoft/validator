@@ -6,6 +6,8 @@ namespace Yiisoft\Validator\Rule\Date;
 
 use IntlDateFormatter;
 
+use function func_num_args;
+
 /**
  * @psalm-import-type IntlDateFormatterFormat from BaseDate
  */
@@ -20,11 +22,17 @@ final class TimeHandler extends BaseDateHandler
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageTimeType = null,
+        ?int $messageTimeType = IntlDateFormatter::SHORT,
         string $incorrectInputMessage = '{Property} must be a time.',
         string $tooEarlyMessage = '{Property} must be no earlier than {limit}.',
         string $tooLateMessage = '{Property} must be no later than {limit}.',
     ) {
+        $argumentCount = func_num_args();
+        // Keep the public default value for BC, but treat it as unset when omitted.
+        if ($messageTimeType === IntlDateFormatter::SHORT && $argumentCount !== 5) {
+            $messageTimeType = null;
+        }
+
         parent::__construct(
             IntlDateFormatter::NONE,
             $timeType,

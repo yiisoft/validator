@@ -81,6 +81,12 @@ final class DateTimeTest extends RuleTestCase
                 new DateTime(format: 'php:Y-m-d, H:i', max: '2024-01-01, 00:00'),
                 ['' => ['Value must be no later than 2024-01-01, 00:00.']],
             ],
+            'handler-custom-message' => [
+                '2024-03-29, 12:50',
+                new DateTime(format: 'php:Y-m-d, H:i', max: '2024-01-01, 00:00'),
+                ['' => ['Max: 2024-01-01, 00:00.']],
+                [DateTimeHandler::class => new DateTimeHandler(tooLateMessage: 'Max: {limit}.')],
+            ],
             'timestamp' => [
                 1711705158,
                 new DateTime(format: 'php:d.m.Y, H:i:s', min: 1711705200),

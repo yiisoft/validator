@@ -192,10 +192,10 @@ abstract class BaseDateHandler implements RuleHandlerInterface
 
         $formatterDateType = $ruleMessageDateType
             ?? $this->messageDateType
-            ?? $this->getDateTypeFromRule($rule);
+            ?? ($rule instanceof Time ? IntlDateFormatter::NONE : IntlDateFormatter::SHORT);
         $formatterTimeType = $ruleMessageTimeType
             ?? $this->messageTimeType
-            ?? $this->getTimeTypeFromRule($rule);
+            ?? ($rule instanceof Date ? IntlDateFormatter::NONE : IntlDateFormatter::SHORT);
 
         $format = $rule->getMessageFormat() ?? $this->messageFormat;
         if (
