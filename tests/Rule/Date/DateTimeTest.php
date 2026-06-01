@@ -210,6 +210,23 @@ final class DateTimeTest extends RuleTestCase
                     ),
                 ],
             ],
+            'handler-message-date-type-only-short-overrides-format' => [
+                '29*03*2024, 12:50',
+                new DateTime(format: 'php:d*m*Y, H:i', max: '11*11*2023, 12:35'),
+                ['' => ['Value must be no later than 11/11/23, 12:35 PM.']],
+                [DateTimeHandler::class => new DateTimeHandler(messageDateType: IntlDateFormatter::SHORT)],
+            ],
+            'handler-unset-message-time-type-stays-short' => [
+                1704114000,
+                new DateTime(max: 1704106800),
+                ['' => ['Value must be no later than Monday, January 1, 2024 at 11:00 AM.']],
+                [
+                    DateTimeHandler::class => new DateTimeHandler(
+                        timeType: IntlDateFormatter::LONG,
+                        messageDateType: IntlDateFormatter::FULL,
+                    ),
+                ],
+            ],
         ];
     }
 
