@@ -87,10 +87,10 @@ final class TimeTest extends RuleTestCase
                 ['' => ['Value must be no later than 11:30:00 AM Coordinated Universal Time.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: IntlDateFormatter::FULL)],
             ],
-            'format-overrides-handler-message-type' => [
+            'handler-message-type-overrides-format' => [
                 '13*30',
                 new Time(format: 'php:H*i', max: '11*30'),
-                ['' => ['Value must be no later than 11*30.']],
+                ['' => ['Value must be no later than 11:30:00 AM Coordinated Universal Time.']],
                 [TimeHandler::class => new TimeHandler(messageTimeType: IntlDateFormatter::FULL)],
             ],
             'rule-message-type-override-handler' => [

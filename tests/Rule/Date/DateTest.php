@@ -153,6 +153,12 @@ final class DateTest extends RuleTestCase
                 ['' => ['Value must be no later than 10.11.2002.']],
                 [DateHandler::class => new DateHandler(locale: 'en')],
             ],
+            'handler-message-type-overrides-format' => [
+                '29*03*2024',
+                new Date(format: 'php:d*m*Y', max: '11*11*2023'),
+                ['' => ['Value must be no later than Saturday, November 11, 2023.']],
+                [DateHandler::class => new DateHandler(messageDateType: IntlDateFormatter::FULL)],
+            ],
             'format-used-for-message' => [
                 '01.01.2100',
                 new Date(
