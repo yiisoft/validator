@@ -11,6 +11,7 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Validator;
 
 final class EqualTest extends RuleTestCase
 {
@@ -133,5 +134,12 @@ final class EqualTest extends RuleTestCase
     {
         $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Equal(1), new Equal(1, when: $when));
+    }
+
+    public function testDefaultSkipOnEmptyCondition(): void
+    {
+        $validator = (new Validator())->withDefaultSkipOnEmptyCondition(true);
+        $result = $validator->validate('', [new Equal(5)]);
+        $this->assertTrue($result->isValid());
     }
 }

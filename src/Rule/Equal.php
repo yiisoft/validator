@@ -94,7 +94,7 @@ final class Equal extends AbstractCompare
         ?string $message = null,
         string $type = CompareType::NUMBER,
         bool $strict = false,
-        bool|callable|null $skipOnEmpty = false,
+        bool|callable|null $skipOnEmpty = null,
         bool $skipOnError = false,
         ?Closure $when = null,
     ) {

@@ -2,6 +2,7 @@
 
 ## 2.5.2 under development
 
+- Chg #788: Fix `skipOnEmpty` default value in `Equal`, `GreaterThan`, `GreaterThanOrEqual`, `LessThan`, `LessThanOrEqual` and `NotEqual` rules from `false` to `null` (@vjik)
 - Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
 - Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
 - Chg #795: Update Polish translations (@rbrzezinski)
