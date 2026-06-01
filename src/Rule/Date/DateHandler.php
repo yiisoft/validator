@@ -28,9 +28,12 @@ final class DateHandler extends BaseDateHandler
         string $tooLateMessage = '{Property} must be no later than {limit}.',
     ) {
         $argumentCount = func_num_args();
+        $messageDateTypeFallbackToRuleType = $messageDateType === null;
+
         // Keep the public default value for BC, but treat it as unset when omitted.
         if ($messageDateType === IntlDateFormatter::SHORT && $argumentCount !== 5) {
             $messageDateType = null;
+            $messageDateTypeFallbackToRuleType = false;
         }
 
         parent::__construct(
@@ -44,6 +47,7 @@ final class DateHandler extends BaseDateHandler
             $incorrectInputMessage,
             $tooEarlyMessage,
             $tooLateMessage,
+            $messageDateTypeFallbackToRuleType,
         );
     }
 }
