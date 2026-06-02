@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.6.1 under development
+
+- no changes in this release.
+
 ## 2.6.0 June 02, 2026
 
 - New #591: Add `File` validator (@samdark)
