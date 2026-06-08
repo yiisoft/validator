@@ -1,13 +1,16 @@
 # Yii Validator Change Log
 
-## 2.5.2 under development
+## 2.6.1 under development
 
 - Bug #752: Allow access to sibling properties in nested validation context (@WarLikeLaux)
-- Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
-- Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
-- Chg #795: Update Polish translations (@rbrzezinski)
+
+## 2.6.0 June 02, 2026
+
 - New #591: Add `File` validator (@samdark)
 - New #798: Add `SplFileInfo` value support to `Image` validator (@samdark)
+- Chg #795: Update Polish translations (@rbrzezinski)
+- Enh #787: Explicitly import classes, functions, and constants in "use" section (@mspirkov)
+- Bug #793: Fix translations, broken link in contributing guide, incorrect imports and grammar in documentation (@evilkarter)
 - Bug #798: Fix `Image` validator when unable to read from stream (@samdark)
 
 ## 2.5.1 December 12, 2025
