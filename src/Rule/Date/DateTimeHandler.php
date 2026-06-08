@@ -6,8 +6,6 @@ namespace Yiisoft\Validator\Rule\Date;
 
 use IntlDateFormatter;
 
-use function func_num_args;
-
 /**
  * @psalm-import-type IntlDateFormatterFormat from BaseDate
  */
@@ -17,6 +15,8 @@ final class DateTimeHandler extends BaseDateHandler
      * @psalm-param IntlDateFormatterFormat $dateType
      * @psalm-param IntlDateFormatterFormat $timeType
      * @psalm-param non-empty-string|null $timeZone
+     * @psalm-param IntlDateFormatterFormat $defaultMessageDateType
+     * @psalm-param IntlDateFormatterFormat $defaultMessageTimeType
      */
     public function __construct(
         int $dateType = IntlDateFormatter::SHORT,
@@ -24,26 +24,14 @@ final class DateTimeHandler extends BaseDateHandler
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageDateType = IntlDateFormatter::SHORT,
-        ?int $messageTimeType = IntlDateFormatter::SHORT,
+        ?int $messageDateType = null,
+        ?int $messageTimeType = null,
         string $incorrectInputMessage = '{Property} must be a date.',
         string $tooEarlyMessage = '{Property} must be no earlier than {limit}.',
         string $tooLateMessage = '{Property} must be no later than {limit}.',
+        int $defaultMessageDateType = IntlDateFormatter::SHORT,
+        int $defaultMessageTimeType = IntlDateFormatter::SHORT,
     ) {
-        $argumentCount = func_num_args();
-        $messageDateTypeFallbackToRuleType = $messageDateType === null;
-        $messageTimeTypeFallbackToRuleType = $messageTimeType === null;
-
-        // Keep the public default values for BC, but treat them as unset when omitted.
-        if ($messageDateType === IntlDateFormatter::SHORT && $argumentCount !== 6) {
-            $messageDateType = null;
-            $messageDateTypeFallbackToRuleType = false;
-        }
-        if ($messageTimeType === IntlDateFormatter::SHORT && $argumentCount !== 7) {
-            $messageTimeType = null;
-            $messageTimeTypeFallbackToRuleType = false;
-        }
-
         parent::__construct(
             $dateType,
             $timeType,
@@ -55,8 +43,8 @@ final class DateTimeHandler extends BaseDateHandler
             $incorrectInputMessage,
             $tooEarlyMessage,
             $tooLateMessage,
-            $messageDateTypeFallbackToRuleType,
-            $messageTimeTypeFallbackToRuleType,
+            $defaultMessageDateType,
+            $defaultMessageTimeType,
         );
     }
 }

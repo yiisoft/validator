@@ -43,8 +43,8 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         private readonly string $incorrectInputMessage,
         private readonly string $tooEarlyMessage,
         private readonly string $tooLateMessage,
-        private readonly bool $messageDateTypeFallbackToRuleType = true,
-        private readonly bool $messageTimeTypeFallbackToRuleType = true,
+        private readonly ?int $defaultMessageDateType = null,
+        private readonly ?int $defaultMessageTimeType = null,
     ) {}
 
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
@@ -194,18 +194,20 @@ abstract class BaseDateHandler implements RuleHandlerInterface
 
         $formatterDateType = $ruleMessageDateType
             ?? $this->messageDateType
-            ?? $this->getMessageDateTypeFallback($rule);
+            ?? $this->defaultMessageDateType
+            ?? ($rule instanceof Time ? IntlDateFormatter::NONE : IntlDateFormatter::SHORT);
         $formatterTimeType = $ruleMessageTimeType
             ?? $this->messageTimeType
-            ?? $this->getMessageTimeTypeFallback($rule);
+            ?? $this->defaultMessageTimeType
+            ?? ($rule instanceof Date ? IntlDateFormatter::NONE : IntlDateFormatter::SHORT);
 
         $format = $rule->getMessageFormat() ?? $this->messageFormat;
         if (
             $format === null
-            && $ruleMessageDateType === null
-            && $ruleMessageTimeType === null
             && $this->messageDateType === null
             && $this->messageTimeType === null
+            && $ruleMessageDateType === null
+            && $ruleMessageTimeType === null
         ) {
             $format = $rule->getFormat();
         }
@@ -247,34 +249,6 @@ abstract class BaseDateHandler implements RuleHandlerInterface
     private function makeDateTimeFromTimestamp(int $timestamp, ?DateTimeZone $timeZone): DateTimeImmutable
     {
         return (new DateTimeImmutable(timezone: $timeZone))->setTimestamp($timestamp);
-    }
-
-    /**
-     * @psalm-return IntlDateFormatterFormat
-     */
-    private function getMessageDateTypeFallback(Date|DateTime|Time $rule): int
-    {
-        if ($rule instanceof Time) {
-            return IntlDateFormatter::NONE;
-        }
-
-        return $this->messageDateTypeFallbackToRuleType
-            ? $this->getDateTypeFromRule($rule)
-            : IntlDateFormatter::SHORT;
-    }
-
-    /**
-     * @psalm-return IntlDateFormatterFormat
-     */
-    private function getMessageTimeTypeFallback(Date|DateTime|Time $rule): int
-    {
-        if ($rule instanceof Date) {
-            return IntlDateFormatter::NONE;
-        }
-
-        return $this->messageTimeTypeFallbackToRuleType
-            ? $this->getTimeTypeFromRule($rule)
-            : IntlDateFormatter::SHORT;
     }
 
     /**

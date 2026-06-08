@@ -70,17 +70,6 @@ final class TimeTest extends RuleTestCase
                 ['' => ['Max: 12:00.']],
                 [TimeHandler::class => new TimeHandler(tooLateMessage: 'Max: {limit}.')],
             ],
-            'handler-message-time-type-null-with-handler-custom-message' => [
-                1711719000,
-                new Time(
-                    timeType: IntlDateFormatter::FULL,
-                    max: 1711711800,
-                    timeZone: 'UTC',
-                    locale: 'en_US',
-                ),
-                ['' => ['Max: 11:30:00 AM Coordinated Universal Time.']],
-                [TimeHandler::class => new TimeHandler(messageTimeType: null, tooLateMessage: 'Max: {limit}.')],
-            ],
             'timestamp' => [
                 1711705158,
                 new Time(format: 'php:d.m.Y, H:i:s', min: 1711705200),
@@ -120,17 +109,6 @@ final class TimeTest extends RuleTestCase
                 ),
                 ['' => ['Value must be no later than 11:30 AM.']],
                 [TimeHandler::class => new TimeHandler(timeType: IntlDateFormatter::FULL)],
-            ],
-            'handler-message-time-type-null-falls-back-to-rule-time-type' => [
-                1711719000,
-                new Time(
-                    timeType: IntlDateFormatter::FULL,
-                    max: 1711711800,
-                    timeZone: 'UTC',
-                    locale: 'en_US',
-                ),
-                ['' => ['Value must be no later than 11:30:00 AM Coordinated Universal Time.']],
-                [TimeHandler::class => new TimeHandler(messageTimeType: null)],
             ],
             'handler-message-time-type-short-overrides-format' => [
                 '15*30',

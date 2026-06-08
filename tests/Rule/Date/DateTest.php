@@ -124,12 +124,6 @@ final class DateTest extends RuleTestCase
                 ['' => ['Max: 2024-01-01.']],
                 [DateHandler::class => new DateHandler(tooLateMessage: 'Max: {limit}.')],
             ],
-            'handler-message-date-type-null-with-handler-custom-message' => [
-                'March 29, 2024',
-                new Date(dateType: IntlDateFormatter::LONG, max: 'January 1, 2024'),
-                ['' => ['Max: January 1, 2024.']],
-                [DateHandler::class => new DateHandler(messageDateType: null, tooLateMessage: 'Max: {limit}.')],
-            ],
             'timestamp' => [
                 1711705158,
                 new Date(min: 1711705200),
@@ -177,17 +171,23 @@ final class DateTest extends RuleTestCase
                 ['' => ['Value must be no later than 1/1/24.']],
                 [DateHandler::class => new DateHandler(dateType: IntlDateFormatter::LONG)],
             ],
-            'handler-message-date-type-null-falls-back-to-rule-date-type' => [
-                'March 29, 2024',
-                new Date(dateType: IntlDateFormatter::LONG, max: 'January 1, 2024'),
-                ['' => ['Value must be no later than January 1, 2024.']],
-                [DateHandler::class => new DateHandler(messageDateType: null)],
-            ],
             'handler-message-date-type-short-overrides-format' => [
                 '2024-03-29',
                 new Date(format: 'php:Y-m-d', max: '2024-01-01'),
                 ['' => ['Value must be no later than 1/1/24.']],
                 [DateHandler::class => new DateHandler(messageDateType: IntlDateFormatter::SHORT)],
+            ],
+            'default-message-date-type-used-when-unset' => [
+                '3/29/24',
+                new Date(max: '1/1/24'),
+                ['' => ['Value must be no later than Monday, January 1, 2024.']],
+                [DateHandler::class => new DateHandler(defaultMessageDateType: IntlDateFormatter::FULL)],
+            ],
+            'default-message-date-type-does-not-override-format' => [
+                '29*03*2024',
+                new Date(format: 'php:d*m*Y', max: '11*11*2023'),
+                ['' => ['Value must be no later than 11*11*2023.']],
+                [DateHandler::class => new DateHandler(defaultMessageDateType: IntlDateFormatter::FULL)],
             ],
             'format-used-for-message' => [
                 '01.01.2100',

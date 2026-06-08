@@ -6,8 +6,6 @@ namespace Yiisoft\Validator\Rule\Date;
 
 use IntlDateFormatter;
 
-use function func_num_args;
-
 /**
  * @psalm-import-type IntlDateFormatterFormat from BaseDate
  */
@@ -16,26 +14,19 @@ final class DateHandler extends BaseDateHandler
     /**
      * @psalm-param IntlDateFormatterFormat $dateType
      * @psalm-param non-empty-string|null $timeZone
+     * @psalm-param IntlDateFormatterFormat $defaultMessageDateType
      */
     public function __construct(
         int $dateType = IntlDateFormatter::SHORT,
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageDateType = IntlDateFormatter::SHORT,
+        ?int $messageDateType = null,
         string $incorrectInputMessage = '{Property} must be a date.',
         string $tooEarlyMessage = '{Property} must be no earlier than {limit}.',
         string $tooLateMessage = '{Property} must be no later than {limit}.',
+        int $defaultMessageDateType = IntlDateFormatter::SHORT,
     ) {
-        $argumentCount = func_num_args();
-        $messageDateTypeFallbackToRuleType = $messageDateType === null;
-
-        // Keep the public default value for BC, but treat it as unset when omitted.
-        if ($messageDateType === IntlDateFormatter::SHORT && $argumentCount !== 5) {
-            $messageDateType = null;
-            $messageDateTypeFallbackToRuleType = false;
-        }
-
         parent::__construct(
             $dateType,
             IntlDateFormatter::NONE,
@@ -47,7 +38,8 @@ final class DateHandler extends BaseDateHandler
             $incorrectInputMessage,
             $tooEarlyMessage,
             $tooLateMessage,
-            $messageDateTypeFallbackToRuleType,
+            $defaultMessageDateType,
+            null,
         );
     }
 }
