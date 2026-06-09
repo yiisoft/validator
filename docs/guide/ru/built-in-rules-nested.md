@@ -262,7 +262,7 @@ $rule = new Nested([
 и `Each`. Если вам это необходимо, используйте явную форму конфигурации
 (см. пример в разделе [Базовое использование]).
 
-### Использование атрибутов
+### Using PHP attributes
 
 Правила и отношения можно объявлять через DTO с PHP атрибутами:
 
@@ -510,5 +510,5 @@ $data = [
 [Базовое использование]: #базовое-использование-связь-один-к-одному
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Conditional validation]: conditional-validation.md
-[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md
+[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Использование валидатора]: using-validator.md

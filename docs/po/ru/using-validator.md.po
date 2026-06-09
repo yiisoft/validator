@@ -25,9 +25,13 @@ msgstr "Правила"
 
 #. type: Title ####
 #: guide/en/built-in-rules-nested.md guide/en/using-validator.md
-#, no-wrap
+#, fuzzy, no-wrap
 msgid "Using PHP attributes"
-msgstr "Использование PHP-атрибутов"
+msgstr ""
+"#-#-#-#-#  built-in-rules-nested.md.po  #-#-#-#-#\n"
+"Использование атрибутов\n"
+"#-#-#-#-#  using-validator.md.po  #-#-#-#-#\n"
+"Использование PHP-атрибутов"
 
 #. type: Link reference
 #: guide/en/configuring-rules-via-php-attributes.md
