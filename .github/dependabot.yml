@@ -12,3 +12,5 @@ updates:
       interval: "weekly"
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: "yiisoft/*"
