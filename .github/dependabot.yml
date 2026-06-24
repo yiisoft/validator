@@ -1,7 +1,17 @@
 version: 2
 updates:
   # Maintain dependencies for GitHub Actions.
-  - package-ecosystem: "github-actions"\n    directory: "/"\n    schedule:\n      interval: "weekly"\n    cooldown:\n      default-days: 7\n    ignore:\n      - dependency-name: "yiisoft/*"\n  - package-ecosystem: "composer"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "yiisoft/*"
+
+  # Maintain dependencies for Composer
+  - package-ecosystem: "composer"
     directory: "/"
     schedule:
       interval: "daily"
