@@ -1,13 +1,5 @@
 version: 2
 updates:
-  # Maintain dependencies for GitHub Actions.
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    # Too noisy. See https://github.community/t/increase-if-necessary-for-github-actions-in-dependabot/179581
-    open-pull-requests-limit: 0
-
   # Maintain dependencies for Composer
     ignore:
       - dependency-name: "yiisoft/*"
@@ -16,3 +8,11 @@ updates:
     schedule:
       interval: "daily"
     versioning-strategy: increase-if-necessary
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
+    ignore:
+      - dependency-name: "yiisoft/*"
