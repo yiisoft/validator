@@ -21,5 +21,7 @@ concurrency:
 jobs:
   rector:
     uses: yiisoft/actions/.github/workflows/rector-cs.yml@master
+    permissions:
+      contents: write # Required by the reusable workflow to push Rector and PHP CS Fixer changes.
     with:
       php: '8.1'
