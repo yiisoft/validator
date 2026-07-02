@@ -16,6 +16,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check-docs:
     name: Check docs
@@ -42,7 +46,7 @@ jobs:
     name: Update docs
     if: github.event_name == 'push'
     permissions:
-      contents: write
+      contents: write # Required to push generated docs translation updates.
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

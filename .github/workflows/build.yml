@@ -28,6 +28,8 @@ name: build
 jobs:
   phpunit:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     with:
       extensions: intl,fileinfo
       coverage: xdebug
@@ -37,6 +39,8 @@ jobs:
         ['8.1', '8.2', '8.3', '8.4', '8.5']
   phpunit-without-intl:
     uses: yiisoft/actions/.github/workflows/phpunit.yml@master
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     with:
       phpunitConfig: phpunit-without-intl.xml
       extensions: :intl
