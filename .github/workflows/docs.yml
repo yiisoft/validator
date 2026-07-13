@@ -3,6 +3,7 @@ name: Update docs translation
 on:
   pull_request:
     paths: &paths
+      - '.github/workflows/docs.yml'
       - 'docs/**'
   push:
     branches: [ "master" ]
