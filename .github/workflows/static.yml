@@ -1,29 +1,23 @@
-permissions:
-  contents: read
+name: static analysis
 
 on:
   pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'infection.json.dist'
-      - 'phpunit.xml.dist'
-
+    paths: &paths
+      - 'src/**'
+      - 'config/**'
+      - '.github/workflows/static.yml'
+      - 'psalm*.xml'
+      - 'composer.json'
   push:
-    branches: [ 'master' ]
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'infection.json.dist'
-      - 'phpunit.xml.dist'
+    branches: ['master']
+    paths: *paths
 
-name: static analysis
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   psalm:
