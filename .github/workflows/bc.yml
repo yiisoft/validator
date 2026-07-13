@@ -1,36 +1,22 @@
-permissions:
-  contents: read
+name: backwards compatibility
 
 on:
   pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'infection.json.dist'
-      - 'phpunit.xml.dist'
-      - 'psalm.xml'
+    paths: &paths
+      - 'src/**'
+      - '.github/workflows/bc.yml'
+      - '.roave-backward-compatibility-check.xml'
+      - 'composer.json'
   push:
-    branches: [ 'master' ]
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'infection.json.dist'
-      - 'phpunit.xml.dist'
-      - 'psalm.xml'
+    branches: ['master']
+    paths: *paths
 
-name: backwards compatibility
+permissions:
+  contents: read
 
 jobs:
   roave_bc_check:
     uses: yiisoft/actions/.github/workflows/bc.yml@master
     with:
-      os: >-
-        ['ubuntu-latest']
       php: >-
         ['8.3']

@@ -2,16 +2,11 @@ name: Update docs translation
 
 on:
   pull_request:
-    paths:
-      - 'docs/po/**'
-      - 'docs/pot/**'
-      - 'docs/po4a.conf'
-      - 'docs/po4a-base.conf'
-      - 'docs/prepare-config.sh'
+    paths: &paths
+      - 'docs/**'
   push:
     branches: [ "master" ]
-    paths:
-      - 'docs/**'
+    paths: *paths
 
 permissions:
   contents: read

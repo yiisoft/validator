@@ -2,14 +2,15 @@ name: Rector + PHP CS Fixer
 
 on:
   pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'infection.json.dist'
-      - 'psalm.xml'
+    paths:
+      - 'config/**'
+      - 'messages/**'
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/rector-cs.yml'
+      - 'composer.json'
+      - 'rector.php'
+      - '.php-cs-fixer.dist.php'
 
 permissions:
   contents: read

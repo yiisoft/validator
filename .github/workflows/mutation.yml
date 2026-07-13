@@ -1,27 +1,21 @@
-permissions:
-  contents: read
+name: mutation test
 
 on:
   pull_request:
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'psalm.xml'
-
+    paths: &paths
+      - 'config/**'
+      - 'src/**'
+      - 'tests/**'
+      - '.github/workflows/mutation.yml'
+      - 'composer.json'
+      - 'infection.json.dist'
+      - 'phpunit.xml.dist'
   push:
-    branches: [ 'master' ]
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'psalm.xml'
+    branches: ['master']
+    paths: *paths
 
-name: mutation test
+permissions:
+  contents: read
 
 jobs:
   mutation:
