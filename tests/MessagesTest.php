@@ -48,7 +48,11 @@ final class MessagesTest extends TestCase
     public static function dataNonEmpty(): array
     {
         return [
+            ['de'],
+            ['pl'],
+            ['pt-BR'],
             ['ru'],
+            ['uz'],
         ];
     }
 
