@@ -2,7 +2,7 @@
 
 ## 2.6.1 under development
 
-- no changes in this release.
+- Bug #752: Allow access to sibling properties in nested validation context (@WarLikeLaux)
 
 ## 2.6.0 June 02, 2026
 
