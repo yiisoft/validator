@@ -1,7 +1,7 @@
 # Результат
 
-The validation result is an object containing errors that occurred during
-validation.
+Результатом валидации является объект, содержащий ошибки, возникшие во время
+проверки.
 
 ## Валидация успешна?
 
@@ -172,10 +172,10 @@ $rule = new Each([new Number(min: 21)]);
 ]
 ```
 
-### First error messages indexed by property
+### Первые сообщения об ошибках, сгруппированные по свойству
 
-To get only the first error message for each property (useful for displaying
-a single error per field), use:
+Чтобы получить только первое сообщение об ошибке для каждого свойства (что
+полезно для отображения одной ошибки для каждого поля), используйте:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -194,8 +194,8 @@ $result->getFirstErrorMessagesIndexedByProperty();
 ];
 ```
 
-Note that unlike `getErrorMessagesIndexedByProperty()`, each value is a
-single string, not an array.
+Обратите внимание, что в отличие от `getErrorMessagesIndexedByProperty()`,
+каждое значение представляет собой отдельную строку, а не массив.
 
 ### Сообщения об ошибках, сгруппированные по пути
 
@@ -233,10 +233,10 @@ $result->getErrorMessagesIndexedByPath();
 ];
 ```
 
-#### First error messages indexed by path
+#### Первые сообщения об ошибках, сгруппированные по пути
 
-To get only the first error message for each path (useful for displaying a
-single error per field), use:
+Чтобы получить только первое сообщение об ошибке для каждого пути (это
+полезно для отображения одной ошибки для каждого поля), используйте:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -256,8 +256,8 @@ $result->getFirstErrorMessagesIndexedByPath();
 ];
 ```
 
-Note that unlike `getErrorMessagesIndexedByPath()`, each value is a single
-string, not an array.
+Обратите внимание, что в отличие от `getErrorMessagesIndexedByPath()`,
+каждое значение представляет собой отдельную строку, а не массив.
 
 #### Разрешение конфликтов специальных символов в именах свойств
 
@@ -375,17 +375,18 @@ use Yiisoft\Validator\Result;
 $result->getPropertyErrors('email');
 ```
 
-## Adding errors
+## Добавление ошибок
 
-When writing custom rule handlers, errors are added to a `Result`
-object. There are three methods available, each with different
-post-processing behavior:
+При написании пользовательских обработчиков правил ошибки добавляются в
+объект `Result`. Доступны три метода, каждый из которых имеет различное
+поведение при постобработке:
 
-- `addError()` — message is translated and formatted (default behavior).
-- `addErrorWithFormatOnly()` — message is formatted (parameter substitution)
-  but not translated.
-- `addErrorWithoutPostProcessing()` — message is used as-is, with no
-  formatting or translation.
+- `addError()` — сообщение переводится и форматируется (поведение по
+  умолчанию).
+- `addErrorWithFormatOnly()` — сообщение отформатировано (подстановка
+  параметров), но не переведено.
+- `addErrorWithoutPostProcessing()` — сообщение используется как есть, без
+  форматирования или перевода.
 
 ```php
 use Yiisoft\Validator\Result;
@@ -396,10 +397,10 @@ $result->addErrorWithFormatOnly('Already formatted: {value}.', ['value' => 42]);
 $result->addErrorWithoutPostProcessing('This message is used exactly as written.');
 ```
 
-## Merging results
+## Объединение результатов
 
-To merge other validation results into the current one, use the `add()`
-method:
+Для объединения результатов других проверок с текущими используйте метод
+`add()`:
 
 ```php
 use Yiisoft\Validator\Result;

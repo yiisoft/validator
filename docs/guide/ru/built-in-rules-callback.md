@@ -1,23 +1,26 @@
-# `Callback` - a wrapper around `callable`
+# `Callback` - обертка вокруг `вызываемого выражения`
 
-This rule allows validation of the current property value (but not limited to it) with an arbitrary condition within a  
-callable. The benefit is that there is no need to create a separate custom
-rule and handler.
+Это правило позволяет проверять текущее значение свойства (но не только его) с помощью произвольного условия внутри
 
-A condition can be within:
+вызываемой функции. Преимущество заключается в том, что нет необходимости
+создавать отдельное пользовательское правило и обработчик.
 
-- Standalone callable function.
-- Callable class.
-- DTO (data transfer object) method.
+Условие может находиться в:
 
-The downside of using standalone functions and DTO methods is a lack of
-reusability. So they are mainly useful for some specific non-repetitive
-conditions. Reusability can be achieved with callable classes, but depending
-on other factors (the need for additional parameters for example), it might
-be a good idea to create a full-fledged [custom
-rule](creating-custom-rules.md) with a separate handler instead.
+- Отдельная вызываемая функция.
+- Вызываемый класс.
+- Метод DTO (объекта передачи данных).
 
-The callback function signature is the following:
+Недостатком использования отдельных функций и методов DTO является
+отсутствие возможности повторного использования. Поэтому они в основном
+полезны в определенных не повторяющихся конкретных ситуациях. Повторное
+использование можно обеспечить с помощью вызываемых классов, но в
+зависимости от других факторов (например, необходимости дополнительных
+параметров) может оказаться целесообразным вместо этого создать полноценное
+[пользовательское правило](creating-custom-rules.md) с отдельным
+обработчиком.
+
+Сигнатура функции обратного вызова выглядит следующим образом:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -29,14 +32,15 @@ function (mixed $value, Callback $rule, ValidationContext $context): Result;
 
 где:
 
-- `$value` is the validated value;
-- `$rule` is a reference to the original `Callback` rule;
+- `$value` проверяемое значение;
+- `$rule` это ссылка на исходное `Callback` правило;
 - `$context` контекст валидации;
-- returned value is a validation result instance with or without errors.
+- возвращаемое значение представляет собой экземпляр результата проверки,
+  содержащий или не содержащий ошибки.
 
-## Using as a function
+## Использование как функции
 
-An example of passing a standalone callable function to a `Callback` rule:
+Пример передачи вызываемой функции в правило  `Callback`:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -45,21 +49,22 @@ use Yiisoft\Validator\ValidationContext;
 
 new Callback(
     static function (mixed $value, Callback $rule, ValidationContext $context): Result {
-        // The actual validation code.
+        // Фактический код проверки.
         
         return new Result();
     },
 );
 ```
 
-## Examples
+## Примеры
 
-### Value validation
+### Проверка значения
 
-`Callback` rule can be used to add validation missing in built-in rules for
-a single property's value. Below is the example verifying that a value is a
-valid [YAML](https://en.wikipedia.org/wiki/YAML) string (additionally
-requires `yaml` PHP extension):
+Правило `Callback` можно использовать для добавления проверки, отсутствующей
+во встроенных правилах, для значения одного свойства. Ниже приведен пример,
+подтверждающий, что значение является допустимой строкой
+[YAML](https://en.wikipedia.org/wiki/YAML) (дополнительно требуется  `yaml`
+модуль для PHP):
 
 ```php
 use Exception;
@@ -89,13 +94,13 @@ new Callback(
 );
 ```
 
-> **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to
-> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. 
+> **Примечание:** Обработка непроверенного пользовательского ввода с помощью `yaml_parse()` может быть опасной при определенных настройках.
+> Для получения более подробной информации обратитесь к [документации `yaml_parse()`](https://www.php.net/manual/en/function.yaml-parse.php).
 
-### Usage of validation context for validating multiple properties depending on each other
+### Использование контекста валидации для проверки нескольких свойств, зависящих друг от друга
 
-In the example below, the 3 angles are validated as degrees to form a valid
-triangle:
+В приведенном ниже примере три угла проверяются на соответствие
+градусам,чтобы сформировался корректный треугольник:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -139,10 +144,10 @@ $rules = [
 ];
 ```
 
-### Replacing boilerplate code with separate rules and `when`
+### Замена шаблонного кода отдельными правилами и `when`
 
-However, some cases of using validation context can lead to boilerplate
-code:
+Однако в некоторых случаях использование контекста валидации может привести
+к появлению шаблонного кода:
 
 ```php
 use Yiisoft\Validator\Result;
@@ -171,8 +176,9 @@ static function (mixed $value, Callback $rule, ValidationContext $context): Resu
 };
 ```
 
-They can be rewritten using multiple rules and conditional validation making
-code more intuitive. We can use built-in rules where possible:
+Их можно переписать, используя несколько правил и условную проверку, что
+сделает код более интуитивно понятным. Можно использовать встроенные правила
+там где это возможно:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -191,11 +197,12 @@ $rules = [
 ];
 ```
 
-## Using as an object's method
+## Использование в качестве метода объекта
 
-### For property
+### Для свойства
 
-When using as a PHP attribute, set an object's method as a callback instead:
+При использовании в качестве PHP-атрибута установите метод объекта в
+качестве функции обратного вызова:
 
 ```php
 use Exception;
@@ -232,17 +239,17 @@ final class Config {
 }
 ```
 
-The signature is the same as in a regular function. Note that there are no
-restrictions on visibility levels and static modifiers, all of them can be
-used (`public`, `protected`, `private`, `static`).
+Сигнатура такая же, как и в обычной функции. Обратите внимание, что
+ограничений на уровни видимости и статические модификаторы нет, все они
+могут быть использованы (`public`, `protected`, `private`, `static`).
 
-Using a `callback` argument instead of `method` with PHP attributes is
-prohibited due to current PHP language restrictions (a callback can't be
-inside a PHP attribute).
+Использование аргумента `callback` вместо `method` с PHP-атрибутами
+запрещено из-за текущих ограничений языка PHP (функция обратного вызова не
+может находиться внутри PHP-атрибута).
 
-### For the whole object
+### Для всего объекта
 
-It's also possible to check the whole object:
+Также можно проверить весь объект:
 
 ```php
 use Exception;
@@ -279,11 +286,12 @@ final class Config {
 }
 ```
 
-Note the use of property value (`$this->yaml`) instead of method argument (`$value`).
+Обратите внимание на использование значения свойства ($this->yaml) вместо аргумента метода ($value).
 
-## Using a callable class
+## Использование вызываемого класса
 
-A class that implements `__invoke()` can also be used as a callable:
+Класс, реализующий метод `__invoke()`, также можно использовать как
+вызываемый объект (callable):
 
 ```php
 use Exception;
@@ -316,9 +324,10 @@ final class YamlCallback
 }
 ```
 
-The signature is the same as in a regular function.
+Сигнатура такая же, как и в обычной функции.
 
-Using in rules (note that a new instance must be passed, not a class name):
+Использование в правилах (обратите внимание, что необходимо передать
+экземпляр, а не имя класса):
 
 ```php
 use Yiisoft\Validator\Rule\Callback;
@@ -328,11 +337,12 @@ $rules = [
 ];
 ``` 
 
-## Shortcut for use with validator
+## Сокращение при использовании в валидаторе
 
-When using with the validator and default `Callback` rule settings, a rule
-declaration can be omitted, so just including a callable is enough. It will
-be normalized automatically before validation:
+При использовании в валидаторе и настройках по умолчанию для `Callback`
+правила, объявление правила можно опустить, поэтому достаточно просто
+указать вызываемую функцию. Она будет автоматически нормализована перед
+проверкой:
 
 ```php
 use Exception;
@@ -364,7 +374,7 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-Or it can be set within an array of other rules:
+Или же его можно задать в массиве вместе с другими правилами:
 
 ```php
 use Exception;

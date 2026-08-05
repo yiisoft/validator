@@ -1,0 +1,206 @@
+# Russian translations for PACKAGE package
+# Copyright (C) 2026 Free Software Foundation, Inc.
+# This file is distributed under the same license as the PACKAGE package.
+# Automatically generated, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2026-06-08 12:31+0000\n"
+"PO-Revision-Date: 2026-06-08 12:31+0000\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. type: Title #
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "File"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "`File` checks that a value is a file and can validate its extension, MIME type, and size."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "Supported values:"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-file.md
+msgid "string file paths;"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-file.md
+msgid "`SplFileInfo` instances;"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules-file.md
+msgid "[PSR-7] `UploadedFileInterface` instances."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "Use `Each` for multiple files:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-file.md
+#, fuzzy, no-wrap
+#| msgid ""
+#| "use Yiisoft\\Validator\\Rule\\Each;\n"
+#| "use Yiisoft\\Validator\\Rule\\Integer;\n"
+#| "\n"
+#| "new Each([\n"
+#| "    new Integer(min: 0, max: 255),\n"
+#| "]);\n"
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\File;\n"
+"\n"
+"$rules = [\n"
+"    'attachments' => new Each(new File(extensions: ['pdf', 'txt'])),\n"
+"];\n"
+msgstr ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\Integer;\n"
+"\n"
+"new Each([\n"
+"    new Integer(min: 0, max: 255),\n"
+"]);\n"
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "For example, with a PSR-7 request:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\Each;\n"
+"use Yiisoft\\Validator\\Rule\\File;\n"
+"use Yiisoft\\Validator\\Validator;\n"
+"\n"
+"$uploadedFiles = $request->getUploadedFiles()['attachments'] ?? [];\n"
+"\n"
+"$result = (new Validator())->validate(\n"
+"    ['attachments' => $uploadedFiles],\n"
+"    ['attachments' => new Each(new File(maxSize: 5_000_000))],\n"
+");\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "If your application works with native PHP `$_FILES` data directly, convert it to supported values such as PSR-7 uploaded file objects before passing it to the validator."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "Uploaded Files"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "`File` handles PSR-7 upload error codes. `UPLOAD_ERR_NO_FILE` is treated as a missing value, so optional upload fields can use `skipOnEmpty`:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\File;\n"
+"\n"
+"$rule = new File(skipOnEmpty: true);\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "Other upload error codes fail validation with `uploadFailedMessage`."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "The rule does not prove that arbitrary string paths or `SplFileInfo` values came from PHP's HTTP upload mechanism. Do not pass user-submitted paths directly. Use PSR-7 uploaded file objects from a trusted request implementation, or perform [upload provenance checks] before validating filesystem paths."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "MIME Types"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "For filesystem-backed files, MIME type validation uses PHP's file information facilities through `mime_content_type()`. If the MIME type can't be determined, MIME validation fails."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "For pathless PSR-7 uploads backed only by an in-memory stream, `File` doesn't trust client-provided media type by default. If your application has already decided that the client metadata is acceptable for this field, enable it explicitly:"
+msgstr ""
+
+#. type: Fenced code block (php)
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid ""
+"use Yiisoft\\Validator\\Rule\\File;\n"
+"\n"
+"$rule = new File(\n"
+"    mimeTypes: ['text/plain'],\n"
+"    trustClientMediaType: true,\n"
+");\n"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "This option should be used with care because the client can send any media type value."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "Size"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "For filesystem-backed uploads, size checks use the actual file size on disk. For pathless streams, size checks use the PSR-7 upload size when available. If a size constraint is configured and the size can't be determined, validation fails."
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "`size` is mutually exclusive with `minSize` and `maxSize`. When both `minSize` and `maxSize` are set, `minSize` must be less than or equal to `maxSize`."
+msgstr ""
+
+#. type: Title ##
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "Request Body Streams"
+msgstr ""
+
+#. type: Plain text
+#: guide/en/built-in-rules-file.md
+msgid "`File` doesn't validate generic request body streams such as data read from `php://input` for PUT requests. Convert such input to a supported value first, or write a custom rule that validates your stream format and storage flow."
+msgstr ""
+
+#. type: Link reference
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "[PSR-7]: https://www.php-fig.org/psr/psr-7/"
+msgstr ""
+
+#. type: Link reference
+#: guide/en/built-in-rules-file.md
+#, no-wrap
+msgid "[upload provenance checks]: https://www.php.net/manual/en/features.file-upload.post-method.php"
+msgstr ""

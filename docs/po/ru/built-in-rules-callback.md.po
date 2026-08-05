@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "POT-Creation-Date: 2026-04-21 14:32+0000\n"
-"PO-Revision-Date: 2026-04-21 14:32+0000\n"
+"PO-Revision-Date: 2026-06-09 16:14+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -15,53 +15,56 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.9\n"
 
 #. type: Title #
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "`Callback` - a wrapper around `callable`"
-msgstr ""
+msgstr "`Callback` - обертка вокруг `вызываемого выражения`"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "This rule allows validation of the current property value (but not limited to it) with an arbitrary condition within a  \n"
 msgstr ""
+"Это правило позволяет проверять текущее значение свойства (но не только его) с помощью произвольного условия внутри\n"
+"\n"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "callable. The benefit is that there is no need to create a separate custom rule and handler."
-msgstr ""
+msgstr "вызываемой функции. Преимущество заключается в том, что нет необходимости создавать отдельное пользовательское правило и обработчик."
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "A condition can be within:"
-msgstr ""
+msgstr "Условие может находиться в:"
 
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md
 msgid "Standalone callable function."
-msgstr ""
+msgstr "Отдельная вызываемая функция."
 
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md
 msgid "Callable class."
-msgstr ""
+msgstr "Вызываемый класс."
 
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md
 msgid "DTO (data transfer object) method."
-msgstr ""
+msgstr "Метод DTO (объекта передачи данных)."
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "The downside of using standalone functions and DTO methods is a lack of reusability. So they are mainly useful for some specific non-repetitive conditions. Reusability can be achieved with callable classes, but depending on other factors (the need for additional parameters for example), it might be a good idea to create a full-fledged [custom rule](creating-custom-rules.md) with a separate handler instead."
-msgstr ""
+msgstr "Недостатком использования отдельных функций и методов DTO является отсутствие возможности повторного использования. Поэтому они в основном полезны в определенных не повторяющихся конкретных ситуациях. Повторное использование можно обеспечить с помощью вызываемых классов, но в зависимости от других факторов (например, необходимости дополнительных параметров) может оказаться целесообразным вместо этого создать полноценное [пользовательское правило](creating-custom-rules.md) с отдельным обработчиком."
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "The callback function signature is the following:"
-msgstr ""
+msgstr "Сигнатура функции обратного вызова выглядит следующим образом:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -82,12 +85,12 @@ msgstr "где:"
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md
 msgid "`$value` is the validated value;"
-msgstr ""
+msgstr "`$value` проверяемое значение;"
 
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md
 msgid "`$rule` is a reference to the original `Callback` rule;"
-msgstr ""
+msgstr "`$rule` это ссылка на исходное `Callback` правило;"
 
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md guide/en/conditional-validation.md
@@ -97,18 +100,18 @@ msgstr "`$context` контекст валидации;"
 #. type: Bullet: '- '
 #: guide/en/built-in-rules-callback.md
 msgid "returned value is a validation result instance with or without errors."
-msgstr ""
+msgstr "возвращаемое значение представляет собой экземпляр результата проверки, содержащий или не содержащий ошибки."
 
 #. type: Title ##
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Using as a function"
-msgstr ""
+msgstr "Использование как функции"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "An example of passing a standalone callable function to a `Callback` rule:"
-msgstr ""
+msgstr "Пример передачи вызываемой функции в правило  `Callback`:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -126,23 +129,34 @@ msgid ""
 "    },\n"
 ");\n"
 msgstr ""
+"use Yiisoft\\Validator\\Result;\n"
+"use Yiisoft\\Validator\\Rule\\Callback;\n"
+"use Yiisoft\\Validator\\ValidationContext;\n"
+"\n"
+"new Callback(\n"
+"    static function (mixed $value, Callback $rule, ValidationContext $context): Result {\n"
+"        // Фактический код проверки.\n"
+"        \n"
+"        return new Result();\n"
+"    },\n"
+");\n"
 
 #. type: Title ##
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Examples"
-msgstr ""
+msgstr "Примеры"
 
 #. type: Title ###
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Value validation"
-msgstr ""
+msgstr "Проверка значения"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "`Callback` rule can be used to add validation missing in built-in rules for a single property's value. Below is the example verifying that a value is a valid [YAML](https://en.wikipedia.org/wiki/YAML) string (additionally requires `yaml` PHP extension):"
-msgstr ""
+msgstr "Правило `Callback` можно использовать для добавления проверки, отсутствующей во встроенных правилах, для значения одного свойства. Ниже приведен пример, подтверждающий, что значение является допустимой строкой [YAML](https://en.wikipedia.org/wiki/YAML) (дополнительно требуется  `yaml` модуль для PHP):"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -182,17 +196,19 @@ msgid ""
 "> **Note:** Processing untrusted user input with `yaml_parse()` can be dangerous with certain settings. Please refer to\n"
 "> [`yaml_parse()` docs](https://www.php.net/manual/en/function.yaml-parse.php) for more details. \n"
 msgstr ""
+"> **Примечание:** Обработка непроверенного пользовательского ввода с помощью `yaml_parse()` может быть опасной при определенных настройках.\n"
+"> Для получения более подробной информации обратитесь к [документации `yaml_parse()`](https://www.php.net/manual/en/function.yaml-parse.php).\n"
 
 #. type: Title ###
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Usage of validation context for validating multiple properties depending on each other"
-msgstr ""
+msgstr "Использование контекста валидации для проверки нескольких свойств, зависящих друг от друга"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "In the example below, the 3 angles are validated as degrees to form a valid triangle:"
-msgstr ""
+msgstr "В приведенном ниже примере три угла проверяются на соответствие градусам,чтобы сформировался корректный треугольник:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -243,12 +259,12 @@ msgstr ""
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Replacing boilerplate code with separate rules and `when`"
-msgstr ""
+msgstr "Замена шаблонного кода отдельными правилами и `when`"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "However, some cases of using validation context can lead to boilerplate code:"
-msgstr ""
+msgstr "Однако в некоторых случаях использование контекста валидации может привести к появлению шаблонного кода:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -283,7 +299,7 @@ msgstr ""
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "They can be rewritten using multiple rules and conditional validation making code more intuitive. We can use built-in rules where possible:"
-msgstr ""
+msgstr "Их можно переписать, используя несколько правил и условную проверку, что сделает код более интуитивно понятным. Можно использовать встроенные правила там где это возможно:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -309,18 +325,18 @@ msgstr ""
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Using as an object's method"
-msgstr ""
+msgstr "Использование в качестве метода объекта"
 
 #. type: Title ###
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "For property"
-msgstr ""
+msgstr "Для свойства"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "When using as a PHP attribute, set an object's method as a callback instead:"
-msgstr ""
+msgstr "При использовании в качестве PHP-атрибута установите метод объекта в качестве функции обратного вызова:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -363,23 +379,23 @@ msgstr ""
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "The signature is the same as in a regular function. Note that there are no restrictions on visibility levels and static modifiers, all of them can be used (`public`, `protected`, `private`, `static`)."
-msgstr ""
+msgstr "Сигнатура такая же, как и в обычной функции. Обратите внимание, что ограничений на уровни видимости и статические модификаторы нет, все они могут быть использованы (`public`, `protected`, `private`, `static`)."
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "Using a `callback` argument instead of `method` with PHP attributes is prohibited due to current PHP language restrictions (a callback can't be inside a PHP attribute)."
-msgstr ""
+msgstr "Использование аргумента `callback` вместо `method` с PHP-атрибутами запрещено из-за текущих ограничений языка PHP (функция обратного вызова не может находиться внутри PHP-атрибута)."
 
 #. type: Title ###
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "For the whole object"
-msgstr ""
+msgstr "Для всего объекта"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "It's also possible to check the whole object:"
-msgstr ""
+msgstr "Также можно проверить весь объект:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -423,18 +439,18 @@ msgstr ""
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Note the use of property value (`$this->yaml`) instead of method argument (`$value`).\n"
-msgstr ""
+msgstr "Обратите внимание на использование значения свойства ($this->yaml) вместо аргумента метода ($value).\n"
 
 #. type: Title ##
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Using a callable class"
-msgstr ""
+msgstr "Использование вызываемого класса"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "A class that implements `__invoke()` can also be used as a callable:"
-msgstr ""
+msgstr "Класс, реализующий метод `__invoke()`, также можно использовать как вызываемый объект (callable):"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -473,12 +489,12 @@ msgstr ""
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "The signature is the same as in a regular function."
-msgstr ""
+msgstr "Сигнатура такая же, как и в обычной функции."
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "Using in rules (note that a new instance must be passed, not a class name):"
-msgstr ""
+msgstr "Использование в правилах (обратите внимание, что необходимо передать экземпляр, а не имя класса):"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -495,12 +511,12 @@ msgstr ""
 #: guide/en/built-in-rules-callback.md
 #, no-wrap
 msgid "Shortcut for use with validator"
-msgstr ""
+msgstr "Сокращение при использовании в валидаторе"
 
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "When using with the validator and default `Callback` rule settings, a rule declaration can be omitted, so just including a callable is enough. It will be normalized automatically before validation:"
-msgstr ""
+msgstr "При использовании в валидаторе и настройках по умолчанию для `Callback` правила, объявление правила можно опустить, поэтому достаточно просто указать вызываемую функцию. Она будет автоматически нормализована перед проверкой:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md
@@ -538,7 +554,7 @@ msgstr ""
 #. type: Plain text
 #: guide/en/built-in-rules-callback.md
 msgid "Or it can be set within an array of other rules:"
-msgstr ""
+msgstr "Или же его можно задать в массиве вместе с другими правилами:"
 
 #. type: Fenced code block (php)
 #: guide/en/built-in-rules-callback.md

@@ -287,13 +287,13 @@ $rules = [
 $result = (new Validator())->validate($data, $rules);
 ```
 
-### `when` within nested structures
+### `when` внутри вложенных структур
 
-`$context->getDataSet()->getPropertyValue()` also works within nested validation, giving access to sibling properties
-at the same nesting level.
+Метод `$context->getDataSet()->getPropertyValue()` также работает внутри вложенной проверки, предоставляя доступ к свойствам соседних элементов
+на том же уровне вложенности.
 
-In this example `content` is only required when its sibling property
-`isEnabled` is `true`:
+В этом примере свойство `content` требуется только тогда, когда соседнее
+свойство `isEnabled` имеет значение `true`:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
@@ -323,11 +323,12 @@ $rules = new Nested([
 $result = (new Validator())->validate($data, $rules);
 ```
 
-Since `isEnabled` is `true`, the `Required` rule is applied and `content`
-fails validation because it is `null`.  Setting `isEnabled` to `false` would
-skip the `Required` rule entirely.
+Поскольку `isEnabled` имеет значение `true`, применяется правило `Required`
+и `content` не проходит проверку, поскольку имеет значение `null`. Установка
+`isEnabled` в значение `false` полностью пропустит правило `Required`.
 
-This approach works at any depth, including inside `Each`:
+Этот подход работает на любом уровне вложенности, в том числе и внутри
+`Each`:
 
 ```php
 use Yiisoft\Validator\Rule\BooleanValue;
