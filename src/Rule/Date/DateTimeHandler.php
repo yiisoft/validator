@@ -15,6 +15,8 @@ final class DateTimeHandler extends BaseDateHandler
      * @psalm-param IntlDateFormatterFormat $dateType
      * @psalm-param IntlDateFormatterFormat $timeType
      * @psalm-param non-empty-string|null $timeZone
+     * @psalm-param IntlDateFormatterFormat $defaultMessageDateType
+     * @psalm-param IntlDateFormatterFormat $defaultMessageTimeType
      */
     public function __construct(
         int $dateType = IntlDateFormatter::SHORT,
@@ -22,11 +24,13 @@ final class DateTimeHandler extends BaseDateHandler
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageDateType = IntlDateFormatter::SHORT,
-        ?int $messageTimeType = IntlDateFormatter::SHORT,
+        ?int $messageDateType = null,
+        ?int $messageTimeType = null,
         string $incorrectInputMessage = '{Property} must be a date.',
         string $tooEarlyMessage = '{Property} must be no earlier than {limit}.',
         string $tooLateMessage = '{Property} must be no later than {limit}.',
+        int $defaultMessageDateType = IntlDateFormatter::SHORT,
+        int $defaultMessageTimeType = IntlDateFormatter::SHORT,
     ) {
         parent::__construct(
             $dateType,
@@ -39,6 +43,8 @@ final class DateTimeHandler extends BaseDateHandler
             $incorrectInputMessage,
             $tooEarlyMessage,
             $tooLateMessage,
+            $defaultMessageDateType,
+            $defaultMessageTimeType,
         );
     }
 }

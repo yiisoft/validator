@@ -14,16 +14,18 @@ final class TimeHandler extends BaseDateHandler
     /**
      * @psalm-param IntlDateFormatterFormat $timeType
      * @psalm-param non-empty-string|null $timeZone
+     * @psalm-param IntlDateFormatterFormat $defaultMessageTimeType
      */
     public function __construct(
         int $timeType = IntlDateFormatter::SHORT,
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageTimeType = IntlDateFormatter::SHORT,
+        ?int $messageTimeType = null,
         string $incorrectInputMessage = '{Property} must be a time.',
         string $tooEarlyMessage = '{Property} must be no earlier than {limit}.',
         string $tooLateMessage = '{Property} must be no later than {limit}.',
+        int $defaultMessageTimeType = IntlDateFormatter::SHORT,
     ) {
         parent::__construct(
             IntlDateFormatter::NONE,
@@ -31,11 +33,13 @@ final class TimeHandler extends BaseDateHandler
             $timeZone,
             $locale,
             $messageFormat,
-            IntlDateFormatter::NONE,
+            null,
             $messageTimeType,
             $incorrectInputMessage,
             $tooEarlyMessage,
             $tooLateMessage,
+            null,
+            $defaultMessageTimeType,
         );
     }
 }

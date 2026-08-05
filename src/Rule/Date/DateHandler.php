@@ -14,16 +14,18 @@ final class DateHandler extends BaseDateHandler
     /**
      * @psalm-param IntlDateFormatterFormat $dateType
      * @psalm-param non-empty-string|null $timeZone
+     * @psalm-param IntlDateFormatterFormat $defaultMessageDateType
      */
     public function __construct(
         int $dateType = IntlDateFormatter::SHORT,
         ?string $timeZone = null,
         ?string $locale = null,
         ?string $messageFormat = null,
-        ?int $messageDateType = IntlDateFormatter::SHORT,
+        ?int $messageDateType = null,
         string $incorrectInputMessage = '{Property} must be a date.',
         string $tooEarlyMessage = '{Property} must be no earlier than {limit}.',
         string $tooLateMessage = '{Property} must be no later than {limit}.',
+        int $defaultMessageDateType = IntlDateFormatter::SHORT,
     ) {
         parent::__construct(
             $dateType,
@@ -32,10 +34,12 @@ final class DateHandler extends BaseDateHandler
             $locale,
             $messageFormat,
             $messageDateType,
-            IntlDateFormatter::NONE,
+            null,
             $incorrectInputMessage,
             $tooEarlyMessage,
             $tooLateMessage,
+            $defaultMessageDateType,
+            null,
         );
     }
 }

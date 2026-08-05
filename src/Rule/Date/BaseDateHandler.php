@@ -43,6 +43,8 @@ abstract class BaseDateHandler implements RuleHandlerInterface
         private readonly string $incorrectInputMessage,
         private readonly string $tooEarlyMessage,
         private readonly string $tooLateMessage,
+        private readonly ?int $defaultMessageDateType = null,
+        private readonly ?int $defaultMessageTimeType = null,
     ) {}
 
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
@@ -187,14 +189,28 @@ abstract class BaseDateHandler implements RuleHandlerInterface
 
     private function formatDate(DateTimeInterface $date, Date|DateTime|Time $rule, ?DateTimeZone $timeZone): string
     {
-        $formatterDateType = $this->getMessageDateTypeFromRule($rule)
+        $ruleMessageDateType = $this->getMessageDateTypeFromRule($rule);
+        $ruleMessageTimeType = $this->getMessageTimeTypeFromRule($rule);
+
+        $formatterDateType = $ruleMessageDateType
             ?? $this->messageDateType
-            ?? $this->getDateTypeFromRule($rule);
-        $formatterTimeType = $this->getMessageTimeTypeFromRule($rule)
+            ?? $this->defaultMessageDateType
+            ?? ($rule instanceof Time ? IntlDateFormatter::NONE : IntlDateFormatter::SHORT);
+        $formatterTimeType = $ruleMessageTimeType
             ?? $this->messageTimeType
-            ?? $this->getTimeTypeFromRule($rule);
+            ?? $this->defaultMessageTimeType
+            ?? ($rule instanceof Date ? IntlDateFormatter::NONE : IntlDateFormatter::SHORT);
 
         $format = $rule->getMessageFormat() ?? $this->messageFormat;
+        if (
+            $format === null
+            && $this->messageDateType === null
+            && $this->messageTimeType === null
+            && $ruleMessageDateType === null
+            && $ruleMessageTimeType === null
+        ) {
+            $format = $rule->getFormat();
+        }
         if (is_string($format) && str_starts_with($format, 'php:')) {
             return $date->format(substr($format, 4));
         }
