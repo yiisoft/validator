@@ -9,6 +9,7 @@ use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\File;
 use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\FilledOnlyOneOf;
 use Yiisoft\Validator\Rule\GreaterThan;
@@ -187,6 +188,44 @@ return [
     '{Property} must be a float.' => '{Property} deve ser um float.',
     /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Pelo menos uma das regras internas deve passar na validação.',
+
+    /** @see File */
+    'The size of {property} must be exactly {exactlyValue, number} {exactlyValue, plural, one{byte} other{bytes}}.' =>
+        'O tamanho de {property} deve ser exatamente {exactlyValue, number} {exactlyValue, plural, one{byte} few{bytes} many{bytes} other{bytes}}.',
+    'The size of {property} must be exactly {exactlyValue, number} KB.' =>
+        'O tamanho de {property} deve ser exatamente {exactlyValue, number} KB.',
+    'The size of {property} must be exactly {exactlyValue, number} MB.' =>
+        'O tamanho de {property} deve ser exatamente {exactlyValue, number} MB.',
+    'The size of {property} must be exactly {exactlyValue, number} GB.' =>
+        'O tamanho de {property} deve ser exatamente {exactlyValue, number} GB.',
+    'The size of {property} must be exactly {exactlyValue, number} TB.' =>
+        'O tamanho de {property} deve ser exatamente {exactlyValue, number} TB.',
+    'The size of {property} must be exactly {exactlyValue, number} PB.' =>
+        'O tamanho de {property} deve ser exatamente {exactlyValue, number} PB.',
+    'The size of {property} cannot be smaller than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' =>
+        'O tamanho de {property} não pode ser menor que {limitValue, number} {limitValue, plural, one{byte} few{bytes} many{bytes} other{bytes}}.',
+    'The size of {property} cannot be smaller than {limitValue, number} KB.' =>
+        'O tamanho de {property} não pode ser menor que {limitValue, number} KB.',
+    'The size of {property} cannot be smaller than {limitValue, number} MB.' =>
+        'O tamanho de {property} não pode ser menor que {limitValue, number} MB.',
+    'The size of {property} cannot be smaller than {limitValue, number} GB.' =>
+        'O tamanho de {property} não pode ser menor que {limitValue, number} GB.',
+    'The size of {property} cannot be smaller than {limitValue, number} TB.' =>
+        'O tamanho de {property} não pode ser menor que {limitValue, number} TB.',
+    'The size of {property} cannot be smaller than {limitValue, number} PB.' =>
+        'O tamanho de {property} não pode ser menor que {limitValue, number} PB.',
+    'The size of {property} cannot be larger than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' =>
+        'O tamanho de {property} não pode ser maior que {limitValue, number} {limitValue, plural, one{byte} few{bytes} many{bytes} other{bytes}}.',
+    'The size of {property} cannot be larger than {limitValue, number} KB.' =>
+        'O tamanho de {property} não pode ser maior que {limitValue, number} KB.',
+    'The size of {property} cannot be larger than {limitValue, number} MB.' =>
+        'O tamanho de {property} não pode ser maior que {limitValue, number} MB.',
+    'The size of {property} cannot be larger than {limitValue, number} GB.' =>
+        'O tamanho de {property} não pode ser maior que {limitValue, number} GB.',
+    'The size of {property} cannot be larger than {limitValue, number} TB.' =>
+        'O tamanho de {property} não pode ser maior que {limitValue, number} TB.',
+    'The size of {property} cannot be larger than {limitValue, number} PB.' =>
+        'O tamanho de {property} não pode ser maior que {limitValue, number} PB.',
 
     /** @see Image */
     '{Property} must be an image.' => '{Property} deve ser uma imagem.',

@@ -9,6 +9,7 @@ use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\File;
 use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\FilledOnlyOneOf;
 use Yiisoft\Validator\Rule\GreaterThan;
@@ -195,6 +196,44 @@ return [
     '{Property} must be a float.' => '{Property} должно быть вещественным числом.',
     /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Как минимум одно из внутренних правил должно пройти валидацию.',
+
+    /** @see File */
+    'The size of {property} must be exactly {exactlyValue, number} {exactlyValue, plural, one{byte} other{bytes}}.' =>
+        'Размер {property} должен быть ровно {exactlyValue, number} {exactlyValue, plural, one{байт} few{байта} many{байтов} other{байта}}.',
+    'The size of {property} must be exactly {exactlyValue, number} KB.' =>
+        'Размер {property} должен быть ровно {exactlyValue, number} КБ.',
+    'The size of {property} must be exactly {exactlyValue, number} MB.' =>
+        'Размер {property} должен быть ровно {exactlyValue, number} МБ.',
+    'The size of {property} must be exactly {exactlyValue, number} GB.' =>
+        'Размер {property} должен быть ровно {exactlyValue, number} ГБ.',
+    'The size of {property} must be exactly {exactlyValue, number} TB.' =>
+        'Размер {property} должен быть ровно {exactlyValue, number} ТБ.',
+    'The size of {property} must be exactly {exactlyValue, number} PB.' =>
+        'Размер {property} должен быть ровно {exactlyValue, number} ПБ.',
+    'The size of {property} cannot be smaller than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' =>
+        'Размер {property} не может быть меньше {limitValue, number} {limitValue, plural, one{байта} few{байтов} many{байтов} other{байта}}.',
+    'The size of {property} cannot be smaller than {limitValue, number} KB.' =>
+        'Размер {property} не может быть меньше {limitValue, number} КБ.',
+    'The size of {property} cannot be smaller than {limitValue, number} MB.' =>
+        'Размер {property} не может быть меньше {limitValue, number} МБ.',
+    'The size of {property} cannot be smaller than {limitValue, number} GB.' =>
+        'Размер {property} не может быть меньше {limitValue, number} ГБ.',
+    'The size of {property} cannot be smaller than {limitValue, number} TB.' =>
+        'Размер {property} не может быть меньше {limitValue, number} ТБ.',
+    'The size of {property} cannot be smaller than {limitValue, number} PB.' =>
+        'Размер {property} не может быть меньше {limitValue, number} ПБ.',
+    'The size of {property} cannot be larger than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' =>
+        'Размер {property} не может быть больше {limitValue, number} {limitValue, plural, one{байта} few{байтов} many{байтов} other{байта}}.',
+    'The size of {property} cannot be larger than {limitValue, number} KB.' =>
+        'Размер {property} не может быть больше {limitValue, number} КБ.',
+    'The size of {property} cannot be larger than {limitValue, number} MB.' =>
+        'Размер {property} не может быть больше {limitValue, number} МБ.',
+    'The size of {property} cannot be larger than {limitValue, number} GB.' =>
+        'Размер {property} не может быть больше {limitValue, number} ГБ.',
+    'The size of {property} cannot be larger than {limitValue, number} TB.' =>
+        'Размер {property} не может быть больше {limitValue, number} ТБ.',
+    'The size of {property} cannot be larger than {limitValue, number} PB.' =>
+        'Размер {property} не может быть больше {limitValue, number} ПБ.',
 
     /** @see Image */
     '{Property} must be an image.' => '{Property} должно быть изображением.',
