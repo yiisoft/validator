@@ -40,11 +40,12 @@
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.3",
         "friendsofphp/php-cs-fixer": "^3.91",
+        "guzzlehttp/psr7": "^2.13",
         "jetbrains/phpstorm-attributes": "^1.2",
-        "maglnet/composer-require-checker": "^4.7.1",
         "phpbench/phpbench": "^1.4.1",
         "phpunit/phpunit": "^10.5.46",
         "rector/rector": "^2.0.16",
+        "shipmonk/composer-dependency-analyser": "^1.8",
         "spatie/phpunit-watcher": "^1.24",
         "yiisoft/di": "^1.3",
         "yiisoft/test-support": "^3.0.2",
@@ -95,6 +96,7 @@
         "infection": "vendor/bin/infection",
         "dry-run": "vendor/bin/rector process --dry-run",
         "psalm": "vendor/bin/psalm --config=psalm.xml",
-        "cs-fix": "php-cs-fixer fix"
+        "cs-fix": "php-cs-fixer fix",
+        "dependency-analyser": "composer-dependency-analyser"
     }
 }
