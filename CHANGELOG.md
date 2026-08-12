@@ -2,7 +2,7 @@
 
 ## 2.6.1 under development
 
-- no changes in this release.
+- Enh #709: In date rules use `format` property for formatting dates in error messages when message format properties are not set (@WarLikeLaux)
 
 ## 2.6.0 June 02, 2026
 

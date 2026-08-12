@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule\Date;
 
 use DateTimeImmutable;
 use DateTimeZone;
+use IntlDateFormatter;
 use Yiisoft\Validator\Rule\Date\DateTime;
 use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateTimeHandler;
@@ -74,23 +75,89 @@ final class DateTimeTest extends RuleTestCase
             'min' => [
                 '2024-03-29, 12:35',
                 new DateTime(format: 'yyyy-MM-dd, HH:mm', min: '2025-01-01, 11:00'),
-                ['' => ['Value must be no earlier than 1/1/25, 11:00 AM.']],
+                ['' => ['Value must be no earlier than 2025-01-01, 11:00.']],
             ],
             'max' => [
                 '2024-03-29, 12:50',
                 new DateTime(format: 'php:Y-m-d, H:i', max: '2024-01-01, 00:00'),
-                ['' => ['Value must be no later than 1/1/24, 12:00 AM.']],
+                ['' => ['Value must be no later than 2024-01-01, 00:00.']],
+            ],
+            'handler-custom-message' => [
+                '2024-03-29, 12:50',
+                new DateTime(format: 'php:Y-m-d, H:i', max: '2024-01-01, 00:00'),
+                ['' => ['Max: 2024-01-01, 00:00.']],
+                [DateTimeHandler::class => new DateTimeHandler(tooLateMessage: 'Max: {limit}.')],
             ],
             'timestamp' => [
                 1711705158,
                 new DateTime(format: 'php:d.m.Y, H:i:s', min: 1711705200),
-                ['' => ['Value must be no earlier than 3/29/24, 9:40 AM.']],
+                ['' => ['Value must be no earlier than 29.03.2024, 09:40:00.']],
             ],
             'without-message-date-and-time-type' => [
                 '29*03*2024*12*35',
                 new DateTime(format: 'php:d*m*Y*H*i', max: '11*11*2023*12*35'),
-                ['' => ['Value must be no later than 11/11/23, 12:35 PM.']],
+                ['' => ['Value must be no later than 11*11*2023*12*35.']],
                 [DateTimeHandler::class => new DateTimeHandler(messageDateType: null, messageTimeType: null)],
+            ],
+            'handler-date-and-time-types-do-not-affect-message' => [
+                1711719000,
+                new DateTime(
+                    dateType: IntlDateFormatter::LONG,
+                    timeType: IntlDateFormatter::SHORT,
+                    max: 1711711800,
+                    timeZone: 'UTC',
+                    locale: 'en_US',
+                ),
+                ['' => ['Value must be no later than 3/29/24, 11:30 AM.']],
+                [
+                    DateTimeHandler::class => new DateTimeHandler(
+                        dateType: IntlDateFormatter::LONG,
+                        timeType: IntlDateFormatter::FULL,
+                    ),
+                ],
+            ],
+            'handler-message-date-and-time-types-short-override-format' => [
+                '2024*03*29*13*30',
+                new DateTime(format: 'php:Y*m*d*H*i', max: '2024*01*01*00*00', locale: 'en_US'),
+                ['' => ['Value must be no later than 1/1/24, 12:00 AM.']],
+                [
+                    DateTimeHandler::class => new DateTimeHandler(
+                        messageDateType: IntlDateFormatter::SHORT,
+                        messageTimeType: IntlDateFormatter::SHORT,
+                    ),
+                ],
+            ],
+            'handler-message-date-and-time-types-full-override-format' => [
+                '2024*03*29*13*30',
+                new DateTime(format: 'php:Y*m*d*H*i', max: '2024*01*01*00*00', locale: 'en_US'),
+                [
+                    '' => [
+                        'Value must be no later than Monday, January 1, 2024 at 12:00:00 AM Coordinated Universal Time.',
+                    ],
+                ],
+                [
+                    DateTimeHandler::class => new DateTimeHandler(
+                        messageDateType: IntlDateFormatter::FULL,
+                        messageTimeType: IntlDateFormatter::FULL,
+                    ),
+                ],
+            ],
+            'handler-message-date-type-only-short-overrides-format' => [
+                '29*03*2024, 12:50',
+                new DateTime(format: 'php:d*m*Y, H:i', max: '11*11*2023, 12:35'),
+                ['' => ['Value must be no later than 11/11/23, 12:35 PM.']],
+                [DateTimeHandler::class => new DateTimeHandler(messageDateType: IntlDateFormatter::SHORT)],
+            ],
+            'handler-unset-message-time-type-stays-short' => [
+                1704114000,
+                new DateTime(max: 1704106800),
+                ['' => ['Value must be no later than Monday, January 1, 2024 at 11:00 AM.']],
+                [
+                    DateTimeHandler::class => new DateTimeHandler(
+                        timeType: IntlDateFormatter::LONG,
+                        messageDateType: IntlDateFormatter::FULL,
+                    ),
+                ],
             ],
         ];
     }
