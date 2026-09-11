@@ -57,19 +57,19 @@ final class UniqueIterableHandler implements RuleHandlerInterface
 
             $previousItem = $item;
 
-            if (!empty($stack) && count($stack) !== count(array_unique($stack, flags: SORT_REGULAR))) {
+            if ($item instanceof DateTimeInterface) {
+                $stack[] = $item->getTimestamp();
+            } elseif ($item instanceof Stringable) {
+                $stack[] = (string) $item;
+            } else {
+                $stack[] = $item;
+            }
+
+            if (count($stack) !== count(array_unique($stack, flags: SORT_REGULAR))) {
                 return (new Result())->addError($rule->getMessage(), [
                     'property' => $context->getTranslatedProperty(),
                     'Property' => $context->getCapitalizedTranslatedProperty(),
                 ]);
-            }
-
-            if ($value instanceof Stringable) {
-                $stack[] = (string) $value;
-            } elseif ($value instanceof DateTimeInterface) {
-                $stack[] = $value->getTimestamp();
-            } else {
-                $stack[] = $value;
             }
         }
 
