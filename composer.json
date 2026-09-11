@@ -44,7 +44,7 @@
         "jetbrains/phpstorm-attributes": "^1.2",
         "phpbench/phpbench": "^1.4.1",
         "phpunit/phpunit": "^10.5.46",
-        "rector/rector": "^2.0.16",
+        "rector/rector": "^2.6.6",
         "shipmonk/composer-dependency-analyser": "^1.8",
         "spatie/phpunit-watcher": "^1.24",
         "yiisoft/di": "^1.3",
