@@ -21,9 +21,7 @@ abstract class BaseConfigTestCase extends TestCase
 
     final protected function getContainerDefinitions(?array $params): array
     {
-        if ($params === null) {
-            $params = $this->getParams();
-        }
+        $params ??= $this->getParams();
 
         return require dirname(__DIR__) . '/config/di.php';
     }
