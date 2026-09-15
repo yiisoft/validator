@@ -2,6 +2,7 @@
 
 ## 2.6.1 under development
 
+- Bug: Preserve microsecond precision when comparing date values in `UniqueIterable` (@samdark)
 - Bug #817: Fix `UniqueIterable` comparing the whole iterable instead of its items (@CorvusSharp)
 
 ## 2.6.0 June 02, 2026
