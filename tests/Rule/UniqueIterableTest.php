@@ -120,6 +120,40 @@ final class UniqueIterableTest extends RuleTestCase
                 [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:02')],
                 new UniqueIterable(),
             ],
+            'more than two unique strings' => [['a', 'b', 'c'], new UniqueIterable()],
+            'more than two unique integers' => [[1, 2, 3, 4], new UniqueIterable()],
+            'more than two unique floats' => [[1.5, 2.5, 3.5], new UniqueIterable()],
+            'more than two unique stringable values' => [
+                [
+                    new class implements Stringable {
+                        public function __toString()
+                        {
+                            return 'a';
+                        }
+                    },
+                    new class implements Stringable {
+                        public function __toString()
+                        {
+                            return 'b';
+                        }
+                    },
+                    new class implements Stringable {
+                        public function __toString()
+                        {
+                            return 'c';
+                        }
+                    },
+                ],
+                new UniqueIterable(),
+            ],
+            'more than two unique datetime values' => [
+                [
+                    new DateTime('2024-04-10 14:05:01'),
+                    new DateTime('2024-04-10 14:05:02'),
+                    new DateTime('2024-04-10 14:05:03'),
+                ],
+                new UniqueIterable(),
+            ],
             'using as attribute' => [
                 new class {
                     #[UniqueIterable]
@@ -212,6 +246,43 @@ final class UniqueIterableTest extends RuleTestCase
                 },
                 null,
                 ['data' => ['"Данные" - в списке есть недопустимое значение.']],
+            ],
+            'two equal strings' => [['a', 'a'], new UniqueIterable(), ['' => [$message]]],
+            'duplicate loses to a later disallowed item' => [
+                [1, 1, []],
+                new UniqueIterable(),
+                ['' => [$incorrectItemValueMessage]],
+            ],
+            'duplicate loses to a later type mismatch' => [
+                ['data' => [1, 1, 'a']],
+                ['data' => new UniqueIterable()],
+                ['data' => ['All iterable items of data must have the same type.']],
+            ],
+            'two equal integers' => [[1, 1], new UniqueIterable(), ['' => [$message]]],
+            'two equal floats' => [[1.5, 1.5], new UniqueIterable(), ['' => [$message]]],
+            'two equal boolean values' => [[true, true], new UniqueIterable(), ['' => [$message]]],
+            'two equal stringable values' => [
+                [
+                    new class implements Stringable {
+                        public function __toString()
+                        {
+                            return 'a';
+                        }
+                    },
+                    new class implements Stringable {
+                        public function __toString()
+                        {
+                            return 'a';
+                        }
+                    },
+                ],
+                new UniqueIterable(),
+                ['' => [$message]],
+            ],
+            'two equal datetime values' => [
+                [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:01')],
+                new UniqueIterable(),
+                ['' => [$message]],
             ],
             'strings' => [['a', 'b', 'a', 'c'], new UniqueIterable(), ['' => [$message]]],
             'integers' => [[1, 2, 1, 3], new UniqueIterable(), ['' => [$message]]],

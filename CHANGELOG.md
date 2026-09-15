@@ -2,7 +2,7 @@
 
 ## 2.6.1 under development
 
-- no changes in this release.
+- Bug #817: Fix `UniqueIterable` comparing the whole iterable instead of its items (@CorvusSharp)
 
 ## 2.6.0 June 02, 2026
 
