@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use DateTime;
+use DateTimeImmutable;
 use stdClass;
 use Stringable;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
@@ -118,6 +119,20 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'datetime values' => [
                 [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:02')],
+                new UniqueIterable(),
+            ],
+            'datetime values with different microseconds' => [
+                [
+                    new DateTime('2024-04-10 14:05:01.000001 UTC'),
+                    new DateTime('2024-04-10 14:05:01.000002 UTC'),
+                ],
+                new UniqueIterable(),
+            ],
+            'distant datetime values with different microseconds' => [
+                [
+                    new DateTimeImmutable('9999-04-10 14:05:01.000001 UTC'),
+                    new DateTimeImmutable('9999-04-10 14:05:01.000002 UTC'),
+                ],
                 new UniqueIterable(),
             ],
             'more than two unique strings' => [['a', 'b', 'c'], new UniqueIterable()],
@@ -281,6 +296,14 @@ final class UniqueIterableTest extends RuleTestCase
             ],
             'two equal datetime values' => [
                 [new DateTime('2024-04-10 14:05:01'), new DateTime('2024-04-10 14:05:01')],
+                new UniqueIterable(),
+                ['' => [$message]],
+            ],
+            'equal datetime values with microseconds in different timezones' => [
+                [
+                    new DateTime('2024-04-10 14:05:01.123456 +00:00'),
+                    new DateTime('2024-04-10 17:05:01.123456 +03:00'),
+                ],
                 new UniqueIterable(),
                 ['' => [$message]],
             ],

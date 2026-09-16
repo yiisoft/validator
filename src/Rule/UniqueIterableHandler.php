@@ -60,7 +60,8 @@ final class UniqueIterableHandler implements RuleHandlerInterface
             if ($item instanceof Stringable) {
                 $stack[] = (string) $item;
             } elseif ($item instanceof DateTimeInterface) {
-                $stack[] = $item->getTimestamp();
+                // Use a non-numeric separator to preserve microseconds during comparison.
+                $stack[] = $item->format('U:u');
             } else {
                 $stack[] = $item;
             }
