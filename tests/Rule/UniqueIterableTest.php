@@ -124,7 +124,7 @@ final class UniqueIterableTest extends RuleTestCase
             'datetime values with different microseconds' => [
                 [
                     new DateTime('2024-04-10 14:05:01.000001 UTC'),
-                    new DateTimeImmutable('2024-04-10 14:05:01.000002 UTC'),
+                    new DateTime('2024-04-10 14:05:01.000002 UTC'),
                 ],
                 new UniqueIterable(),
             ],
@@ -302,7 +302,7 @@ final class UniqueIterableTest extends RuleTestCase
             'equal datetime values with microseconds in different timezones' => [
                 [
                     new DateTime('2024-04-10 14:05:01.123456 +00:00'),
-                    new DateTimeImmutable('2024-04-10 17:05:01.123456 +03:00'),
+                    new DateTime('2024-04-10 17:05:01.123456 +03:00'),
                 ],
                 new UniqueIterable(),
                 ['' => [$message]],
