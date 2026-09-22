@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.6.2 under development
+
+- no changes in this release.
+
 ## 2.6.1 September 22, 2026
 
 - Bug #817: Fix `UniqueIterable` comparing the whole iterable instead of its items (@CorvusSharp)
