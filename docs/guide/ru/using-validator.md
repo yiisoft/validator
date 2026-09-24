@@ -177,7 +177,7 @@ $result = (new Validator())->validate($value, $rule);
 местах. Возможны два способа: использование атрибутов и явное указание через
 реализацию метода интерфейса.
 
-#### Использование атрибутов
+#### Using PHP attributes
 
 В этом случае правила будут парситься автоматически, дополнительно ничего
 делать не нужно.
@@ -203,10 +203,10 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 #### Использование реализации метода интерфейса
 
-When an object implementing `RulesProviderInterface` is passed as the
-`$rules` argument (second argument of `validate()`), only the rules from
-`getRules()` are used. PHP attributes on the object are not parsed in this
-case.
+Когда в качестве аргумента `$rules` (второй аргумент функции `validate()`)
+передается объект, реализующий интерфейс `RulesProviderInterface`,
+используются только правила из функции `getRules()`. PHP-атрибуты объекта в
+этом случае не анализируются.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -216,10 +216,10 @@ use Yiisoft\Validator\Validator;
 
 final class PersonRulesProvider implements RulesProviderInterface
 {
-    #[Length(min: 2)] // Ignored because the object is passed as the $rules argument.
+    #[Length(min: 2)] // Будет проигнорировано, т.к. объект передан как аргумент $rules.
     public string $name;
 
-    #[Number(min: 21)] // Ignored because the object is passed as the $rules argument.
+    #[Number(min: 21)] // Будет проигнорировано, т.к. объект передан как аргумент $rules.
     public int $age;
 
     public function getRules(): iterable
@@ -235,10 +235,10 @@ $result = (new Validator())->validate($data, $rulesProvider);
 
 ### Передача правил через объект данных
 
-In this way, rules are provided in addition to data in the same object. Both
-PHP attributes and `getRules()` method are supported — their rules are
-merged (attribute rules are applied first). Note that the `rules` argument
-is `null` in the `validate()` method call.
+В этом случае правила передаются в дополнение к данным в одном и том же
+объекте. Поддерживаются как PHP-атрибуты, так и метод `getRules()` — их
+правила объединяются (правила атрибутов применяются первыми). Обратите
+внимание, что аргумент `rules` в вызове метода `validate()` равен `null`.
 
 ```php
 use Yiisoft\Validator\Rule\Length;
@@ -249,9 +249,9 @@ use Yiisoft\Validator\Validator;
 final class Person implements RulesProviderInterface
 {
     public function __construct(
-        #[Length(min: 2)] // Merged with rules from getRules(). Attribute rules are applied first.
+        #[Length(min: 2)] // Объединяется с правилами из getRules(). Правила атрибутов применяются первыми.
         public string $name = '',
-        #[Number(min: 21)] // Merged with rules from getRules(). Attribute rules are applied first.
+        #[Number(min: 21)] // Объединяется с правилами из getRules(). Правила атрибутов применяются первыми.
         public int $age = 0,
     ) {
     }
