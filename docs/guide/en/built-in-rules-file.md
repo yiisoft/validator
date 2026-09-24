@@ -79,6 +79,13 @@ This option should be used with care because the client can send any media type 
 For filesystem-backed uploads, size checks use the actual file size on disk. For pathless streams, size checks use the
 PSR-7 upload size when available. If a size constraint is configured and the size can't be determined, validation fails.
 
+Default size error messages use translatable human-readable units, for example `50 MB` when `maxSize` is
+`50 * 1024 * 1024`.
+In custom messages, `{limit}` and `{exactly}` contain the full human-readable size string. Use `{limitValue}` /
+`{exactlyValue}` with `{limitUnit}` / `{exactlyUnit}` when a custom message needs the numeric value and unit separately.
+Use `{limitBytes}` or `{exactlyBytes}` when a custom message needs the raw byte value for ICU number or plural
+formatting.
+
 `size` is mutually exclusive with `minSize` and `maxSize`. When both `minSize` and `maxSize` are set, `minSize` must be
 less than or equal to `maxSize`.
 

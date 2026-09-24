@@ -9,6 +9,7 @@ use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\File;
 use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\FilledOnlyOneOf;
 use Yiisoft\Validator\Rule\GreaterThan;
@@ -187,6 +188,44 @@ return [
     '{Property} must be a float.' => '{Property} oʻnlik kasr boʻlishi kerak.',
     /** @see AnyRule */
     'At least one of the inner rules must pass the validation.' => 'Ichki qoidalardan kamida bittasi tekshiruvdan oʻtishi kerak.',
+
+    /** @see File */
+    'The size of {property} must be exactly {exactlyValue, number} {exactlyValue, plural, one{byte} other{bytes}}.' =>
+        '{property} hajmi aynan {exactlyValue, number} {exactlyValue, plural, one{bayt} other{bayt}} boʻlishi kerak.',
+    'The size of {property} must be exactly {exactlyValue, number} KB.' =>
+        '{property} hajmi aynan {exactlyValue, number} KB boʻlishi kerak.',
+    'The size of {property} must be exactly {exactlyValue, number} MB.' =>
+        '{property} hajmi aynan {exactlyValue, number} MB boʻlishi kerak.',
+    'The size of {property} must be exactly {exactlyValue, number} GB.' =>
+        '{property} hajmi aynan {exactlyValue, number} GB boʻlishi kerak.',
+    'The size of {property} must be exactly {exactlyValue, number} TB.' =>
+        '{property} hajmi aynan {exactlyValue, number} TB boʻlishi kerak.',
+    'The size of {property} must be exactly {exactlyValue, number} PB.' =>
+        '{property} hajmi aynan {exactlyValue, number} PB boʻlishi kerak.',
+    'The size of {property} cannot be smaller than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' =>
+        '{property} hajmi {limitValue, number} {limitValue, plural, one{bayt} other{bayt}}dan kichik boʻlishi mumkin emas.',
+    'The size of {property} cannot be smaller than {limitValue, number} KB.' =>
+        '{property} hajmi {limitValue, number} KBdan kichik boʻlishi mumkin emas.',
+    'The size of {property} cannot be smaller than {limitValue, number} MB.' =>
+        '{property} hajmi {limitValue, number} MBdan kichik boʻlishi mumkin emas.',
+    'The size of {property} cannot be smaller than {limitValue, number} GB.' =>
+        '{property} hajmi {limitValue, number} GBdan kichik boʻlishi mumkin emas.',
+    'The size of {property} cannot be smaller than {limitValue, number} TB.' =>
+        '{property} hajmi {limitValue, number} TBdan kichik boʻlishi mumkin emas.',
+    'The size of {property} cannot be smaller than {limitValue, number} PB.' =>
+        '{property} hajmi {limitValue, number} PBdan kichik boʻlishi mumkin emas.',
+    'The size of {property} cannot be larger than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' =>
+        '{property} hajmi {limitValue, number} {limitValue, plural, one{bayt} other{bayt}}dan katta boʻlishi mumkin emas.',
+    'The size of {property} cannot be larger than {limitValue, number} KB.' =>
+        '{property} hajmi {limitValue, number} KBdan katta boʻlishi mumkin emas.',
+    'The size of {property} cannot be larger than {limitValue, number} MB.' =>
+        '{property} hajmi {limitValue, number} MBdan katta boʻlishi mumkin emas.',
+    'The size of {property} cannot be larger than {limitValue, number} GB.' =>
+        '{property} hajmi {limitValue, number} GBdan katta boʻlishi mumkin emas.',
+    'The size of {property} cannot be larger than {limitValue, number} TB.' =>
+        '{property} hajmi {limitValue, number} TBdan katta boʻlishi mumkin emas.',
+    'The size of {property} cannot be larger than {limitValue, number} PB.' =>
+        '{property} hajmi {limitValue, number} PBdan katta boʻlishi mumkin emas.',
 
     /** @see Image */
     '{Property} must be an image.' => '{Property} rasm boʻlishi kerak.',

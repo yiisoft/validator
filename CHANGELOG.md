@@ -2,7 +2,7 @@
 
 ## 2.6.2 under development
 
-- no changes in this release.
+- Chg #802: Use translatable human-readable file sizes in `File` validation messages and add numeric, unit, and raw byte placeholders (@samdark)
 
 ## 2.6.1 September 22, 2026
 
