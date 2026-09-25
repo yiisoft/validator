@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Validator;
 
+use Closure;
 use RuntimeException;
 use Yiisoft\Arrays\ArrayHelper;
 use Yiisoft\Strings\StringHelper;
@@ -37,6 +38,14 @@ final class ValidationContext
      * with {@see setContextDataOnce()} yet.
      */
     private ?ValidatorInterface $validator = null;
+
+    /**
+     * @var Closure|null A callback validating a value according to a rule or a list of rules without changing the
+     * current scope of the context. `null` means context data was not set with {@see setContextDataOnce()} yet.
+     *
+     * @psalm-var (Closure(mixed, callable|iterable|RuleInterface, ValidationContext): Result)|null
+     */
+    private ?Closure $currentScopeValidator = null;
 
     /**
      * @var mixed The raw validated data. `null` means context data was not set with {@see setContextDataOnce()} yet.
@@ -90,6 +99,10 @@ final class ValidationContext
      * is specified via {@see setPropertyTranslator()}, it will be used instead.
      * @param mixed $rawData The raw validated data.
      * @param DataSetInterface $dataSet Global data set ({@see $globalDataSet}).
+     * @param Closure $currentScopeValidator A callback validating a value according to a rule or a list of rules
+     * without changing the current scope of the context ({@see validateInCurrentScope()}).
+     *
+     * @psalm-param Closure(mixed, callable|iterable|RuleInterface, ValidationContext): Result $currentScopeValidator
      *
      * @internal
      *
@@ -100,12 +113,14 @@ final class ValidationContext
         PropertyTranslatorInterface $propertyTranslator,
         mixed $rawData,
         DataSetInterface $dataSet,
+        Closure $currentScopeValidator,
     ): self {
         if ($this->validator !== null) {
             return $this;
         }
 
         $this->validator = $validator;
+        $this->currentScopeValidator = $currentScopeValidator;
         $this->defaultPropertyTranslator = $propertyTranslator;
         $this->rawData = $rawData;
         $this->globalDataSet = $dataSet;
@@ -171,6 +186,38 @@ final class ValidationContext
         $this->defaultPropertyTranslator = $currentDefaultPropertyTranslator;
 
         return $result;
+    }
+
+    /**
+     * Validate a value according to a rule or a list of rules in the current scope: the data set, the property and
+     * other context data are kept as is. Useful for rules grouping other rules, such as {@see StopOnError}.
+     *
+     * The value is usually the one currently validated, but it could be another one as well (for example, a modified
+     * current value). In the latter case {@see PARAMETER_VALUE_AS_ARRAY} is not used for the value. Note that
+     * the context still describes the current property, for example, {@see isPropertyMissing()} checks the current
+     * property, not the passed value.
+     *
+     * @param mixed $value The validated value.
+     * @param callable|iterable|RuleInterface $rules A single rule or a list of rules to apply. Keys of the list are
+     * ignored: all rules are applied to the passed value.
+     *
+     * @psalm-param callable|RuleInterface|iterable<int, callable|RuleInterface> $rules
+     *
+     * @throws RuntimeException If validator is not set in validation context.
+     *
+     * @return Result Validation result.
+     */
+    public function validateInCurrentScope(mixed $value, callable|iterable|RuleInterface $rules): Result
+    {
+        $this->requireValidator();
+
+        $currentParameters = $this->parameters;
+
+        try {
+            return ($this->currentScopeValidator)($value, $rules, $this);
+        } finally {
+            $this->parameters = $currentParameters;
+        }
     }
 
     /**
@@ -331,6 +378,7 @@ final class ValidationContext
      * Ensure that validator is set in validation context.
      *
      * @psalm-assert ValidatorInterface $this->validator
+     * @psalm-assert Closure $this->currentScopeValidator
      * @psalm-assert DataSetInterface $this->globalDataSet
      *
      * @throws RuntimeException If validator is not set in validation context.
