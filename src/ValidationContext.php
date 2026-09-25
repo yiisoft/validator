@@ -212,10 +212,12 @@ final class ValidationContext
         $this->requireValidator();
 
         $currentParameters = $this->parameters;
-        $result = ($this->currentScopeValidator)($value, $rules, $this);
-        $this->parameters = $currentParameters;
 
-        return $result;
+        try {
+            return ($this->currentScopeValidator)($value, $rules, $this);
+        } finally {
+            $this->parameters = $currentParameters;
+        }
     }
 
     /**

@@ -192,6 +192,42 @@ final class ValidationContextTest extends TestCase
         $this->assertSame($parametersBefore, $parametersAfter);
     }
 
+    public function testValidateInCurrentScopeRestoresParametersOnException(): void
+    {
+        $data = ['items' => [1, 20]];
+        $parametersBefore = null;
+        $parametersAfter = null;
+
+        (new Validator())->validate($data, [
+            new Callback(
+                static function (mixed $value, Callback $rule, ValidationContext $context) use (
+                    &$parametersBefore,
+                    &$parametersAfter,
+                ): Result {
+                    $parametersBefore = [
+                        $context->getParameter(ValidationContext::PARAMETER_PREVIOUS_RULES_ERRORED),
+                        $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY),
+                    ];
+                    try {
+                        $context->validateInCurrentScope($value['items'], [
+                            new Number(max: 6),
+                            static fn(): Result => throw new RuntimeException('Test.'),
+                        ]);
+                    } catch (RuntimeException) {
+                    }
+                    $parametersAfter = [
+                        $context->getParameter(ValidationContext::PARAMETER_PREVIOUS_RULES_ERRORED),
+                        $context->getParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY),
+                    ];
+                    return new Result();
+                },
+            ),
+        ]);
+
+        $this->assertSame([null, $data], $parametersBefore);
+        $this->assertSame($parametersBefore, $parametersAfter);
+    }
+
     public function testGetRawDataWithoutRawData(): void
     {
         $context = new ValidationContext();
