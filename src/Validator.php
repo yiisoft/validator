@@ -16,11 +16,13 @@ use Yiisoft\Validator\PropertyTranslator\TranslatorPropertyTranslator;
 use Yiisoft\Validator\Helper\DataSetNormalizer;
 use Yiisoft\Validator\Helper\MessageProcessor;
 use Yiisoft\Validator\Helper\RulesNormalizer;
+use Yiisoft\Validator\Helper\RulesNormalizerIterator;
 use Yiisoft\Validator\Helper\SkipOnEmptyNormalizer;
 use Yiisoft\Validator\RuleHandlerResolver\SimpleRuleHandlerContainer;
 
 use function extension_loaded;
 use function is_int;
+use function is_iterable;
 use function is_string;
 
 /**
@@ -123,7 +125,7 @@ final class Validator implements ValidatorInterface
         ?ValidationContext $context = null,
     ): Result {
         $dataSet = DataSetNormalizer::normalize($data);
-        $originalData = $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $data;
+        $originalData = $this->getOriginalData($dataSet);
 
         $rules = RulesNormalizer::normalize(
             $rules,
@@ -137,7 +139,13 @@ final class Validator implements ValidatorInterface
 
         $context ??= new ValidationContext();
         $context
-            ->setContextDataOnce($this, $defaultPropertyTranslator, $data, $dataSet)
+            ->setContextDataOnce(
+                $this,
+                $defaultPropertyTranslator,
+                $data,
+                $dataSet,
+                $this->validateInCurrentScope(...),
+            )
             ->setDataSet($dataSet);
 
         $result = new Result();
@@ -167,7 +175,7 @@ final class Validator implements ValidatorInterface
                 $result->addErrorWithoutPostProcessing(
                     $this->messageProcessor->process($error),
                     $error->getParameters(),
-                    $error->getValuePath(),
+                    is_string($property) ? [$property, ...$error->getValuePath()] : $error->getValuePath(),
                 );
             }
         }
@@ -214,9 +222,6 @@ final class Validator implements ValidatorInterface
 
             foreach ($ruleResult->getErrors() as $error) {
                 $valuePath = $error->getValuePath();
-                if ($context->getProperty() !== null) {
-                    $valuePath = [$context->getProperty(), ...$valuePath];
-                }
                 match ($error->getMessageProcessing()) {
                     Error::MESSAGE_TRANSLATE => $compoundResult->addError($error->getMessage(), $error->getParameters(), $valuePath),
                     Error::MESSAGE_FORMAT => $compoundResult->addErrorWithFormatOnly(
@@ -233,6 +238,50 @@ final class Validator implements ValidatorInterface
             }
         }
         return $compoundResult;
+    }
+
+    /**
+     * Validates a value according to a rule or a list of rules without changing the current scope of the validation
+     * context ({@see ValidationContext::validateInCurrentScope()}).
+     *
+     * @param mixed $value The validated value of any type.
+     * @param callable|iterable|RuleInterface $rules A single rule or a list of rules to apply.
+     * @param ValidationContext $context Validation context.
+     *
+     * @return Result The result of validation.
+     */
+    private function validateInCurrentScope(
+        mixed $value,
+        callable|iterable|RuleInterface $rules,
+        ValidationContext $context,
+    ): Result {
+        if (
+            $context->getProperty() === null
+            && $value !== $this->getOriginalData($context->getDataSet())
+        ) {
+            $context->setParameter(ValidationContext::PARAMETER_VALUE_AS_ARRAY, null);
+        }
+        return $this->validateInternal(
+            $value,
+            new RulesNormalizerIterator(
+                is_iterable($rules) ? $rules : [$rules],
+                $this->defaultSkipOnEmptyCondition,
+            ),
+            $context,
+        );
+    }
+
+    /**
+     * Gets the original data from a data set.
+     *
+     * @param DataSetInterface $dataSet A data set to get the original data from.
+     *
+     * @return mixed The original data wrapped by the data set ({@see DataWrapperInterface}), or the data set itself
+     * when it's not a wrapper.
+     */
+    private function getOriginalData(DataSetInterface $dataSet): mixed
+    {
+        return $dataSet instanceof DataWrapperInterface ? $dataSet->getSource() : $dataSet;
     }
 
     /**
