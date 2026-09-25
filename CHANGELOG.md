@@ -2,8 +2,8 @@
 
 ## 2.7.0 under development
 
-- New #822: Add `ValidationContext::validateInCurrentScope()` method to validate a value in the current scope (@vjik)
-- Bug #822: Validate rules inside `StopOnError`, `Composite` and `AnyRule` in the current scope, same as without these
+- New #824: Add `ValidationContext::validateInCurrentScope()` method to validate a value in the current scope (@vjik)
+- Bug #824: Validate rules inside `StopOnError`, `Composite` and `AnyRule` in the current scope, same as without these
   wrappers: keep the current data set and property in validation context, don't iterate over public properties of
   an object value and don't call its `PostValidationHookInterface::processValidationResult()` (@vjik)
 
