@@ -44,6 +44,12 @@ final class NumberTest extends RuleTestCase
         $this->assertSame(Number::class, $rule->getName());
     }
 
+    public function testIntegerGetName(): void
+    {
+        $rule = new Integer();
+        $this->assertSame(Integer::class, $rule->getName());
+    }
+
     public static function dataOptions(): array
     {
         return [
@@ -312,9 +318,20 @@ final class NumberTest extends RuleTestCase
         $this->testSkipOnErrorInternal(new Number(), new Number(skipOnError: true));
     }
 
+    public function testIntegerSkipOnError(): void
+    {
+        $this->testSkipOnErrorInternal(new Integer(), new Integer(skipOnError: true));
+    }
+
     public function testWhen(): void
     {
         $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Number(), new Number(when: $when));
+    }
+
+    public function testIntegerWhen(): void
+    {
+        $when = static fn(mixed $value): bool => $value !== null;
+        $this->testWhenInternal(new Integer(), new Integer(when: $when));
     }
 }

@@ -7,7 +7,6 @@ namespace Yiisoft\Validator\Tests\Rule\Date;
 use DateTimeImmutable;
 use DateTimeZone;
 use Yiisoft\Validator\Rule\Date\DateTime;
-use Yiisoft\Validator\Rule\Date\Date;
 use Yiisoft\Validator\Rule\Date\DateTimeHandler;
 use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\SkipOnErrorTestTrait;
@@ -20,7 +19,7 @@ final class DateTimeTest extends RuleTestCase
 
     public function testGetName(): void
     {
-        $rule = new Date();
+        $rule = new DateTime();
         $this->assertSame('date', $rule->getName());
     }
 
@@ -97,14 +96,14 @@ final class DateTimeTest extends RuleTestCase
 
     public function testSkipOnError(): void
     {
-        $this->testSkipOnErrorInternal(new Date(), new Date(skipOnError: true));
+        $this->testSkipOnErrorInternal(new DateTime(), new DateTime(skipOnError: true));
     }
 
     public function testWhen(): void
     {
         $this->testWhenInternal(
-            new Date(),
-            new Date(
+            new DateTime(),
+            new DateTime(
                 when: static fn(mixed $value): bool => $value !== null,
             ),
         );
