@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Yiisoft\Validator\Tests\Rule;
 
 use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Length;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Rule\StopOnError;
@@ -15,7 +18,9 @@ use Yiisoft\Validator\Tests\Rule\Base\RuleTestCase;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithOptionsTestTrait;
 use Yiisoft\Validator\Tests\Rule\Base\RuleWithProvidedRulesTrait;
 use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
+use Yiisoft\Validator\Tests\Support\Data\PostValidationHookCounter;
 use Yiisoft\Validator\Tests\Support\Data\StopOnErrorDto;
+use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 final class StopOnErrorTest extends RuleTestCase
@@ -292,6 +297,119 @@ final class StopOnErrorTest extends RuleTestCase
             new StopOnError([new Length(min: 10)]),
             new StopOnError([new Length(min: 10)], when: $when),
         );
+    }
+
+    public function testDataSetAndPropertyInInnerRules(): void
+    {
+        $data = ['a' => 'x', 'b' => 1];
+        $innerData = null;
+        $innerProperty = null;
+
+        (new Validator())->validate($data, [
+            'a' => new StopOnError([
+                new Callback(
+                    static function (mixed $value, Callback $rule, ValidationContext $context) use (
+                        &$innerData,
+                        &$innerProperty,
+                    ): Result {
+                        $innerData = $context->getDataSet()->getData();
+                        $innerProperty = $context->getProperty();
+                        return new Result();
+                    },
+                ),
+            ]),
+        ]);
+
+        $this->assertSame($data, $innerData);
+        $this->assertSame('a', $innerProperty);
+    }
+
+    public function testDataSetInInnerRulesWithNestedEach(): void
+    {
+        $data = [
+            'groups' => [
+                ['items' => [['a' => 1], ['a' => 2]]],
+                ['items' => [['a' => 3]]],
+            ],
+        ];
+
+        $createRules = static function (callable $wrap) use (&$innerData): array {
+            $callback = new Callback(
+                static function (mixed $value, Callback $rule, ValidationContext $context) use (&$innerData): Result {
+                    $innerData[] = [$context->getDataSet()->getData(), $context->getProperty()];
+                    return new Result();
+                },
+            );
+            return [
+                'groups' => new Each(
+                    new Nested([
+                        'items' => new Each(
+                            new Nested(['a' => $wrap($callback)]),
+                        ),
+                    ]),
+                ),
+            ];
+        };
+
+        $innerData = [];
+        (new Validator())->validate(
+            $data,
+            $createRules(static fn(Callback $callback): Callback => $callback),
+        );
+        $expectedInnerData = $innerData;
+
+        $innerData = [];
+        (new Validator())->validate(
+            $data,
+            $createRules(static fn(Callback $callback): StopOnError => new StopOnError([$callback])),
+        );
+
+        $this->assertSame(
+            [
+                [['a' => 1], 'a'],
+                [['a' => 2], 'a'],
+                [['a' => 3], 'a'],
+            ],
+            $expectedInnerData,
+        );
+        $this->assertSame($expectedInnerData, $innerData);
+    }
+
+    public function testObjectValueInInnerRules(): void
+    {
+        $result = (new Validator())->validate(
+            ['o' => (object) ['x' => 7]],
+            ['o' => new StopOnError([new Each([new Number(max: 10)])])],
+        );
+
+        $this->assertSame(
+            ['o' => ['O must be array or iterable. stdClass given.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testPostValidationHookOfDataInInnerRules(): void
+    {
+        $data = new PostValidationHookCounter();
+
+        (new Validator())->validate(
+            $data,
+            [new StopOnError([new Callback(static fn(): Result => new Result())])],
+        );
+
+        $this->assertSame(1, $data->hookCallsCount);
+    }
+
+    public function testPostValidationHookOfPropertyValueInInnerRules(): void
+    {
+        $value = new PostValidationHookCounter();
+
+        (new Validator())->validate(
+            ['o' => $value],
+            ['o' => new StopOnError([new Callback(static fn(): Result => new Result())])],
+        );
+
+        $this->assertSame(0, $value->hookCallsCount);
     }
 
     public function testClassAttribute(): void

@@ -417,14 +417,19 @@ final class OnHandler implements RuleHandlerInterface
 
         return $this->isSatisfied($rule, $scenario)
             // With active scenario, perform the validation.
-            ? $context->validate($value, $rule->getRules())
+            ? $context->validateInCurrentScope($value, $rule->getRules())
             // With all other scenarios, skip the validation.
             : new Result();
     }
 }
 ```
 
-This code snippet is taken from [Yii Validator Scenarios] extension by [Sergei Predvoditelev]. Read more in [Scenarios]
+Note that `$context->validateInCurrentScope()` is used here instead of `$context->validate()`. Use
+`validateInCurrentScope()` for rules grouping other rules, when the inner rules must be applied to the same property
+as the wrapping rule: the data set, the property and other context data are kept as is. Use `validate()` for
+validating other data (for example, a nested object or array) as a separate data set.
+
+This code snippet is based on [Yii Validator Scenarios] extension by [Sergei Predvoditelev]. Read more in [Scenarios]
 section.
 
 ## Making an extension

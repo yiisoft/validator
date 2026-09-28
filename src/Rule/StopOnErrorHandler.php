@@ -23,7 +23,7 @@ final class StopOnErrorHandler implements RuleHandlerInterface
         }
 
         foreach ($rule->getRules() as $relatedRule) {
-            $result = $context->validate($value, $relatedRule);
+            $result = $context->validateInCurrentScope($value, $relatedRule);
             if (!$result->isValid()) {
                 return $result;
             }

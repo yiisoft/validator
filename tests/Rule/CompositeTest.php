@@ -8,7 +8,9 @@ use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Composite;
 use Yiisoft\Validator\Rule\CompositeHandler;
+use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\Nested;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\Rule\Required;
 use Yiisoft\Validator\Tests\Rule\Base\DifferentRuleInHandlerTestTrait;
@@ -20,6 +22,8 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Tests\Support\Rule\CoordinatesRuleSet;
 use Yiisoft\Validator\Tests\Support\Rule\RuleWithoutOptions;
 use Yiisoft\Validator\Tests\Support\Data\CompositeWithCallbackAttribute;
+use Yiisoft\Validator\Tests\Support\Data\PostValidationHookCounter;
+use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
 final class CompositeTest extends RuleTestCase
@@ -347,6 +351,119 @@ final class CompositeTest extends RuleTestCase
     {
         $when = static fn(mixed $value): bool => $value !== null;
         $this->testWhenInternal(new Composite([]), new Composite([], when: $when));
+    }
+
+    public function testDataSetAndPropertyInInnerRules(): void
+    {
+        $data = ['a' => 'x', 'b' => 1];
+        $innerData = null;
+        $innerProperty = null;
+
+        (new Validator())->validate($data, [
+            'a' => new Composite([
+                new Callback(
+                    static function (mixed $value, Callback $rule, ValidationContext $context) use (
+                        &$innerData,
+                        &$innerProperty,
+                    ): Result {
+                        $innerData = $context->getDataSet()->getData();
+                        $innerProperty = $context->getProperty();
+                        return new Result();
+                    },
+                ),
+            ]),
+        ]);
+
+        $this->assertSame($data, $innerData);
+        $this->assertSame('a', $innerProperty);
+    }
+
+    public function testDataSetInInnerRulesWithNestedEach(): void
+    {
+        $data = [
+            'groups' => [
+                ['items' => [['a' => 1], ['a' => 2]]],
+                ['items' => [['a' => 3]]],
+            ],
+        ];
+
+        $createRules = static function (callable $wrap) use (&$innerData): array {
+            $callback = new Callback(
+                static function (mixed $value, Callback $rule, ValidationContext $context) use (&$innerData): Result {
+                    $innerData[] = [$context->getDataSet()->getData(), $context->getProperty()];
+                    return new Result();
+                },
+            );
+            return [
+                'groups' => new Each(
+                    new Nested([
+                        'items' => new Each(
+                            new Nested(['a' => $wrap($callback)]),
+                        ),
+                    ]),
+                ),
+            ];
+        };
+
+        $innerData = [];
+        (new Validator())->validate(
+            $data,
+            $createRules(static fn(Callback $callback): Callback => $callback),
+        );
+        $expectedInnerData = $innerData;
+
+        $innerData = [];
+        (new Validator())->validate(
+            $data,
+            $createRules(static fn(Callback $callback): Composite => new Composite([$callback])),
+        );
+
+        $this->assertSame(
+            [
+                [['a' => 1], 'a'],
+                [['a' => 2], 'a'],
+                [['a' => 3], 'a'],
+            ],
+            $expectedInnerData,
+        );
+        $this->assertSame($expectedInnerData, $innerData);
+    }
+
+    public function testObjectValueInInnerRules(): void
+    {
+        $result = (new Validator())->validate(
+            ['o' => (object) ['x' => 7]],
+            ['o' => new Composite([new Each([new Number(max: 10)])])],
+        );
+
+        $this->assertSame(
+            ['o' => ['O must be array or iterable. stdClass given.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testPostValidationHookOfDataInInnerRules(): void
+    {
+        $data = new PostValidationHookCounter();
+
+        (new Validator())->validate(
+            $data,
+            [new Composite([new Callback(static fn(): Result => new Result())])],
+        );
+
+        $this->assertSame(1, $data->hookCallsCount);
+    }
+
+    public function testPostValidationHookOfPropertyValueInInnerRules(): void
+    {
+        $value = new PostValidationHookCounter();
+
+        (new Validator())->validate(
+            ['o' => $value],
+            ['o' => new Composite([new Callback(static fn(): Result => new Result())])],
+        );
+
+        $this->assertSame(0, $value->hookCallsCount);
     }
 
     public function testWithCallbackAttribute(): void
