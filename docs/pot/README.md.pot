@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"POT-Creation-Date: 2026-06-08 12:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -77,6 +77,11 @@ msgstr ""
 #. type: Bullet: '- '
 #: guide/en/README.md guide/en/built-in-rules.md
 msgid "[Each](built-in-rules-each.md)"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+msgid "[File](built-in-rules-file.md)"
 msgstr ""
 
 #. type: Bullet: '- '

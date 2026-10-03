@@ -69,17 +69,18 @@ $validator = new Validator(translator: $translator);
 
 ## Перевод имен свойств
 
-Almost all error templates have support for `{property}` and `{Property}`
-placeholders which are substituted with an actual property name that was set
-during rules configuration. The `{Property}` variant capitalizes the first
-letter. By default, a property name is formatted as is. It can be acceptable
-for English language (for example, `currentPassword is required.`), but when
-using translations for error messages, it's better to provide an additional
-property translation.
+Практически все шаблоны ошибок поддерживают заполнители `{property}` и
+`{Property}`, которые заменяются на фактическое имя свойства, заданное при
+настройке правил. Вариант `{Property}` преобразует первую букву в
+заглавную. По умолчанию имя свойства форматируется без изменений. Это может
+быть приемлемо для английского языка (например, `currentPassword is
+required.`), но при использовании переводов для сообщений об ошибках лучше
+предоставить дополнительный перевод свойства.
 
-The simplest approach for properties defined via PHP attributes is to use
-the `Label` attribute directly on the property. See [Configuring rules via
-PHP attributes] for details.
+Самый простой способ настройки свойств, определяемых с помощью
+PHP-атрибутов, — это непосредственное использование атрибута `Label` для
+данного свойства. Подробнее см. в разделе [Настройка правил с помощью
+PHP-атрибутов].
 
 Для решения именно этой задачи существует отдельный интерфейс
 `PropertyTranslatorInterface`. Он поставляется с тремя реализациями из
@@ -157,7 +158,7 @@ $result = (new Validator())->validate($form);
 ```
 
 [PR]: https://github.com/yiisoft/validator/pulls
-[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md
+[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Yii Translator]: https://github.com/yiisoft/translator
 [Yii Config]: https://github.com/yiisoft/config
 [Yii DI]: https://github.com/yiisoft/di

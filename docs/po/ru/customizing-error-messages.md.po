@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2026-04-21 14:32+0000\n"
-"PO-Revision-Date: 2025-04-19 07:44+0500\n"
+"PO-Revision-Date: 2026-06-09 13:13+0500\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -15,13 +15,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Poedit 3.9\n"
 
 #. type: Link reference
 #: guide/en/built-in-rules-nested.md guide/en/customizing-error-messages.md
-#, no-wrap
+#, fuzzy, no-wrap
 msgid "[Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md"
-msgstr "[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md"
+msgstr ""
+"#-#-#-#-#  built-in-rules-nested.md.po  #-#-#-#-#\n"
+"[Настройка правил с помощью PHP атрибутов]: configuring-rules-via-php-attributes.md\n"
+"#-#-#-#-#  customizing-error-messages.md.po  #-#-#-#-#\n"
+"[Настройка правил с помощью PHP-атрибутов]: configuring-rules-via-php-attributes.md"
 
 #. type: Title #
 #: guide/en/customizing-error-messages.md
@@ -150,15 +154,13 @@ msgstr "Перевод имен свойств"
 
 #. type: Plain text
 #: guide/en/customizing-error-messages.md
-#, fuzzy
-#| msgid "Almost all error templates have support for a `{property}` placeholder which is substituted with an actual property name that was set during rules configuration. By default, a property name is formatted as is. It can be acceptable for English language (for example, `currentPassword is required.`), but when using translations for error messages, it's better to provide an additional property translation."
 msgid "Almost all error templates have support for `{property}` and `{Property}` placeholders which are substituted with an actual property name that was set during rules configuration. The `{Property}` variant capitalizes the first letter. By default, a property name is formatted as is. It can be acceptable for English language (for example, `currentPassword is required.`), but when using translations for error messages, it's better to provide an additional property translation."
-msgstr "Почти все шаблоны ошибок поддерживают плейсхолдер `{property}`, который заменяется фактическим именем свойства, заданным во время настройки правил. По умолчанию имя свойства форматируется без изменений. Это может быть приемлемо для английского языка (например, `currentPassword is required.`), но при использовании перевода сообщений об ошибках, лучше предоставить дополнительный перевод свойства."
+msgstr "Практически все шаблоны ошибок поддерживают заполнители `{property}` и `{Property}`, которые заменяются на фактическое имя свойства, заданное при настройке правил. Вариант `{Property}` преобразует первую букву в заглавную. По умолчанию имя свойства форматируется без изменений. Это может быть приемлемо для английского языка (например, `currentPassword is required.`), но при использовании переводов для сообщений об ошибках лучше предоставить дополнительный перевод свойства."
 
 #. type: Plain text
 #: guide/en/customizing-error-messages.md
 msgid "The simplest approach for properties defined via PHP attributes is to use the `Label` attribute directly on the property. See [Configuring rules via PHP attributes] for details."
-msgstr ""
+msgstr "Самый простой способ настройки свойств, определяемых с помощью PHP-атрибутов, — это непосредственное использование атрибута `Label` для данного свойства. Подробнее см. в разделе [Настройка правил с помощью PHP-атрибутов]."
 
 #. type: Plain text
 #: guide/en/customizing-error-messages.md
