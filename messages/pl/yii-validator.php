@@ -13,6 +13,7 @@ use Yiisoft\Validator\Rule\Date\Time;
 use Yiisoft\Validator\Rule\Each;
 use Yiisoft\Validator\Rule\Email;
 use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\File;
 use Yiisoft\Validator\Rule\GreaterThan;
 use Yiisoft\Validator\Rule\GreaterThanOrEqual;
 use Yiisoft\Validator\Rule\Image\Image;
@@ -63,6 +64,25 @@ return [
     '{Property} is not a valid email address.' => '{Property} nie jest prawidłowym adresem e-mail.',
     /** @see FloatType */
     '{Property} must be a float.' => '{Property} musi być liczbą zmiennoprzecinkową.',
+    /** @see File */
+    'The size of {property} must be exactly {exactlyValue, number} {exactlyValue, plural, one{byte} other{bytes}}.' => 'Rozmiar {property} musi wynosić dokładnie {exactlyValue, number} {exactlyValue, plural, one{bajt} few{bajty} many{bajtów} other{bajta}}.',
+    'The size of {property} must be exactly {exactlyValue, number} KB.' => 'Rozmiar {property} musi wynosić dokładnie {exactlyValue, number} KB.',
+    'The size of {property} must be exactly {exactlyValue, number} MB.' => 'Rozmiar {property} musi wynosić dokładnie {exactlyValue, number} MB.',
+    'The size of {property} must be exactly {exactlyValue, number} GB.' => 'Rozmiar {property} musi wynosić dokładnie {exactlyValue, number} GB.',
+    'The size of {property} must be exactly {exactlyValue, number} TB.' => 'Rozmiar {property} musi wynosić dokładnie {exactlyValue, number} TB.',
+    'The size of {property} must be exactly {exactlyValue, number} PB.' => 'Rozmiar {property} musi wynosić dokładnie {exactlyValue, number} PB.',
+    'The size of {property} cannot be smaller than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' => 'Rozmiar {property} nie może być mniejszy niż {limitValue, number} {limitValue, plural, one{bajt} few{bajty} many{bajtów} other{bajta}}.',
+    'The size of {property} cannot be smaller than {limitValue, number} KB.' => 'Rozmiar {property} nie może być mniejszy niż {limitValue, number} KB.',
+    'The size of {property} cannot be smaller than {limitValue, number} MB.' => 'Rozmiar {property} nie może być mniejszy niż {limitValue, number} MB.',
+    'The size of {property} cannot be smaller than {limitValue, number} GB.' => 'Rozmiar {property} nie może być mniejszy niż {limitValue, number} GB.',
+    'The size of {property} cannot be smaller than {limitValue, number} TB.' => 'Rozmiar {property} nie może być mniejszy niż {limitValue, number} TB.',
+    'The size of {property} cannot be smaller than {limitValue, number} PB.' => 'Rozmiar {property} nie może być mniejszy niż {limitValue, number} PB.',
+    'The size of {property} cannot be larger than {limitValue, number} {limitValue, plural, one{byte} other{bytes}}.' => 'Rozmiar {property} nie może być większy niż {limitValue, number} {limitValue, plural, one{bajt} few{bajty} many{bajtów} other{bajta}}.',
+    'The size of {property} cannot be larger than {limitValue, number} KB.' => 'Rozmiar {property} nie może być większy niż {limitValue, number} KB.',
+    'The size of {property} cannot be larger than {limitValue, number} MB.' => 'Rozmiar {property} nie może być większy niż {limitValue, number} MB.',
+    'The size of {property} cannot be larger than {limitValue, number} GB.' => 'Rozmiar {property} nie może być większy niż {limitValue, number} GB.',
+    'The size of {property} cannot be larger than {limitValue, number} TB.' => 'Rozmiar {property} nie może być większy niż {limitValue, number} TB.',
+    'The size of {property} cannot be larger than {limitValue, number} PB.' => 'Rozmiar {property} nie może być większy niż {limitValue, number} PB.',
     /** @see Image */
     '{Property} must be an image.' => '{Property} musi być obrazem.',
     'The width of {property} must be exactly {exactly, number} {exactly, plural, one{pixel} other{pixels}}.' => 'Szerokość {property} musi wynosić dokładnie {exactly, number} {exactly, plural, one{piksel} few{piksele} many{pikseli} other{piksela}}.',

@@ -10,6 +10,12 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
 use SplFileInfo;
 use stdClass;
+use Yiisoft\Translator\CategorySource;
+use Yiisoft\Translator\IdMessageReader;
+use Yiisoft\Translator\IntlMessageFormatter;
+use Yiisoft\Translator\Message\Php\MessageSource;
+use Yiisoft\Translator\SimpleMessageFormatter;
+use Yiisoft\Translator\Translator;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\PropertyTranslatorInterface;
 use Yiisoft\Validator\PropertyTranslatorProviderInterface;
@@ -25,6 +31,8 @@ use Yiisoft\Validator\Tests\Rule\Base\WhenTestTrait;
 use Yiisoft\Validator\Validator;
 
 use function chmod;
+use function dirname;
+use function extension_loaded;
 use function file_put_contents;
 use function fopen;
 use function fwrite;
@@ -149,15 +157,18 @@ final class FileTest extends RuleTestCase
                         'parameters' => [],
                     ],
                     'notExactSizeMessage' => [
-                        'template' => 'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
+                        'template' => 'The size of {property} must be exactly {exactly, number} '
+                            . '{exactly, plural, one{byte} other{bytes}}.',
                         'parameters' => [],
                     ],
                     'tooSmallMessage' => [
-                        'template' => 'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+                        'template' => 'The size of {property} cannot be smaller than {limit, number} '
+                            . '{limit, plural, one{byte} other{bytes}}.',
                         'parameters' => [],
                     ],
                     'tooBigMessage' => [
-                        'template' => 'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+                        'template' => 'The size of {property} cannot be larger than {limit, number} '
+                            . '{limit, plural, one{byte} other{bytes}}.',
                         'parameters' => [],
                     ],
                     'unableToDetermineSizeMessage' => [
@@ -369,6 +380,60 @@ final class FileTest extends RuleTestCase
                 new File(maxSize: 920),
                 ['' => ['The size of value cannot be larger than 920 bytes.']],
             ],
+            'exact size mismatch uses human-readable size' => [
+                self::TEXT_FILE,
+                new File(size: 50 * 1024 * 1024),
+                ['' => ['The size of value must be exactly 50 MB.']],
+            ],
+            'too small uses human-readable size' => [
+                self::TEXT_FILE,
+                new File(minSize: 1536),
+                ['' => ['The size of value cannot be smaller than 1.5 KB.']],
+            ],
+            'too big uses human-readable size' => [
+                self::JPG_FILE,
+                new File(maxSize: 512),
+                ['' => ['The size of value cannot be larger than 512 bytes.']],
+            ],
+            'size boundary rounds to next unit' => [
+                self::createStreamUpload('large.bin', 'application/octet-stream', 1024 * 1024),
+                new File(maxSize: 1024 * 1024 - 1),
+                ['' => ['The size of value cannot be larger than 1 MB.']],
+            ],
+            'custom message uses human-readable size placeholders' => [
+                self::createStreamUpload('large.bin', 'application/octet-stream', 60 * 1024 * 1024),
+                new File(
+                    maxSize: 50 * 1024 * 1024,
+                    tooBigMessage: '{file} is larger than {limit}.',
+                ),
+                ['' => ['large.bin is larger than 50 MB.']],
+            ],
+            'custom message can use human-readable size value and unit placeholders' => [
+                self::createStreamUpload('large.bin', 'application/octet-stream', 60 * 1024 * 1024),
+                new File(
+                    maxSize: 50 * 1024 * 1024,
+                    tooBigMessage: '{file} is larger than {limitValue, number} {limitUnit}.',
+                ),
+                ['' => ['large.bin is larger than 50 MB.']],
+            ],
+            'custom message can use raw byte size placeholder' => [
+                self::JPG_FILE,
+                new File(
+                    maxSize: 512,
+                    tooBigMessage: '{file} limit is {limit}; raw limit is {limitBytes, number} '
+                    . '{limitBytes, plural, one{byte} other{bytes}}.',
+                ),
+                ['' => ['16x18.jpg limit is 512 bytes; raw limit is 512 bytes.']],
+            ],
+            'custom exact size message can use raw byte size placeholder' => [
+                self::JPG_FILE,
+                new File(
+                    size: 512,
+                    notExactSizeMessage: '{file} must be {exactly}; raw size is {exactlyBytes, number} '
+                    . '{exactlyBytes, plural, one{byte} other{bytes}}.',
+                ),
+                ['' => ['16x18.jpg must be 512 bytes; raw size is 512 bytes.']],
+            ],
             'stream upload unknown exact size' => [
                 self::createStreamUpload('resume.txt', 'text/plain', null),
                 new File(extensions: 'txt', mimeTypes: 'text/plain', size: 22, trustClientMediaType: true),
@@ -499,6 +564,76 @@ final class FileTest extends RuleTestCase
         $this->assertSame([], $warnings);
         $this->assertSame(
             ['' => ['Only files with these MIME types are allowed: text/plain.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testDefaultSizeMessageWithSimpleMessageFormatter(): void
+    {
+        $translator = (new Translator())->addCategorySources(
+            new CategorySource(
+                Validator::DEFAULT_TRANSLATION_CATEGORY,
+                new IdMessageReader(),
+                new SimpleMessageFormatter(),
+            ),
+        );
+
+        $result = (new Validator(translator: $translator))->validate(self::JPG_FILE, new File(maxSize: 512));
+
+        $this->assertSame(
+            ['' => ['The size of value cannot be larger than 512 bytes.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testDefaultSizeMessagesAreTranslatedToRussian(): void
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The "intl" extension is required for Russian plural rules.');
+        }
+
+        $messagesPath = dirname(__DIR__) . '/../messages';
+        $this->assertDirectoryExists($messagesPath);
+
+        $translator = (new Translator('ru'))->withLocale('ru')->addCategorySources(
+            new CategorySource(
+                Validator::DEFAULT_TRANSLATION_CATEGORY,
+                new MessageSource($messagesPath),
+                new IntlMessageFormatter(),
+            ),
+        );
+        $validator = new Validator(translator: $translator);
+
+        $result = $validator->validate(self::JPG_FILE, new File(maxSize: 512));
+        $this->assertSame(
+            ['' => ['Размер value не может быть больше 512 байтов.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+
+        $result = $validator->validate(self::EMPTY_JPG_FILE, new File(minSize: 1));
+        $this->assertSame(
+            ['' => ['Размер value не может быть меньше 1 байта.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+
+        $result = $validator->validate(self::TEXT_FILE, new File(minSize: 1024));
+        $this->assertSame(
+            ['' => ['Размер value не может быть меньше 1 КБ.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+
+        $result = $validator->validate(self::TEXT_FILE, new File(size: 50 * 1024 * 1024));
+        $this->assertSame(
+            ['' => ['Размер value должен быть ровно 50 МБ.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+
+        $result = $validator->validate(
+            self::createStreamUpload('large.bin', 'application/octet-stream', 1024 * 1024),
+            new File(maxSize: 1024 * 1024 - 1),
+        );
+        $this->assertSame(
+            ['' => ['Размер value не может быть больше 1 МБ.']],
             $result->getErrorMessagesIndexedByPath(),
         );
     }
