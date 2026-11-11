@@ -2,7 +2,7 @@
 
 ## 2.6.2 under development
 
-- no changes in this release.
+- Bug #823: Restore parent `Each` key in validation context on early returns in `EachHandler` (@abu-tahir-0)
 
 ## 2.6.1 September 22, 2026
 

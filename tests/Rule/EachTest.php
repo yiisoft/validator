@@ -467,6 +467,70 @@ final class EachTest extends RuleTestCase
         $this->assertSame(['x', 'y', 'a', 'z', 'b'], $indexes);
     }
 
+    public function testContextEachKeyRestoredAfterStopOnError(): void
+    {
+        $keys = [];
+        $rules = [
+            new Each(new Number(min: 10), stopOnError: true),
+            new Callback(
+                function (mixed $value, object $rule, ValidationContext $context) use (&$keys) {
+                    $keys[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                    return new Result();
+                },
+            ),
+        ];
+
+        (new Validator())->validate([5, 20], $rules);
+
+        $this->assertSame([null], $keys);
+    }
+
+    public function testContextEachKeyRestoredAfterIncorrectInputKey(): void
+    {
+        $data = (static function (): Generator {
+            yield 0 => 10;
+            yield false => 20;
+        })();
+
+        $keys = [];
+        $rules = [
+            'items' => [
+                new Each(new Number(min: 0)),
+                new Callback(
+                    function (mixed $value, object $rule, ValidationContext $context) use (&$keys) {
+                        $keys[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                        return new Result();
+                    },
+                ),
+            ],
+        ];
+
+        (new Validator())->validate(['items' => $data], $rules);
+
+        $this->assertSame([null], $keys);
+    }
+
+    public function testNestedContextEachKeyRestoredAfterStopOnError(): void
+    {
+        $indexes = [];
+        $callback = new Callback(
+            function (mixed $value, object $rule, ValidationContext $context) use (&$indexes) {
+                $indexes[] = $context->getParameter(Each::PARAMETER_EACH_KEY);
+                return new Result();
+            },
+        );
+
+        (new Validator())->validate(
+            ['a' => [5, 20]],
+            new Each([
+                new Each(new Number(min: 10), stopOnError: true),
+                $callback,
+            ]),
+        );
+
+        $this->assertSame(['a'], $indexes);
+    }
+
     public function testClassAttribute(): void
     {
         $result = (new Validator())->validate(new EachDto(1, 0, 3));

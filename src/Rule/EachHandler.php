@@ -40,6 +40,8 @@ final class EachHandler implements RuleHandlerInterface
 
         foreach ($value as $index => $item) {
             if (!is_int($index) && !is_string($index)) {
+                $context->setParameter(Each::PARAMETER_EACH_KEY, $originalEachKey);
+
                 return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
                     'property' => $context->getTranslatedProperty(),
                     'Property' => $context->getCapitalizedTranslatedProperty(),
@@ -63,6 +65,8 @@ final class EachHandler implements RuleHandlerInterface
             }
 
             if ($rule->stopOnError) {
+                $context->setParameter(Each::PARAMETER_EACH_KEY, $originalEachKey);
+
                 return $result;
             }
         }
