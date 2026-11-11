@@ -1686,6 +1686,28 @@ final class NestedTest extends RuleTestCase
         $this->assertFalse($result->isValid());
     }
 
+    /**
+     * @see https://github.com/yiisoft/validator/issues/821
+     */
+    public function testSiblingRuleKeepsOwnPropertyLabelAfterNested(): void
+    {
+        $rules = [
+            'property1' => [
+                new Nested([
+                    'property2' => new Number(),
+                ]),
+                new Required(emptyCondition: static fn(): bool => true),
+            ],
+        ];
+
+        $result = (new Validator())->validate(['property1' => ['property2' => 42]], $rules);
+
+        $this->assertSame(
+            ['property1' => ['Property1 cannot be blank.']],
+            $result->getErrorMessagesIndexedByProperty(),
+        );
+    }
+
     protected function getDifferentRuleInHandlerItems(): array
     {
         return [Nested::class, NestedHandler::class];

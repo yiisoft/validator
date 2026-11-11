@@ -10,6 +10,7 @@ use RuntimeException;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
 
@@ -141,5 +142,17 @@ final class ValidationContextTest extends TestCase
             ->setPropertyLabel('First Name');
 
         $this->assertSame('Имя', $context->getTranslatedProperty());
+    }
+
+    public function testValidateRestoresPropertyLabel(): void
+    {
+        $data = ['inner' => 42];
+        $context = (new ValidationContext())
+            ->setContextDataOnce(new Validator(), new NullPropertyTranslator(), $data, new ArrayDataSet($data))
+            ->setPropertyLabel('outer');
+
+        $context->validate($data, ['inner' => [new Number()]]);
+
+        $this->assertSame('outer', $context->getPropertyLabel());
     }
 }

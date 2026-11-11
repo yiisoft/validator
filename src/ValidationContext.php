@@ -153,6 +153,7 @@ final class ValidationContext
 
         $currentDataSet = $this->dataSet;
         $currentProperty = $this->property;
+        $currentPropertyLabel = $this->propertyLabel;
         $isCurrentDataSetMissing = $this->isDataSetMissing;
         $currentParameters = $this->parameters;
         $currentDefaultPropertyTranslator = $this->defaultPropertyTranslator;
@@ -166,6 +167,7 @@ final class ValidationContext
 
         $this->dataSet = $currentDataSet;
         $this->property = $currentProperty;
+        $this->propertyLabel = $currentPropertyLabel;
         $this->isDataSetMissing = $isCurrentDataSetMissing;
         $this->parameters = $currentParameters;
         $this->defaultPropertyTranslator = $currentDefaultPropertyTranslator;
