@@ -153,6 +153,7 @@ final class ValidationContext
 
         $currentDataSet = $this->dataSet;
         $currentProperty = $this->property;
+        $currentPropertyLabel = $this->propertyLabel;
         $isCurrentDataSetMissing = $this->isDataSetMissing;
         $currentParameters = $this->parameters;
         $currentDefaultPropertyTranslator = $this->defaultPropertyTranslator;
@@ -162,13 +163,16 @@ final class ValidationContext
         if ($data instanceof PropertyTranslatorProviderInterface) {
             $this->defaultPropertyTranslator = $data->getPropertyTranslator() ?? $currentDefaultPropertyTranslator;
         }
-        $result = $this->validator->validate($data, $rules, $this);
-
-        $this->dataSet = $currentDataSet;
-        $this->property = $currentProperty;
-        $this->isDataSetMissing = $isCurrentDataSetMissing;
-        $this->parameters = $currentParameters;
-        $this->defaultPropertyTranslator = $currentDefaultPropertyTranslator;
+        try {
+            $result = $this->validator->validate($data, $rules, $this);
+        } finally {
+            $this->dataSet = $currentDataSet;
+            $this->property = $currentProperty;
+            $this->propertyLabel = $currentPropertyLabel;
+            $this->isDataSetMissing = $isCurrentDataSetMissing;
+            $this->parameters = $currentParameters;
+            $this->defaultPropertyTranslator = $currentDefaultPropertyTranslator;
+        }
 
         return $result;
     }

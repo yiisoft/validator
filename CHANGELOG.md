@@ -2,7 +2,7 @@
 
 ## 2.6.2 under development
 
-- no changes in this release.
+- Bug #821: Restore property label in validation context after nested validation (@abu-tahir-0)
 
 ## 2.6.1 September 22, 2026
 
