@@ -10,6 +10,8 @@ use RuntimeException;
 use Yiisoft\Validator\PropertyTranslator\ArrayPropertyTranslator;
 use Yiisoft\Validator\PropertyTranslator\NullPropertyTranslator;
 use Yiisoft\Validator\DataSet\ArrayDataSet;
+use Yiisoft\Validator\Result;
+use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Number;
 use Yiisoft\Validator\ValidationContext;
 use Yiisoft\Validator\Validator;
@@ -152,6 +154,30 @@ final class ValidationContextTest extends TestCase
             ->setPropertyLabel('outer');
 
         $context->validate($data, ['inner' => [new Number()]]);
+
+        $this->assertSame('outer', $context->getPropertyLabel());
+    }
+
+    public function testValidateRestoresPropertyLabelWhenValidationThrows(): void
+    {
+        $data = ['inner' => 42];
+        $context = (new ValidationContext())
+            ->setContextDataOnce(new Validator(), new NullPropertyTranslator(), $data, new ArrayDataSet($data))
+            ->setPropertyLabel('outer');
+
+        try {
+            $context->validate($data, [
+                'inner' => [
+                    new Callback(
+                        static function (): Result {
+                            throw new RuntimeException('Validation failed.');
+                        },
+                    ),
+                ],
+            ]);
+            $this->fail('Expected exception was not thrown.');
+        } catch (RuntimeException) {
+        }
 
         $this->assertSame('outer', $context->getPropertyLabel());
     }
