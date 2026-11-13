@@ -38,36 +38,38 @@ final class EachHandler implements RuleHandlerInterface
 
         $originalEachKey = $context->getParameter(Each::PARAMETER_EACH_KEY);
 
-        foreach ($value as $index => $item) {
-            if (!is_int($index) && !is_string($index)) {
-                return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
-                    'property' => $context->getTranslatedProperty(),
-                    'Property' => $context->getCapitalizedTranslatedProperty(),
-                    'type' => get_debug_type($index),
-                ]);
-            }
+        try {
+            foreach ($value as $index => $item) {
+                if (!is_int($index) && !is_string($index)) {
+                    return (new Result())->addError($rule->getIncorrectInputKeyMessage(), [
+                        'property' => $context->getTranslatedProperty(),
+                        'Property' => $context->getCapitalizedTranslatedProperty(),
+                        'type' => get_debug_type($index),
+                    ]);
+                }
 
-            $context->setParameter(Each::PARAMETER_EACH_KEY, $index);
+                $context->setParameter(Each::PARAMETER_EACH_KEY, $index);
 
-            $itemResult = $context->validate($item, $rules);
-            if ($itemResult->isValid()) {
-                continue;
-            }
+                $itemResult = $context->validate($item, $rules);
+                if ($itemResult->isValid()) {
+                    continue;
+                }
 
-            foreach ($itemResult->getErrors() as $error) {
-                $result->addErrorWithoutPostProcessing(
-                    $error->getMessage(),
-                    $error->getParameters(),
-                    $error->getValuePath() === [] ? [$index] : [$index, ...$error->getValuePath()],
-                );
-            }
+                foreach ($itemResult->getErrors() as $error) {
+                    $result->addErrorWithoutPostProcessing(
+                        $error->getMessage(),
+                        $error->getParameters(),
+                        $error->getValuePath() === [] ? [$index] : [$index, ...$error->getValuePath()],
+                    );
+                }
 
-            if ($rule->stopOnError) {
-                return $result;
+                if ($rule->stopOnError) {
+                    return $result;
+                }
             }
+        } finally {
+            $context->setParameter(Each::PARAMETER_EACH_KEY, $originalEachKey);
         }
-
-        $context->setParameter(Each::PARAMETER_EACH_KEY, $originalEachKey);
 
         return $result;
     }
