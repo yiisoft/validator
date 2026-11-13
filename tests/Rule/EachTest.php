@@ -6,6 +6,7 @@ namespace Yiisoft\Validator\Tests\Rule;
 
 use Generator;
 use PHPUnit\Framework\Attributes\DataProvider;
+use RuntimeException;
 use stdClass;
 use Yiisoft\Validator\Result;
 use Yiisoft\Validator\Rule\Callback;
@@ -480,9 +481,14 @@ final class EachTest extends RuleTestCase
             ),
         ];
 
-        (new Validator())->validate([5, 20], $rules);
+        $result = (new Validator())->validate([5, 1], $rules);
 
         $this->assertSame([null], $keys);
+        // Both items are invalid, so a single error proves the "stopOnError" early return was taken.
+        $this->assertSame(
+            ['0' => ['Value must be no less than 10.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
     }
 
     public function testContextEachKeyRestoredAfterIncorrectInputKey(): void
@@ -505,9 +511,14 @@ final class EachTest extends RuleTestCase
             ],
         ];
 
-        (new Validator())->validate(['items' => $data], $rules);
+        $result = (new Validator())->validate(['items' => $data], $rules);
 
         $this->assertSame([null], $keys);
+        // The error is only added by the incorrect input key early return.
+        $this->assertSame(
+            ['items' => ['Every iterable key of items must have an integer or a string type. bool given.']],
+            $result->getErrorMessagesIndexedByProperty(),
+        );
     }
 
     public function testNestedContextEachKeyRestoredAfterStopOnError(): void
@@ -520,8 +531,8 @@ final class EachTest extends RuleTestCase
             },
         );
 
-        (new Validator())->validate(
-            ['a' => [5, 20]],
+        $result = (new Validator())->validate(
+            ['a' => [5, 1]],
             new Each([
                 new Each(new Number(min: 10), stopOnError: true),
                 $callback,
@@ -529,6 +540,54 @@ final class EachTest extends RuleTestCase
         );
 
         $this->assertSame(['a'], $indexes);
+        // Both items are invalid, so a single error proves the "stopOnError" early return was taken.
+        $this->assertSame(
+            ['a.0' => ['Value must be no less than 10.']],
+            $result->getErrorMessagesIndexedByPath(),
+        );
+    }
+
+    public function testContextEachKeyRestoredWhenItemValidationThrows(): void
+    {
+        $context = new ValidationContext();
+        $rules = [
+            new Each(
+                new Callback(
+                    static function (mixed $value, object $rule, ValidationContext $context): Result {
+                        if ($value === 2) {
+                            throw new RuntimeException('Item validation failed.');
+                        }
+
+                        return new Result();
+                    },
+                ),
+            ),
+        ];
+
+        try {
+            (new Validator())->validate([1, 2], $rules, $context);
+            $this->fail('Expected exception was not thrown.');
+        } catch (RuntimeException) {
+        }
+
+        $this->assertNull($context->getParameter(Each::PARAMETER_EACH_KEY));
+    }
+
+    public function testContextEachKeyRestoredWhenIterationThrows(): void
+    {
+        $context = new ValidationContext();
+        $data = (static function (): Generator {
+            yield 0 => 1;
+            throw new RuntimeException('Iteration failed.');
+        })();
+
+        try {
+            (new Validator())->validate(['items' => $data], ['items' => new Each(new Number())], $context);
+            $this->fail('Expected exception was not thrown.');
+        } catch (RuntimeException) {
+        }
+
+        $this->assertNull($context->getParameter(Each::PARAMETER_EACH_KEY));
     }
 
     public function testClassAttribute(): void
