@@ -1,8 +1,13 @@
 # Yii Validator Change Log
 
-## 2.6.1 under development
+## 2.6.2 under development
 
 - Bug #752: Allow access to sibling properties in nested validation context (@WarLikeLaux)
+
+## 2.6.1 September 22, 2026
+
+- Bug #817: Fix `UniqueIterable` comparing the whole iterable instead of its items (@CorvusSharp)
+- Bug #819: Preserve microsecond precision when comparing date values in `UniqueIterable` (@samdark)
 
 ## 2.6.0 June 02, 2026
 

@@ -590,9 +590,7 @@ final class Nested implements
                 $remainingValuePath = implode(self::EACH_SHORTCUT, $parts);
                 $remainingValuePath = rtrim($remainingValuePath, self::SEPARATOR);
 
-                if (!isset($rulesMap[$remainingValuePath])) {
-                    $rulesMap[$remainingValuePath] = [];
-                }
+                $rulesMap[$remainingValuePath] ??= [];
 
                 $rulesMap[$remainingValuePath][$lastValuePath] = $rule;
                 unset($rules[$valuePath]);
