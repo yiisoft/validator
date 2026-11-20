@@ -14,12 +14,11 @@ use Yiisoft\Validator\RuleHandlerInterface;
 use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
+use function array_key_exists;
 use function array_slice;
 use function is_array;
 use function is_int;
 use function is_object;
-use function array_key_exists;
-use function count;
 
 /**
  * A handler for {@see Nested} rule. Validates nested structures.
@@ -70,11 +69,11 @@ final class NestedHandler implements RuleHandlerInterface
         $compoundResult = new Result();
 
         foreach ($rule->getRules() as $valuePath => $rules) {
-            if ($rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
-                $valuePathList = is_int($valuePath)
-                    ? [$valuePath]
-                    : StringHelper::parsePath($valuePath);
+            $valuePathList = is_int($valuePath)
+                ? [$valuePath]
+                : StringHelper::parsePath($valuePath);
 
+            if ($rule->isPropertyPathRequired() && !ArrayHelper::pathExists($data, $valuePath)) {
                 $compoundResult->addError(
                     $rule->getNoPropertyPathMessage(),
                     [
@@ -88,46 +87,32 @@ final class NestedHandler implements RuleHandlerInterface
                 continue;
             }
 
-            if (is_int($valuePath)) {
-                $validatedValue = ArrayHelper::getValueByPath($data, $valuePath);
-                $itemResult = $context->validate($validatedValue, $rules);
-            } else {
-                $valuePathList = StringHelper::parsePath($valuePath);
-                $property = end($valuePathList);
+            $property = end($valuePathList);
+            $validateValueItself = is_int($valuePath) || (string) (int) $property === $property;
 
-                $scopeData = $data;
-                for ($i = 0, $limit = count($valuePathList) - 1; $i < $limit; $i++) {
-                    $key = $valuePathList[$i];
-                    if (!is_array($scopeData) || !array_key_exists($key, $scopeData)) {
-                        $scopeData = [];
-                        break;
-                    }
-                    $scopeData = $scopeData[$key];
-                }
-
-                if (!is_array($scopeData)) {
-                    $scopeData = [];
-                }
-
-                $itemResult = $context->validate(
-                    $scopeData,
+            $itemResult = $validateValueItself
+                ? $context->validate(
+                    ArrayHelper::getValueByPath($data, $valuePath),
+                    $rules,
+                )
+                : $context->validate(
+                    $this->getPropertyScopeData($data, $valuePathList),
                     [$property => $rules],
                 );
-            }
 
             if ($itemResult->isValid()) {
                 continue;
             }
 
             foreach ($itemResult->getErrors() as $error) {
-                $valuePathList = is_int($valuePath)
-                    ? [$valuePath, ...$error->getValuePath()]
-                    : [...StringHelper::parsePath($valuePath), ...array_slice($error->getValuePath(), 1)];
+                $errorValuePath = $validateValueItself
+                    ? [...$valuePathList, ...$error->getValuePath()]
+                    : [...$valuePathList, ...array_slice($error->getValuePath(), 1)];
 
                 $compoundResult->addErrorWithoutPostProcessing(
                     $error->getMessage(),
                     $error->getParameters(),
-                    $valuePathList,
+                    $errorValuePath,
                 );
             }
         }
@@ -137,5 +122,27 @@ final class NestedHandler implements RuleHandlerInterface
         }
 
         return $compoundResult;
+    }
+
+    /**
+     * Get the data of the scope a property with a given value path belongs to, so it also contains sibling
+     * properties. Only arrays are traversed, any other intermediate value is treated as a missing path.
+     *
+     * @param array $data The data to get the scope from.
+     * @param array<array-key, int|string> $valuePathList A parsed value path of the validated property.
+     *
+     * @return array The scope data. An empty array when the scope cannot be resolved.
+     */
+    private function getPropertyScopeData(array $data, array $valuePathList): array
+    {
+        $scopeData = $data;
+        foreach (array_slice($valuePathList, 0, -1) as $key) {
+            if (!is_array($scopeData) || !array_key_exists($key, $scopeData)) {
+                return [];
+            }
+            $scopeData = $scopeData[$key];
+        }
+
+        return is_array($scopeData) ? $scopeData : [];
     }
 }
