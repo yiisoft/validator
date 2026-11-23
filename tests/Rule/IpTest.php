@@ -308,6 +308,8 @@ final class IpTest extends RuleTestCase
             'incorrect input, boolean (false)' => [false, [new Ip()], ['' => ['Value must be a string. bool given.']],
             ],
             'incorrect input, null' => [null, [new Ip()], ['' => ['Value must be a string. null given.']]],
+            'trailing newline, IPv4' => ["192.168.10.11\n", [new Ip()], ['' => [$message]]],
+            'trailing newline, IPv6' => ["2008:fa::1\n", [new Ip()], ['' => [$message]]],
             'custom incorrect input message' => [
                 1,
                 [new Ip(incorrectInputMessage: 'Custom incorrect input message.')],

@@ -2,7 +2,7 @@
 
 ## 2.6.2 under development
 
-- no changes in this release.
+- Security GHSA-c4w6-v59v-38v5: Fix `Email`, `Url`, `Uuid` and `Ip` rules accepting a value that ends with a newline (@iefken)
 
 ## 2.6.1 September 22, 2026
 

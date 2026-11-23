@@ -43,6 +43,11 @@ final class UuidTest extends RuleTestCase
             'wrong dashes' => ['123e4567e89b12d3a456426614174000', [new Uuid()], ['' => ['The value of value is not a valid UUID.']]],
             'letters instead of hex' => ['g23e4567-e89b-12d3-a456-426614174000', [new Uuid()], ['' => ['The value of value is not a valid UUID.']]],
             'empty string' => ['', [new Uuid()], ['' => ['The value of value is not a valid UUID.']]],
+            'trailing newline' => [
+                "123e4567-e89b-12d3-a456-426614174000\n",
+                [new Uuid()],
+                ['' => ['The value of value is not a valid UUID.']],
+            ],
 
             'custom incorrect input message' => [
                 123,
