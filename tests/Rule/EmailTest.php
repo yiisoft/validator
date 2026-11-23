@@ -214,6 +214,9 @@ final class EmailTest extends RuleTestCase
             ['ex..ample@example.com', [$rule], $errors],
             [str_repeat('a', 65) . '@gmail.com', [$rule], $errors],
             ['name@' . str_repeat('a', 246) . '.com', [$rule], $errors],
+            'trailing newline' => ["developer@yiiframework.com\n", [$rule], $errors],
+            'trailing newline, name allowed' => ["Carsten Brandt <mail@cebe.cc>\n", [$ruleAllowedName], $errors],
+            'trailing newline, IDN enabled' => ["developer@yiiframework.com\n", [$ruleEnabledIdn], $errors],
 
             // Malicious email addresses that can be used to exploit SwiftMailer vulnerability CVE-2016-10074 while IDN
             // is disabled.

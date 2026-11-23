@@ -163,6 +163,8 @@ final class UrlTest extends RuleTestCase
             ],
 
             ['google.de', [new Url()], $errors],
+            'trailing newline' => ["http://google.de\n", [new Url()], $errors],
+            'trailing newline after path' => ["http://google.de/path\n", [new Url()], $errors],
             ['htp://yiiframework.com', [new Url()], $errors],
             ['ftp://ftp.ruhr-uni-bochum.de/', [new Url()], $errors],
             ['http://invalid,domain', [new Url()], $errors],

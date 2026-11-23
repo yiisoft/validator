@@ -1,9 +1,13 @@
 # Yii Validator Change Log
 
-## 2.6.2 under development
+## 2.6.3 under development
 
 - Bug #752: Allow access to sibling properties in nested validation context, e.g. in `when` callbacks and
   `targetProperty` of compare rules (@WarLikeLaux, @vjik)
+
+## 2.6.2 November 23, 2026
+
+- Security GHSA-c4w6-v59v-38v5: Fix `Email`, `Url`, `Uuid` and `Ip` rules accepting a value that ends with a newline (@iefken)
 
 ## 2.6.1 September 22, 2026
 

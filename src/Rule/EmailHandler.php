@@ -11,6 +11,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
+use function str_ends_with;
 use function strlen;
 
 /**
@@ -33,7 +34,13 @@ final class EmailHandler implements RuleHandlerInterface
             ]);
         }
 
-        if (!preg_match(
+        if (str_ends_with($value, "\n")) {
+            /**
+             * In PCRE, `$` also matches right before a trailing newline. The patterns keep `$` without the `D`
+             * modifier so they can be reused on the client side, therefore a trailing newline is rejected here.
+             */
+            $valid = false;
+        } elseif (!preg_match(
             '/^(?P<name>(?:"?([^"]*)"?\s)?)(?:\s+)?((?P<open><?)((?P<local>.+)@(?P<domain>[^>]+))(?P<close>>?))/',
             $value,
             $matches,

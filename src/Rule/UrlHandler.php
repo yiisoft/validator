@@ -11,6 +11,7 @@ use Yiisoft\Validator\RuleInterface;
 use Yiisoft\Validator\ValidationContext;
 
 use function is_string;
+use function str_ends_with;
 use function strlen;
 
 /**
@@ -37,8 +38,13 @@ final class UrlHandler implements RuleHandlerInterface
             return $result;
         }
 
-        // Make sure the length is limited to avoid DOS attacks.
-        if (strlen($value) < 2000) {
+        /**
+         * Make sure the length is limited to avoid DOS attacks.
+         *
+         * A trailing newline is rejected because `$` in the pattern also matches right before it (the pattern has no
+         * `D` modifier, so it can be reused on the client side).
+         */
+        if (strlen($value) < 2000 && !str_ends_with($value, "\n")) {
             if ($rule->isIdnEnabled()) {
                 $value = $this->convertIdn($value);
             }

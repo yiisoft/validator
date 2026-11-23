@@ -76,7 +76,7 @@ final class IpHandler implements RuleHandlerInterface
     {
         return '/^(?<not>'
             . IpRanges::NEGATION_CHARACTER
-            . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/';
+            . ')?(?<ipCidr>(?<ip>(?:' . IpHelper::IPV4_PATTERN . ')|(?:' . IpHelper::IPV6_PATTERN . '))(?:\/(?<cidr>-?\d+))?)$/D';
     }
 
     /**
