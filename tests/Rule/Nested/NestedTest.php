@@ -20,6 +20,7 @@ use Yiisoft\Validator\Rule\BooleanValue;
 use Yiisoft\Validator\Rule\Callback;
 use Yiisoft\Validator\Rule\Count;
 use Yiisoft\Validator\Rule\Each;
+use Yiisoft\Validator\Rule\Equal;
 use Yiisoft\Validator\Rule\FilledAtLeast;
 use Yiisoft\Validator\Rule\In;
 use Yiisoft\Validator\Rule\Integer;
@@ -1060,6 +1061,67 @@ final class NestedTest extends RuleTestCase
                 ['' => 17],
                 new Nested(['' => new Integer(min: 15)]),
             ],
+            'sibling access skips rule when sibling is false' => [
+                [
+                    'push' => [
+                        'isEnabled' => false,
+                        'content' => null,
+                    ],
+                ],
+                new Nested([
+                    'push' => new Nested([
+                        'isEnabled' => [new BooleanValue()],
+                        'content' => [
+                            new Required(
+                                when: static function (mixed $value, ValidationContext $context): bool {
+                                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                },
+                            ),
+                        ],
+                    ]),
+                ]),
+            ],
+            'sibling access with each and nested' => [
+                [
+                    'tasks' => [
+                        [
+                            'push' => [
+                                'isEnabled' => false,
+                                'content' => null,
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'tasks' => new Each(
+                        new Nested([
+                            'push' => new Nested([
+                                'isEnabled' => [new BooleanValue()],
+                                'content' => [
+                                    new Required(
+                                        when: static function (mixed $value, ValidationContext $context): bool {
+                                            return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                        },
+                                    ),
+                                ],
+                            ]),
+                        ]),
+                    ),
+                ]),
+            ],
+            'compare rule targetProperty sibling access' => [
+                [
+                    'p' => 1,
+                    'p2' => 1,
+                ],
+                new Nested(['p2' => new Equal(targetProperty: 'p')]),
+            ],
+            'numeric last path segment' => [
+                [
+                    'items' => [[1], [2]],
+                ],
+                new Nested(['items.1' => new Count(max: 1)]),
+            ],
         ];
     }
 
@@ -1284,6 +1346,70 @@ final class NestedTest extends RuleTestCase
                     'properties.abc' => ['Abc cannot be blank.'],
                 ],
             ],
+            'sibling access in when callback' => [
+                [
+                    'push' => [
+                        'isEnabled' => true,
+                        'content' => null,
+                    ],
+                ],
+                new Nested([
+                    'push' => new Nested([
+                        'isEnabled' => [new BooleanValue()],
+                        'content' => [
+                            new Required(
+                                when: static function (mixed $value, ValidationContext $context): bool {
+                                    return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                },
+                            ),
+                        ],
+                    ]),
+                ]),
+                [
+                    'push.content' => ['Content cannot be blank.'],
+                ],
+            ],
+            'sibling access in when callback inside Each' => [
+                [
+                    'tasks' => [
+                        [
+                            'push' => [
+                                'isEnabled' => true,
+                                'content' => null,
+                            ],
+                        ],
+                    ],
+                ],
+                new Nested([
+                    'tasks' => new Each(
+                        new Nested([
+                            'push' => new Nested([
+                                'isEnabled' => [new BooleanValue()],
+                                'content' => [
+                                    new Required(
+                                        when: static function (mixed $value, ValidationContext $context): bool {
+                                            return (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+                                        },
+                                    ),
+                                ],
+                            ]),
+                        ]),
+                    ),
+                ]),
+                [
+                    'tasks.0.push.content' => ['Content cannot be blank.'],
+                ],
+            ],
+            'compare rule targetProperty sibling access with different values' => [
+                [
+                    'p' => 1,
+                    'p2' => 2,
+                ],
+                new Nested(['p2' => new Equal(targetProperty: 'p')]),
+                [
+                    'p2' => ['P2 must be equal to "p".'],
+                ],
+            ],
             'deep level of nesting with plain keys' => [
                 [
                     'level1' => [
@@ -1311,6 +1437,66 @@ final class NestedTest extends RuleTestCase
                 [
                     'level1.level2.level3.key' => ['Key must be no less than 9.', 'Key must be no greater than 5.'],
                     'level1.level2.level3.name' => ['Name must contain at least 5 characters.'],
+                ],
+            ],
+            'dotted path with missing intermediate key' => [
+                [
+                    'level1' => [
+                        'x' => 1,
+                    ],
+                ],
+                new Nested([
+                    'level1.level2.key' => [new Required()],
+                ]),
+                [
+                    'level1.level2.key' => ['Key not passed.'],
+                ],
+            ],
+            'dotted path with scalar intermediate value' => [
+                [
+                    'level1' => 'scalar',
+                ],
+                new Nested([
+                    'level1.level2' => [new Required()],
+                ]),
+                [
+                    'level1.level2' => ['Level2 not passed.'],
+                ],
+            ],
+            'dotted path with scalar intermediate value and deeper path' => [
+                [
+                    'level1' => 'scalar',
+                ],
+                new Nested([
+                    'level1.level2.key' => [new Required()],
+                ]),
+                [
+                    'level1.level2.key' => ['Key not passed.'],
+                ],
+            ],
+            'numeric last path segment' => [
+                [
+                    'items' => [[1], [2]],
+                ],
+                new Nested([
+                    'items.1' => [new Count(exactly: 5)],
+                ]),
+                [
+                    'items.1' => ['Value must contain exactly 5 items.'],
+                ],
+            ],
+            'numeric last path segment with nested rules' => [
+                [
+                    'items' => [
+                        ['name' => 'abcde'],
+                        ['name' => 'ab'],
+                    ],
+                ],
+                new Nested([
+                    'items.1' => new Nested(['name' => [new Length(min: 5)]]),
+                ]),
+                [
+                    'items.1.name' => ['Name must contain at least 5 characters.'],
                 ],
             ],
             'error messages with properties in nested structure' => [

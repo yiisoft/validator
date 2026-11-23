@@ -2,7 +2,8 @@
 
 ## 2.6.3 under development
 
-- no changes in this release.
+- Bug #752: Allow access to sibling properties in nested validation context, e.g. in `when` callbacks and
+  `targetProperty` of compare rules (@WarLikeLaux, @vjik)
 
 ## 2.6.2 November 23, 2026
 

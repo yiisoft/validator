@@ -343,8 +343,18 @@ $rules = new Nested([
 $result = (new Validator())->validate($data, $rules);
 ```
 
+Sibling access works because, for named properties, `Nested` uses the whole scope the property belongs to as the
+validation data. The same data set is available in custom rules and in comparison rules with `targetProperty`, see
+the [`Nested` rule] guide for details.
+
+Note that only named properties provide such access. When a rule is attached to a numeric leaf — an integer key or a
+path ending with a numeric segment, like `'items.1'` — the selected value is validated as is, without the containing
+list. In this case `$context->getDataSet()->getPropertyValue()` returns `null` for any sibling property, and the
+`targetProperty` option of comparison rules cannot reference them.
+
 As an alternative to functions, callable classes can be used instead. This approach has the advantage of code reusability.
 See the [Skip on empty] section for an example.
 
 [Configuring empty condition in other rules]: #configuring-empty-condition-in-other-rules
 [Skip on empty]: #skiponempty---skipping-a-rule-if-the-validated-value-is-empty
+[`Nested` rule]: built-in-rules-nested.md

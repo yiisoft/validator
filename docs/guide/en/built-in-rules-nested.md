@@ -388,10 +388,15 @@ attributes] section.
 - For more information about possible data / rules combinations passed for validation, refer to the [Using validator] 
 section. 
 
-### Conditional validation within nested structures
+### Accessing sibling properties
 
-When using `when` callbacks inside `Nested`, the validation context provides access to sibling properties — other
-properties at the same nesting level. Use `$context->getDataSet()->getPropertyValue()` to read them.
+For rules attached to named properties, `Nested` validates a property together with its whole scope. Because of
+this, the validation context provides access to sibling properties — other properties at the same nesting level:
+
+- in `when` callbacks and custom rules, via `$context->getDataSet()->getPropertyValue()`;
+- in comparison rules, via the `targetProperty` option.
+
+#### `when` callbacks
 
 For example, to require `content` only when `isEnabled` is `true`:
 
@@ -425,6 +430,53 @@ $result = (new Validator())->validate($data, $rules);
 
 This works at any depth, including when combined with `Each`. For more details and examples, see the
 [Conditional validation] guide.
+
+#### Comparison rules
+
+Comparison rules can compare the validated property with a sibling one. Use the `targetProperty` option for this:
+
+```php
+use Yiisoft\Validator\Rule\Equal;
+use Yiisoft\Validator\Rule\Nested;
+use Yiisoft\Validator\Rule\Number;
+use Yiisoft\Validator\Validator;
+
+$data = [
+    'discountPercent' => 10,
+    'confirmedDiscountPercent' => 10,
+];
+$rules = new Nested([
+    'discountPercent' => new Number(min: 0),
+    'confirmedDiscountPercent' => new Equal(targetProperty: 'discountPercent'),
+]);
+$result = (new Validator())->validate($data, $rules);
+```
+
+Here `confirmedDiscountPercent` must be equal to the sibling `discountPercent` property. For more comparison options,
+see the [`Compare` rule] guide.
+
+#### Custom rules
+
+A custom rule handler receives a `ValidationContext` as the third argument of its `validate()` method. Sibling
+properties are resolved there the same way:
+
+```php
+public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
+{
+    $isEnabled = (bool) $context->getDataSet()->getPropertyValue('isEnabled');
+    // ...
+}
+```
+
+For more information about creating custom rules, see the [Creating custom rules] guide.
+
+#### Numeric keys
+
+A rule attached to a numeric key — an integer key like `0` or a path whose last segment is numeric, like
+`'items.1'` — behaves differently: the selected value is validated as is, without the containing list. Sibling items
+are not available in this case — `$context->getDataSet()->getPropertyValue()` returns `null` for them, and the
+`targetProperty` option cannot reference them. To access properties of the same item in a list, combine `Each` with
+`Nested` as shown above.
 
 ### Using keys containing separator / shortcut
 
@@ -501,5 +553,7 @@ $data = [
 [Basic usage]: #basic-usage-one-to-one-relation
 [JSFiddle]: https://jsfiddle.net/fys8uadr/
 [Conditional validation]: conditional-validation.md
+[`Compare` rule]: built-in-rules-compare.md
+[Creating custom rules]: creating-custom-rules.md
 [Configuring rules via PHP attributes]: configuring-rules-via-php-attributes.md
 [Using validator]: using-validator.md
