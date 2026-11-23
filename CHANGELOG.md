@@ -1,5 +1,9 @@
 # Yii Validator Change Log
 
+## 2.6.3 under development
+
+- no changes in this release.
+
 ## 2.6.2 November 23, 2026
 
 - Security GHSA-c4w6-v59v-38v5: Fix `Email`, `Url`, `Uuid` and `Ip` rules accepting a value that ends with a newline (@iefken)
