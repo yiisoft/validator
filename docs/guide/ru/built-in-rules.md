@@ -57,6 +57,7 @@ Here is a list of all available built-in rules, divided by category.
 
 ### File rules
 
+- [File](../../../src/Rule/File.php)
 - [Image](../../../src/Rule/Image/Image.php)
 
 ### Date rules
@@ -86,6 +87,7 @@ Some rules also have guides in addition to PHPDoc:
 - [Compare](built-in-rules-compare.md)
 - [Composite](built-in-rules-composite.md)
 - [Each](built-in-rules-each.md)
+- [File](built-in-rules-file.md)
 - [Nested](built-in-rules-nested.md)
 - [Required](built-in-rules-required.md)
 - [StopOnError](built-in-rules-stop-on-error.md)

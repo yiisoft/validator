@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2026-04-21 14:32+0000\n"
+"POT-Creation-Date: 2026-06-08 12:31+0000\n"
 "PO-Revision-Date: 2026-04-21 14:32+0000\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -39,6 +39,15 @@ msgstr ""
 #: guide/en/README.md guide/en/built-in-rules.md
 msgid "[Each](built-in-rules-each.md)"
 msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/README.md guide/en/built-in-rules.md
+#, fuzzy
+msgid "[File](built-in-rules-file.md)"
+msgstr ""
+"#-#-#-#-#  README.md.po  #-#-#-#-#\n"
+"[Each]: built-in-rules-each.md\n"
+"#-#-#-#-#  built-in-rules.md.po (PACKAGE VERSION)  #-#-#-#-#\n"
 
 #. type: Bullet: '- '
 #: guide/en/README.md guide/en/built-in-rules.md
@@ -268,6 +277,11 @@ msgstr ""
 #: guide/en/built-in-rules.md
 #, no-wrap
 msgid "File rules"
+msgstr ""
+
+#. type: Bullet: '- '
+#: guide/en/built-in-rules.md
+msgid "[File](../../../src/Rule/File.php)"
 msgstr ""
 
 #. type: Bullet: '- '
