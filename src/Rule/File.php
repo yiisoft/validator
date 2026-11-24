@@ -127,7 +127,10 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * - `{property}`: the translated label of the property being validated.
      * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
-     * - `{exactly}`: expected exact size in bytes.
+     * - `{exactly}`: expected exact size as a human-readable string.
+     * - `{exactlyValue}`: expected exact size numeric value converted to a human-readable unit.
+     * - `{exactlyUnit}`: expected exact size unit identifier. Possible values are `byte`, `KB`, `MB`, `GB`, `TB`, `PB`.
+     * - `{exactlyBytes}`: expected exact size in bytes.
      * @param string $tooSmallMessage A message used when the file size is less than {@see $minSize}.
      *
      * You may use the following placeholders in the message:
@@ -135,7 +138,10 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * - `{property}`: the translated label of the property being validated.
      * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
-     * - `{limit}`: expected minimum size in bytes.
+     * - `{limit}`: expected minimum size as a human-readable string.
+     * - `{limitValue}`: expected minimum size numeric value converted to a human-readable unit.
+     * - `{limitUnit}`: expected minimum size unit identifier. Possible values are `byte`, `KB`, `MB`, `GB`, `TB`, `PB`.
+     * - `{limitBytes}`: expected minimum size in bytes.
      * @param string $tooBigMessage A message used when the file size is greater than {@see $maxSize}.
      *
      * You may use the following placeholders in the message:
@@ -143,7 +149,10 @@ final class File implements DumpedRuleInterface, SkipOnErrorInterface, WhenInter
      * - `{property}`: the translated label of the property being validated.
      * - `{Property}`: the translated label of the property being validated, capitalized.
      * - `{file}`: the validated file name when it is available.
-     * - `{limit}`: expected maximum size in bytes.
+     * - `{limit}`: expected maximum size as a human-readable string.
+     * - `{limitValue}`: expected maximum size numeric value converted to a human-readable unit.
+     * - `{limitUnit}`: expected maximum size unit identifier. Possible values are `byte`, `KB`, `MB`, `GB`, `TB`, `PB`.
+     * - `{limitBytes}`: expected maximum size in bytes.
      * @param string $unableToDetermineSizeMessage A message used when file size constraints are configured, but the
      * file size can't be determined.
      *

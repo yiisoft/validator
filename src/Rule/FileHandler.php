@@ -21,6 +21,7 @@ use function is_readable;
 use function is_string;
 use function mime_content_type;
 use function pathinfo;
+use function round;
 use function str_contains;
 use function str_ends_with;
 use function str_replace;
@@ -51,6 +52,19 @@ use const UPLOAD_ERR_OK;
  */
 final class FileHandler implements RuleHandlerInterface
 {
+    private const DEFAULT_NOT_EXACT_SIZE_MESSAGES = [
+        'The size of {property} must be exactly {exactly, number} {exactly, plural, one{byte} other{bytes}}.',
+        'The size of {property} must be exactly {exactly}.',
+    ];
+    private const DEFAULT_TOO_SMALL_MESSAGES = [
+        'The size of {property} cannot be smaller than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        'The size of {property} cannot be smaller than {limit}.',
+    ];
+    private const DEFAULT_TOO_BIG_MESSAGES = [
+        'The size of {property} cannot be larger than {limit, number} {limit, plural, one{byte} other{bytes}}.',
+        'The size of {property} cannot be larger than {limit}.',
+    ];
+
     public function validate(mixed $value, RuleInterface $rule, ValidationContext $context): Result
     {
         if (!$rule instanceof File) {
@@ -279,25 +293,158 @@ final class FileHandler implements RuleHandlerInterface
         }
 
         if ($rule->getSize() !== null && $size !== $rule->getSize()) {
+            $ruleSize = $rule->getSize();
+            $sizeParameters = $this->getSizeParameters($ruleSize);
             $result->addError(
-                $rule->getNotExactSizeMessage(),
-                $this->getParameters($context, $file, ['exactly' => $rule->getSize()]),
+                $this->getNotExactSizeMessage($rule, $sizeParameters['unit']),
+                $this->getParameters(
+                    $context,
+                    $file,
+                    [
+                        'exactly' => $sizeParameters['text'],
+                        'exactlyValue' => $sizeParameters['value'],
+                        'exactlyUnit' => $sizeParameters['unit'],
+                        'exactlyBytes' => $sizeParameters['bytes'],
+                    ],
+                ),
             );
         }
 
         if ($rule->getMinSize() !== null && $size < $rule->getMinSize()) {
+            $minSize = $rule->getMinSize();
+            $sizeParameters = $this->getSizeParameters($minSize);
             $result->addError(
-                $rule->getTooSmallMessage(),
-                $this->getParameters($context, $file, ['limit' => $rule->getMinSize()]),
+                $this->getTooSmallMessage($rule, $sizeParameters['unit']),
+                $this->getParameters(
+                    $context,
+                    $file,
+                    [
+                        'limit' => $sizeParameters['text'],
+                        'limitValue' => $sizeParameters['value'],
+                        'limitUnit' => $sizeParameters['unit'],
+                        'limitBytes' => $sizeParameters['bytes'],
+                    ],
+                ),
             );
         }
 
         if ($rule->getMaxSize() !== null && $size > $rule->getMaxSize()) {
+            $maxSize = $rule->getMaxSize();
+            $sizeParameters = $this->getSizeParameters($maxSize);
             $result->addError(
-                $rule->getTooBigMessage(),
-                $this->getParameters($context, $file, ['limit' => $rule->getMaxSize()]),
+                $this->getTooBigMessage($rule, $sizeParameters['unit']),
+                $this->getParameters(
+                    $context,
+                    $file,
+                    [
+                        'limit' => $sizeParameters['text'],
+                        'limitValue' => $sizeParameters['value'],
+                        'limitUnit' => $sizeParameters['unit'],
+                        'limitBytes' => $sizeParameters['bytes'],
+                    ],
+                ),
             );
         }
+    }
+
+    private function getNotExactSizeMessage(File $rule, string $unit): string
+    {
+        $message = $rule->getNotExactSizeMessage();
+        if (!in_array($message, self::DEFAULT_NOT_EXACT_SIZE_MESSAGES, true)) {
+            return $message;
+        }
+
+        return match ($unit) {
+            'byte' => 'The size of {property} must be exactly {exactlyValue, number} '
+                . '{exactlyValue, plural, one{byte} other{bytes}}.',
+            'KB' => 'The size of {property} must be exactly {exactlyValue, number} KB.',
+            'MB' => 'The size of {property} must be exactly {exactlyValue, number} MB.',
+            'GB' => 'The size of {property} must be exactly {exactlyValue, number} GB.',
+            'TB' => 'The size of {property} must be exactly {exactlyValue, number} TB.',
+            'PB' => 'The size of {property} must be exactly {exactlyValue, number} PB.',
+            default => $message,
+        };
+    }
+
+    private function getTooSmallMessage(File $rule, string $unit): string
+    {
+        $message = $rule->getTooSmallMessage();
+        if (!in_array($message, self::DEFAULT_TOO_SMALL_MESSAGES, true)) {
+            return $message;
+        }
+
+        return match ($unit) {
+            'byte' => 'The size of {property} cannot be smaller than {limitValue, number} '
+                . '{limitValue, plural, one{byte} other{bytes}}.',
+            'KB' => 'The size of {property} cannot be smaller than {limitValue, number} KB.',
+            'MB' => 'The size of {property} cannot be smaller than {limitValue, number} MB.',
+            'GB' => 'The size of {property} cannot be smaller than {limitValue, number} GB.',
+            'TB' => 'The size of {property} cannot be smaller than {limitValue, number} TB.',
+            'PB' => 'The size of {property} cannot be smaller than {limitValue, number} PB.',
+            default => $message,
+        };
+    }
+
+    private function getTooBigMessage(File $rule, string $unit): string
+    {
+        $message = $rule->getTooBigMessage();
+        if (!in_array($message, self::DEFAULT_TOO_BIG_MESSAGES, true)) {
+            return $message;
+        }
+
+        return match ($unit) {
+            'byte' => 'The size of {property} cannot be larger than {limitValue, number} '
+                . '{limitValue, plural, one{byte} other{bytes}}.',
+            'KB' => 'The size of {property} cannot be larger than {limitValue, number} KB.',
+            'MB' => 'The size of {property} cannot be larger than {limitValue, number} MB.',
+            'GB' => 'The size of {property} cannot be larger than {limitValue, number} GB.',
+            'TB' => 'The size of {property} cannot be larger than {limitValue, number} TB.',
+            'PB' => 'The size of {property} cannot be larger than {limitValue, number} PB.',
+            default => $message,
+        };
+    }
+
+    /**
+     * @return array{value: int|float, unit: string, bytes: int, text: string}
+     */
+    private function getSizeParameters(int $size): array
+    {
+        if ($size < 1024) {
+            return [
+                'value' => $size,
+                'unit' => 'byte',
+                'bytes' => $size,
+                'text' => $size . ' ' . ($size === 1 ? 'byte' : 'bytes'),
+            ];
+        }
+
+        $value = (float) $size;
+        foreach (['KB', 'MB', 'GB', 'TB'] as $unit) {
+            $value /= 1024;
+            $roundedValue = round($value, 2);
+            if ($roundedValue < 1024) {
+                return [
+                    'value' => $roundedValue,
+                    'unit' => $unit,
+                    'bytes' => $size,
+                    'text' => $this->formatSizeText($roundedValue, $unit),
+                ];
+            }
+        }
+
+        $value /= 1024;
+        $roundedValue = round($value, 2);
+        return [
+            'value' => $roundedValue,
+            'unit' => 'PB',
+            'bytes' => $size,
+            'text' => $this->formatSizeText($roundedValue, 'PB'),
+        ];
+    }
+
+    private function formatSizeText(int|float $value, string $unit): string
+    {
+        return $value . ' ' . $unit;
     }
 
     /**
